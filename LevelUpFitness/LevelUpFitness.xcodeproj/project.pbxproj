@@ -1,0 +1,437 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		99A67EEA2BF451F0002DC3DC /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A67EE92BF451EF002DC3DC /* HomeView.swift */; };
+		99A67EF92BF45251002DC3DC /* Sailec Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 99A67EEE2BF45250002DC3DC /* Sailec Bold.ttf */; };
+		99A67EFA2BF45251002DC3DC /* times new roman bold italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 99A67EEF2BF45250002DC3DC /* times new roman bold italic.ttf */; };
+		99A67EFB2BF45251002DC3DC /* times new roman.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 99A67EF02BF45250002DC3DC /* times new roman.ttf */; };
+		99A67EFC2BF45251002DC3DC /* EtruscoNowCondensed Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 99A67EF12BF45250002DC3DC /* EtruscoNowCondensed Bold.ttf */; };
+		99A67EFD2BF45251002DC3DC /* EtruscoNow Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 99A67EF22BF45250002DC3DC /* EtruscoNow Medium.ttf */; };
+		99A67EFE2BF45251002DC3DC /* Sailec Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 99A67EF32BF45250002DC3DC /* Sailec Light.ttf */; };
+		99A67EFF2BF45251002DC3DC /* Sailec Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 99A67EF42BF45250002DC3DC /* Sailec Thin.ttf */; };
+		99A67F002BF45251002DC3DC /* times new roman bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 99A67EF52BF45250002DC3DC /* times new roman bold.ttf */; };
+		99A67F012BF45251002DC3DC /* times new roman italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 99A67EF62BF45250002DC3DC /* times new roman italic.ttf */; };
+		99A67F022BF45251002DC3DC /* Sailec Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 99A67EF72BF45250002DC3DC /* Sailec Medium.ttf */; };
+		99A67F032BF45251002DC3DC /* Sailec Regular Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 99A67EF82BF45251002DC3DC /* Sailec Regular Italic.ttf */; };
+		99A67F062BF456A7002DC3DC /* PagesHolderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A67F052BF456A7002DC3DC /* PagesHolderView.swift */; };
+		99CFAAE62BEB075500EFF67E /* LevelUpFitnessApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CFAAE52BEB075500EFF67E /* LevelUpFitnessApp.swift */; };
+		99CFAAE82BEB075500EFF67E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CFAAE72BEB075500EFF67E /* ContentView.swift */; };
+		99CFAAEA2BEB075700EFF67E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 99CFAAE92BEB075700EFF67E /* Assets.xcassets */; };
+		99CFAAED2BEB075700EFF67E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 99CFAAEC2BEB075700EFF67E /* Preview Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		99A67EE92BF451EF002DC3DC /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		99A67EEE2BF45250002DC3DC /* Sailec Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Sailec Bold.ttf"; sourceTree = "<group>"; };
+		99A67EEF2BF45250002DC3DC /* times new roman bold italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "times new roman bold italic.ttf"; sourceTree = "<group>"; };
+		99A67EF02BF45250002DC3DC /* times new roman.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "times new roman.ttf"; sourceTree = "<group>"; };
+		99A67EF12BF45250002DC3DC /* EtruscoNowCondensed Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "EtruscoNowCondensed Bold.ttf"; sourceTree = "<group>"; };
+		99A67EF22BF45250002DC3DC /* EtruscoNow Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "EtruscoNow Medium.ttf"; sourceTree = "<group>"; };
+		99A67EF32BF45250002DC3DC /* Sailec Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Sailec Light.ttf"; sourceTree = "<group>"; };
+		99A67EF42BF45250002DC3DC /* Sailec Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Sailec Thin.ttf"; sourceTree = "<group>"; };
+		99A67EF52BF45250002DC3DC /* times new roman bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "times new roman bold.ttf"; sourceTree = "<group>"; };
+		99A67EF62BF45250002DC3DC /* times new roman italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "times new roman italic.ttf"; sourceTree = "<group>"; };
+		99A67EF72BF45250002DC3DC /* Sailec Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Sailec Medium.ttf"; sourceTree = "<group>"; };
+		99A67EF82BF45251002DC3DC /* Sailec Regular Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Sailec Regular Italic.ttf"; sourceTree = "<group>"; };
+		99A67F042BF4525B002DC3DC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		99A67F052BF456A7002DC3DC /* PagesHolderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagesHolderView.swift; sourceTree = "<group>"; };
+		99CFAAE22BEB075500EFF67E /* LevelUpFitness.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LevelUpFitness.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		99CFAAE52BEB075500EFF67E /* LevelUpFitnessApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelUpFitnessApp.swift; sourceTree = "<group>"; };
+		99CFAAE72BEB075500EFF67E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		99CFAAE92BEB075700EFF67E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		99CFAAEC2BEB075700EFF67E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		99CFAADF2BEB075500EFF67E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		99A67EE82BF451E3002DC3DC /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
+		99A67EEB2BF451F4002DC3DC /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				99A67EE92BF451EF002DC3DC /* HomeView.swift */,
+				99A67F052BF456A7002DC3DC /* PagesHolderView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		99A67EEC2BF45206002DC3DC /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		99A67EED2BF45211002DC3DC /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				99A67EF22BF45250002DC3DC /* EtruscoNow Medium.ttf */,
+				99A67EF12BF45250002DC3DC /* EtruscoNowCondensed Bold.ttf */,
+				99A67EEE2BF45250002DC3DC /* Sailec Bold.ttf */,
+				99A67EF32BF45250002DC3DC /* Sailec Light.ttf */,
+				99A67EF72BF45250002DC3DC /* Sailec Medium.ttf */,
+				99A67EF82BF45251002DC3DC /* Sailec Regular Italic.ttf */,
+				99A67EF42BF45250002DC3DC /* Sailec Thin.ttf */,
+				99A67EEF2BF45250002DC3DC /* times new roman bold italic.ttf */,
+				99A67EF52BF45250002DC3DC /* times new roman bold.ttf */,
+				99A67EF62BF45250002DC3DC /* times new roman italic.ttf */,
+				99A67EF02BF45250002DC3DC /* times new roman.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
+		99CFAAD92BEB075400EFF67E = {
+			isa = PBXGroup;
+			children = (
+				99CFAAE42BEB075500EFF67E /* LevelUpFitness */,
+				99CFAAE32BEB075500EFF67E /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		99CFAAE32BEB075500EFF67E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				99CFAAE22BEB075500EFF67E /* LevelUpFitness.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		99CFAAE42BEB075500EFF67E /* LevelUpFitness */ = {
+			isa = PBXGroup;
+			children = (
+				99A67F042BF4525B002DC3DC /* Info.plist */,
+				99A67EED2BF45211002DC3DC /* Fonts */,
+				99A67EEC2BF45206002DC3DC /* Extensions */,
+				99A67EEB2BF451F4002DC3DC /* Views */,
+				99A67EE82BF451E3002DC3DC /* Managers */,
+				99CFAAE52BEB075500EFF67E /* LevelUpFitnessApp.swift */,
+				99CFAAE72BEB075500EFF67E /* ContentView.swift */,
+				99CFAAE92BEB075700EFF67E /* Assets.xcassets */,
+				99CFAAEB2BEB075700EFF67E /* Preview Content */,
+			);
+			path = LevelUpFitness;
+			sourceTree = "<group>";
+		};
+		99CFAAEB2BEB075700EFF67E /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				99CFAAEC2BEB075700EFF67E /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		99CFAAE12BEB075500EFF67E /* LevelUpFitness */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 99CFAAF02BEB075700EFF67E /* Build configuration list for PBXNativeTarget "LevelUpFitness" */;
+			buildPhases = (
+				99CFAADE2BEB075500EFF67E /* Sources */,
+				99CFAADF2BEB075500EFF67E /* Frameworks */,
+				99CFAAE02BEB075500EFF67E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LevelUpFitness;
+			productName = LevelUpFitness;
+			productReference = 99CFAAE22BEB075500EFF67E /* LevelUpFitness.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		99CFAADA2BEB075500EFF67E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1520;
+				LastUpgradeCheck = 1520;
+				TargetAttributes = {
+					99CFAAE12BEB075500EFF67E = {
+						CreatedOnToolsVersion = 15.2;
+					};
+				};
+			};
+			buildConfigurationList = 99CFAADD2BEB075500EFF67E /* Build configuration list for PBXProject "LevelUpFitness" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 99CFAAD92BEB075400EFF67E;
+			productRefGroup = 99CFAAE32BEB075500EFF67E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				99CFAAE12BEB075500EFF67E /* LevelUpFitness */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		99CFAAE02BEB075500EFF67E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				99A67F032BF45251002DC3DC /* Sailec Regular Italic.ttf in Resources */,
+				99CFAAED2BEB075700EFF67E /* Preview Assets.xcassets in Resources */,
+				99A67EFC2BF45251002DC3DC /* EtruscoNowCondensed Bold.ttf in Resources */,
+				99A67F002BF45251002DC3DC /* times new roman bold.ttf in Resources */,
+				99A67EFF2BF45251002DC3DC /* Sailec Thin.ttf in Resources */,
+				99CFAAEA2BEB075700EFF67E /* Assets.xcassets in Resources */,
+				99A67EF92BF45251002DC3DC /* Sailec Bold.ttf in Resources */,
+				99A67EFA2BF45251002DC3DC /* times new roman bold italic.ttf in Resources */,
+				99A67F022BF45251002DC3DC /* Sailec Medium.ttf in Resources */,
+				99A67EFE2BF45251002DC3DC /* Sailec Light.ttf in Resources */,
+				99A67EFD2BF45251002DC3DC /* EtruscoNow Medium.ttf in Resources */,
+				99A67F012BF45251002DC3DC /* times new roman italic.ttf in Resources */,
+				99A67EFB2BF45251002DC3DC /* times new roman.ttf in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		99CFAADE2BEB075500EFF67E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				99A67EEA2BF451F0002DC3DC /* HomeView.swift in Sources */,
+				99A67F062BF456A7002DC3DC /* PagesHolderView.swift in Sources */,
+				99CFAAE82BEB075500EFF67E /* ContentView.swift in Sources */,
+				99CFAAE62BEB075500EFF67E /* LevelUpFitnessApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		99CFAAEE2BEB075700EFF67E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		99CFAAEF2BEB075700EFF67E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		99CFAAF12BEB075700EFF67E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"LevelUpFitness/Preview Content\"";
+				DEVELOPMENT_TEAM = Z6X96R5RVB;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = LevelUpFitness/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.LevelUpFitness;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		99CFAAF22BEB075700EFF67E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"LevelUpFitness/Preview Content\"";
+				DEVELOPMENT_TEAM = Z6X96R5RVB;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = LevelUpFitness/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.LevelUpFitness;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		99CFAADD2BEB075500EFF67E /* Build configuration list for PBXProject "LevelUpFitness" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				99CFAAEE2BEB075700EFF67E /* Debug */,
+				99CFAAEF2BEB075700EFF67E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		99CFAAF02BEB075700EFF67E /* Build configuration list for PBXNativeTarget "LevelUpFitness" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				99CFAAF12BEB075700EFF67E /* Debug */,
+				99CFAAF22BEB075700EFF67E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 99CFAADA2BEB075500EFF67E /* Project object */;
+}
