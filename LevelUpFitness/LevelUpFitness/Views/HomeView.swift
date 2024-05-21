@@ -6,8 +6,13 @@
 //
 
 import SwiftUI
+import AVKit
 
 struct HomeView: View {
+    @ObservableObject var storageManager = StorageManager()
+    
+    @State var avPlayer = AVPlayer()
+    
     var body: some View {
         ZStack {
             VStack (spacing: 0) {
@@ -16,29 +21,42 @@ struct HomeView: View {
                         .font(.custom("EtruscoNowCondensed Bold", size: 35))
                     
                     Spacer()
+                    
+                    Image(systemName: "gearshape")
+                        .foregroundColor(.black)
                 }
                 .padding(.horizontal)
                 
+                Divider()
+                    .padding(.horizontal)
+                
                 HStack {
                     Text("Today's Video")
-                        .font(.custom("EtruscoNowCondensed Bold", size: 25))
+                        .font(.custom("EtruscoNowCondensed Bold", size: 30))
                     
                     Spacer()
                 }
                 .padding(.horizontal)
                 
                 VStack(spacing: 0) {
-                    Rectangle()
-                        .fill(.white)
-                        .frame(width: .infinity, height: 200)
-                        .overlay (
-                            Image("GuyAtTheGym")
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                            
-                                .padding(.horizontal)
-                                .clipped()
-                        )
+                    if let url = storageManager.dailyVideo {
+                        VideoPlayer(player: avPlayer)
+                            .frame(width: .infinity, height: 200)
+                            .onAppear {
+                                avPlayer = AVPlayer(url: url)
+                            }
+                    } else {
+                        Rectangle()
+                            .fill(.white)
+                            .frame(width: .infinity, height: 200)
+                            .overlay (
+                                Image("GuyAtTheGym")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .padding(.horizontal)
+                                    .clipped()
+                            )
+                    }
                     
                     HStack {
                        VStack {
@@ -76,10 +94,17 @@ struct HomeView: View {
                        Rectangle()
                            .fill(Color(red: 250/255.0, green: 245/255.0, blue: 245/255.0))
                    )
-        
                 }
                 .padding(.horizontal)
                 .cornerRadius(3)
+                
+                HStack {
+                    Text("Your Stats")
+                        .font(.custom("EtruscoNowCondensed Bold", size: 30))
+                    
+                    Spacer()
+                }
+                .padding(.horizontal)
                 
                 Spacer()
             }

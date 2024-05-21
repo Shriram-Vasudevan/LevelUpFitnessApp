@@ -1,0 +1,24 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-levelupfitness-dev-415b8-authRole",
+      "UnauthRoleArn": "arn:aws:iam::851725206834:role/amplify-levelupfitness-dev-415b8-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::851725206834:role/amplify-levelupfitness-dev-415b8-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-levelupfitness-dev-415b8-deployment",
+      "UnauthRoleName": "amplify-levelupfitness-dev-415b8-unauthRole",
+      "StackName": "amplify-levelupfitness-dev-415b8",
+      "StackId": "arn:aws:cloudformation:us-east-2:851725206834:stack/amplify-levelupfitness-dev-415b8/94753b00-1645-11ef-a73e-0af870f83bf3",
+      "AmplifyAppId": "d30p9207o93meo"
+    },
+    "categories": {
+      "auth": {
+        "levelupfitness57991826": {},
+        "userPoolGroups": {}
+      },
+      "storage": {
+        "LevelUpFitnessStorage": {}
+      }
+    }
+  }
+}

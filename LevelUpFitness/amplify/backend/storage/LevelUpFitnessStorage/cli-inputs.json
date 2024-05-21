@@ -1,0 +1,13 @@
+{
+  "resourceName": "LevelUpFitnessStorage",
+  "policyUUID": "d9dcf19f",
+  "bucketName": "level-up-fitness-bucket",
+  "storageAccess": "authAndGuest",
+  "guestAccess": [
+    "READ"
+  ],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ"
+  ]
+}

@@ -8,11 +8,20 @@
 import SwiftUI
 
 struct PagesHolderView: View {
+    @State var pageType: PageType
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        switch pageType {
+        case .home:
+            HomeView()
+        case .workout:
+            Text("Workout")
+        case .profile:
+            Text("Workout")
+        }
     }
 }
 
 #Preview {
-    PagesHolderView()
+    PagesHolderView(pageType: .home)
 }

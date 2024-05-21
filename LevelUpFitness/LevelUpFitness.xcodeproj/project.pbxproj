@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0E5CE1C6E0490B7BE5F50F4D /* awsconfiguration.json in Resources */ = {isa = PBXBuildFile; fileRef = C9EF97A8E6FAD1E27A905BF3 /* awsconfiguration.json */; };
+		998475182BFC18F200295C6E /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998475172BFC18F200295C6E /* AuthenticationManager.swift */; };
+		9984753D2BFC315F00295C6E /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9984753C2BFC315F00295C6E /* StorageManager.swift */; };
+		998475402BFC333600295C6E /* AWSAPIPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 9984753F2BFC333600295C6E /* AWSAPIPlugin */; };
+		998475422BFC333600295C6E /* AWSCloudWatchLoggingPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 998475412BFC333600295C6E /* AWSCloudWatchLoggingPlugin */; };
+		998475442BFC333600295C6E /* AWSCognitoAuthPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 998475432BFC333600295C6E /* AWSCognitoAuthPlugin */; };
+		998475462BFC333600295C6E /* AWSDataStorePlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 998475452BFC333600295C6E /* AWSDataStorePlugin */; };
+		998475482BFC333600295C6E /* AWSLocationGeoPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 998475472BFC333600295C6E /* AWSLocationGeoPlugin */; };
 		99A67EEA2BF451F0002DC3DC /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A67EE92BF451EF002DC3DC /* HomeView.swift */; };
 		99A67EF92BF45251002DC3DC /* Sailec Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 99A67EEE2BF45250002DC3DC /* Sailec Bold.ttf */; };
 		99A67EFA2BF45251002DC3DC /* times new roman bold italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 99A67EEF2BF45250002DC3DC /* times new roman bold italic.ttf */; };
@@ -20,13 +28,18 @@
 		99A67F022BF45251002DC3DC /* Sailec Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 99A67EF72BF45250002DC3DC /* Sailec Medium.ttf */; };
 		99A67F032BF45251002DC3DC /* Sailec Regular Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 99A67EF82BF45251002DC3DC /* Sailec Regular Italic.ttf */; };
 		99A67F062BF456A7002DC3DC /* PagesHolderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A67F052BF456A7002DC3DC /* PagesHolderView.swift */; };
+		99A67F092BF55EFE002DC3DC /* PageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A67F082BF55EFE002DC3DC /* PageType.swift */; };
 		99CFAAE62BEB075500EFF67E /* LevelUpFitnessApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CFAAE52BEB075500EFF67E /* LevelUpFitnessApp.swift */; };
 		99CFAAE82BEB075500EFF67E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CFAAE72BEB075500EFF67E /* ContentView.swift */; };
 		99CFAAEA2BEB075700EFF67E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 99CFAAE92BEB075700EFF67E /* Assets.xcassets */; };
 		99CFAAED2BEB075700EFF67E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 99CFAAEC2BEB075700EFF67E /* Preview Assets.xcassets */; };
+		E244B057B6BA41AE81672440 /* amplifyconfiguration.json in Resources */ = {isa = PBXBuildFile; fileRef = 4CBA503DE7750582F847DD00 /* amplifyconfiguration.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4CBA503DE7750582F847DD00 /* amplifyconfiguration.json */ = {isa = PBXFileReference; explicitFileType = text.json; path = amplifyconfiguration.json; sourceTree = "<group>"; };
+		998475172BFC18F200295C6E /* AuthenticationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationManager.swift; sourceTree = "<group>"; };
+		9984753C2BFC315F00295C6E /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		99A67EE92BF451EF002DC3DC /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		99A67EEE2BF45250002DC3DC /* Sailec Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Sailec Bold.ttf"; sourceTree = "<group>"; };
 		99A67EEF2BF45250002DC3DC /* times new roman bold italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "times new roman bold italic.ttf"; sourceTree = "<group>"; };
@@ -41,11 +54,13 @@
 		99A67EF82BF45251002DC3DC /* Sailec Regular Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Sailec Regular Italic.ttf"; sourceTree = "<group>"; };
 		99A67F042BF4525B002DC3DC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		99A67F052BF456A7002DC3DC /* PagesHolderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagesHolderView.swift; sourceTree = "<group>"; };
+		99A67F082BF55EFE002DC3DC /* PageType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageType.swift; sourceTree = "<group>"; };
 		99CFAAE22BEB075500EFF67E /* LevelUpFitness.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LevelUpFitness.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		99CFAAE52BEB075500EFF67E /* LevelUpFitnessApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelUpFitnessApp.swift; sourceTree = "<group>"; };
 		99CFAAE72BEB075500EFF67E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		99CFAAE92BEB075700EFF67E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		99CFAAEC2BEB075700EFF67E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		C9EF97A8E6FAD1E27A905BF3 /* awsconfiguration.json */ = {isa = PBXFileReference; explicitFileType = text.json; path = awsconfiguration.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +68,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				998475402BFC333600295C6E /* AWSAPIPlugin in Frameworks */,
+				998475482BFC333600295C6E /* AWSLocationGeoPlugin in Frameworks */,
+				998475422BFC333600295C6E /* AWSCloudWatchLoggingPlugin in Frameworks */,
+				998475442BFC333600295C6E /* AWSCognitoAuthPlugin in Frameworks */,
+				998475462BFC333600295C6E /* AWSDataStorePlugin in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -62,6 +82,8 @@
 		99A67EE82BF451E3002DC3DC /* Managers */ = {
 			isa = PBXGroup;
 			children = (
+				998475172BFC18F200295C6E /* AuthenticationManager.swift */,
+				9984753C2BFC315F00295C6E /* StorageManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -100,11 +122,20 @@
 			path = Fonts;
 			sourceTree = "<group>";
 		};
+		99A67F072BF55EEF002DC3DC /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				99A67F082BF55EFE002DC3DC /* PageType.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		99CFAAD92BEB075400EFF67E = {
 			isa = PBXGroup;
 			children = (
 				99CFAAE42BEB075500EFF67E /* LevelUpFitness */,
 				99CFAAE32BEB075500EFF67E /* Products */,
+				DD9E74D5C9CEB2157F079D13 /* AmplifyConfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -119,6 +150,7 @@
 		99CFAAE42BEB075500EFF67E /* LevelUpFitness */ = {
 			isa = PBXGroup;
 			children = (
+				99A67F072BF55EEF002DC3DC /* Models */,
 				99A67F042BF4525B002DC3DC /* Info.plist */,
 				99A67EED2BF45211002DC3DC /* Fonts */,
 				99A67EEC2BF45206002DC3DC /* Extensions */,
@@ -140,6 +172,15 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		DD9E74D5C9CEB2157F079D13 /* AmplifyConfig */ = {
+			isa = PBXGroup;
+			children = (
+				C9EF97A8E6FAD1E27A905BF3 /* awsconfiguration.json */,
+				4CBA503DE7750582F847DD00 /* amplifyconfiguration.json */,
+			);
+			name = AmplifyConfig;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -156,6 +197,13 @@
 			dependencies = (
 			);
 			name = LevelUpFitness;
+			packageProductDependencies = (
+				9984753F2BFC333600295C6E /* AWSAPIPlugin */,
+				998475412BFC333600295C6E /* AWSCloudWatchLoggingPlugin */,
+				998475432BFC333600295C6E /* AWSCognitoAuthPlugin */,
+				998475452BFC333600295C6E /* AWSDataStorePlugin */,
+				998475472BFC333600295C6E /* AWSLocationGeoPlugin */,
+			);
 			productName = LevelUpFitness;
 			productReference = 99CFAAE22BEB075500EFF67E /* LevelUpFitness.app */;
 			productType = "com.apple.product-type.application";
@@ -184,6 +232,9 @@
 				Base,
 			);
 			mainGroup = 99CFAAD92BEB075400EFF67E;
+			packageReferences = (
+				9984753E2BFC333500295C6E /* XCRemoteSwiftPackageReference "amplify-swift" */,
+			);
 			productRefGroup = 99CFAAE32BEB075500EFF67E /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -211,6 +262,8 @@
 				99A67EFD2BF45251002DC3DC /* EtruscoNow Medium.ttf in Resources */,
 				99A67F012BF45251002DC3DC /* times new roman italic.ttf in Resources */,
 				99A67EFB2BF45251002DC3DC /* times new roman.ttf in Resources */,
+				0E5CE1C6E0490B7BE5F50F4D /* awsconfiguration.json in Resources */,
+				E244B057B6BA41AE81672440 /* amplifyconfiguration.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -224,7 +277,10 @@
 				99A67EEA2BF451F0002DC3DC /* HomeView.swift in Sources */,
 				99A67F062BF456A7002DC3DC /* PagesHolderView.swift in Sources */,
 				99CFAAE82BEB075500EFF67E /* ContentView.swift in Sources */,
+				9984753D2BFC315F00295C6E /* StorageManager.swift in Sources */,
+				998475182BFC18F200295C6E /* AuthenticationManager.swift in Sources */,
 				99CFAAE62BEB075500EFF67E /* LevelUpFitnessApp.swift in Sources */,
+				99A67F092BF55EFE002DC3DC /* PageType.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -432,6 +488,45 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		9984753E2BFC333500295C6E /* XCRemoteSwiftPackageReference "amplify-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/aws-amplify/amplify-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.33.6;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		9984753F2BFC333600295C6E /* AWSAPIPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9984753E2BFC333500295C6E /* XCRemoteSwiftPackageReference "amplify-swift" */;
+			productName = AWSAPIPlugin;
+		};
+		998475412BFC333600295C6E /* AWSCloudWatchLoggingPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9984753E2BFC333500295C6E /* XCRemoteSwiftPackageReference "amplify-swift" */;
+			productName = AWSCloudWatchLoggingPlugin;
+		};
+		998475432BFC333600295C6E /* AWSCognitoAuthPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9984753E2BFC333500295C6E /* XCRemoteSwiftPackageReference "amplify-swift" */;
+			productName = AWSCognitoAuthPlugin;
+		};
+		998475452BFC333600295C6E /* AWSDataStorePlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9984753E2BFC333500295C6E /* XCRemoteSwiftPackageReference "amplify-swift" */;
+			productName = AWSDataStorePlugin;
+		};
+		998475472BFC333600295C6E /* AWSLocationGeoPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9984753E2BFC333500295C6E /* XCRemoteSwiftPackageReference "amplify-swift" */;
+			productName = AWSLocationGeoPlugin;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 99CFAADA2BEB075500EFF67E /* Project object */;
 }
