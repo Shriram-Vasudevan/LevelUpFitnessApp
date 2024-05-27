@@ -1,10 +1,10 @@
 {
   "version": "1",
   "cognitoConfig": {
-    "identityPoolName": "levelupfitness57991826_identitypool_a44ce78c",
+    "identityPoolName": "levelupfitnessapp07d30c36_identitypool_07d30c36",
     "allowUnauthenticatedIdentities": true,
-    "resourceNameTruncated": "levelu57991826",
-    "userPoolName": "levelupfitness57991826_userpool_57991826",
+    "resourceNameTruncated": "levelu07d30c36",
+    "userPoolName": "levelupfitnessapp07d30c36_userpool_07d30c36",
     "autoVerifiedAttributes": [
       "email"
     ],
@@ -14,7 +14,7 @@
     ],
     "smsAuthenticationMessage": "Your authentication code is {####}",
     "smsVerificationMessage": "Your verification code is {####}",
-    "emailVerificationSubject": "Email Verification",
+    "emailVerificationSubject": "Your verification code",
     "emailVerificationMessage": "Your verification code is {####}",
     "defaultPasswordPolicy": false,
     "passwordPolicyMinLength": 8,
@@ -32,19 +32,17 @@
       "email",
       "name"
     ],
-    "userpoolClientLambdaRole": "levelu57991826_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "levelu07d30c36_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": true,
-    "sharedId": "57991826",
-    "resourceName": "levelupfitness57991826",
+    "sharedId": "07d30c36",
+    "resourceName": "levelupfitnessapp07d30c36",
     "authSelections": "identityPoolAndUserPool",
     "useDefault": "manual",
     "usernameAttributes": [
       "email"
     ],
     "triggers": {},
-    "userPoolGroupList": [
-      "LevelUpFitnessUserPool"
-    ],
+    "userPoolGroupList": [],
     "serviceName": "Cognito",
     "usernameCaseSensitive": false,
     "useEnabledMfas": true,
@@ -62,13 +60,14 @@
     },
     "breakCircularDependency": true,
     "dependsOn": [],
+    "thirdPartyAuth": false,
+    "userPoolGroups": false,
+    "adminQueries": false,
+    "hostedUI": false,
+    "authProviders": [],
     "parentStack": {
       "Ref": "AWS::StackId"
     },
-    "permissions": [],
-    "userPoolGroups": true,
-    "adminQueries": false,
-    "hostedUI": false,
-    "authProviders": []
+    "permissions": []
   }
 }

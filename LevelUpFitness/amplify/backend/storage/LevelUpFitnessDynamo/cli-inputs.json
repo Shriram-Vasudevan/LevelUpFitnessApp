@@ -1,0 +1,14 @@
+{
+  "resourceName": "LevelUpFitnessDynamo",
+  "tableName": "workouts-db",
+  "partitionKey": {
+    "fieldName": "UserID",
+    "fieldType": "string"
+  },
+  "sortKey": {
+    "fieldName": "WorkoutID",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}

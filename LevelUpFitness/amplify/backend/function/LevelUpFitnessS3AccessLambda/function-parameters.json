@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "storage": {
+      "LevelUpFitnessStorage": [
+        "read",
+        "update"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}

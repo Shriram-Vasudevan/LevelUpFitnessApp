@@ -13,33 +13,32 @@ import AWSAPIPlugin
 
 @main
 struct LevelUpFitnessApp: App {
-    //@StateObject private var authStateObserver = AuthStateObserver()
-
-    init() {
-        configureAmplify { success in
-            if success {
-                //authStateObserver.checkAuthState()
-            }
-        }
-    }
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    @StateObject private var authStateObserver = AuthStateObserver()
 
     var body: some Scene {
         WindowGroup {
-            HomeView()
+            AuthCheckView()
+                .environmentObject(authStateObserver)
         }
     }
+}
 
-    private func configureAmplify(completionHandler: @escaping (Bool) -> Void) {
+class AppDelegate: NSObject, UIApplicationDelegate {
+    func application(
+        _ application: UIApplication,
+        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil
+    ) -> Bool {
         do {
             try Amplify.add(plugin: AWSCognitoAuthPlugin())
             try Amplify.add(plugin: AWSAPIPlugin())
             try Amplify.add(plugin: AWSS3StoragePlugin())
             try Amplify.configure()
             print("Amplify configured successfully")
-            completionHandler(true)
         } catch {
-            print("could not initialize Amplify", error)
-            completionHandler(false)
+            print("An error occurred setting up Amplify: \(error)")
         }
+        return true
     }
 }
+

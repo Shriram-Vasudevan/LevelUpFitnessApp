@@ -1,23 +1,38 @@
 {
   "dev": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-levelupfitness-dev-415b8-authRole",
-      "UnauthRoleArn": "arn:aws:iam::851725206834:role/amplify-levelupfitness-dev-415b8-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::851725206834:role/amplify-levelupfitness-dev-415b8-authRole",
+      "AuthRoleName": "amplify-levelupfitnessapp-dev-33cf0-authRole",
+      "UnauthRoleArn": "arn:aws:iam::851725206834:role/amplify-levelupfitnessapp-dev-33cf0-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::851725206834:role/amplify-levelupfitnessapp-dev-33cf0-authRole",
       "Region": "us-east-2",
-      "DeploymentBucketName": "amplify-levelupfitness-dev-415b8-deployment",
-      "UnauthRoleName": "amplify-levelupfitness-dev-415b8-unauthRole",
-      "StackName": "amplify-levelupfitness-dev-415b8",
-      "StackId": "arn:aws:cloudformation:us-east-2:851725206834:stack/amplify-levelupfitness-dev-415b8/94753b00-1645-11ef-a73e-0af870f83bf3",
-      "AmplifyAppId": "d30p9207o93meo"
+      "DeploymentBucketName": "amplify-levelupfitnessapp-dev-33cf0-deployment",
+      "UnauthRoleName": "amplify-levelupfitnessapp-dev-33cf0-unauthRole",
+      "StackName": "amplify-levelupfitnessapp-dev-33cf0",
+      "StackId": "arn:aws:cloudformation:us-east-2:851725206834:stack/amplify-levelupfitnessapp-dev-33cf0/0b4b8e00-1b96-11ef-b868-026d6887bb6b",
+      "AmplifyAppId": "d1tbhw51vpgrz",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-levelupfitnessapp-dev-33cf0-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
     },
     "categories": {
       "auth": {
-        "levelupfitness57991826": {},
-        "userPoolGroups": {}
+        "levelupfitnessapp07d30c36": {}
       },
       "storage": {
-        "LevelUpFitnessStorage": {}
+        "LevelUpFitnessStorage": {},
+        "LevelUpFitnessDynamo": {}
+      },
+      "function": {
+        "LevelUpFitnessDynamoAccessLambda": {
+          "deploymentBucketName": "amplify-levelupfitnessapp-dev-33cf0-deployment",
+          "s3Key": "amplify-builds/LevelUpFitnessDynamoAccessLambda-6a704e56584f2b43592b-build.zip"
+        },
+        "LevelUpFitnessS3AccessLambda": {
+          "deploymentBucketName": "amplify-levelupfitnessapp-dev-33cf0-deployment",
+          "s3Key": "amplify-builds/LevelUpFitnessS3AccessLambda-63413250465a74684933-build.zip"
+        }
+      },
+      "api": {
+        "LevelUpFitnessDynamoAccessAPI": {},
+        "LevelUpFitnessS3AccessAPI": {}
       }
     }
   }

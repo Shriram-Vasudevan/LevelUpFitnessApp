@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "paths": {
+    "/getUserProgram": {
+      "name": "/getUserProgram",
+      "lambdaFunction": "LevelUpFitnessS3AccessLambda",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "read",
+          "update"
+        ]
+      }
+    }
+  }
+}

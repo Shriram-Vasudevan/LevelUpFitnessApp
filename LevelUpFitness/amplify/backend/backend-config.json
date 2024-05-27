@@ -1,6 +1,36 @@
 {
+  "api": {
+    "LevelUpFitnessDynamoAccessAPI": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "LevelUpFitnessDynamoAccessLambda"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    },
+    "LevelUpFitnessS3AccessAPI": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "LevelUpFitnessS3AccessLambda"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    }
+  },
   "auth": {
-    "levelupfitness57991826": {
+    "levelupfitnessapp07d30c36": {
       "customAuth": false,
       "dependsOn": [],
       "frontendAuthConfig": {
@@ -25,25 +55,68 @@
       },
       "providerPlugin": "awscloudformation",
       "service": "Cognito"
+    }
+  },
+  "function": {
+    "LevelUpFitnessDynamoAccessLambda": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
     },
-    "userPoolGroups": {
+    "LevelUpFitnessS3AccessLambda": {
+      "build": true,
       "dependsOn": [
         {
           "attributes": [
-            "UserPoolId",
-            "AppClientIDWeb",
-            "AppClientID",
-            "IdentityPoolId"
+            "BucketName"
           ],
-          "category": "auth",
-          "resourceName": "levelupfitness57991826"
+          "category": "storage",
+          "resourceName": "LevelUpFitnessStorage"
         }
       ],
       "providerPlugin": "awscloudformation",
-      "service": "Cognito-UserPool-Groups"
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_LevelUpFitnessDynamoAccessLambda_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "LevelUpFitnessDynamoAccessLambda"
+        }
+      ]
+    },
+    "AMPLIFY_function_LevelUpFitnessDynamoAccessLambda_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "LevelUpFitnessDynamoAccessLambda"
+        }
+      ]
+    },
+    "AMPLIFY_function_LevelUpFitnessS3AccessLambda_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "LevelUpFitnessS3AccessLambda"
+        }
+      ]
+    },
+    "AMPLIFY_function_LevelUpFitnessS3AccessLambda_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "LevelUpFitnessS3AccessLambda"
+        }
+      ]
     }
   },
   "storage": {
+    "LevelUpFitnessDynamo": {
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB"
+    },
     "LevelUpFitnessStorage": {
       "dependsOn": [],
       "providerPlugin": "awscloudformation",

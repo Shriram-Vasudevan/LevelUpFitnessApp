@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "paths": {
+    "/getWorkouts": {
+      "name": "/getWorkouts",
+      "lambdaFunction": "LevelUpFitnessDynamoAccessLambda",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "read",
+          "update"
+        ]
+      }
+    }
+  }
+}
