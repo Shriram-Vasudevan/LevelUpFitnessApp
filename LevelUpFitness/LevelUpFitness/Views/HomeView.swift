@@ -68,43 +68,6 @@ struct HomeView: View {
                                     )
                                     .cornerRadius(10)
                             }
-                            
-//                            HStack {
-//                               VStack {
-//                                   HStack {
-//                                       Text("Leg Exercises")
-//                                           .font(.custom("Sailec Bold", size: 23))
-//                                           .foregroundColor(.black)
-//                                           .textCase(.uppercase)
-//                                       
-//                                       Spacer()
-//                                       
-//                                   }
-//                                   
-//                                   HStack {
-//                                       Text("Exercises to Strengthen your Legs")
-//                                           .font(.custom("Sailec Medium", size: 15))
-//                                           .foregroundColor(.gray)
-//                                       
-//                                       Spacer()
-//                                   }
-//                               }
-//                               
-//                               Spacer()
-//                               
-//                               VStack {
-//                                   Text("25")
-//                                       .font(.custom("Sailec Bold", size: 20))
-//                                   
-//                                   Text("MAY")
-//                                       .font(.custom("Sailec Bold", size: 20))
-//                               }
-//                           }
-//                           .padding()
-//                           .background(
-//                               Rectangle()
-//                                   .fill(Color(red: 250/255.0, green: 245/255.0, blue: 245/255.0))
-//                           )
                         }
                         .padding(.horizontal)
                         .cornerRadius(15)
@@ -182,6 +145,10 @@ struct HomeView: View {
                 
                 if databaseManager.workouts.count <= 0 {
                     await databaseManager.getWorkouts()
+                }
+                
+                if storageManager.program == nil {
+                    await storageManager.getUserProgram()
                 }
             }
         }

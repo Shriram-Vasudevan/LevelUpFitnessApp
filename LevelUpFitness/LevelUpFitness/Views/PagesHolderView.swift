@@ -19,7 +19,7 @@ struct PagesHolderView: View {
                 case .home:
                     HomeView(storageManager: storageManager, databaseManager: databaseManager)
                 case .train:
-                    TrainView(databaseManager: databaseManager)
+                    TrainView(databaseManager: databaseManager, storageManager: storageManager)
                 case .profile:
                     Text("Workout")
                 }

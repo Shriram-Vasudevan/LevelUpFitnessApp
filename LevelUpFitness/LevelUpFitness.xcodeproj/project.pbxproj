@@ -34,6 +34,7 @@
 		994E7DC72C03DE5400BAD9E0 /* PascalCaseCodingKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994E7DC62C03DE5400BAD9E0 /* PascalCaseCodingKey.swift */; };
 		994E7DC92C03DF5C00BAD9E0 /* ProgramView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994E7DC82C03DF5C00BAD9E0 /* ProgramView.swift */; };
 		994E7DCB2C05289F00BAD9E0 /* Program.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994E7DCA2C05289F00BAD9E0 /* Program.swift */; };
+		994E7DCF2C0551FE00BAD9E0 /* ProgramListWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994E7DCE2C0551FE00BAD9E0 /* ProgramListWidget.swift */; };
 		998475182BFC18F200295C6E /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998475172BFC18F200295C6E /* AuthenticationManager.swift */; };
 		9984753D2BFC315F00295C6E /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9984753C2BFC315F00295C6E /* StorageManager.swift */; };
 		99A67EEA2BF451F0002DC3DC /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A67EE92BF451EF002DC3DC /* HomeView.swift */; };
@@ -74,6 +75,7 @@
 		994E7DC62C03DE5400BAD9E0 /* PascalCaseCodingKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PascalCaseCodingKey.swift; sourceTree = "<group>"; };
 		994E7DC82C03DF5C00BAD9E0 /* ProgramView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramView.swift; sourceTree = "<group>"; };
 		994E7DCA2C05289F00BAD9E0 /* Program.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Program.swift; sourceTree = "<group>"; };
+		994E7DCE2C0551FE00BAD9E0 /* ProgramListWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramListWidget.swift; sourceTree = "<group>"; };
 		998475172BFC18F200295C6E /* AuthenticationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationManager.swift; sourceTree = "<group>"; };
 		9984753C2BFC315F00295C6E /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		99A67EE92BF451EF002DC3DC /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -156,6 +158,7 @@
 				994E7DBE2C02919000BAD9E0 /* TrainView.swift */,
 				994E7DC02C02950000BAD9E0 /* WorkoutCard.swift */,
 				994E7DC82C03DF5C00BAD9E0 /* ProgramView.swift */,
+				994E7DCE2C0551FE00BAD9E0 /* ProgramListWidget.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -362,6 +365,7 @@
 				9984753D2BFC315F00295C6E /* StorageManager.swift in Sources */,
 				998475182BFC18F200295C6E /* AuthenticationManager.swift in Sources */,
 				99F71F9F2C023A3D00E27B60 /* UsageTimeView.swift in Sources */,
+				994E7DCF2C0551FE00BAD9E0 /* ProgramListWidget.swift in Sources */,
 				99CFAAE62BEB075500EFF67E /* LevelUpFitnessApp.swift in Sources */,
 				994E7DC72C03DE5400BAD9E0 /* PascalCaseCodingKey.swift in Sources */,
 				994E7DB72C026A1D00BAD9E0 /* AuthStateObserver.swift in Sources */,

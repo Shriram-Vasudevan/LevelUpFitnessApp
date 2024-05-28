@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ProgramView: View {
+    @State var program: Program
+    
     var body: some View {
         ZStack {
             VStack {
@@ -18,5 +20,5 @@ struct ProgramView: View {
 }
 
 #Preview {
-    ProgramView()
+    ProgramView(program: Program(program: [ProgramDay(day: "", workout: "", completed: false, exercises: [Exercise(name: "", sets: "", reps: "", rpe: "", rest: 0, completed: false)])]))
 }
