@@ -53,9 +53,24 @@ struct TrainView: View {
                             }
                             .padding([.horizontal, .bottom])
                             
-                            if let program = storageManager.program {
-                                ProgramListWidget(navigateToProgramView: $navigateToProgramView, program: program)
+                            VStack {
+                                ZStack {
+                                    Image("ManExercising - PushUp")
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                }
+                                
+                                Text("Begin Workout")
+                                    .foregroundColor(.gray)
                             }
+                            .padding()
+                            .background(
+                                Rectangle()
+                                    .fill(.white)
+                                    .shadow(radius: 5)
+                            )
+                            .padding(.horizontal)
+                            .padding(.bottom)
                         }
                         
                         

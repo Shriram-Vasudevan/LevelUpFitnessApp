@@ -10,12 +10,50 @@ import SwiftUI
 struct ProgramView: View {
     @State var program: Program
     
+    @State var navigateToWorkoutView: Bool = false
+    
+    @Environment(\.dismiss) var dismiss
+    
     var body: some View {
         ZStack {
-            VStack {
+            VStack (spacing: 0) {
+                HStack {
+                    Button(action: {
+                        dismiss()
+                    }, label: {
+                        Image(systemName: "chevron.left")
+                            .foregroundColor(.black)
+                    })
+                    
+                    Text("Exit")
+                    
+                    Spacer()
+                }
+                .padding(.horizontal)
+                
+                HStack {
+                    Text("Today's Program")
+                        .font(.custom("EtruscoNowCondensed Bold", size: 35))
+                    
+                    Spacer()
+                }
+                .padding([.horizontal, .bottom])
+                
+                ProgramListWidget(navigateToWorkoutView: $navigateToWorkoutView, program: program)
+                
+                
+                HStack {
+                    Text("Bonus Exercises")
+                        .font(.custom("EtruscoNowCondensed Bold", size: 35))
+                    
+                    Spacer()
+                }
+                .padding([.horizontal, .bottom])
+                Spacer()
                 
             }
         }
+        .navigationBarBackButtonHidden()
     }
 }
 

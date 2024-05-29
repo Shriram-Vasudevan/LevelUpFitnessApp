@@ -71,37 +71,8 @@ struct HomeView: View {
                         }
                         .padding(.horizontal)
                         .cornerRadius(15)
-                        
-                        HStack {
-                            Text("Your Stats")
-                                .font(.custom("EtruscoNowCondensed Bold", size: 30))
-                            
-                            Spacer()
-                        }
-                        .padding([.horizontal, .bottom])
-                        
-            
-                        VStack() {
-                            if !days.isEmpty {
-                                HStack() {
-                                    Chart {
-                                        ForEach(days.keys.sorted(), id: \.self) { date in
-                                            let randomUsageTime = Int.random(in: 5..<30)
-                                            
-                                            BarMark(
-                                               x: .value("Date", date),
-                                               y: .value("Time", randomUsageTime)
-                                           )
-                                        }
-                                    }
-                                    .chartYAxis {
-                                        AxisMarks(position: .leading)
-                                    }
-                                }
-                            }
-                        }
-                        .padding([.horizontal, .bottom])
-                        
+                        .padding(.bottom)
+
                         VStack {
                             HStack {
                                 ZStack {
@@ -110,19 +81,48 @@ struct HomeView: View {
                                         .foregroundColor(.white)
                                         .bold()
                                 }
+                                .padding()
+                                .background(
+                                    RoundedRectangle(cornerRadius: 15)
+                                        .fill(LinearGradient(gradient: Gradient(colors: [Color.blue, Color.purple]), startPoint: .leading, endPoint: .trailing))
+                                        .shadow(radius: 5)
+                                )
+                                .padding(.bottom, 5)
+                                
+                                Spacer()
+                                
+                                Text("Percentage of your Program Completed this Week")
+                                    .bold()
+                                    .font(.headline)
+                                    .foregroundColor(.black)
+                                    .multilineTextAlignment(.center)
+                                
+                                Spacer()
+                            }
+                            
+                            VStack() {
+                                if !days.isEmpty {
+                                    HStack() {
+                                        Chart {
+                                            ForEach(days.keys.sorted(), id: \.self) { date in
+                                                let randomUsageTime = Int.random(in: 5..<30)
+                                                
+                                                BarMark(
+                                                   x: .value("Date", date),
+                                                   y: .value("Time", randomUsageTime)
+                                               )
+                                            }
+                                        }
+                                        .chartYAxis {
+                                            AxisMarks(position: .leading)
+                                        }
+                                    }
+                                }
                             }
                             .padding()
-                            .background(
-                                RoundedRectangle(cornerRadius: 15)
-                                    .fill(LinearGradient(gradient: Gradient(colors: [Color.blue, Color.purple]), startPoint: .leading, endPoint: .trailing))
-                                    .shadow(radius: 5)
-                            )
-                            .padding(.bottom, 5)
                             
-                            Text("Percentage of your Program Completed this Week")
-                                .font(.footnote)
-                                .foregroundColor(.black)
-                                .multilineTextAlignment(.center)
+                            
+                            
                         }
                         .padding()
                         .background(

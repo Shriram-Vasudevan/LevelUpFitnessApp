@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ProgramListWidget: View {
-    @Binding var navigateToProgramView: Bool
+    @Binding var navigateToWorkoutView: Bool
     
     var program: Program
     
@@ -21,54 +21,53 @@ struct ProgramListWidget: View {
                 
                 Spacer()
                 
-                Image(systemName: "chevron.left")
-                Image(systemName: "chevron.right")
             }
             
             Divider()
                 .padding(.bottom, 5)
             
-            if let todayProgram = program.program.first(where: { $0.day == getCurrentWeekday() }) {
-                VStack(spacing: 5) {
-                    ForEach(todayProgram.exercises, id: \.name) { exercise in
-                        HStack {
-                            Text("\(exercise.name)")
-                            
-                            Spacer()
-                            
-                            if exercise.completed {
-                                Image(systemName: "checkmark.seal.fill")
-                                    .foregroundColor(.green)
+            ZStack {
+                Image("ManExercising - PushUp")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                
+                if let todayProgram = program.program.first(where: { $0.day == getCurrentWeekday() }) {
+                    VStack(spacing: 5) {
+                        ForEach(todayProgram.exercises, id: \.name) { exercise in
+                            HStack {
+                                Text("\(exercise.name)")
+                                
+                                Spacer()
+                                
+                                if exercise.completed {
+                                    Image(systemName: "checkmark.seal.fill")
+                                        .foregroundColor(.green)
+                                }
+                                else {
+                                    Button {
+                                        navigateToWorkoutView = true
+                                    } label: {
+                                        Text("Start Now")
+                                    }
+
+                                }
                             }
                         }
                     }
+                } else {
+                    Text("No program for today")
+                        .foregroundColor(.gray)
                 }
-            } else {
-                Text("No program for today")
-                    .foregroundColor(.gray)
             }
-            
-            Button(action: {
-                navigateToProgramView = true
-            }) {
-                Text("Let's Go!")
-                    .fontWeight(.bold)
-                    .foregroundColor(.white)
-                    .frame(minWidth: 0, maxWidth: .infinity)
-                    .padding(20)
-                    .background(.blue)
-                    .cornerRadius(15)
-            }
-            .padding(.top, 15)
-            
         }
         .padding()
         .background(
-            RoundedRectangle(cornerRadius: 15)
+            Rectangle()
                 .fill(.white)
                 .shadow(radius: 5)
         )
         .padding(.horizontal)
+        .padding(.bottom)
     }
     
     func getCurrentWeekday() -> String {
@@ -83,5 +82,5 @@ struct ProgramListWidget: View {
 }
 
 #Preview {
-    ProgramListWidget(navigateToProgramView: .constant(false), program: Program(program: [ProgramDay(day: "", workout: "", completed: false, exercises: [Exercise(name: "", sets: "", reps: "", rpe: "", rest: 0, completed: false)])]))
+    ProgramListWidget(navigateToWorkoutView: .constant(false), program: Program(program: [ProgramDay(day: "", workout: "", completed: false, exercises: [Exercise(name: "", sets: "", reps: "", rpe: "", rest: 0, completed: false)])]))
 }
