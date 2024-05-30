@@ -11,6 +11,8 @@ import Amplify
 class StorageManager: ObservableObject {
     @Published var dailyVideo: URL?
     @Published var program: Program?
+    @Published var retrievingProgram: Bool = false
+    
     
     func downloadDailyVideo() async {
         do {
@@ -46,6 +48,7 @@ class StorageManager: ObservableObject {
     
     func getUserProgram() async  {
         do {
+            retrievingProgram = true
             guard let userID = try? await Amplify.Auth.getCurrentUser().userId else { return }
             
             let downloadTask = Amplify.Storage.downloadData(key: "UserPrograms/\(userID).json")
@@ -61,6 +64,7 @@ class StorageManager: ObservableObject {
             
             DispatchQueue.main.async {
                 self.program = decodedData
+                self.retrievingProgram = false
             }
         } catch {
             print(error)

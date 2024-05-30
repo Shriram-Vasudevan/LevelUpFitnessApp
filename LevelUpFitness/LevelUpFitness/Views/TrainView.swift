@@ -53,24 +53,67 @@ struct TrainView: View {
                             }
                             .padding([.horizontal, .bottom])
                             
-                            VStack {
-                                ZStack {
-                                    Image("ManExercising - PushUp")
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit)
+                            if storageManager.retrievingProgram {
+                                VStack {
+                                    ZStack {
+                                        Image("ManExercising - PushUp")
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                    }
+                                    
+                                    Text("We're Getting your Program!}")
+                                        .foregroundColor(.gray)
                                 }
-                                
-                                Text("Begin Workout")
-                                    .foregroundColor(.gray)
+                                .padding()
+                                .background(
+                                    Rectangle()
+                                        .fill(.white)
+                                        .shadow(radius: 5)
+                                )
+                                .padding(.horizontal)
+                                .padding(.bottom)
+                            } else if storageManager.program != nil {
+                                VStack {
+                                    ZStack {
+                                        Image("ManExercising - PushUp")
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                    }
+                                    
+                                    Text("Begin Workout")
+                                        .foregroundColor(.gray)
+                                }
+                                .padding()
+                                .background(
+                                    Rectangle()
+                                        .fill(.white)
+                                        .shadow(radius: 5)
+                                )
+                                .padding(.horizontal)
+                                .padding(.bottom)
+                                .onTapGesture {
+                                    navigateToProgramView = true
+                                }
+                            } else {
+                                VStack {
+                                    ZStack {
+                                        Image("ManExercising - PushUp")
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                    }
+                                    
+                                    Text("You Have no Program!")
+                                        .foregroundColor(.gray)
+                                }
+                                .padding()
+                                .background(
+                                    Rectangle()
+                                        .fill(.white)
+                                        .shadow(radius: 5)
+                                )
+                                .padding(.horizontal)
+                                .padding(.bottom)
                             }
-                            .padding()
-                            .background(
-                                Rectangle()
-                                    .fill(.white)
-                                    .shadow(radius: 5)
-                            )
-                            .padding(.horizontal)
-                            .padding(.bottom)
                         }
                         
                         
