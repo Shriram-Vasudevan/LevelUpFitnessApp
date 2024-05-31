@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct TrainView: View {
-    @State var databaseManager: DatabaseManager
-    @State var storageManager: StorageManager
+    @ObservedObject var databaseManager: DatabaseManager
+    @ObservedObject var storageManager: StorageManager
     
     @State var navigateToProgramView: Bool = false
     
@@ -124,7 +124,7 @@ struct TrainView: View {
             }
             .navigationDestination(isPresented: $navigateToProgramView) {
                 if let program = storageManager.program {
-                    ProgramView(program: program)
+                    ProgramView(storageManager: storageManager)
                 }
             }
         }

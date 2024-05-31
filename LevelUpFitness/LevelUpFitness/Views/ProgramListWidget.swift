@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct ProgramListWidget: View {
-    @Binding var navigateToWorkoutView: Bool
+    @ObservedObject var storageManager: StorageManager
     
-    var program: Program
+    @Binding var navigateToWorkoutView: Bool
     
     var body: some View {
         VStack {
@@ -31,9 +31,9 @@ struct ProgramListWidget: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                 
-                if let todayProgram = program.program.first(where: { $0.day == getCurrentWeekday() }) {
+                if let todaysProgram = storageManager.program?.program.first(where: { $0.day == getCurrentWeekday() }) {
                     VStack(spacing: 5) {
-                        ForEach(todayProgram.exercises, id: \.name) { exercise in
+                        ForEach(todaysProgram.exercises, id: \.name) { exercise in
                             HStack {
                                 Text("\(exercise.name)")
                                 
@@ -42,14 +42,6 @@ struct ProgramListWidget: View {
                                 if exercise.completed {
                                     Image(systemName: "checkmark.seal.fill")
                                         .foregroundColor(.green)
-                                }
-                                else {
-                                    Button {
-                                        navigateToWorkoutView = true
-                                    } label: {
-                                        Text("Start Now")
-                                    }
-
                                 }
                             }
                         }
@@ -68,6 +60,9 @@ struct ProgramListWidget: View {
         )
         .padding(.horizontal)
         .padding(.bottom)
+        .onTapGesture {
+            navigateToWorkoutView = true
+        }
     }
     
     func getCurrentWeekday() -> String {
@@ -82,5 +77,5 @@ struct ProgramListWidget: View {
 }
 
 #Preview {
-    ProgramListWidget(navigateToWorkoutView: .constant(false), program: Program(program: [ProgramDay(day: "", workout: "", completed: false, exercises: [Exercise(name: "", sets: "", reps: "", rpe: "", rest: 0, completed: false)])]))
+    ProgramListWidget(storageManager: StorageManager(), navigateToWorkoutView: .constant(false))
 }

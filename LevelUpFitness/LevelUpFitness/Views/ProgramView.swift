@@ -8,56 +8,61 @@
 import SwiftUI
 
 struct ProgramView: View {
-    @State var program: Program
+    @ObservedObject var storageManager: StorageManager
     
     @State var navigateToWorkoutView: Bool = false
     
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
-        ZStack {
-            VStack (spacing: 0) {
-                HStack {
-                    Button(action: {
-                        dismiss()
-                    }, label: {
-                        Image(systemName: "chevron.left")
-                            .foregroundColor(.black)
-                    })
+        NavigationStack {
+            ZStack {
+                VStack (spacing: 0) {
+                    HStack {
+                        Button(action: {
+                            dismiss()
+                        }, label: {
+                            Image(systemName: "chevron.left")
+                                .foregroundColor(.black)
+                        })
+                        
+                        Text("Exit")
+                        
+                        Spacer()
+                    }
+                    .padding(.horizontal)
                     
-                    Text("Exit")
+                    HStack {
+                        Text("Today's Program")
+                            .font(.custom("EtruscoNowCondensed Bold", size: 35))
+                        
+                        Spacer()
+                    }
+                    .padding([.horizontal, .bottom])
+                    
+                    ProgramListWidget(storageManager: StorageManager(), navigateToWorkoutView: $navigateToWorkoutView)
+                    
+                    
+                    HStack {
+                        Text("Bonus Exercises")
+                            .font(.custom("EtruscoNowCondensed Bold", size: 35))
+                        
+                        Spacer()
+                    }
+                    .padding([.horizontal, .bottom])
                     
                     Spacer()
-                }
-                .padding(.horizontal)
-                
-                HStack {
-                    Text("Today's Program")
-                        .font(.custom("EtruscoNowCondensed Bold", size: 35))
                     
-                    Spacer()
                 }
-                .padding([.horizontal, .bottom])
-                
-                ProgramListWidget(navigateToWorkoutView: $navigateToWorkoutView, program: program)
-                
-                
-                HStack {
-                    Text("Bonus Exercises")
-                        .font(.custom("EtruscoNowCondensed Bold", size: 35))
-                    
-                    Spacer()
-                }
-                .padding([.horizontal, .bottom])
-                
-                Spacer()
-                
+            }
+            .navigationBarBackButtonHidden()
+            .navigationDestination(isPresented: $navigateToWorkoutView) {
+                WorkoutView(storageManager: storageManager)
             }
         }
-        .navigationBarBackButtonHidden()
     }
 }
 
 #Preview {
-    ProgramView(program: Program(program: [ProgramDay(day: "", workout: "", completed: false, exercises: [Exercise(name: "", sets: "", reps: "", rpe: "", rest: 0, completed: false)])]))
+    ProgramView(storageManager: StorageManager())
 }

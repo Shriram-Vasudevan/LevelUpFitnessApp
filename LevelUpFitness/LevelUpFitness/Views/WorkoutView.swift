@@ -8,22 +8,43 @@
 import SwiftUI
 
 struct WorkoutView: View {
-    @State var program: Program
-    @State var currentExercise: Exercise?
+    @ObservedObject var storageManager: StorageManager
+    
+    @State var currentExercises: [Exercise] = []
+    @State var currentExerciseIndex: Int = 0
+
+    var programWorkoutManager = ProgramWorkoutManager()
+    
+    @Environment(\.dismiss) var dismiss
     
     var body: some View {
         ZStack {
-            if let currentExercise = currentExercise {
+            if currentExercises.count > 0 {
                 VStack {
+                    
+                    HStack {
+                        Button(action: {
+                            dismiss()
+                        }, label: {
+                            Image(systemName: "chevron.left")
+                                .foregroundColor(.black)
+                        })
+                        
+                        Text("Back")
+                        
+                        Spacer()
+                    }
+                    .padding(.horizontal)
+                    
                     HStack {
                         VStack (alignment: .leading, spacing: 0) {
-                            Text(currentExercise.name)
+                            Text(currentExercises[currentExerciseIndex].name)
                                 .font(.custom("EtruscoNowCondensed Bold", size: 35))
                                 .padding(.bottom, -7)
                             
                             HStack {
-                                Text("Reps: \(currentExercise.reps)")
-                                Text("Sets: \(currentExercise.sets)")
+                                Text("Reps: \(currentExercises[currentExerciseIndex].reps)")
+                                Text("Sets: \(currentExercises[currentExerciseIndex].sets)")
                                 
                                 Spacer()
                             }
@@ -31,17 +52,24 @@ struct WorkoutView: View {
                         
                         Spacer()
                         
-                        Text("Complete")
-                            .font(.footnote)
-                            .bold()
-                            .padding()
-                            .background(
-                                Capsule()
-                                    .fill(.green)
-                            )
+                        Button(action: {
+                            withAnimation {
+                                currentExercises[currentExerciseIndex].completed = true
+                                currentExerciseIndex += 1
+                            }
+                        }, label: {
+                            Text("Complete")
+                                .font(.footnote)
+                                .foregroundColor(.black)
+                                .bold()
+                                .padding()
+                                .background(
+                                    Capsule()
+                                        .fill(.green)
+                                )
+                        })
                     }
                     .padding([.horizontal, .bottom])
-                    .padding(.top, 50)
 
                     
                     Image("GuyAtTheGym")
@@ -60,17 +88,29 @@ struct WorkoutView: View {
                     Spacer()
                 }
             }
+            else if currentExercises.count - 1 == currentExerciseIndex {
+                
+            }
         }
+        .navigationBarBackButtonHidden()
         .onAppear {
-            
+            if let todaysProgram = storageManager.program?.program.first(where: { $0.day == programWorkoutManager.getCurrentWeekday() }) {
+                self.currentExercises = todaysProgram.exercises
+                
+                print(currentExercises)
+                
+                if let (index, exercise) = todaysProgram.exercises.enumerated().first(where: { $0.element.completed == true }) {
+                    self.currentExerciseIndex = index
+                    
+                }
+            }
+            else {
+                print("none")
+            }
         }
-    }
-    
-    func moveToNextExercise() {
-        
     }
 }
 
 #Preview {
-    WorkoutView(program: Program(program: [ProgramDay(day: "", workout: "", completed: false, exercises: [Exercise(name: "", sets: "", reps: "", rpe: "", rest: 0, completed: false)])]), currentExercise: Exercise(name: "", sets: "", reps: "", rpe: "", rest: 0, completed: false))
+    WorkoutView(storageManager: StorageManager())
 }

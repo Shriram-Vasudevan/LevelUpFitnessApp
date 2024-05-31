@@ -49,7 +49,7 @@ struct HomeView: View {
                             if let url = storageManager.dailyVideo {
                                 VideoPlayer(player: avPlayer)
                                     .aspectRatio(contentMode: .fill)
-                                    .frame(width: .infinity, height: 200)
+                                    .frame(height: 200)
                                     .onAppear {
                                         avPlayer = AVPlayer(url: url)
                                     }
@@ -58,7 +58,7 @@ struct HomeView: View {
                             } else {
                                 Rectangle()
                                     .fill(.white)
-                                    .frame(width: .infinity, height: 200)
+                                    .frame(height: 200)
                                     .overlay (
                                         Image("GuyAtTheGym")
                                             .resizable()

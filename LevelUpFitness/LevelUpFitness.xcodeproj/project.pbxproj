@@ -39,6 +39,7 @@
 		9984753D2BFC315F00295C6E /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9984753C2BFC315F00295C6E /* StorageManager.swift */; };
 		999F70652C06C80300B35A78 /* WorkoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999F70642C06C80300B35A78 /* WorkoutView.swift */; };
 		999F70672C0818E600B35A78 /* ProgramWorkoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999F70662C0818E600B35A78 /* ProgramWorkoutManager.swift */; };
+		999F706A2C096C2700B35A78 /* ProgramViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999F70692C096C2700B35A78 /* ProgramViewModel.swift */; };
 		99A67EEA2BF451F0002DC3DC /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A67EE92BF451EF002DC3DC /* HomeView.swift */; };
 		99A67EF92BF45251002DC3DC /* Sailec Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 99A67EEE2BF45250002DC3DC /* Sailec Bold.ttf */; };
 		99A67EFA2BF45251002DC3DC /* times new roman bold italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 99A67EEF2BF45250002DC3DC /* times new roman bold italic.ttf */; };
@@ -82,6 +83,7 @@
 		9984753C2BFC315F00295C6E /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		999F70642C06C80300B35A78 /* WorkoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutView.swift; sourceTree = "<group>"; };
 		999F70662C0818E600B35A78 /* ProgramWorkoutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramWorkoutManager.swift; sourceTree = "<group>"; };
+		999F70692C096C2700B35A78 /* ProgramViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramViewModel.swift; sourceTree = "<group>"; };
 		99A67EE92BF451EF002DC3DC /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		99A67EEE2BF45250002DC3DC /* Sailec Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Sailec Bold.ttf"; sourceTree = "<group>"; };
 		99A67EEF2BF45250002DC3DC /* times new roman bold italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "times new roman bold italic.ttf"; sourceTree = "<group>"; };
@@ -134,6 +136,14 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		999F70682C096AA600B35A78 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				999F70692C096C2700B35A78 /* ProgramViewModel.swift */,
+			);
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 		99A67EE82BF451E3002DC3DC /* Managers */ = {
@@ -226,6 +236,7 @@
 		99CFAAE42BEB075500EFF67E /* LevelUpFitness */ = {
 			isa = PBXGroup;
 			children = (
+				999F70682C096AA600B35A78 /* ViewModels */,
 				99A67F072BF55EEF002DC3DC /* Models */,
 				99A67F042BF4525B002DC3DC /* Info.plist */,
 				99A67EED2BF45211002DC3DC /* Fonts */,
@@ -366,6 +377,7 @@
 				994E7DCB2C05289F00BAD9E0 /* Program.swift in Sources */,
 				999F70672C0818E600B35A78 /* ProgramWorkoutManager.swift in Sources */,
 				994E7DBD2C028F5B00BAD9E0 /* ConfirmationCodeView.swift in Sources */,
+				999F706A2C096C2700B35A78 /* ProgramViewModel.swift in Sources */,
 				994E7DB32C02665300BAD9E0 /* KeyboardResponder.swift in Sources */,
 				994E7DC92C03DF5C00BAD9E0 /* ProgramView.swift in Sources */,
 				999F70652C06C80300B35A78 /* WorkoutView.swift in Sources */,
