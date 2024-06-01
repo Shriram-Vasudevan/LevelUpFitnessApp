@@ -27,10 +27,6 @@ struct ProgramListWidget: View {
                 .padding(.bottom, 5)
             
             ZStack {
-                Image("ManExercising - PushUp")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                
                 if let todaysProgram = storageManager.program?.program.first(where: { $0.day == getCurrentWeekday() }) {
                     VStack(spacing: 5) {
                         ForEach(todaysProgram.exercises, id: \.name) { exercise in
@@ -61,7 +57,9 @@ struct ProgramListWidget: View {
         .padding(.horizontal)
         .padding(.bottom)
         .onTapGesture {
-            navigateToWorkoutView = true
+            withAnimation {
+                navigateToWorkoutView = true
+            }
         }
     }
     

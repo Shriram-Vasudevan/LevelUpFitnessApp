@@ -18,8 +18,8 @@ struct PagesHolderView: View {
                 switch pageType {
                 case .home:
                     HomeView(storageManager: storageManager, databaseManager: databaseManager)
-                case .train:
-                    TrainView(databaseManager: databaseManager, storageManager: storageManager)
+                case .program:
+                    ProgramView(storageManager: storageManager)
                 case .profile:
                     Text("Workout")
                 }
@@ -53,19 +53,19 @@ struct PagesHolderView: View {
                     ZStack {
                         VStack {
                             Button(action: {
-                                pageType = .train
+                                pageType = .program
                             }, label: {
                                 VStack {
-                                    Image(pageType == .train ? "TrainBlue" : "TrainGrey")
+                                    Image(pageType == .program ? "TrainBlue" : "TrainGrey")
                                         .resizable()
                                         .frame(width: 30, height: 30)
                                         .aspectRatio(contentMode:  .fill)
-                                        .foregroundColor(pageType == .train ? .blue : .gray)
+                                        .foregroundColor(pageType == .program ? .blue : .gray)
                                     
                                     
-                                    Text("Train")
+                                    Text("Program")
                                         .font(.caption)
-                                        .foregroundColor(pageType == .train ? .blue : .gray)
+                                        .foregroundColor(pageType == .program ? .blue : .gray)
                                     
                                 }
                                 .padding(.bottom)
@@ -105,7 +105,21 @@ struct PagesHolderView: View {
                 .padding(.bottom)
             }
         }
-        .navigationBarBackButtonHidden()
+        .onAppear {
+            Task {
+                if storageManager.dailyVideo == nil {
+                    await storageManager.downloadDailyVideo()
+                }
+                
+                if databaseManager.workouts.count <= 0 {
+                    await databaseManager.getWorkouts()
+                }
+                
+                if storageManager.program == nil {
+                    await storageManager.getUserProgram()
+                }
+            }
+        }
         .ignoresSafeArea(edges: .bottom)
     }
 }

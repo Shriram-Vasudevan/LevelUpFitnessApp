@@ -8,5 +8,5 @@
 import Foundation
 
 enum PageType {
-    case home, train, profile
+    case home, program, profile
 }

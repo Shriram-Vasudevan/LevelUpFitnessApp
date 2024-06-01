@@ -18,19 +18,24 @@ struct ProgramView: View {
         NavigationStack {
             ZStack {
                 VStack (spacing: 0) {
-                    HStack {
-                        Button(action: {
-                            dismiss()
-                        }, label: {
-                            Image(systemName: "chevron.left")
-                                .foregroundColor(.black)
-                        })
-                        
-                        Text("Exit")
-                        
-                        Spacer()
+                    VStack {
+                        HStack {
+                            Spacer()
+                            
+                            Text("Your Program")
+                                .font(.custom("EtruscoNowCondensed Bold", size: 35))
+                                .foregroundColor(.white)
+                            
+                            Spacer()
+                        }
+                        .padding(.top, 50)
+                        .padding(.horizontal)
                     }
-                    .padding(.horizontal)
+                    .background(
+                        Rectangle()
+                            .fill(.blue)
+                    )
+                    .edgesIgnoringSafeArea(.top)
                     
                     HStack {
                         Text("Today's Program")
@@ -39,9 +44,9 @@ struct ProgramView: View {
                         Spacer()
                     }
                     .padding([.horizontal, .bottom])
+                    .padding(.top, -40)
                     
-                    ProgramListWidget(storageManager: StorageManager(), navigateToWorkoutView: $navigateToWorkoutView)
-                    
+                    ProgramListWidget(storageManager: storageManager, navigateToWorkoutView: $navigateToWorkoutView)
                     
                     HStack {
                         Text("Bonus Exercises")
@@ -52,13 +57,15 @@ struct ProgramView: View {
                     .padding([.horizontal, .bottom])
                     
                     Spacer()
-                    
+                }
+                .onTapGesture {
+                    navigateToWorkoutView = true
                 }
             }
-            .navigationBarBackButtonHidden()
-            .navigationDestination(isPresented: $navigateToWorkoutView) {
+            .navigationDestination(isPresented: $navigateToWorkoutView, destination: {
                 WorkoutView(storageManager: storageManager)
-            }
+            })
+            .navigationBarBackButtonHidden()
         }
     }
 }
@@ -66,3 +73,4 @@ struct ProgramView: View {
 #Preview {
     ProgramView(storageManager: StorageManager())
 }
+

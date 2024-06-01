@@ -21,30 +21,38 @@ struct HomeView: View {
     var body: some View {
         ZStack {
             VStack (spacing: 0) {
-                HStack {
-                    Text("LevelUp Fitness")
-                        .font(.custom("EtruscoNowCondensed Bold", size: 35))
-                    
-                    Spacer()
-                    
-                    Image(systemName: "gearshape")
-                        .foregroundColor(.black)
-                }
-                .padding(.horizontal)
-                
-                Divider()
+                VStack {
+                    HStack {
+                        Image(systemName: "line.3.horizontal")
+                            .foregroundColor(.white)
+                            .hidden()
+                        
+                        Spacer()
+                        
+                        Text("LevelUp Fitness")
+                            .font(.custom("EtruscoNowCondensed Bold", size: 35))
+                            .foregroundColor(.white)
+                        
+                        Spacer()
+                        
+                        Image(systemName: "line.3.horizontal")
+                            .resizable()
+                            .foregroundColor(.white)
+                           // .aspectRatio(contentMode: .fit)
+                            .frame(width: 20, height: 15)
+                           
+                    }
+                    .padding(.top, 50)
                     .padding(.horizontal)
-                
+                }
+                .background(
+                    Rectangle()
+                        .fill(.blue)
+                )
+                .edgesIgnoringSafeArea(.top)
+
                 ScrollView(.vertical) {
                     VStack (spacing: 0) {
-                        HStack {
-                            Text("Today's Video")
-                                .font(.custom("EtruscoNowCondensed Bold", size: 30))
-                            
-                            Spacer()
-                        }
-                        .padding(.horizontal)
-                        
                         VStack(spacing: 0) {
                             if let url = storageManager.dailyVideo {
                                 VideoPlayer(player: avPlayer)
@@ -54,10 +62,15 @@ struct HomeView: View {
                                         avPlayer = AVPlayer(url: url)
                                     }
                                     .cornerRadius(10)
+                                    .overlay (
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .stroke(.black, lineWidth: 2)
+                                    )
 
                             } else {
                                 Rectangle()
                                     .fill(.white)
+                                    .stroke(.black, lineWidth: 2)
                                     .frame(height: 200)
                                     .overlay (
                                         Image("GuyAtTheGym")
@@ -71,8 +84,35 @@ struct HomeView: View {
                         }
                         .padding(.horizontal)
                         .cornerRadius(15)
-                        .padding(.bottom)
+                        .padding(.bottom, 5)
+                        HStack {
+                            VStack (alignment: .leading) {
+                                Text("Leg Raises")
+                                    .font(.headline)
+                                    .bold()
+                                
+                                Text("Daily Exercises")
+                            }
 
+                            Spacer()
+                            
+                            VStack {
+                                Text("31")
+                                    .font(.custom("Sailec Bold", size: 20))
+                                
+                                Text("MAY")
+                                    .font(.custom("Sailec Bold", size: 20))
+                            }
+                        }
+                        .padding()
+                        .background(
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(.white)
+                                .shadow(radius: 5)
+                            
+                        )
+                        .padding([.horizontal, .bottom])
+                        
                         VStack {
                             HStack {
                                 ZStack {
@@ -120,9 +160,6 @@ struct HomeView: View {
                                 }
                             }
                             .padding()
-                            
-                            
-                            
                         }
                         .padding()
                         .background(
@@ -132,25 +169,34 @@ struct HomeView: View {
                         )
                         .padding(.horizontal)
                         
+                        if databaseManager.workouts.count > 0 {
+                            HStack {
+                                Text("Workouts")
+                                    .font(.custom("EtruscoNowCondensed Bold", size: 35))
+                                
+                                Spacer()
+                                
+                                Text("Show All")
+                                    .foregroundColor(.blue)
+                            }
+                            .padding()
+                            
+                            
+                            VStack (spacing: 10) {
+                                ForEach(databaseManager.workouts.prefix(2), id: \.id) { workout in
+                                    WorkoutCard(workout: workout)
+                                }
+                            }
+                            .padding(.top, 1)
+                            .padding(.bottom)
+                        }
+                        
                         Spacer()
                     }
                 }
+                .padding(.top, -40)
             }
-        }
-        .onAppear {
-            Task {
-                if storageManager.dailyVideo == nil {
-                    await storageManager.downloadDailyVideo()
-                }
-                
-                if databaseManager.workouts.count <= 0 {
-                    await databaseManager.getWorkouts()
-                }
-                
-                if storageManager.program == nil {
-                    await storageManager.getUserProgram()
-                }
-            }
+            
         }
     }
     
