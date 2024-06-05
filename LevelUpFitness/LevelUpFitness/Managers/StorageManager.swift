@@ -70,4 +70,39 @@ class StorageManager: ObservableObject {
             print(error)
         }
     }
+    
+    func uploadNewProgramStatus(completionHandler: @escaping () -> Void) async {
+        do {
+            let userID = try await Amplify.Auth.getCurrentUser().userId
+            
+            print(userID)
+            
+            let jsonEncoder = JSONEncoder()
+            let jsonData = try jsonEncoder.encode(program)
+            let jsonString = String(data: jsonData, encoding: .utf8)
+            print(jsonString)
+            
+            let temporaryDirectory = FileManager.default.temporaryDirectory
+            let fileURL = temporaryDirectory.appendingPathComponent("\(userID).json")
+            
+            try jsonData.write(to: fileURL)
+            
+            let storageOperation = Amplify.Storage.uploadFile(key: "UserPrograms/\(userID).json", local: fileURL)
+                    
+            Task {
+                do {
+                    let progress = try await storageOperation.value
+                    print("Upload completed: \(progress)")
+                    DispatchQueue.main.async {
+                        completionHandler()
+                    }
+                } catch {
+                    print("Upload failed with error: \(error)")
+                }
+            }
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+
 }

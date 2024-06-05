@@ -19,7 +19,9 @@ struct WorkoutCard: View {
                 
                 Spacer()
                 
-                Text(workout.isPaid ? "Paid" : "Not Paid")
+                Image(systemName: workout.isPaid ? "checkmark.seal.fill" : "x.circle")
+                    .foregroundColor(workout.isPaid ? .green : .red)
+
             }
             
             HStack {
@@ -36,7 +38,7 @@ struct WorkoutCard: View {
         .background(
             RoundedRectangle(cornerRadius: 15)
                 .fill(.white)
-                .stroke(.black, lineWidth: 1)
+                .shadow(radius: 3)
         )
         .padding(.horizontal)
     }

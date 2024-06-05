@@ -23,10 +23,16 @@ struct ProgramDay: Codable {
 
 struct Exercise: Codable {
     var name: String
-    var sets: String
+    var sets: Int
     var reps: String
     var rpe: String
     var rest: Int
     var completed: Bool
+    var data: [ExerciseData]
 }
 
+struct ExerciseData: Codable {
+    var weight: Int
+    var time: Double
+    var rest: Double
+}

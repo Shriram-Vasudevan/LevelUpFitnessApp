@@ -22,6 +22,8 @@ struct PagesHolderView: View {
                     ProgramView(storageManager: storageManager)
                 case .profile:
                     Text("Workout")
+                case .community:
+                    CommunityView()
                 }
                 
                 Spacer()
@@ -75,6 +77,31 @@ struct PagesHolderView: View {
                         
                     }
 
+                    ZStack {
+                        VStack {
+                            Button(action: {
+                                pageType = .community
+                            }, label: {
+                                VStack {
+                                    Image(pageType == .community ? "CommunityBlue" : "CommunityGrey")
+                                        .resizable()
+                                        .frame(width: 30, height: 30)
+                                        .aspectRatio(contentMode:  .fill)
+                                        .foregroundColor(pageType == .community ? .blue : .gray)
+                                    
+                                    
+                                    Text("Community")
+                                        .font(.caption)
+                                        .foregroundColor(pageType == .community  ? .blue : .gray)
+                                    
+                                }
+                                .padding(.bottom)
+                            })
+                        }
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        
+                    }
+                    
                     ZStack {
                         VStack {
                             Button(action: {
