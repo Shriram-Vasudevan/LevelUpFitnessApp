@@ -142,7 +142,7 @@ struct ProgramView: View {
                 }
             }
             .fullScreenCover(isPresented:  $navigateToWorkoutView, content: {
-                WorkoutView(storageManager: storageManager)
+                WorkoutView(storageManager: storageManager, onDataEntryCompleteHandler: { string1, string2, string3, int  in })
             })
 //            .navigationDestination(isPresented: $navigateToWorkoutView, destination: {
 //                WorkoutView(storageManager: storageManager)

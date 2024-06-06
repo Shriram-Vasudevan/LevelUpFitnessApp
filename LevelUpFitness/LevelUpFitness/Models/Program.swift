@@ -35,4 +35,10 @@ struct ExerciseData: Codable {
     var weight: Int
     var time: Double
     var rest: Double
+    
+    init(from model: ExerciseDataWidgetModel) {
+        self.weight = model.weight
+        self.time = model.time
+        self.rest = model.rest
+    }
 }
