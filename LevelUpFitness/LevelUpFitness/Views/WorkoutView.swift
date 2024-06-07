@@ -21,6 +21,7 @@ struct WorkoutView: View {
     
     @Environment(\.dismiss) var dismiss
     
+    @State var onStartSet: (Int) -> Void
     @State var onDataEntryCompleteHandler: (String, String, String, Int) -> Void
     
     var body: some View {
@@ -95,15 +96,13 @@ struct WorkoutView: View {
                                         if let dayIndex = storageManager.program?.program.firstIndex(where: { $0.day == programWorkoutManager.getCurrentWeekday() }) {
                                             storageManager.program?.program[dayIndex].exercises = currentExercises
                                             
-                                            storageManager.program?.program[dayIndex].exercises[currentExerciseIndex] = getAllExerciseDatas()
+                                            storageManager.program?.program[dayIndex].exercises[currentExerciseIndex].data = getAllExerciseDatas()
 
                                         }
                                         
                                         if currentExerciseIndex < currentExercises.count - 1 {
                                             currentExerciseIndex += 1
                                         }
-                                        
-                                        addAllExerciseDatas()
                                     }
                                 }, label: {
                                     Text("Complete")
@@ -120,11 +119,13 @@ struct WorkoutView: View {
                             .padding([.horizontal, .bottom])
 
                             ForEach(0 ..< currentExerciseData.count, id: \.self) { index in
-                                ExerciseDataWidget(exerciseDataWidgetModel: $currentExerciseData[index], index: index, onDataEntryComplete: $onDataEntryCompleteHandler)
-                                
+                                ExerciseDataWidget(exerciseDataWidgetModel: $currentExerciseData[index], index: index, onStartSet: $onStartSet, onDataEntryComplete: $onDataEntryCompleteHandler)
                                     .onAppear {
                                         onDataEntryCompleteHandler = { weight, time, rest, index in
                                             addExerciseData(weight: weight, time: time, rest: rest, index: index)
+                                        }
+                                        onStartSet = { index in
+                                            stopPreviousRestTimer(index: index)
                                         }
                                     }
                             }
@@ -177,9 +178,9 @@ struct WorkoutView: View {
                     currentExerciseData = []
                     for i in 0..<currentExercises[currentExerciseIndex].sets {
                         if i == 0 {
-                            currentExerciseData.append(ExerciseDataWidgetModel(weight: 0, time: 0.0, rest: 0.0, isAvailable: true, isStarted: false))
+                            currentExerciseData.append(ExerciseDataWidgetModel(weight: 0, time: 0.0, rest: 0.0, isAvailable: true, isStarted: false, stopRestTimer: false))
                         } else {
-                            currentExerciseData.append(ExerciseDataWidgetModel(weight: 0, time: 0.0, rest: 0.0, isAvailable: false, isStarted: false))
+                            currentExerciseData.append(ExerciseDataWidgetModel(weight: 0, time: 0.0, rest: 0.0, isAvailable: false, isStarted: false, stopRestTimer: false))
                         }
                     }
                     
@@ -193,9 +194,9 @@ struct WorkoutView: View {
                 currentExerciseData = []
                 for i in 0..<currentExercises[currentExerciseIndex].sets {
                     if i == 0 {
-                        currentExerciseData.append(ExerciseDataWidgetModel(weight: 0, time: 0.0, rest: 0.0, isAvailable: true, isStarted: false))
+                        currentExerciseData.append(ExerciseDataWidgetModel(weight: 0, time: 0.0, rest: 0.0, isAvailable: true, isStarted: false, stopRestTimer: false))
                     } else {
-                        currentExerciseData.append(ExerciseDataWidgetModel(weight: 0, time: 0.0, rest: 0.0, isAvailable: false, isStarted: false))
+                        currentExerciseData.append(ExerciseDataWidgetModel(weight: 0, time: 0.0, rest: 0.0, isAvailable: false, isStarted: false, stopRestTimer: false))
                     }
                 }
                 
@@ -204,31 +205,37 @@ struct WorkoutView: View {
         }
     }
     
-    func getAllExerciseDatas(weight: String, time: String, rest: String, index: Int) {
+    func addExerciseData(weight: String, time: String, rest: String, index: Int) {
         let weightValue = Int(weight) ?? 0
         let timeValue = Double(time) ?? 0.0
         let restValue = Double(rest) ?? 0.0
 
         if index < currentExerciseData.count {
-            currentExerciseData[index] = ExerciseDataWidgetModel(weight: weightValue, time: timeValue, rest: restValue, isAvailable: false, isStarted: false)
+            currentExerciseData[index] = ExerciseDataWidgetModel(weight: weightValue, time: timeValue, rest: restValue, isAvailable: false, isStarted: false, stopRestTimer: false)
             
             print(currentExerciseData[index])
             print(index)
             print(currentExerciseData.count)
             
             if index + 1 < currentExerciseData.count {
-                currentExerciseData[index + 1] = ExerciseDataWidgetModel(weight: 0, time: 0.0, rest: 0.0, isAvailable: true, isStarted: false)
+                currentExerciseData[index + 1] = ExerciseDataWidgetModel(weight: 0, time: 0.0, rest: 0.0, isAvailable: true, isStarted: false, stopRestTimer: false)
             }
         }
     }
     
-    func addAllExerciseDatas() -> [ExerciseData] {
+    func getAllExerciseDatas() -> [ExerciseData] {
         let exerciseDataArray = currentExerciseData.map { ExerciseData(from: $0) }
         return exerciseDataArray
+    }
+    
+    func stopPreviousRestTimer(index: Int) {
+        if index > 0 {
+            currentExerciseData[index - 1].stopRestTimer = true
+        }
     }
 }
 
 #Preview {
-    WorkoutView(storageManager: StorageManager(), onDataEntryCompleteHandler: { string1, string2, string3, int  in })
+    WorkoutView(storageManager: StorageManager(), onStartSet: { int1 in }, onDataEntryCompleteHandler: { string1, string2, string3, int  in })
 }
 

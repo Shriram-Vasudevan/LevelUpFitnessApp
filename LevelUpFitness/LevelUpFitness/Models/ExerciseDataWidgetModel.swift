@@ -7,10 +7,11 @@
 
 import Foundation
 
-struct ExerciseDataWidgetModel: Codable {
+struct ExerciseDataWidgetModel: Codable, Equatable {
     var weight: Int
     var time: Double
     var rest: Double
     var isAvailable: Bool
     var isStarted: Bool
+    var stopRestTimer: Bool
 }
