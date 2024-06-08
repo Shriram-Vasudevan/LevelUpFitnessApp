@@ -93,9 +93,12 @@ struct ExerciseDataWidget: View {
             if newValue.stopRestTimer {
                 stopTimer()
             }
-//            weightText = ""
-//            timeText = ""
-//            restText = ""
+            
+            if newValue.clear {
+                weightText = ""
+                timeText = ""
+                restText = ""
+            }
         }
         
     }
@@ -123,5 +126,5 @@ struct ExerciseDataWidget: View {
 }
 
 #Preview {
-    ExerciseDataWidget(exerciseDataWidgetModel: .constant(ExerciseDataWidgetModel(weight: 0, time: 0.0, rest: 0.0, isAvailable: true, isStarted: false, stopRestTimer: false)), index: 0, onStartSet: .constant({ int1 in}), onDataEntryComplete: .constant({ string1, string2, string3, int in }))
+    ExerciseDataWidget(exerciseDataWidgetModel: .constant(ExerciseDataWidgetModel(weight: 0, time: 0.0, rest: 0.0, isAvailable: true, isStarted: false, clear: false, stopRestTimer: false)), index: 0, onStartSet: .constant({ int1 in}), onDataEntryComplete: .constant({ string1, string2, string3, int in }))
 }

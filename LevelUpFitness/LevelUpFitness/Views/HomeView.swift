@@ -12,6 +12,7 @@ import AVKit
 struct HomeView: View {
     @ObservedObject var storageManager: StorageManager
     @ObservedObject var databaseManager: DatabaseManager
+    @ObservedObject var healthManager: HealthManager
     
     @State var avPlayer = AVPlayer()
     
@@ -126,7 +127,9 @@ struct HomeView: View {
                                     let squareWidth = (totalWidth - padding) / 2
                                     
                                     HStack(spacing: padding) {
-                                        StatisticsWidget(width: squareWidth, colorA: Color(red: 0 / 255, green: 149 / 255, blue: 246 / 255), colorB: Color(red: 0 / 255, green: 0 / 255, blue: 255 / 255), stat: 650, text: "Steps Today")
+                                        if let steps = healthManager.todaysSteps {
+                                            StatisticsWidget(width: squareWidth, colorA: Color(red: 0 / 255, green: 149 / 255, blue: 246 / 255), colorB: Color(red: 0 / 255, green: 0 / 255, blue: 255 / 255), stat: steps, text: "Steps Today")
+                                        }
                                         
                                         StatisticsWidget(width: squareWidth, colorA: Color(red: 152/255, green: 230/255, blue: 138/255), colorB: .green, stat: 180.5, text: "Current Weight")
                                     }
@@ -156,5 +159,5 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeView(storageManager: StorageManager(), databaseManager: DatabaseManager())
+    HomeView(storageManager: StorageManager(), databaseManager: DatabaseManager(), healthManager: HealthManager())
 }

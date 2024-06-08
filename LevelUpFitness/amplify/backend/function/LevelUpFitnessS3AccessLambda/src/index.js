@@ -45,6 +45,41 @@ exports.handler = async (event) => {
             };
         }
     }
+    else if (event.path == "/getStandardProgramNames", event.httpMethod == "GET") {
+        const params =  {
+            Bucket: "level-up-fitness-storage-bucket33cf0-dev",
+            Prefix: "public/StandardPrograms/"
+        }
+
+        try {
+            const data = s3.listObjectsV2(params).promise()
+
+            const objectsList = data.Contents ? data.Contents.map(item => item.Key) : []
+
+            return {
+                statusCode: 200,
+                headers: {
+                  "Access-Control-Allow-Origin": "*",
+                  "Access-Control-Allow-Headers": "*"
+                },
+                body: JSON.stringify(objectsList)
+              };
+
+        } catch (error) {
+            console.log(error);
+            return {
+                statusCode: 500,
+                headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Headers": "*"
+                },
+                body: JSON.stringify(error),
+            };
+        }
+    }
+    else if (event.path == "/getStandardProgram" && event.httpMethod == "GET") {
+
+    }
 
     return {
         statusCode: 200,

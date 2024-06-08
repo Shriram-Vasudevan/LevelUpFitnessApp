@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-import SwiftUI
-
 struct WorkoutView: View {
     @ObservedObject var storageManager: StorageManager
     var programWorkoutManager = ProgramWorkoutManager()
@@ -32,40 +30,47 @@ struct WorkoutView: View {
                 
                 if currentExercises.count > 0 {
                     VStack {
-                        HStack {
-                            Button(action: {
-                                dismiss()
-                                currentExerciseIndex = 0
-                            }, label: {
-                                Image(systemName: "xmark")
+                        ZStack {
+                            HStack {
+                                Button(action: {
+                                    dismiss()
+                                    currentExerciseIndex = 0
+                                }, label: {
+                                    Image(systemName: "xmark")
+                                        .foregroundColor(.white)
+                                })
+                                
+                                Text("Close")
                                     .foregroundColor(.white)
-                            })
+                                
+                                Spacer()
+                                
+                                Button(action: {
+                                    Task {
+                                        await storageManager.uploadNewProgramStatus(completionHandler: {
+                                            dismiss()
+                                        })
+                                    }
+                                }) {
+                                    Text("Save")
+                                        .fontWeight(.bold)
+                                        .foregroundColor(.white)
+                                }
+                                
+                            }
+                            .padding(.horizontal)
                             
-                            Text("Close")
-                                .foregroundColor(.white)
-                            
-                            Spacer()
-                            
-                            Text("Workout")
-                                .bold()
-                                .foregroundColor(.white)
-                            
-                            Spacer()
-                            
-                            Button(action: {
-                                dismiss()
-                                currentExerciseIndex = 0
-                            }, label: {
-                                Image(systemName: "xmark")
-                                    .foregroundColor(.black)
-                            })
-                            .hidden()
-                            
-                            Text("Close")
-                                .hidden()
-                            
+                            HStack {
+                                Spacer()
+                                
+                                Text("Workout")
+                                    .bold()
+                                    .foregroundColor(.white)
+                                
+                                Spacer()
+                            }
+                            .padding(.horizontal)
                         }
-                        .padding(.horizontal)
                         
                         VStack (spacing: 0) {
                             Image("GuyAtTheGym")
@@ -103,6 +108,10 @@ struct WorkoutView: View {
                                         if currentExerciseIndex < currentExercises.count - 1 {
                                             currentExerciseIndex += 1
                                         }
+                                        
+                                        stopPreviousRestTimer(index: currentExerciseData.count)
+                                        
+                                        resetFields()
                                     }
                                 }, label: {
                                     Text("Complete")
@@ -131,25 +140,6 @@ struct WorkoutView: View {
                             }
                             
                             Spacer()
-                            
-                            Button(action: {
-                                Task {
-                                    await storageManager.uploadNewProgramStatus(completionHandler: {
-                                        dismiss()
-                                    })
-                                }
-                            }) {
-                                Text("Save and Exit")
-                                    .fontWeight(.bold)
-                                    .foregroundColor(.white)
-                                    .frame(minWidth: 0, maxWidth: .infinity)
-                                    .padding()
-                                    .background(.black)
-                                    .cornerRadius(7)
-                                    .shadow(radius: 3)
-                                    .padding(.horizontal, 20)
-                                    .padding(.vertical)
-                            }
                         }
                         .padding(.top)
                         .background(
@@ -168,60 +158,61 @@ struct WorkoutView: View {
             }
             .navigationBarBackButtonHidden()
             .onAppear {
-                if let todaysProgram = storageManager.program?.program.first(where: { $0.day == programWorkoutManager.getCurrentWeekday() }) {
-                    self.currentExercises = todaysProgram.exercises
-                    
-                    if let (index, _) = todaysProgram.exercises.enumerated().first(where: { $0.element.completed == false }) {
-                        self.currentExerciseIndex = index
-                    }
-                    
-                    currentExerciseData = []
-                    for i in 0..<currentExercises[currentExerciseIndex].sets {
-                        if i == 0 {
-                            currentExerciseData.append(ExerciseDataWidgetModel(weight: 0, time: 0.0, rest: 0.0, isAvailable: true, isStarted: false, stopRestTimer: false))
-                        } else {
-                            currentExerciseData.append(ExerciseDataWidgetModel(weight: 0, time: 0.0, rest: 0.0, isAvailable: false, isStarted: false, stopRestTimer: false))
-                        }
-                    }
-                    
-                    print("on appear \(currentExerciseData)")
-                }
-                else {
-                    print("none")
-                }
+                initializeExerciseData()
             }
             .onChange(of: currentExerciseIndex) { oldValue, newValue in
-                currentExerciseData = []
-                for i in 0..<currentExercises[currentExerciseIndex].sets {
-                    if i == 0 {
-                        currentExerciseData.append(ExerciseDataWidgetModel(weight: 0, time: 0.0, rest: 0.0, isAvailable: true, isStarted: false, stopRestTimer: false))
-                    } else {
-                        currentExerciseData.append(ExerciseDataWidgetModel(weight: 0, time: 0.0, rest: 0.0, isAvailable: false, isStarted: false, stopRestTimer: false))
-                    }
-                }
-                
-                print("on change \(currentExerciseData)")
+                initializeExerciseData()
             }
         }
     }
     
+    func initializeExerciseData() {
+        if let todaysProgram = storageManager.program?.program.first(where: { $0.day == programWorkoutManager.getCurrentWeekday() }) {
+            self.currentExercises = todaysProgram.exercises
+            
+            if let (index, _) = todaysProgram.exercises.enumerated().first(where: { $0.element.completed == false }) {
+                self.currentExerciseIndex = index
+            }
+            
+            currentExerciseData = []
+            for i in 0..<currentExercises[currentExerciseIndex].sets {
+                if i == 0 {
+                    currentExerciseData.append(ExerciseDataWidgetModel(weight: 0, time: 0.0, rest: 0.0, isAvailable: true, isStarted: false, clear: false, stopRestTimer: false))
+                } else {
+                    currentExerciseData.append(ExerciseDataWidgetModel(weight: 0, time: 0.0, rest: 0.0, isAvailable: false, isStarted: false, clear: false, stopRestTimer: false))
+                }
+            }
+            
+            
+            print("on appear \(currentExerciseData)")
+        } else {
+            print("none")
+        }
+    }
+    
+    func resetFields() {
+        for i in 0..<currentExerciseData.count {
+            currentExerciseData[i].clear = true
+        }
+    }
+
     func addExerciseData(weight: String, time: String, rest: String, index: Int) {
         let weightValue = Int(weight) ?? 0
         let timeValue = Double(time) ?? 0.0
         let restValue = Double(rest) ?? 0.0
 
         if index < currentExerciseData.count {
-            currentExerciseData[index] = ExerciseDataWidgetModel(weight: weightValue, time: timeValue, rest: restValue, isAvailable: false, isStarted: false, stopRestTimer: false)
+            currentExerciseData[index] = ExerciseDataWidgetModel(weight: weightValue, time: timeValue, rest: restValue, isAvailable: false, isStarted: false, clear: false, stopRestTimer: false)
             
             print(currentExerciseData[index])
             print(index)
             print(currentExerciseData.count)
             
             if index + 1 < currentExerciseData.count {
-                currentExerciseData[index + 1] = ExerciseDataWidgetModel(weight: 0, time: 0.0, rest: 0.0, isAvailable: true, isStarted: false, stopRestTimer: false)
+                currentExerciseData[index + 1] = ExerciseDataWidgetModel(weight: 0, time: 0.0, rest: 0.0, isAvailable: true, isStarted: false, clear: false, stopRestTimer: false)
             }
         }
-    }
+    } 
     
     func getAllExerciseDatas() -> [ExerciseData] {
         let exerciseDataArray = currentExerciseData.map { ExerciseData(from: $0) }
@@ -234,6 +225,7 @@ struct WorkoutView: View {
         }
     }
 }
+
 
 #Preview {
     WorkoutView(storageManager: StorageManager(), onStartSet: { int1 in }, onDataEntryCompleteHandler: { string1, string2, string3, int  in })

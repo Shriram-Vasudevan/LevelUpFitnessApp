@@ -10,6 +10,8 @@ import SwiftUI
 struct PagesHolderView: View {
     @StateObject var storageManager = StorageManager()
     @StateObject var databaseManager = DatabaseManager()
+    @StateObject var healthManager = HealthManager()
+    
     @State var pageType: PageType
     
     var body: some View {
@@ -17,7 +19,7 @@ struct PagesHolderView: View {
             VStack {
                 switch pageType {
                 case .home:
-                    HomeView(storageManager: storageManager, databaseManager: databaseManager)
+                    HomeView(storageManager: storageManager, databaseManager: databaseManager, healthManager: healthManager)
                 case .program:
                     ProgramView(storageManager: storageManager)
                 case .profile:
@@ -134,17 +136,15 @@ struct PagesHolderView: View {
         }
         .onAppear {
             Task {
-                if storageManager.dailyVideo == nil {
-                    await storageManager.downloadDailyVideo()
+                if healthManager.todaysSteps == nil {
+                    healthManager.getInitialHealthData()
                 }
+                    
+                async let dailyVideo: ()? = storageManager.dailyVideo == nil ? storageManager.downloadDailyVideo() : nil
+                async let workouts = databaseManager.workouts.count <= 0 ? databaseManager.getWorkouts() : nil
+                async let userProgram = storageManager.program == nil ? storageManager.getUserProgram() : nil
                 
-                if databaseManager.workouts.count <= 0 {
-                    await databaseManager.getWorkouts()
-                }
-                
-                if storageManager.program == nil {
-                    await storageManager.getUserProgram()
-                }
+                _ = await (dailyVideo, workouts, userProgram)
             }
         }
         .ignoresSafeArea(edges: .bottom)

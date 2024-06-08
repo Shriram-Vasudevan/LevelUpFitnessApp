@@ -11,6 +11,7 @@ import Amplify
 class StorageManager: ObservableObject {
     @Published var dailyVideo: URL?
     @Published var program: Program?
+    @Published var standardProgramNames: [String]?
     @Published var retrievingProgram: Bool = false
     
     
@@ -64,8 +65,25 @@ class StorageManager: ObservableObject {
             
             DispatchQueue.main.async {
                 self.program = decodedData
-                self.retrievingProgram = false
             }
+            self.retrievingProgram = false
+            
+        } catch {
+            print("user program retrieval error: \(error)")
+            self.retrievingProgram = false
+            await getStandardProgramNames()
+        }
+    }
+    
+    func getStandardProgramNames() async {
+        do {
+            let restRequest = RESTRequest(apiName: "LevelUpFitnessS3AccessAPI", path: "/getStandardProgramNames")
+            let response = try await Amplify.API.get(request: restRequest)
+            
+            let jsonString = String(data: response, encoding: .utf8)
+            
+            print("standard programs \(jsonString)")
+            
         } catch {
             print(error)
         }

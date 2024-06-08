@@ -11,6 +11,16 @@
           "update"
         ]
       }
+    },
+    "/getStandardProgramNames": {
+      "name": "/getStandardProgramNames",
+      "lambdaFunction": "LevelUpFitnessS3AccessLambda",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "read"
+        ]
+      }
     }
   }
 }

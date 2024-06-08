@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		0E5CE1C6E0490B7BE5F50F4D /* awsconfiguration.json in Resources */ = {isa = PBXBuildFile; fileRef = C9EF97A8E6FAD1E27A905BF3 /* awsconfiguration.json */; };
+		991F8FDA2C13EB3900A134A5 /* HealthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991F8FD92C13EB3900A134A5 /* HealthManager.swift */; };
+		991F8FDC2C13FA8100A134A5 /* StandardProgramName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991F8FDB2C13FA8100A134A5 /* StandardProgramName.swift */; };
+		991F8FDE2C14031D00A134A5 /* ProgramStatisticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991F8FDD2C14031D00A134A5 /* ProgramStatisticsManager.swift */; };
 		994BE7082C01483D00959EB5 /* AWSAPIPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 994BE7072C01483D00959EB5 /* AWSAPIPlugin */; };
 		994BE70A2C01483D00959EB5 /* AWSCloudWatchLoggingPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 994BE7092C01483D00959EB5 /* AWSCloudWatchLoggingPlugin */; };
 		994BE70C2C01483D00959EB5 /* AWSCognitoAuthPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 994BE70B2C01483D00959EB5 /* AWSCognitoAuthPlugin */; };
@@ -70,6 +73,9 @@
 
 /* Begin PBXFileReference section */
 		4CBA503DE7750582F847DD00 /* amplifyconfiguration.json */ = {isa = PBXFileReference; explicitFileType = text.json; path = amplifyconfiguration.json; sourceTree = "<group>"; };
+		991F8FD92C13EB3900A134A5 /* HealthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthManager.swift; sourceTree = "<group>"; };
+		991F8FDB2C13FA8100A134A5 /* StandardProgramName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StandardProgramName.swift; sourceTree = "<group>"; };
+		991F8FDD2C14031D00A134A5 /* ProgramStatisticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramStatisticsManager.swift; sourceTree = "<group>"; };
 		994E7DB02C02643D00BAD9E0 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		994E7DB22C02665300BAD9E0 /* KeyboardResponder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardResponder.swift; sourceTree = "<group>"; };
 		994E7DB42C0266A000BAD9E0 /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
@@ -166,6 +172,8 @@
 				994E7DB62C026A1D00BAD9E0 /* AuthStateObserver.swift */,
 				994E7DC42C03AC3E00BAD9E0 /* DatabaseManager.swift */,
 				999F70662C0818E600B35A78 /* ProgramWorkoutManager.swift */,
+				991F8FD92C13EB3900A134A5 /* HealthManager.swift */,
+				991F8FDD2C14031D00A134A5 /* ProgramStatisticsManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -176,6 +184,7 @@
 				99A67EE92BF451EF002DC3DC /* HomeView.swift */,
 				994E7DC82C03DF5C00BAD9E0 /* ProgramView.swift */,
 				999F70642C06C80300B35A78 /* WorkoutView.swift */,
+				994E7DCE2C0551FE00BAD9E0 /* ProgramListWidget.swift */,
 				999F70792C0FF2E200B35A78 /* ExerciseDataWidget.swift */,
 				99A67F052BF456A7002DC3DC /* PagesHolderView.swift */,
 				99F71F9E2C023A3D00E27B60 /* UsageTimeView.swift */,
@@ -185,7 +194,6 @@
 				994E7DBA2C026BFE00BAD9E0 /* SplashScreenView.swift */,
 				994E7DBC2C028F5B00BAD9E0 /* ConfirmationCodeView.swift */,
 				994E7DC02C02950000BAD9E0 /* WorkoutCard.swift */,
-				994E7DCE2C0551FE00BAD9E0 /* ProgramListWidget.swift */,
 				999F706B2C0E71E000B35A78 /* WorkoutExitWarningView.swift */,
 				999F706D2C0EB08600B35A78 /* MetricsView.swift */,
 				999F70712C0EB4D400B35A78 /* AchievementWidget.swift */,
@@ -229,6 +237,7 @@
 				994E7DC62C03DE5400BAD9E0 /* PascalCaseCodingKey.swift */,
 				994E7DCA2C05289F00BAD9E0 /* Program.swift */,
 				999F707B2C10020E00B35A78 /* ExerciseDataWidgetModel.swift */,
+				991F8FDB2C13FA8100A134A5 /* StandardProgramName.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -390,6 +399,7 @@
 				99A67F062BF456A7002DC3DC /* PagesHolderView.swift in Sources */,
 				994E7DBB2C026BFE00BAD9E0 /* SplashScreenView.swift in Sources */,
 				99CFAAE82BEB075500EFF67E /* ContentView.swift in Sources */,
+				991F8FDA2C13EB3900A134A5 /* HealthManager.swift in Sources */,
 				994E7DC32C02955300BAD9E0 /* Workout.swift in Sources */,
 				994E7DCB2C05289F00BAD9E0 /* Program.swift in Sources */,
 				999F70672C0818E600B35A78 /* ProgramWorkoutManager.swift in Sources */,
@@ -407,6 +417,7 @@
 				998475182BFC18F200295C6E /* AuthenticationManager.swift in Sources */,
 				99F71F9F2C023A3D00E27B60 /* UsageTimeView.swift in Sources */,
 				994E7DCF2C0551FE00BAD9E0 /* ProgramListWidget.swift in Sources */,
+				991F8FDC2C13FA8100A134A5 /* StandardProgramName.swift in Sources */,
 				99CFAAE62BEB075500EFF67E /* LevelUpFitnessApp.swift in Sources */,
 				994E7DC72C03DE5400BAD9E0 /* PascalCaseCodingKey.swift in Sources */,
 				994E7DB72C026A1D00BAD9E0 /* AuthStateObserver.swift in Sources */,
@@ -416,6 +427,7 @@
 				999F706C2C0E71E000B35A78 /* WorkoutExitWarningView.swift in Sources */,
 				99A67F092BF55EFE002DC3DC /* PageType.swift in Sources */,
 				999F70762C0F6D9C00B35A78 /* Double.swift in Sources */,
+				991F8FDE2C14031D00A134A5 /* ProgramStatisticsManager.swift in Sources */,
 				994E7DB92C026BE500BAD9E0 /* AuthCheckView.swift in Sources */,
 				999F707C2C10020E00B35A78 /* ExerciseDataWidgetModel.swift in Sources */,
 			);

@@ -13,5 +13,6 @@ struct ExerciseDataWidgetModel: Codable, Equatable {
     var rest: Double
     var isAvailable: Bool
     var isStarted: Bool
+    var clear: Bool
     var stopRestTimer: Bool
 }
