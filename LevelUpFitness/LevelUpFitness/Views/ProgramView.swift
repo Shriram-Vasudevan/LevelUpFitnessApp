@@ -11,6 +11,7 @@ struct ProgramView: View {
     @ObservedObject var storageManager: StorageManager
     
     @State var navigateToWorkoutView: Bool = false
+    @State var navigateToMetricsView: Bool = false
     
     @State var buttonHeight: CGFloat = 200
     
@@ -49,17 +50,43 @@ struct ProgramView: View {
                     if storageManager.program == nil && !storageManager.retrievingProgram {
                         VStack {
                             HStack {
-                                Spacer()
-                                
                                 Text("No Program Found \n Select One Below!")
-                                    .font(.custom("Sailec Medium", size: 25))
-                                    .multilineTextAlignment(.center)
-                                    .foregroundColor(.gray)
+                                    .font(.custom("Sailec Medium", size: 20))
+                                    .multilineTextAlignment(.leading)
+                                    .foregroundColor(.black)
                                 
                                 Spacer()
                             }
-                            .padding(.top)
+                            .padding()
                             
+                            if let standardProgramNames = storageManager.standardProgramNames {
+                                
+                                ForEach(standardProgramNames, id: \.self) { name in
+                                    HStack {
+                                        Text(name)
+                                            .font(.custom("EtruscoNowCondensed Bold", size: 20))
+                                            .lineLimit(1)
+                                        
+                                        Spacer()
+                                        
+                                        Button(action: {
+                                            Task {
+                                                await storageManager.joinStandardProgram(programName: name)
+                                            }
+                                        }, label: {
+                                            Text("Join")
+                                                .bold()
+                                        })
+                                    }
+                                    .padding()
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 15)
+                                            .fill(.white)
+                                            .shadow(radius: 5)
+                                    )
+                                    .padding(.horizontal)
+                                }
+                            }
                             Spacer()
                         }
                         .background(
@@ -106,7 +133,7 @@ struct ProgramView: View {
                                             })
                                             
                                             Button(action: {
-                                                
+                                                navigateToMetricsView = true
                                             }, label: {
                                                 Rectangle()
                                                     .fill(.white)
@@ -163,6 +190,11 @@ struct ProgramView: View {
             }
             .fullScreenCover(isPresented:  $navigateToWorkoutView, content: {
                 WorkoutView(storageManager: storageManager, onStartSet: {int1 in}, onDataEntryCompleteHandler: { string1, string2, string3, int  in })
+            })
+            .fullScreenCover(isPresented:  $navigateToMetricsView, content: {
+                if let program = storageManager.program {
+                    ProgramStatisticsView(program: program)
+                }
             })
 //            .navigationDestination(isPresented: $navigateToWorkoutView, destination: {
 //                WorkoutView(storageManager: storageManager)

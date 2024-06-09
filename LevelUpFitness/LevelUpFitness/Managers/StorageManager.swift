@@ -8,6 +8,7 @@
 import Foundation
 import Amplify
 
+@MainActor
 class StorageManager: ObservableObject {
     @Published var dailyVideo: URL?
     @Published var program: Program?
@@ -24,9 +25,7 @@ class StorageManager: ObservableObject {
             let data = try await downloadTask.value
             
             if let url = saveVideoLocally(at: "DailyVideo", video: data) {
-                DispatchQueue.main.async {
-                    self.dailyVideo = url
-                }
+                self.dailyVideo = url
             }
         }
         catch {
@@ -36,7 +35,7 @@ class StorageManager: ObservableObject {
     
     func saveVideoLocally(at path: String, video: Data) -> URL? {
         let temporaryDirectory = FileManager.default.temporaryDirectory
-        let videoURL = temporaryDirectory.appendingPathComponent("path").appendingPathExtension("mp4")
+        let videoURL = temporaryDirectory.appendingPathComponent(path).appendingPathExtension("mp4")
         
         do {
             try video.write(to: videoURL, options: .atomic)
@@ -63,9 +62,7 @@ class StorageManager: ObservableObject {
             
             print(decodedData)
             
-            DispatchQueue.main.async {
-                self.program = decodedData
-            }
+            self.program = decodedData
             self.retrievingProgram = false
             
         } catch {
@@ -82,12 +79,69 @@ class StorageManager: ObservableObject {
             
             let jsonString = String(data: response, encoding: .utf8)
             
-            print("standard programs \(jsonString)")
+            if let array = try JSONSerialization.jsonObject(with: response) as? [String] {
+                self.standardProgramNames = array.map( { String($0.dropLast(5)) })
+            } else {
+                print("Error getting names")
+            }
             
         } catch {
             print(error)
         }
     }
+    
+    func joinStandardProgram(programName: String) async {
+        do {
+            print("StandardPrograms/\(programName).json")
+            let downloadTask = Amplify.Storage.downloadData(key: "StandardPrograms/\(programName).json")
+            
+            let data = try await downloadTask.value
+            
+            let decoder = JSONDecoder()
+            let decodedData = try decoder.decode(Program.self, from: data)
+            
+            await temporarilySaveStandardProgram(programName: programName, data: data) { success, url in
+                if success, let fileURL = url {
+                    await self.uploadStandardProgram(fileURL: fileURL) { success in
+                        if success {
+                            self.program = decodedData
+                        }
+                    }
+                }
+            }
+            
+        } catch {
+            print(error)
+        }
+    }
+    
+    func temporarilySaveStandardProgram(programName: String, data: Data, completionHandler: @escaping (Bool, URL?) async -> Void) async {
+        let temporaryDirectory = FileManager.default.temporaryDirectory
+        let fileURL = temporaryDirectory.appendingPathComponent(programName).appendingPathExtension("json")
+        do {
+            try data.write(to: fileURL, options: .atomic)
+            await completionHandler(true, fileURL)
+        } catch {
+            print(error)
+            await completionHandler(false, nil)
+        }
+    }
+    
+    func uploadStandardProgram(fileURL: URL, completionHandler: @escaping (Bool) -> Void) async {
+        do {
+            let userID = try await Amplify.Auth.getCurrentUser().userId
+            
+            let storageOperation = Amplify.Storage.uploadFile(key: "UserPrograms/\(userID).json", local: fileURL)
+                
+            let progress = try await storageOperation.value
+            print("Upload completed: \(progress)")
+            completionHandler(true)
+        } catch {
+            print("Upload failed with error: \(error)")
+            completionHandler(false)
+        }
+    }
+    
     
     func uploadNewProgramStatus(completionHandler: @escaping () -> Void) async {
         do {
@@ -107,16 +161,14 @@ class StorageManager: ObservableObject {
             
             let storageOperation = Amplify.Storage.uploadFile(key: "UserPrograms/\(userID).json", local: fileURL)
                     
-            Task {
-                do {
-                    let progress = try await storageOperation.value
-                    print("Upload completed: \(progress)")
-                    DispatchQueue.main.async {
-                        completionHandler()
-                    }
-                } catch {
-                    print("Upload failed with error: \(error)")
+            do {
+                let progress = try await storageOperation.value
+                print("Upload completed: \(progress)")
+                DispatchQueue.main.async {
+                    completionHandler()
                 }
+            } catch {
+                print("Upload failed with error: \(error)")
             }
         } catch {
             print(error.localizedDescription)

@@ -9,8 +9,10 @@
 /* Begin PBXBuildFile section */
 		0E5CE1C6E0490B7BE5F50F4D /* awsconfiguration.json in Resources */ = {isa = PBXBuildFile; fileRef = C9EF97A8E6FAD1E27A905BF3 /* awsconfiguration.json */; };
 		991F8FDA2C13EB3900A134A5 /* HealthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991F8FD92C13EB3900A134A5 /* HealthManager.swift */; };
-		991F8FDC2C13FA8100A134A5 /* StandardProgramName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991F8FDB2C13FA8100A134A5 /* StandardProgramName.swift */; };
-		991F8FDE2C14031D00A134A5 /* ProgramStatisticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991F8FDD2C14031D00A134A5 /* ProgramStatisticsManager.swift */; };
+		991F8FE02C15274000A134A5 /* StatisticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991F8FDF2C15274000A134A5 /* StatisticsManager.swift */; };
+		991F8FE22C15278500A134A5 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991F8FE12C15278500A134A5 /* Extensions.swift */; };
+		991F8FE42C1527A900A134A5 /* ProgramStatisticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991F8FE32C1527A900A134A5 /* ProgramStatisticsView.swift */; };
+		991F8FE62C154F5200A134A5 /* DayCompletion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991F8FE52C154F5200A134A5 /* DayCompletion.swift */; };
 		994BE7082C01483D00959EB5 /* AWSAPIPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 994BE7072C01483D00959EB5 /* AWSAPIPlugin */; };
 		994BE70A2C01483D00959EB5 /* AWSCloudWatchLoggingPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 994BE7092C01483D00959EB5 /* AWSCloudWatchLoggingPlugin */; };
 		994BE70C2C01483D00959EB5 /* AWSCognitoAuthPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 994BE70B2C01483D00959EB5 /* AWSCognitoAuthPlugin */; };
@@ -74,8 +76,10 @@
 /* Begin PBXFileReference section */
 		4CBA503DE7750582F847DD00 /* amplifyconfiguration.json */ = {isa = PBXFileReference; explicitFileType = text.json; path = amplifyconfiguration.json; sourceTree = "<group>"; };
 		991F8FD92C13EB3900A134A5 /* HealthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthManager.swift; sourceTree = "<group>"; };
-		991F8FDB2C13FA8100A134A5 /* StandardProgramName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StandardProgramName.swift; sourceTree = "<group>"; };
-		991F8FDD2C14031D00A134A5 /* ProgramStatisticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramStatisticsManager.swift; sourceTree = "<group>"; };
+		991F8FDF2C15274000A134A5 /* StatisticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsManager.swift; sourceTree = "<group>"; };
+		991F8FE12C15278500A134A5 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		991F8FE32C1527A900A134A5 /* ProgramStatisticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramStatisticsView.swift; sourceTree = "<group>"; };
+		991F8FE52C154F5200A134A5 /* DayCompletion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCompletion.swift; sourceTree = "<group>"; };
 		994E7DB02C02643D00BAD9E0 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		994E7DB22C02665300BAD9E0 /* KeyboardResponder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardResponder.swift; sourceTree = "<group>"; };
 		994E7DB42C0266A000BAD9E0 /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
@@ -173,7 +177,7 @@
 				994E7DC42C03AC3E00BAD9E0 /* DatabaseManager.swift */,
 				999F70662C0818E600B35A78 /* ProgramWorkoutManager.swift */,
 				991F8FD92C13EB3900A134A5 /* HealthManager.swift */,
-				991F8FDD2C14031D00A134A5 /* ProgramStatisticsManager.swift */,
+				991F8FDF2C15274000A134A5 /* StatisticsManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -184,6 +188,7 @@
 				99A67EE92BF451EF002DC3DC /* HomeView.swift */,
 				994E7DC82C03DF5C00BAD9E0 /* ProgramView.swift */,
 				999F70642C06C80300B35A78 /* WorkoutView.swift */,
+				991F8FE32C1527A900A134A5 /* ProgramStatisticsView.swift */,
 				994E7DCE2C0551FE00BAD9E0 /* ProgramListWidget.swift */,
 				999F70792C0FF2E200B35A78 /* ExerciseDataWidget.swift */,
 				99A67F052BF456A7002DC3DC /* PagesHolderView.swift */,
@@ -207,6 +212,7 @@
 			isa = PBXGroup;
 			children = (
 				999F70752C0F6D9C00B35A78 /* Double.swift */,
+				991F8FE12C15278500A134A5 /* Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -237,7 +243,7 @@
 				994E7DC62C03DE5400BAD9E0 /* PascalCaseCodingKey.swift */,
 				994E7DCA2C05289F00BAD9E0 /* Program.swift */,
 				999F707B2C10020E00B35A78 /* ExerciseDataWidgetModel.swift */,
-				991F8FDB2C13FA8100A134A5 /* StandardProgramName.swift */,
+				991F8FE52C154F5200A134A5 /* DayCompletion.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -409,25 +415,27 @@
 				994E7DC92C03DF5C00BAD9E0 /* ProgramView.swift in Sources */,
 				999F706E2C0EB08600B35A78 /* MetricsView.swift in Sources */,
 				999F70652C06C80300B35A78 /* WorkoutView.swift in Sources */,
+				991F8FE62C154F5200A134A5 /* DayCompletion.swift in Sources */,
 				999F70742C0F59EA00B35A78 /* StatisticsWidget.swift in Sources */,
 				994E7DC12C02950000BAD9E0 /* WorkoutCard.swift in Sources */,
 				9984753D2BFC315F00295C6E /* StorageManager.swift in Sources */,
 				999F70722C0EB4D400B35A78 /* AchievementWidget.swift in Sources */,
 				999F707A2C0FF2E200B35A78 /* ExerciseDataWidget.swift in Sources */,
 				998475182BFC18F200295C6E /* AuthenticationManager.swift in Sources */,
+				991F8FE42C1527A900A134A5 /* ProgramStatisticsView.swift in Sources */,
+				991F8FE22C15278500A134A5 /* Extensions.swift in Sources */,
 				99F71F9F2C023A3D00E27B60 /* UsageTimeView.swift in Sources */,
 				994E7DCF2C0551FE00BAD9E0 /* ProgramListWidget.swift in Sources */,
-				991F8FDC2C13FA8100A134A5 /* StandardProgramName.swift in Sources */,
 				99CFAAE62BEB075500EFF67E /* LevelUpFitnessApp.swift in Sources */,
 				994E7DC72C03DE5400BAD9E0 /* PascalCaseCodingKey.swift in Sources */,
 				994E7DB72C026A1D00BAD9E0 /* AuthStateObserver.swift in Sources */,
 				994E7DC52C03AC3E00BAD9E0 /* DatabaseManager.swift in Sources */,
 				994E7DB52C0266A000BAD9E0 /* RegisterView.swift in Sources */,
 				994E7DB12C02643D00BAD9E0 /* LoginView.swift in Sources */,
+				991F8FE02C15274000A134A5 /* StatisticsManager.swift in Sources */,
 				999F706C2C0E71E000B35A78 /* WorkoutExitWarningView.swift in Sources */,
 				99A67F092BF55EFE002DC3DC /* PageType.swift in Sources */,
 				999F70762C0F6D9C00B35A78 /* Double.swift in Sources */,
-				991F8FDE2C14031D00A134A5 /* ProgramStatisticsManager.swift in Sources */,
 				994E7DB92C026BE500BAD9E0 /* AuthCheckView.swift in Sources */,
 				999F707C2C10020E00B35A78 /* ExerciseDataWidgetModel.swift in Sources */,
 			);

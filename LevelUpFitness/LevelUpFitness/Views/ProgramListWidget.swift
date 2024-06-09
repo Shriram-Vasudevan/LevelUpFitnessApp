@@ -43,7 +43,7 @@ struct ProgramListWidget: View {
                         }
                     }
                 } else {
-                    Text("No program for today")
+                    Text("No workout for today")
                         .foregroundColor(.gray)
                 }
             }

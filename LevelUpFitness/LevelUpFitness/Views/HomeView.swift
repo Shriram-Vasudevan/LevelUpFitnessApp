@@ -139,6 +139,27 @@ struct HomeView: View {
                                 .padding(.horizontal)
                             }
                             
+                            VStack() {
+                                if !days.isEmpty {
+                                    HStack() {
+                                        Chart {
+                                            ForEach(days.keys.sorted(), id: \.self) { date in
+                                                let randomUsageTime = Int.random(in: 5..<30)
+                                                
+                                                BarMark(
+                                                   x: .value("Date", date),
+                                                   y: .value("Time", randomUsageTime)
+                                               )
+                                            }
+                                        }
+                                        .chartYAxis {
+                                            AxisMarks(position: .leading)
+                                        }
+                                    }
+                                }
+                            }
+                            .padding([.horizontal, .bottom])
+                            
                             Spacer()
                         }
                     }
