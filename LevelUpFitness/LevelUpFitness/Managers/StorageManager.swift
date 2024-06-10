@@ -49,28 +49,53 @@ class StorageManager: ObservableObject {
     func getUserProgram() async  {
         do {
             retrievingProgram = true
-            guard let userID = try? await Amplify.Auth.getCurrentUser().userId else { return }
-            
-            let downloadTask = Amplify.Storage.downloadData(key: "UserPrograms/\(userID).json")
-//            for await progress in await downloadTask.progress {
-////                print(progress)
-//            }
-            let data = try await downloadTask.value
-            
-            let decoder = JSONDecoder()
-            let decodedData = try decoder.decode(Program.self, from: data)
-            
-            print(decodedData)
-            
-            self.program = decodedData
+            let userID = try await Amplify.Auth.getCurrentUser().userId
+            if let date = getPreviousMondayDate() {
+                let downloadTask = Amplify.Storage.downloadData(key: "UserPrograms/\(userID)/(\(date)).json")
+
+                let data = try await downloadTask.value
+                
+                let decoder = JSONDecoder()
+                let decodedData = try decoder.decode(Program.self, from: data)
+                
+                print(decodedData)
+                
+                self.program = decodedData
+            }
             self.retrievingProgram = false
             
         } catch {
             print("user program retrieval error: \(error)")
             self.retrievingProgram = false
-            await getStandardProgramNames()
+            
+            if let programName = await getUserProgramDBRepresentation() {
+                await joinStandardProgram(programName: programName)
+            }
+            else {
+                await getStandardProgramNames()
+            }
         }
     }
+    
+    func getUserProgramDBRepresentation() async -> String? {
+        do {
+            let userID = try await Amplify.Auth.getCurrentUser().userId
+            
+            let request = RESTRequest(apiName: "LevelUpFitnessDynamoAccessAPI", path: "/getUserProgramInfo", queryParameters: ["UserID" : userID])
+            let response = try await Amplify.API.get(request: request)
+            
+//            let jsonString = String(data: response, encoding: .utf8)
+            
+            let jsonDecoder = JSONDecoder()
+            let programDBRepresentation = try jsonDecoder.decode(ProgramDBRepresentation.self, from: response)
+            
+            return programDBRepresentation.program
+        } catch {
+            print(error)
+            return nil
+        }
+    }
+
     
     func getStandardProgramNames() async {
         do {
@@ -102,7 +127,7 @@ class StorageManager: ObservableObject {
             
             await temporarilySaveStandardProgram(programName: programName, data: data) { success, url in
                 if success, let fileURL = url {
-                    await self.uploadStandardProgram(fileURL: fileURL) { success in
+                    await self.uploadStandardProgram(fileURL: fileURL, programName: programName) { success in
                         if success {
                             self.program = decodedData
                         }
@@ -127,18 +152,38 @@ class StorageManager: ObservableObject {
         }
     }
     
-    func uploadStandardProgram(fileURL: URL, completionHandler: @escaping (Bool) -> Void) async {
+    func uploadStandardProgram(fileURL: URL, programName: String, completionHandler: @escaping (Bool) -> Void) async {
         do {
             let userID = try await Amplify.Auth.getCurrentUser().userId
             
-            let storageOperation = Amplify.Storage.uploadFile(key: "UserPrograms/\(userID).json", local: fileURL)
+            if let date = getPreviousMondayDate() {
+                let storageOperation = Amplify.Storage.uploadFile(key: "UserPrograms/\(userID)/(\(date)).json", local: fileURL)
+                    
+                let progress = try await storageOperation.value
+                print("Upload completed: \(progress)")
                 
-            let progress = try await storageOperation.value
-            print("Upload completed: \(progress)")
-            completionHandler(true)
+                try await addProgramToDB(programName: programName)
+                
+                completionHandler(true)
+            } else {
+                print("Failed to get date")
+                completionHandler(false)
+            }
         } catch {
             print("Upload failed with error: \(error)")
             completionHandler(false)
+        }
+    }
+    
+    func addProgramToDB(programName: String) async throws {
+        do {
+            let userID = try await Amplify.Auth.getCurrentUser().userId
+            
+            let request = RESTRequest(apiName: "LevelUpFitnessDynamoAccessAPI", path: "/addUserProgram", queryParameters: ["UserID" : userID, "Program" : programName])
+            let response = try await Amplify.API.put(request: request)
+        } catch {
+            print(error)
+            throw APIError.failed
         }
     }
     
@@ -174,5 +219,25 @@ class StorageManager: ObservableObject {
             print(error.localizedDescription)
         }
     }
+    
+    func getPreviousMondayDate() -> String? {
+        let calendar = Calendar.current
+        
+        let weekdayComponent = calendar.component(.weekday, from: Date())
+        let dayToSubtract = (weekdayComponent == 1 ? 6 : weekdayComponent - 2)
+        
+        if let previousMonday = calendar.date(byAdding: .day, value: -dayToSubtract, to: Date()) {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "MM-dd-yyyy"
+            return dateFormatter.string(from: previousMonday)
+        }
+        else {
+            return nil
+        }
+    }
 
+}
+
+enum APIError: Error {
+    case failed
 }

@@ -1,0 +1,14 @@
+{
+  "resourceName": "LevelUpFitnessUserProgramsDB",
+  "tableName": "user-programs-db",
+  "partitionKey": {
+    "fieldName": "UserID",
+    "fieldType": "string"
+  },
+  "sortKey": {
+    "fieldName": "Program",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}

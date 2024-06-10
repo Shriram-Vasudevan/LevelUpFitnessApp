@@ -11,6 +11,27 @@
           "update"
         ]
       }
+    },
+    "/addUserProgram": {
+      "name": "/addUserProgram",
+      "lambdaFunction": "LevelUpFitnessDynamoAccessLambda",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "update"
+        ]
+      }
+    },
+    "/getUserProgramInfo": {
+      "name": "/getUserProgramInfo",
+      "lambdaFunction": "LevelUpFitnessDynamoAccessLambda",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "read"
+        ]
+      }
     }
   }
 }

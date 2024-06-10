@@ -9,9 +9,12 @@ import Foundation
 
 struct Program: Codable {
     var program: [ProgramDay]
+    var programName: String
     
     enum CodingKeys: String, CodingKey {
         case program = "workout_schedule"
+        case programName = "program_name"
+        
     }
 }
 struct ProgramDay: Codable {

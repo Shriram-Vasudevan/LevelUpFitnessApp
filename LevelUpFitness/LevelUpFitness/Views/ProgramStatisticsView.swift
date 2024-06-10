@@ -52,48 +52,91 @@ struct ProgramStatisticsView: View {
                 VStack {
                     
                     ScrollView(.vertical) {
-                        HStack {
-                            CircularProgressBar(progress: program.getProgramCompletionPercentage())
-                                .frame(width: 50, height: 50)
-                                .padding(.vertical)
-                                .padding(.trailing, 5)
-                            
-                            VStack(alignment: .leading) {
-                                Text("Percentage of Program")
-                                    .font(.headline)
-                                Text("completed this week")
-                                    .font(.subheadline)
-                                    .foregroundColor(.gray)
-                            }
-                            
-                            Spacer()
-                        }
-                        .padding(.horizontal)
-                        
-                        HStack {
-                            Text("Here's the Breakdown")
-                                .font(.headline)
-                            
-                            Spacer()
-                        }
-                        .padding(.horizontal)
-                        
-                        Chart {
-                            ForEach(program.getDayCompletionPercentages()) { kvp in
+                        Group {
+                            HStack {
+                                CircularProgressBar(progress: program.getProgramCompletionPercentage())
+                                    .frame(width: 50, height: 50)
+                                    .padding(.vertical)
+                                    .padding(.trailing, 5)
                                 
-                                BarMark(
-                                   x: .value("Date", kvp.day),
-                                   y: .value("Percentage", kvp.percentage)
-                               )
+                                VStack(alignment: .leading) {
+                                    Text("Percentage of Program")
+                                        .font(.headline)
+                                    Text("completed this week")
+                                        .font(.subheadline)
+                                        .foregroundColor(.gray)
+                                }
+                                
+                                Spacer()
                             }
+                            .padding(.horizontal)
+                            
+                            HStack {
+                                Text("Here's the Breakdown")
+                                    .font(.headline)
+                                
+                                Spacer()
+                            }
+                            .padding(.horizontal)
+                            
+                            Chart {
+                                ForEach(program.getDayCompletionPercentages()) { kvp in
+                                    
+                                    BarMark(
+                                       x: .value("Date", kvp.day),
+                                       y: .value("Percentage", kvp.percentage)
+                                   )
+                                }
+                            }
+                            .chartYAxis {
+                                AxisMarks(position: .leading)
+                            }
+                            .frame(height: 200)
+                            .padding(.horizontal)
                         }
-                        .chartYAxis {
-                            AxisMarks(position: .leading)
+                        
+                        Group {
+                            HStack {
+                                Text("Rest Metrics")
+                                    .font(.title3)
+                                    .bold()
+                                    .padding(.top)
+                                
+                                Spacer()
+                            }
+                            .padding(.horizontal)
+                            
+                            HStack {
+                                VStack {
+                                    Text("\(String(format: "%.1f", program.getAverageRestDifferential())) s")
+                                    Text("Avg. Rest Differential")
+                                        .font(.headline)
+                                        .multilineTextAlignment(.center)
+                                }
+                                .frame(maxWidth: .infinity)
+
+                                Divider()
+
+                                VStack {
+                                    Text("\(String(format: "%.1f", program.getAverageRestDifferential())) s")
+                                    Text("Avg. Rest Differential")
+                                        .font(.headline)
+                                        .multilineTextAlignment(.center)
+                                }
+                                .frame(maxWidth: .infinity)
+
+                                Divider()
+
+                                VStack {
+                                    Text("\(String(format: "%.1f", program.getAverageRestDifferential())) s")
+                                    Text("Avg. Rest Differential")
+                                        .font(.headline)
+                                        .multilineTextAlignment(.center)
+                                }
+                                .frame(maxWidth: .infinity)
+                            }
+
                         }
-                        .frame(height: 200)
-                        .padding(.horizontal)
-            
-                        Text("\(program.getAverageRestDifferential())")
                         Spacer()
                     }
                 }
@@ -136,5 +179,5 @@ struct CircularProgressBar: View {
 
 
 #Preview {
-    ProgramStatisticsView(program: Program(program: [ProgramDay(day: "Monday", workout: "", completed: false, exercises: [Exercise(name: "", sets: 2, reps: "5", rpe: "", rest: 3, completed: false, data: [ExerciseData(from: ExerciseDataWidgetModel(weight: 2, time: 2.0, rest: 2.0, isAvailable: false, isStarted: false, clear: false, stopRestTimer: false))])])]))
+    ProgramStatisticsView(program: Program(program: [ProgramDay(day: "Monday", workout: "", completed: false, exercises: [Exercise(name: "", sets: 2, reps: "5", rpe: "", rest: 3, completed: false, data: [ExerciseData(from: ExerciseDataWidgetModel(weight: 2, time: 2.0, rest: 5.0, isAvailable: false, isStarted: false, clear: false, stopRestTimer: false))])])], programName: "program"))
 }

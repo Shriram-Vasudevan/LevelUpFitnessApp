@@ -13,6 +13,7 @@
 		991F8FE22C15278500A134A5 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991F8FE12C15278500A134A5 /* Extensions.swift */; };
 		991F8FE42C1527A900A134A5 /* ProgramStatisticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991F8FE32C1527A900A134A5 /* ProgramStatisticsView.swift */; };
 		991F8FE62C154F5200A134A5 /* DayCompletion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991F8FE52C154F5200A134A5 /* DayCompletion.swift */; };
+		991F8FE82C1680A800A134A5 /* ProgramDBRepresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991F8FE72C1680A800A134A5 /* ProgramDBRepresentation.swift */; };
 		994BE7082C01483D00959EB5 /* AWSAPIPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 994BE7072C01483D00959EB5 /* AWSAPIPlugin */; };
 		994BE70A2C01483D00959EB5 /* AWSCloudWatchLoggingPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 994BE7092C01483D00959EB5 /* AWSCloudWatchLoggingPlugin */; };
 		994BE70C2C01483D00959EB5 /* AWSCognitoAuthPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 994BE70B2C01483D00959EB5 /* AWSCognitoAuthPlugin */; };
@@ -80,6 +81,7 @@
 		991F8FE12C15278500A134A5 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		991F8FE32C1527A900A134A5 /* ProgramStatisticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramStatisticsView.swift; sourceTree = "<group>"; };
 		991F8FE52C154F5200A134A5 /* DayCompletion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCompletion.swift; sourceTree = "<group>"; };
+		991F8FE72C1680A800A134A5 /* ProgramDBRepresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramDBRepresentation.swift; sourceTree = "<group>"; };
 		994E7DB02C02643D00BAD9E0 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		994E7DB22C02665300BAD9E0 /* KeyboardResponder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardResponder.swift; sourceTree = "<group>"; };
 		994E7DB42C0266A000BAD9E0 /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
@@ -244,6 +246,7 @@
 				994E7DCA2C05289F00BAD9E0 /* Program.swift */,
 				999F707B2C10020E00B35A78 /* ExerciseDataWidgetModel.swift */,
 				991F8FE52C154F5200A134A5 /* DayCompletion.swift */,
+				991F8FE72C1680A800A134A5 /* ProgramDBRepresentation.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -420,6 +423,7 @@
 				994E7DC12C02950000BAD9E0 /* WorkoutCard.swift in Sources */,
 				9984753D2BFC315F00295C6E /* StorageManager.swift in Sources */,
 				999F70722C0EB4D400B35A78 /* AchievementWidget.swift in Sources */,
+				991F8FE82C1680A800A134A5 /* ProgramDBRepresentation.swift in Sources */,
 				999F707A2C0FF2E200B35A78 /* ExerciseDataWidget.swift in Sources */,
 				998475182BFC18F200295C6E /* AuthenticationManager.swift in Sources */,
 				991F8FE42C1527A900A134A5 /* ProgramStatisticsView.swift in Sources */,

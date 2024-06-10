@@ -46,32 +46,46 @@ extension Program {
     
     func getAverageRestDifferential() -> Double {
         var totalRestDifferential = 0.0
+        var totalDataPoints = 0
         
         for day in program {
-            totalRestDifferential += day.getAverageRestDifferential()
+            let dayRestDifferential = day.getAverageRestDifferential()
+            if dayRestDifferential >= 0 {
+                totalRestDifferential += dayRestDifferential
+                totalDataPoints += 1
+            }
         }
         
-        return (totalRestDifferential / Double(program.count) * 100)
+        guard totalDataPoints > 0 else {
+            return 0.0
+        }
+        
+        return totalRestDifferential / Double(totalDataPoints)
     }
 }
 
 extension ProgramDay {
     func getAverageRestDifferential() -> Double {
-        guard exercises.count > 0 else { return 0.0 }
-        
-        var totalRestDifferential = 0.0
-        var totalDatas = 0
-        
-        for exercise in exercises {
-            for exerciseData in exercise.data {
-                let restDifferential = abs(Double(exerciseData.rest) - Double(exercise.rest))
-                totalRestDifferential += restDifferential
-                totalDatas += 1
+            guard exercises.count > 0 else { return 0.0 }
+            
+            var totalRestDifferential = 0.0
+            var totalDataPoints = 0
+            
+            for exercise in exercises {
+                for exerciseData in exercise.data {
+                    let restDifferential = abs(Double(exerciseData.rest) - Double(exercise.rest))
+                    totalRestDifferential += restDifferential
+                    totalDataPoints += 1
+                }
             }
+            
+            guard totalDataPoints > 0 else {
+                return 0.0
+            }
+            
+            return totalRestDifferential / Double(totalDataPoints)
         }
-        
-        return (totalRestDifferential / Double(totalDatas)) * 100
-    }
+    
     func getDayCompletionPercentage() -> Double {
         guard exercises.count > 0 else { return 0.0 }
         
