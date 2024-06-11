@@ -54,7 +54,7 @@ struct ProgramStatisticsView: View {
                     ScrollView(.vertical) {
                         Group {
                             HStack {
-                                CircularProgressBar(progress: program.getProgramCompletionPercentage())
+                                ProgramCircularProgressBar(progress: program.getProgramCompletionPercentage())
                                     .frame(width: 50, height: 50)
                                     .padding(.vertical)
                                     .padding(.trailing, 5)
@@ -91,21 +91,24 @@ struct ProgramStatisticsView: View {
                             .chartYAxis {
                                 AxisMarks(position: .leading)
                             }
+                            .chartYScale(domain: 0...100)
                             .frame(height: 200)
                             .padding(.horizontal)
                         }
                         
-                        Group {
+                        VStack (spacing: 0) {
                             HStack {
                                 Text("Rest Metrics")
                                     .font(.title3)
                                     .bold()
-                                    .padding(.top)
                                 
                                 Spacer()
                             }
-                            .padding(.horizontal)
+                            .padding()
                             
+                            RestDistributionBar(restTime: program.getTotalRestTime(), workoutTime: program.getTotalWorkoutTime())
+                                .padding(.bottom)
+      
                             HStack {
                                 VStack {
                                     Text("\(String(format: "%.1f", program.getAverageRestDifferential())) s")
@@ -118,8 +121,8 @@ struct ProgramStatisticsView: View {
                                 Divider()
 
                                 VStack {
-                                    Text("\(String(format: "%.1f", program.getAverageRestDifferential())) s")
-                                    Text("Avg. Rest Differential")
+                                    Text("\(String(format: "%.1f", program.getTotalWorkoutTime())) s")
+                                    Text("Total Workout Time")
                                         .font(.headline)
                                         .multilineTextAlignment(.center)
                                 }
@@ -128,13 +131,14 @@ struct ProgramStatisticsView: View {
                                 Divider()
 
                                 VStack {
-                                    Text("\(String(format: "%.1f", program.getAverageRestDifferential())) s")
-                                    Text("Avg. Rest Differential")
+                                    Text("\(String(format: "%.1f", program.getTotalRestTime())) s")
+                                    Text("Total Rest Time")
                                         .font(.headline)
                                         .multilineTextAlignment(.center)
                                 }
                                 .frame(maxWidth: .infinity)
                             }
+                            
 
                         }
                         Spacer()
@@ -153,7 +157,7 @@ struct ProgramStatisticsView: View {
     }
 }
 
-struct CircularProgressBar: View {
+struct ProgramCircularProgressBar: View {
     var progress: Double
 
     var body: some View {
@@ -177,7 +181,51 @@ struct CircularProgressBar: View {
     }
 }
 
+struct RestDistributionBar: View {
+    var restTime: Double
+    var workoutTime: Double
+
+    var body: some View {
+        ZStack {
+            VStack (spacing: 0) {
+                HStack {
+                    Rectangle()
+                        .fill(.green)
+                        .frame(width: 10, height: 10)
+                    
+                    Text("Rest")
+                    
+                    Rectangle()
+                        .fill(.blue)
+                        .frame(width: 10, height: 10)
+                    
+                    Text("Workout")
+                    
+                    Spacer()
+                }
+                .padding(.horizontal)
+                .padding(.bottom, 10)
+                
+                GeometryReader { reader in
+                    RoundedRectangle(cornerRadius: 10)
+                                .fill(Color.blue)
+                                .frame(height: 40)
+                                .frame(maxWidth: reader.size.width)
+                                .padding(.horizontal)
+                    
+                    RoundedRectangle(cornerRadius: 10)
+                                .fill(Color.green)
+                                .frame(height: 40)
+                                .frame(maxWidth: reader.size.width * restTime / (workoutTime + restTime))
+                                .padding(.horizontal)
+                }
+                .frame(height: 40)
+            }
+
+        }
+    }
+}
 
 #Preview {
-    ProgramStatisticsView(program: Program(program: [ProgramDay(day: "Monday", workout: "", completed: false, exercises: [Exercise(name: "", sets: 2, reps: "5", rpe: "", rest: 3, completed: false, data: [ExerciseData(from: ExerciseDataWidgetModel(weight: 2, time: 2.0, rest: 5.0, isAvailable: false, isStarted: false, clear: false, stopRestTimer: false))])])], programName: "program"))
+    ProgramStatisticsView(program: Program(program: [ProgramDay(day: "Monday", workout: "", completed: false, exercises: [Exercise(name: "", sets: 2, reps: "5", rpe: "", rest: 3, completed: false, data: [ExerciseData(from: ExerciseDataWidgetModel(weight: 2, time: 8.0, rest: 5.0, isAvailable: false, isStarted: false, clear: false, stopRestTimer: false))])])], programName: "program"))
 }

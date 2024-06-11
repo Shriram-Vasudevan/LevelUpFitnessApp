@@ -10,6 +10,7 @@ import Foundation
 struct Badge: Codable {
     let id: String
     let badgeName: String
+    let badgeDescription: String
     let badgeIconS3URL: String
     let badgeCriteria: BadgeCriteria
 }

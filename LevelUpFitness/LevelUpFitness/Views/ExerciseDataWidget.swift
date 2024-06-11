@@ -20,7 +20,7 @@ struct ExerciseDataWidget: View {
     var index: Int
     
     @Binding var onStartSet: ((Int) -> Void)
-    @Binding var onDataEntryComplete: ((String, String, String, Int) -> Void)
+    @Binding var onDataEntryComplete: ((Int) -> Void)
     
     
     var body: some View {
@@ -55,6 +55,9 @@ struct ExerciseDataWidget: View {
                 Button {
                     exerciseDataWidgetModel.isStarted = true
                     onStartSet(index)
+                    
+                    print("the index: \(index)")
+                    
                     startTimer(for: "time")
                 } label: {
                     Text("Start")
@@ -71,7 +74,7 @@ struct ExerciseDataWidget: View {
             } else if exerciseDataWidgetModel.isStarted && exerciseDataWidgetModel.isAvailable {
                 Button {
                     stopTimer()
-                    onDataEntryComplete(weightText, timeText, restText, index)
+                    onDataEntryComplete(index)
                     exerciseDataWidgetModel.isAvailable = false
                     startTimer(for: "rest")
                 } label: {
@@ -90,7 +93,12 @@ struct ExerciseDataWidget: View {
         }
         .opacity(exerciseDataWidgetModel.isAvailable ? 1 : 0.5)
         .onChange(of: exerciseDataWidgetModel) { newValue in
-            if newValue.stopRestTimer {
+            if newValue.stopRestTimer  {
+                let weightValue = Int(weightText) ?? 0
+                let timeValue = Double(timeText) ?? 0.0
+                let restValue = Double(restText) ?? 0.0
+                
+                exerciseDataWidgetModel = ExerciseDataWidgetModel(weight: weightValue, time: timeValue, rest: restValue, isAvailable: false, isStarted: false, clear: false, stopRestTimer: false)
                 stopTimer()
             }
             
@@ -126,5 +134,5 @@ struct ExerciseDataWidget: View {
 }
 
 #Preview {
-    ExerciseDataWidget(exerciseDataWidgetModel: .constant(ExerciseDataWidgetModel(weight: 0, time: 0.0, rest: 0.0, isAvailable: true, isStarted: false, clear: false, stopRestTimer: false)), index: 0, onStartSet: .constant({ int1 in}), onDataEntryComplete: .constant({ string1, string2, string3, int in }))
+    ExerciseDataWidget(exerciseDataWidgetModel: .constant(ExerciseDataWidgetModel(weight: 0, time: 0.0, rest: 0.0, isAvailable: true, isStarted: false, clear: false, stopRestTimer: false)), index: 0, onStartSet: .constant({ int1 in}), onDataEntryComplete: .constant({ int in }))
 }

@@ -20,7 +20,7 @@ struct WorkoutView: View {
     @Environment(\.dismiss) var dismiss
     
     @State var onStartSet: (Int) -> Void
-    @State var onDataEntryCompleteHandler: (String, String, String, Int) -> Void
+    @State var onDataEntryCompleteHandler: (Int) -> Void
     
     var body: some View {
         NavigationStack {
@@ -29,125 +29,108 @@ struct WorkoutView: View {
                     .edgesIgnoringSafeArea(.all)
                 
                 if currentExercises.count > 0 {
-                    VStack {
-                        ZStack {
-                            HStack {
-                                Button(action: {
-                                    dismiss()
-                                    currentExerciseIndex = 0
-                                }, label: {
-                                    Image(systemName: "xmark")
+                        VStack {
+                            ZStack {
+                                HStack {
+                                    Button(action: {
+                                        dismiss()
+                                        currentExerciseIndex = 0
+                                    }, label: {
+                                        Image(systemName: "xmark")
+                                            .foregroundColor(.white)
+                                    })
+                                    
+                                    Text("Close")
                                         .foregroundColor(.white)
-                                })
-                                
-                                Text("Close")
-                                    .foregroundColor(.white)
-                                
-                                Spacer()
-                                
-                                Button(action: {
-                                    Task {
-                                        await storageManager.uploadNewProgramStatus(completionHandler: {
-                                            dismiss()
-                                        })
+                                    
+                                    Spacer()
+                                    
+                                    Button(action: {
+                                        Task {
+                                            await storageManager.uploadNewProgramStatus(completionHandler: {
+                                                dismiss()
+                                            })
+                                        }
+                                    }) {
+                                        Text("Save")
+                                            .fontWeight(.bold)
+                                            .foregroundColor(.white)
                                     }
-                                }) {
-                                    Text("Save")
-                                        .fontWeight(.bold)
-                                        .foregroundColor(.white)
+                                    
                                 }
-                                
-                            }
-                            .padding(.horizontal)
-                            
-                            HStack {
-                                Spacer()
-                                
-                                Text("Workout")
-                                    .bold()
-                                    .foregroundColor(.white)
-                                
-                                Spacer()
-                            }
-                            .padding(.horizontal)
-                        }
-                        
-                        VStack (spacing: 0) {
-                            Image("GuyAtTheGym")
-                                .resizable()
-                                .frame(height:  200)
-                                .cornerRadius(10)
                                 .padding(.horizontal)
+                                
+                                HStack {
+                                    Spacer()
+                                    
+                                    Text("Workout")
+                                        .bold()
+                                        .foregroundColor(.white)
+                                    
+                                    Spacer()
+                                }
+                                .padding(.horizontal)
+                            }
                             
-                            
-                            HStack {
-                                VStack (alignment: .leading, spacing: 0) {
-                                    Text(currentExercises[currentExerciseIndex].name)
-                                        .font(.custom("EtruscoNowCondensed Bold", size: 35))
-                                        .padding(.bottom, -7)
+                            ScrollView(.vertical) {
+                                VStack (spacing: 0) {
+                                    Image("GuyAtTheGym")
+                                        .resizable()
+                                        .frame(height:  200)
+                                        .cornerRadius(10)
+                                        .padding(.horizontal)
+                                    
                                     
                                     HStack {
-                                        Text("Reps per Set: \(currentExercises[currentExerciseIndex].reps)")
-                                        Spacer()
-                                    }
-                                }
-                                
-                                Spacer()
-                                
-                                Button(action: {
-                                    withAnimation {
-                                        currentExercises[currentExerciseIndex].completed = true
-                                        
-                                        if let dayIndex = storageManager.program?.program.firstIndex(where: { $0.day == programWorkoutManager.getCurrentWeekday() }) {
-                                            storageManager.program?.program[dayIndex].exercises = currentExercises
+                                        VStack (alignment: .leading, spacing: 0) {
+                                            Text(currentExercises[currentExerciseIndex].name)
+                                                .font(.custom("EtruscoNowCondensed Bold", size: 35))
+                                                .padding(.bottom, -7)
                                             
-                                            storageManager.program?.program[dayIndex].exercises[currentExerciseIndex].data = getAllExerciseDatas()
-
+                                            HStack {
+                                                Image(systemName: "repeat")
+                                                    .foregroundColor(.black)
+                                                
+                                                Text("Reps Per Set: \(currentExercises[currentExerciseIndex].reps)")
+                                                Spacer()
+                                            }
+                                            
+                                            HStack {
+                                                Image(systemName: "timer")
+                                                    .foregroundColor(.black)
+                                                
+                                                Text("Recommended Rest: \(currentExercises[currentExerciseIndex].rest) seconds")
+                                                Spacer()
+                                            }
                                         }
                                         
-                                        if currentExerciseIndex < currentExercises.count - 1 {
-                                            currentExerciseIndex += 1
-                                        }
+                                        Spacer()
                                         
-                                        stopPreviousRestTimer(index: currentExerciseData.count)
-                                        
-                                        resetFields()
                                     }
-                                }, label: {
-                                    Text("Complete")
-                                        .font(.footnote)
-                                        .foregroundColor(.black)
-                                        .bold()
-                                        .padding()
-                                        .background(
-                                            Capsule()
-                                                .fill(.green)
-                                        )
-                                })
-                            }
-                            .padding([.horizontal, .bottom])
+                                    .padding([.horizontal, .bottom])
 
-                            ForEach(0 ..< currentExerciseData.count, id: \.self) { index in
-                                ExerciseDataWidget(exerciseDataWidgetModel: $currentExerciseData[index], index: index, onStartSet: $onStartSet, onDataEntryComplete: $onDataEntryCompleteHandler)
-                                    .onAppear {
-                                        onDataEntryCompleteHandler = { weight, time, rest, index in
-                                            addExerciseData(weight: weight, time: time, rest: rest, index: index)
-                                        }
-                                        onStartSet = { index in
-                                            stopPreviousRestTimer(index: index)
-                                        }
+                                    ForEach(0 ..< currentExerciseData.count, id: \.self) { index in
+                                        ExerciseDataWidget(exerciseDataWidgetModel: $currentExerciseData[index], index: index, onStartSet: $onStartSet, onDataEntryComplete: $onDataEntryCompleteHandler)
+                                            .onAppear {
+                                                onDataEntryCompleteHandler = { index in
+                                                    addExerciseData(index: index)
+                                                }
+                                                onStartSet = { index in
+                                                    stopPreviousRestTimer(index: index)
+                                                }
+                                            }
                                     }
+                                    
+                                    Spacer()
+                                }
                             }
-                            
-                            Spacer()
+                            .padding(.top)
+                            .background(
+                                Rectangle()
+                                    .fill(.white)
+                            )
+                            .ignoresSafeArea(.all)
                         }
-                        .padding(.top)
-                        .background(
-                            Rectangle()
-                                .fill(.white)
-                        )
-                        .ignoresSafeArea(.all)
-                    }
                 }
                 else if currentExercises.count - 1 == currentExerciseIndex {
                     // Logic for completing the workout
@@ -196,23 +179,31 @@ struct WorkoutView: View {
         }
     }
 
-    func addExerciseData(weight: String, time: String, rest: String, index: Int) {
-        let weightValue = Int(weight) ?? 0
-        let timeValue = Double(time) ?? 0.0
-        let restValue = Double(rest) ?? 0.0
+    func addExerciseData(index: Int) {
+        if index + 1 < currentExerciseData.count {
+            currentExerciseData[index + 1] = ExerciseDataWidgetModel(weight: 0, time: 0.0, rest: 0.0, isAvailable: true, isStarted: false, clear: false, stopRestTimer: false)
+        }
+        else {
+            withAnimation {
+                stopPreviousRestTimer(index: currentExerciseData.count)
+                
+                currentExercises[currentExerciseIndex].completed = true
+                
+                if let dayIndex = storageManager.program?.program.firstIndex(where: { $0.day == programWorkoutManager.getCurrentWeekday() }) {
+                    storageManager.program?.program[dayIndex].exercises = currentExercises
+                    
+                    storageManager.program?.program[dayIndex].exercises[currentExerciseIndex].data = getAllExerciseDatas()
 
-        if index < currentExerciseData.count {
-            currentExerciseData[index] = ExerciseDataWidgetModel(weight: weightValue, time: timeValue, rest: restValue, isAvailable: false, isStarted: false, clear: false, stopRestTimer: false)
-            
-            print(currentExerciseData[index])
-            print(index)
-            print(currentExerciseData.count)
-            
-            if index + 1 < currentExerciseData.count {
-                currentExerciseData[index + 1] = ExerciseDataWidgetModel(weight: 0, time: 0.0, rest: 0.0, isAvailable: true, isStarted: false, clear: false, stopRestTimer: false)
+                }
+                
+//                if currentExerciseIndex < currentExercises.count - 1 {
+//                    currentExerciseIndex += 1
+//                }
+                
+                resetFields()
             }
         }
-    } 
+    }
     
     func getAllExerciseDatas() -> [ExerciseData] {
         let exerciseDataArray = currentExerciseData.map { ExerciseData(from: $0) }
@@ -220,14 +211,17 @@ struct WorkoutView: View {
     }
     
     func stopPreviousRestTimer(index: Int) {
-        if index > 0 {
-            currentExerciseData[index - 1].stopRestTimer = true
-        }
+        guard index > 0 && index - 1 < currentExerciseData.count else {
+               print("Index \(index) out of bounds for stopPreviousRestTimer")
+               return
+           }
+        
+        currentExerciseData[index - 1].stopRestTimer = true
     }
 }
 
 
 #Preview {
-    WorkoutView(storageManager: StorageManager(), onStartSet: { int1 in }, onDataEntryCompleteHandler: { string1, string2, string3, int  in })
+    WorkoutView(storageManager: StorageManager(), onStartSet: { int1 in }, onDataEntryCompleteHandler: { int  in })
 }
 

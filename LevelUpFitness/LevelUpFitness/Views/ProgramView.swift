@@ -195,11 +195,13 @@ struct ProgramView: View {
                 }
             }
             .fullScreenCover(isPresented:  $navigateToWorkoutView, content: {
-                WorkoutView(storageManager: storageManager, onStartSet: {int1 in}, onDataEntryCompleteHandler: { string1, string2, string3, int  in })
+                WorkoutView(storageManager: storageManager, onStartSet: {int1 in}, onDataEntryCompleteHandler: { int  in })
+                    .preferredColorScheme(.light)
             })
             .fullScreenCover(isPresented:  $navigateToMetricsView, content: {
                 if let program = storageManager.program {
                     ProgramStatisticsView(program: program)
+                        .preferredColorScheme(.light)
                 }
             })
 //            .navigationDestination(isPresented: $navigateToWorkoutView, destination: {

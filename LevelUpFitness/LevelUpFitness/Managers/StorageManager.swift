@@ -207,17 +207,12 @@ class StorageManager: ObservableObject {
             let fileURL = temporaryDirectory.appendingPathComponent("\(userID).json")
             
             try jsonData.write(to: fileURL)
-            
-            let storageOperation = Amplify.Storage.uploadFile(key: "UserPrograms/\(userID).json", local: fileURL)
-                    
-            do {
+            if let date = getPreviousMondayDate() {
+                let storageOperation = Amplify.Storage.uploadFile(key: "UserPrograms/\(userID)/(\(date)).json", local: fileURL)
+                        
                 let progress = try await storageOperation.value
                 print("Upload completed: \(progress)")
-                DispatchQueue.main.async {
-                    completionHandler()
-                }
-            } catch {
-                print("Upload failed with error: \(error)")
+                completionHandler()
             }
         } catch {
             print(error.localizedDescription)

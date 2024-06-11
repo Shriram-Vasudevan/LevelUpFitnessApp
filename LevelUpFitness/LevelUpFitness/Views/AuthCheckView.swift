@@ -14,13 +14,13 @@ struct AuthCheckView: View {
         VStack {
             if authStateObserver.isSignedIn {
                 PagesHolderView(pageType: .home)
+                    .preferredColorScheme(.light)
             } else if !authStateObserver.hasFinishedChecking {
                 SplashScreenView()
                     .preferredColorScheme(.light)
             } else {
                 LoginView()
-//                PagesHolderView(pageType: .home)
-//                    .preferredColorScheme(.light)
+                    .preferredColorScheme(.light)
             }
         }
         .transition(.opacity)

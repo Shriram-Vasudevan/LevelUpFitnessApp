@@ -11,6 +11,8 @@ struct AchievementWidget: View {
     var userBadgeInfo: UserBadgeInfo
     var badge: Badge
     
+    @State private var width: CGFloat = 50
+    
     var body: some View {
         VStack (alignment: .leading, spacing: 10) {
             HStack {
@@ -23,7 +25,7 @@ struct AchievementWidget: View {
                     Text(badge.badgeName)
                         .bold()
                     
-                    Text("Completed 5 workout sessions! Your dedication is inspiring!")
+                    Text(badge.badgeDescription)
                         .font(.subheadline)
                         .foregroundColor(.gray)
                 }
@@ -31,22 +33,31 @@ struct AchievementWidget: View {
                 Spacer()
             }
             
-            HStack (spacing: 10) {
-                ZStack(alignment: .leading) {
-                    Rectangle()
-                        .fill(Color.gray.opacity(0.3))
-                        .frame(width: UIScreen.main.bounds.width * 0.6, height: 20)
+            GeometryReader { geometry in
+                HStack (spacing: 10) {
+                    ZStack(alignment: .leading) {
+                        Rectangle()
+                            .fill(Color.gray.opacity(0.3))
+                            .frame(width: geometry.size.width * 0.7, height: 20)
+                        
+                        if userBadgeInfo.weeks <= badge.badgeCriteria.threshold {
+                            Rectangle()
+                                .fill(Color.blue)
+                                .frame(width: CGFloat(userBadgeInfo.weeks) / CGFloat(badge.badgeCriteria.threshold) * geometry.size.width * 0.7, height: 20)
+                        } else {
+                            Rectangle()
+                                .fill(Color.blue)
+                                .frame(width: geometry.size.width * 0.7, height: 20)
+                        }
+                    }
                     
-                    Rectangle()
-                        .fill(Color.blue)
-                        .frame(width: CGFloat(userBadgeInfo.weeks) / CGFloat(badge.badgeCriteria.threshold) * UIScreen.main.bounds.width * 0.6, height: 20)
+                    Spacer()
+                    
+                    Text("\(Int(CGFloat(userBadgeInfo.weeks) / CGFloat(badge.badgeCriteria.threshold) * 100))%")
+                        .bold()
                 }
-                
-                Spacer()
-                
-                Text("\(Int(CGFloat(userBadgeInfo.weeks) / CGFloat(badge.badgeCriteria.threshold) * 100))%")
-                    .bold()
             }
+            .padding(.bottom, 10)
         }
         .padding()
         .background(
@@ -59,6 +70,8 @@ struct AchievementWidget: View {
 }
 
 #Preview {
-    AchievementWidget(userBadgeInfo: UserBadgeInfo(userId: "Test", weeks: 3, badgesEarned: [""]), badge: Badge(id: "Test", badgeName: "Memory Master", badgeIconS3URL: "Test", badgeCriteria: BadgeCriteria(field: "weeks", threshold: 5)))
+    AchievementWidget(userBadgeInfo: UserBadgeInfo(userId: "Test", weeks: 3, badgesEarned: [""]), badge: Badge(id: "Test", badgeName: "Memory Master", badgeDescription: "Completed your first week of workouts! You're off to a strong start!", badgeIconS3URL: "Test", badgeCriteria: BadgeCriteria(field: "weeks", threshold: 5)))
 }
+
+
 

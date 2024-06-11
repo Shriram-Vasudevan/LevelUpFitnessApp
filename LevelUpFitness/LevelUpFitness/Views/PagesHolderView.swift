@@ -21,12 +21,15 @@ struct PagesHolderView: View {
                 switch pageType {
                 case .home:
                     HomeView(storageManager: storageManager, databaseManager: databaseManager, healthManager: healthManager)
+                        .preferredColorScheme(.light)
                 case .program:
                     ProgramView(storageManager: storageManager, badgeManager: badgeManager)
+                        .preferredColorScheme(.light)
                 case .profile:
                     Text("Workout")
-                case .community:
-                    CommunityView()
+                case .library:
+                    LibraryView()
+                        .preferredColorScheme(.light)
                 }
                 
                 Spacer()
@@ -83,19 +86,19 @@ struct PagesHolderView: View {
                     ZStack {
                         VStack {
                             Button(action: {
-                                pageType = .community
+                                pageType = .library
                             }, label: {
                                 VStack {
-                                    Image(pageType == .community ? "CommunityBlue" : "CommunityGrey")
+                                    Image(pageType == .library ? "LibraryBlue" : "LibraryGrey")
                                         .resizable()
                                         .frame(width: 30, height: 30)
                                         .aspectRatio(contentMode:  .fill)
-                                        .foregroundColor(pageType == .community ? .blue : .gray)
+                                        .foregroundColor(pageType == .library ? .blue : .gray)
                                     
                                     
-                                    Text("Community")
+                                    Text("Library")
                                         .font(.caption)
-                                        .foregroundColor(pageType == .community  ? .blue : .gray)
+                                        .foregroundColor(pageType == .library  ? .blue : .gray)
                                     
                                 }
                                 .padding(.bottom)

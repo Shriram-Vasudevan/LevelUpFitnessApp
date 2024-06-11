@@ -17,6 +17,8 @@
 		991F8FEA2C17841300A134A5 /* BadgeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991F8FE92C17841300A134A5 /* BadgeManager.swift */; };
 		991F8FEC2C17844400A134A5 /* Badge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991F8FEB2C17844400A134A5 /* Badge.swift */; };
 		991F8FEE2C17852900A134A5 /* UserBadgeInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991F8FED2C17852900A134A5 /* UserBadgeInfo.swift */; };
+		991F8FF22C18D0A100A134A5 /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991F8FF12C18D0A100A134A5 /* LibraryView.swift */; };
+		991F8FF42C18DF9400A134A5 /* WeightProgressTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991F8FF32C18DF9400A134A5 /* WeightProgressTracker.swift */; };
 		994BE7082C01483D00959EB5 /* AWSAPIPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 994BE7072C01483D00959EB5 /* AWSAPIPlugin */; };
 		994BE70A2C01483D00959EB5 /* AWSCloudWatchLoggingPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 994BE7092C01483D00959EB5 /* AWSCloudWatchLoggingPlugin */; };
 		994BE70C2C01483D00959EB5 /* AWSCognitoAuthPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 994BE70B2C01483D00959EB5 /* AWSCognitoAuthPlugin */; };
@@ -88,6 +90,8 @@
 		991F8FE92C17841300A134A5 /* BadgeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeManager.swift; sourceTree = "<group>"; };
 		991F8FEB2C17844400A134A5 /* Badge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Badge.swift; sourceTree = "<group>"; };
 		991F8FED2C17852900A134A5 /* UserBadgeInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserBadgeInfo.swift; sourceTree = "<group>"; };
+		991F8FF12C18D0A100A134A5 /* LibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryView.swift; sourceTree = "<group>"; };
+		991F8FF32C18DF9400A134A5 /* WeightProgressTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightProgressTracker.swift; sourceTree = "<group>"; };
 		994E7DB02C02643D00BAD9E0 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		994E7DB22C02665300BAD9E0 /* KeyboardResponder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardResponder.swift; sourceTree = "<group>"; };
 		994E7DB42C0266A000BAD9E0 /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
@@ -213,6 +217,8 @@
 				999F70732C0F59EA00B35A78 /* StatisticsWidget.swift */,
 				999F70772C0FA57500B35A78 /* CommunityView.swift */,
 				999F70712C0EB4D400B35A78 /* AchievementWidget.swift */,
+				991F8FF12C18D0A100A134A5 /* LibraryView.swift */,
+				991F8FF32C18DF9400A134A5 /* WeightProgressTracker.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -435,12 +441,14 @@
 				999F70722C0EB4D400B35A78 /* AchievementWidget.swift in Sources */,
 				991F8FE82C1680A800A134A5 /* ProgramDBRepresentation.swift in Sources */,
 				999F707A2C0FF2E200B35A78 /* ExerciseDataWidget.swift in Sources */,
+				991F8FF42C18DF9400A134A5 /* WeightProgressTracker.swift in Sources */,
 				998475182BFC18F200295C6E /* AuthenticationManager.swift in Sources */,
 				991F8FE42C1527A900A134A5 /* ProgramStatisticsView.swift in Sources */,
 				991F8FE22C15278500A134A5 /* Extensions.swift in Sources */,
 				99F71F9F2C023A3D00E27B60 /* UsageTimeView.swift in Sources */,
 				994E7DCF2C0551FE00BAD9E0 /* ProgramListWidget.swift in Sources */,
 				991F8FEA2C17841300A134A5 /* BadgeManager.swift in Sources */,
+				991F8FF22C18D0A100A134A5 /* LibraryView.swift in Sources */,
 				99CFAAE62BEB075500EFF67E /* LevelUpFitnessApp.swift in Sources */,
 				994E7DC72C03DE5400BAD9E0 /* PascalCaseCodingKey.swift in Sources */,
 				994E7DB72C026A1D00BAD9E0 /* AuthStateObserver.swift in Sources */,
@@ -587,7 +595,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"LevelUpFitness/Preview Content\"";
-				DEVELOPMENT_TEAM = Z6X96R5RVB;
+				DEVELOPMENT_TEAM = NDZ2DG6484;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = LevelUpFitness/Info.plist;
@@ -602,7 +610,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.LevelUpFitness;
+				PRODUCT_BUNDLE_IDENTIFIER = com.LevelUpFitnessApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -618,7 +626,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"LevelUpFitness/Preview Content\"";
-				DEVELOPMENT_TEAM = Z6X96R5RVB;
+				DEVELOPMENT_TEAM = NDZ2DG6484;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = LevelUpFitness/Info.plist;
@@ -633,7 +641,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.LevelUpFitness;
+				PRODUCT_BUNDLE_IDENTIFIER = com.LevelUpFitnessApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
