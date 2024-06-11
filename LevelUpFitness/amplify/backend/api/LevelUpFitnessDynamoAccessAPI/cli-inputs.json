@@ -32,6 +32,37 @@
           "read"
         ]
       }
+    },
+    "/getBadges": {
+      "name": "/getBadges",
+      "lambdaFunction": "LevelUpFitnessDynamoAccessLambda",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "read"
+        ]
+      }
+    },
+    "/modifyUserBadgeInfo": {
+      "name": "/modifyUserBadgeInfo",
+      "lambdaFunction": "LevelUpFitnessDynamoAccessLambda",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "update"
+        ]
+      }
+    },
+    "/getUserBadgeInfo": {
+      "name": "/getUserBadgeInfo",
+      "lambdaFunction": "LevelUpFitnessDynamoAccessLambda",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "read"
+        ]
+      }
     }
   }
 }

@@ -8,46 +8,50 @@
 import SwiftUI
 
 struct AchievementWidget: View {
+    var userBadgeInfo: UserBadgeInfo
+    var badge: Badge
+    
     var body: some View {
-        VStack (alignment: .leading) {
+        VStack (alignment: .leading, spacing: 10) {
             HStack {
                 Image("AchievementBadge")
                     .resizable()
                     .frame(width: 60, height: 60)
                     .aspectRatio(contentMode: .fit)
                 
-                Spacer()
-                
-                VStack (alignment: .leading){
-                    Text("Fitness Frenzy")
+                VStack (alignment: .leading, spacing: 5) {
+                    Text(badge.badgeName)
                         .bold()
                     
                     Text("Completed 5 workout sessions! Your dedication is inspiring!")
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
                 }
-
+                
+                Spacer()
             }
-        
-            HStack (spacing: 15){
+            
+            HStack (spacing: 10) {
                 ZStack(alignment: .leading) {
                     Rectangle()
                         .fill(Color.gray.opacity(0.3))
-                        .frame(height: 20)
+                        .frame(width: UIScreen.main.bounds.width * 0.6, height: 20)
                     
                     Rectangle()
                         .fill(Color.blue)
-                        .frame(width: UIScreen.main.bounds.width * 0.4, height: 20)
+                        .frame(width: CGFloat(userBadgeInfo.weeks) / CGFloat(badge.badgeCriteria.threshold) * UIScreen.main.bounds.width * 0.6, height: 20)
                 }
                 
                 Spacer()
                 
-                Text("60%")
+                Text("\(Int(CGFloat(userBadgeInfo.weeks) / CGFloat(badge.badgeCriteria.threshold) * 100))%")
                     .bold()
             }
         }
         .padding()
         .background(
-            Rectangle()
-                .fill(.white)
+            RoundedRectangle(cornerRadius: 10)
+                .fill(Color.white)
                 .shadow(radius: 3)
         )
         .padding(.horizontal)
@@ -55,5 +59,6 @@ struct AchievementWidget: View {
 }
 
 #Preview {
-    AchievementWidget()
+    AchievementWidget(userBadgeInfo: UserBadgeInfo(userId: "Test", weeks: 3, badgesEarned: [""]), badge: Badge(id: "Test", badgeName: "Memory Master", badgeIconS3URL: "Test", badgeCriteria: BadgeCriteria(field: "weeks", threshold: 5)))
 }
+

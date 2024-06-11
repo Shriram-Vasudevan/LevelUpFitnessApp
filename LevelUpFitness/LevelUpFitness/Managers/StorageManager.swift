@@ -46,7 +46,7 @@ class StorageManager: ObservableObject {
         }
     }
     
-    func getUserProgram() async  {
+    func getUserProgram(badgeManager: BadgeManager) async  {
         do {
             retrievingProgram = true
             let userID = try await Amplify.Auth.getCurrentUser().userId
@@ -69,7 +69,7 @@ class StorageManager: ObservableObject {
             self.retrievingProgram = false
             
             if let programName = await getUserProgramDBRepresentation() {
-                await joinStandardProgram(programName: programName)
+                await joinStandardProgram(programName: programName, badgeManager: badgeManager)
             }
             else {
                 await getStandardProgramNames()
@@ -81,17 +81,20 @@ class StorageManager: ObservableObject {
         do {
             let userID = try await Amplify.Auth.getCurrentUser().userId
             
+            print("userid: \(userID)")
+            
             let request = RESTRequest(apiName: "LevelUpFitnessDynamoAccessAPI", path: "/getUserProgramInfo", queryParameters: ["UserID" : userID])
             let response = try await Amplify.API.get(request: request)
             
-//            let jsonString = String(data: response, encoding: .utf8)
+            let jsonString = String(data: response, encoding: .utf8)
+            print("program db representation \(jsonString)")
             
             let jsonDecoder = JSONDecoder()
             let programDBRepresentation = try jsonDecoder.decode(ProgramDBRepresentation.self, from: response)
             
             return programDBRepresentation.program
         } catch {
-            print(error)
+            print("The db program error \(error)")
             return nil
         }
     }
@@ -115,7 +118,7 @@ class StorageManager: ObservableObject {
         }
     }
     
-    func joinStandardProgram(programName: String) async {
+    func joinStandardProgram(programName: String, badgeManager: BadgeManager) async {
         do {
             print("StandardPrograms/\(programName).json")
             let downloadTask = Amplify.Storage.downloadData(key: "StandardPrograms/\(programName).json")
@@ -127,7 +130,7 @@ class StorageManager: ObservableObject {
             
             await temporarilySaveStandardProgram(programName: programName, data: data) { success, url in
                 if success, let fileURL = url {
-                    await self.uploadStandardProgram(fileURL: fileURL, programName: programName) { success in
+                    await self.uploadStandardProgram(fileURL: fileURL, programName: programName, badgeManager: badgeManager) { success in
                         if success {
                             self.program = decodedData
                         }
@@ -152,7 +155,7 @@ class StorageManager: ObservableObject {
         }
     }
     
-    func uploadStandardProgram(fileURL: URL, programName: String, completionHandler: @escaping (Bool) -> Void) async {
+    func uploadStandardProgram(fileURL: URL, programName: String, badgeManager: BadgeManager, completionHandler: @escaping (Bool) -> Void) async {
         do {
             let userID = try await Amplify.Auth.getCurrentUser().userId
             
@@ -164,6 +167,7 @@ class StorageManager: ObservableObject {
                 
                 try await addProgramToDB(programName: programName)
                 
+                await badgeManager.checkIfBadgesEarned(weeksUpdated: true)
                 completionHandler(true)
             } else {
                 print("Failed to get date")

@@ -14,6 +14,9 @@
 		991F8FE42C1527A900A134A5 /* ProgramStatisticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991F8FE32C1527A900A134A5 /* ProgramStatisticsView.swift */; };
 		991F8FE62C154F5200A134A5 /* DayCompletion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991F8FE52C154F5200A134A5 /* DayCompletion.swift */; };
 		991F8FE82C1680A800A134A5 /* ProgramDBRepresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991F8FE72C1680A800A134A5 /* ProgramDBRepresentation.swift */; };
+		991F8FEA2C17841300A134A5 /* BadgeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991F8FE92C17841300A134A5 /* BadgeManager.swift */; };
+		991F8FEC2C17844400A134A5 /* Badge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991F8FEB2C17844400A134A5 /* Badge.swift */; };
+		991F8FEE2C17852900A134A5 /* UserBadgeInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991F8FED2C17852900A134A5 /* UserBadgeInfo.swift */; };
 		994BE7082C01483D00959EB5 /* AWSAPIPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 994BE7072C01483D00959EB5 /* AWSAPIPlugin */; };
 		994BE70A2C01483D00959EB5 /* AWSCloudWatchLoggingPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 994BE7092C01483D00959EB5 /* AWSCloudWatchLoggingPlugin */; };
 		994BE70C2C01483D00959EB5 /* AWSCognitoAuthPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 994BE70B2C01483D00959EB5 /* AWSCognitoAuthPlugin */; };
@@ -82,6 +85,9 @@
 		991F8FE32C1527A900A134A5 /* ProgramStatisticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramStatisticsView.swift; sourceTree = "<group>"; };
 		991F8FE52C154F5200A134A5 /* DayCompletion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCompletion.swift; sourceTree = "<group>"; };
 		991F8FE72C1680A800A134A5 /* ProgramDBRepresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramDBRepresentation.swift; sourceTree = "<group>"; };
+		991F8FE92C17841300A134A5 /* BadgeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeManager.swift; sourceTree = "<group>"; };
+		991F8FEB2C17844400A134A5 /* Badge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Badge.swift; sourceTree = "<group>"; };
+		991F8FED2C17852900A134A5 /* UserBadgeInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserBadgeInfo.swift; sourceTree = "<group>"; };
 		994E7DB02C02643D00BAD9E0 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		994E7DB22C02665300BAD9E0 /* KeyboardResponder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardResponder.swift; sourceTree = "<group>"; };
 		994E7DB42C0266A000BAD9E0 /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
@@ -180,6 +186,7 @@
 				999F70662C0818E600B35A78 /* ProgramWorkoutManager.swift */,
 				991F8FD92C13EB3900A134A5 /* HealthManager.swift */,
 				991F8FDF2C15274000A134A5 /* StatisticsManager.swift */,
+				991F8FE92C17841300A134A5 /* BadgeManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -203,9 +210,9 @@
 				994E7DC02C02950000BAD9E0 /* WorkoutCard.swift */,
 				999F706B2C0E71E000B35A78 /* WorkoutExitWarningView.swift */,
 				999F706D2C0EB08600B35A78 /* MetricsView.swift */,
-				999F70712C0EB4D400B35A78 /* AchievementWidget.swift */,
 				999F70732C0F59EA00B35A78 /* StatisticsWidget.swift */,
 				999F70772C0FA57500B35A78 /* CommunityView.swift */,
+				999F70712C0EB4D400B35A78 /* AchievementWidget.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -247,6 +254,8 @@
 				999F707B2C10020E00B35A78 /* ExerciseDataWidgetModel.swift */,
 				991F8FE52C154F5200A134A5 /* DayCompletion.swift */,
 				991F8FE72C1680A800A134A5 /* ProgramDBRepresentation.swift */,
+				991F8FEB2C17844400A134A5 /* Badge.swift */,
+				991F8FED2C17852900A134A5 /* UserBadgeInfo.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -405,6 +414,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				99A67EEA2BF451F0002DC3DC /* HomeView.swift in Sources */,
+				991F8FEC2C17844400A134A5 /* Badge.swift in Sources */,
 				99A67F062BF456A7002DC3DC /* PagesHolderView.swift in Sources */,
 				994E7DBB2C026BFE00BAD9E0 /* SplashScreenView.swift in Sources */,
 				99CFAAE82BEB075500EFF67E /* ContentView.swift in Sources */,
@@ -430,12 +440,14 @@
 				991F8FE22C15278500A134A5 /* Extensions.swift in Sources */,
 				99F71F9F2C023A3D00E27B60 /* UsageTimeView.swift in Sources */,
 				994E7DCF2C0551FE00BAD9E0 /* ProgramListWidget.swift in Sources */,
+				991F8FEA2C17841300A134A5 /* BadgeManager.swift in Sources */,
 				99CFAAE62BEB075500EFF67E /* LevelUpFitnessApp.swift in Sources */,
 				994E7DC72C03DE5400BAD9E0 /* PascalCaseCodingKey.swift in Sources */,
 				994E7DB72C026A1D00BAD9E0 /* AuthStateObserver.swift in Sources */,
 				994E7DC52C03AC3E00BAD9E0 /* DatabaseManager.swift in Sources */,
 				994E7DB52C0266A000BAD9E0 /* RegisterView.swift in Sources */,
 				994E7DB12C02643D00BAD9E0 /* LoginView.swift in Sources */,
+				991F8FEE2C17852900A134A5 /* UserBadgeInfo.swift in Sources */,
 				991F8FE02C15274000A134A5 /* StatisticsManager.swift in Sources */,
 				999F706C2C0E71E000B35A78 /* WorkoutExitWarningView.swift in Sources */,
 				99A67F092BF55EFE002DC3DC /* PageType.swift in Sources */,
@@ -584,6 +596,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -614,6 +627,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

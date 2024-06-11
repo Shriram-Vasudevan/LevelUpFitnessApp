@@ -39,6 +39,16 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "storage": {
+    "LevelUpFitnessBadgesDB": {
+      "Arn": "string",
+      "Name": "string",
+      "PartitionKeyName": "string",
+      "PartitionKeyType": "string",
+      "Region": "string",
+      "SortKeyName": "string",
+      "SortKeyType": "string",
+      "StreamArn": "string"
+    },
     "LevelUpFitnessDynamo": {
       "Arn": "string",
       "Name": "string",
@@ -52,6 +62,14 @@ export type AmplifyDependentResourcesAttributes = {
     "LevelUpFitnessStorage": {
       "BucketName": "string",
       "Region": "string"
+    },
+    "LevelUpFitnessUserBadgeInfoDB": {
+      "Arn": "string",
+      "Name": "string",
+      "PartitionKeyName": "string",
+      "PartitionKeyType": "string",
+      "Region": "string",
+      "StreamArn": "string"
     },
     "LevelUpFitnessUserProgramsDB": {
       "Arn": "string",

@@ -1,0 +1,10 @@
+{
+  "resourceName": "LevelUpFitnessUserBadgeInfoDB",
+  "tableName": "user-badge-info-db",
+  "partitionKey": {
+    "fieldName": "UserID",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}

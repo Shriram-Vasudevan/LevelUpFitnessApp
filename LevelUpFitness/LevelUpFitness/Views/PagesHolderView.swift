@@ -11,6 +11,7 @@ struct PagesHolderView: View {
     @StateObject var storageManager = StorageManager()
     @StateObject var databaseManager = DatabaseManager()
     @StateObject var healthManager = HealthManager()
+    @StateObject var badgeManager = BadgeManager()
     
     @State var pageType: PageType
     
@@ -21,7 +22,7 @@ struct PagesHolderView: View {
                 case .home:
                     HomeView(storageManager: storageManager, databaseManager: databaseManager, healthManager: healthManager)
                 case .program:
-                    ProgramView(storageManager: storageManager)
+                    ProgramView(storageManager: storageManager, badgeManager: badgeManager)
                 case .profile:
                     Text("Workout")
                 case .community:
@@ -142,7 +143,7 @@ struct PagesHolderView: View {
                     
                 async let dailyVideo: ()? = storageManager.dailyVideo == nil ? storageManager.downloadDailyVideo() : nil
                 async let workouts = databaseManager.workouts.count <= 0 ? databaseManager.getWorkouts() : nil
-                async let userProgram = storageManager.program == nil ? storageManager.getUserProgram() : nil
+                async let userProgram = storageManager.program == nil ? storageManager.getUserProgram(badgeManager: badgeManager) : nil
                 
                 _ = await (dailyVideo, workouts, userProgram)
             }

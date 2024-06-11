@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ProgramView: View {
     @ObservedObject var storageManager: StorageManager
+    @ObservedObject var badgeManager: BadgeManager
     
     @State var navigateToWorkoutView: Bool = false
     @State var navigateToMetricsView: Bool = false
@@ -71,7 +72,7 @@ struct ProgramView: View {
                                         
                                         Button(action: {
                                             Task {
-                                                await storageManager.joinStandardProgram(programName: name)
+                                                await storageManager.joinStandardProgram(programName: name, badgeManager: badgeManager)
                                             }
                                         }, label: {
                                             Text("Join")
@@ -170,12 +171,17 @@ struct ProgramView: View {
                                     }
                                     .padding(.horizontal)
                                     
-                                    VStack (spacing: 15) {
-                                        AchievementWidget()
-                                        AchievementWidget()
-                                        AchievementWidget()
-                                        AchievementWidget()
+                                    ForEach(badgeManager.badges.sorted(by: { $0.badgeCriteria.threshold < $1.badgeCriteria.threshold }), id: \.id) { badge in
+                                        
+                                        if let userBadgeInfo = badgeManager.userBadgeInfo {
+                                            if !userBadgeInfo.badgesEarned.contains(badge.id) {
+                                                AchievementWidget(userBadgeInfo: userBadgeInfo, badge: badge)
+                                                    .padding(.bottom)
+                                            }
+                                        }
+                                        
                                     }
+                                    
                                     Spacer()
                                 }
                             }
@@ -205,6 +211,6 @@ struct ProgramView: View {
 }
 
 #Preview {
-    ProgramView(storageManager: StorageManager())
+    ProgramView(storageManager: StorageManager(), badgeManager: BadgeManager())
 }
 

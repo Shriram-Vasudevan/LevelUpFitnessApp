@@ -113,6 +113,10 @@
     }
   },
   "storage": {
+    "LevelUpFitnessBadgesDB": {
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB"
+    },
     "LevelUpFitnessDynamo": {
       "providerPlugin": "awscloudformation",
       "service": "DynamoDB"
@@ -121,6 +125,10 @@
       "dependsOn": [],
       "providerPlugin": "awscloudformation",
       "service": "S3"
+    },
+    "LevelUpFitnessUserBadgeInfoDB": {
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB"
     },
     "LevelUpFitnessUserProgramsDB": {
       "providerPlugin": "awscloudformation",

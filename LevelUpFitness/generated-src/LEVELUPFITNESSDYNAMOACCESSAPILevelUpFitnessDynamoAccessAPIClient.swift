@@ -204,6 +204,138 @@ public class LEVELUPFITNESSDYNAMOACCESSAPILevelUpFitnessDynamoAccessAPIClient: A
      
      return type: 
      */
+    public func getBadgesOptions() -> AWSTask<AnyObject> {
+	    let headerParameters = [
+                   "Content-Type": "application/json",
+                   "Accept": "application/json",
+                   
+	            ]
+	    
+	    let queryParameters:[String:Any] = [:]
+	    
+	    let pathParameters:[String:Any] = [:]
+	    
+	    return self.invokeHTTPRequest("OPTIONS", urlString: "/getBadges", pathParameters: pathParameters, queryParameters: queryParameters, headerParameters: headerParameters, body: nil, responseClass: nil)
+	}
+
+	
+    /*
+     
+     
+     @param proxy 
+     
+     return type: 
+     */
+    public func getBadgesProxyOptions(proxy: String) -> AWSTask<AnyObject> {
+	    let headerParameters = [
+                   "Content-Type": "application/json",
+                   "Accept": "application/json",
+                   
+	            ]
+	    
+	    let queryParameters:[String:Any] = [:]
+	    
+	    var pathParameters:[String:Any] = [:]
+	    pathParameters["proxy"] = proxy
+	    
+	    return self.invokeHTTPRequest("OPTIONS", urlString: "/getBadges/{proxy+}", pathParameters: pathParameters, queryParameters: queryParameters, headerParameters: headerParameters, body: nil, responseClass: nil)
+	}
+
+	
+    /*
+     
+     
+     
+     return type: 
+     */
+    public func getUserBadgeInfoOptions() -> AWSTask<AnyObject> {
+	    let headerParameters = [
+                   "Content-Type": "application/json",
+                   "Accept": "application/json",
+                   
+	            ]
+	    
+	    let queryParameters:[String:Any] = [:]
+	    
+	    let pathParameters:[String:Any] = [:]
+	    
+	    return self.invokeHTTPRequest("OPTIONS", urlString: "/getUserBadgeInfo", pathParameters: pathParameters, queryParameters: queryParameters, headerParameters: headerParameters, body: nil, responseClass: nil)
+	}
+
+	
+    /*
+     
+     
+     @param proxy 
+     
+     return type: 
+     */
+    public func getUserBadgeInfoProxyOptions(proxy: String) -> AWSTask<AnyObject> {
+	    let headerParameters = [
+                   "Content-Type": "application/json",
+                   "Accept": "application/json",
+                   
+	            ]
+	    
+	    let queryParameters:[String:Any] = [:]
+	    
+	    var pathParameters:[String:Any] = [:]
+	    pathParameters["proxy"] = proxy
+	    
+	    return self.invokeHTTPRequest("OPTIONS", urlString: "/getUserBadgeInfo/{proxy+}", pathParameters: pathParameters, queryParameters: queryParameters, headerParameters: headerParameters, body: nil, responseClass: nil)
+	}
+
+	
+    /*
+     
+     
+     
+     return type: 
+     */
+    public func getUserProgramInfoOptions() -> AWSTask<AnyObject> {
+	    let headerParameters = [
+                   "Content-Type": "application/json",
+                   "Accept": "application/json",
+                   
+	            ]
+	    
+	    let queryParameters:[String:Any] = [:]
+	    
+	    let pathParameters:[String:Any] = [:]
+	    
+	    return self.invokeHTTPRequest("OPTIONS", urlString: "/getUserProgramInfo", pathParameters: pathParameters, queryParameters: queryParameters, headerParameters: headerParameters, body: nil, responseClass: nil)
+	}
+
+	
+    /*
+     
+     
+     @param proxy 
+     
+     return type: 
+     */
+    public func getUserProgramInfoProxyOptions(proxy: String) -> AWSTask<AnyObject> {
+	    let headerParameters = [
+                   "Content-Type": "application/json",
+                   "Accept": "application/json",
+                   
+	            ]
+	    
+	    let queryParameters:[String:Any] = [:]
+	    
+	    var pathParameters:[String:Any] = [:]
+	    pathParameters["proxy"] = proxy
+	    
+	    return self.invokeHTTPRequest("OPTIONS", urlString: "/getUserProgramInfo/{proxy+}", pathParameters: pathParameters, queryParameters: queryParameters, headerParameters: headerParameters, body: nil, responseClass: nil)
+	}
+
+	
+    /*
+     
+     
+     
+     return type: 
+     */
     public func getWorkoutsOptions() -> AWSTask<AnyObject> {
 	    let headerParameters = [
                    "Content-Type": "application/json",
@@ -239,6 +371,50 @@ public class LEVELUPFITNESSDYNAMOACCESSAPILevelUpFitnessDynamoAccessAPIClient: A
 	    pathParameters["proxy"] = proxy
 	    
 	    return self.invokeHTTPRequest("OPTIONS", urlString: "/getWorkouts/{proxy+}", pathParameters: pathParameters, queryParameters: queryParameters, headerParameters: headerParameters, body: nil, responseClass: nil)
+	}
+
+	
+    /*
+     
+     
+     
+     return type: 
+     */
+    public func modifyUserBadgeInfoOptions() -> AWSTask<AnyObject> {
+	    let headerParameters = [
+                   "Content-Type": "application/json",
+                   "Accept": "application/json",
+                   
+	            ]
+	    
+	    let queryParameters:[String:Any] = [:]
+	    
+	    let pathParameters:[String:Any] = [:]
+	    
+	    return self.invokeHTTPRequest("OPTIONS", urlString: "/modifyUserBadgeInfo", pathParameters: pathParameters, queryParameters: queryParameters, headerParameters: headerParameters, body: nil, responseClass: nil)
+	}
+
+	
+    /*
+     
+     
+     @param proxy 
+     
+     return type: 
+     */
+    public func modifyUserBadgeInfoProxyOptions(proxy: String) -> AWSTask<AnyObject> {
+	    let headerParameters = [
+                   "Content-Type": "application/json",
+                   "Accept": "application/json",
+                   
+	            ]
+	    
+	    let queryParameters:[String:Any] = [:]
+	    
+	    var pathParameters:[String:Any] = [:]
+	    pathParameters["proxy"] = proxy
+	    
+	    return self.invokeHTTPRequest("OPTIONS", urlString: "/modifyUserBadgeInfo/{proxy+}", pathParameters: pathParameters, queryParameters: queryParameters, headerParameters: headerParameters, body: nil, responseClass: nil)
 	}
 
 

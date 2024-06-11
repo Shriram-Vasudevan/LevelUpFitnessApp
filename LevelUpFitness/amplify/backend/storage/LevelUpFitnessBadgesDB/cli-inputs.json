@@ -1,0 +1,14 @@
+{
+  "resourceName": "LevelUpFitnessBadgesDB",
+  "tableName": "badges-db",
+  "partitionKey": {
+    "fieldName": "ID",
+    "fieldType": "string"
+  },
+  "sortKey": {
+    "fieldName": "BadgeName",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}
