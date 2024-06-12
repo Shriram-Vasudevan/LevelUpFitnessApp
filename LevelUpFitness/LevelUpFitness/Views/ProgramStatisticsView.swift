@@ -213,7 +213,7 @@ struct RestDistributionBar: View {
                                 .frame(maxWidth: reader.size.width)
                                 .padding(.horizontal)
                     
-                    RoundedRectangle(cornerRadius: 10)
+                            Rectangle()
                                 .fill(Color.green)
                                 .frame(height: 40)
                                 .frame(maxWidth: reader.size.width * restTime / (workoutTime + restTime))
