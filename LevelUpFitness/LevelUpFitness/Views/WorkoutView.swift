@@ -21,6 +21,7 @@ struct WorkoutView: View {
     
     @State var onStartSet: (Int) -> Void
     @State var onDataEntryCompleteHandler: (Int) -> Void
+    @State var lastSetComplete: (() -> Void)
     
     var body: some View {
         NavigationStack {
@@ -29,7 +30,7 @@ struct WorkoutView: View {
                     .edgesIgnoringSafeArea(.all)
                 
                 if currentExercises.count > 0 {
-                        VStack {
+                    VStack (spacing: 0) {
                             ZStack {
                                 HStack {
                                     Button(action: {
@@ -71,14 +72,13 @@ struct WorkoutView: View {
                                 }
                                 .padding(.horizontal)
                             }
+                            .padding(.bottom, 10)
                             
                             ScrollView(.vertical) {
                                 VStack (spacing: 0) {
                                     Image("GuyAtTheGym")
                                         .resizable()
                                         .frame(height:  200)
-                                        .cornerRadius(10)
-                                        .padding(.horizontal)
                                     
                                     
                                     HStack {
@@ -110,7 +110,7 @@ struct WorkoutView: View {
                                     .padding([.horizontal, .bottom])
 
                                     ForEach(0 ..< currentExerciseData.count, id: \.self) { index in
-                                        ExerciseDataWidget(exerciseDataWidgetModel: $currentExerciseData[index], index: index, onStartSet: $onStartSet, onDataEntryComplete: $onDataEntryCompleteHandler)
+                                        ExerciseDataWidget(exerciseDataWidgetModel: $currentExerciseData[index], index: index, onStartSet: $onStartSet, onDataEntryComplete: $onDataEntryCompleteHandler, lastSetComplete: $lastSetComplete)
                                             .onAppear {
                                                 onDataEntryCompleteHandler = { index in
                                                     addExerciseData(index: index)
@@ -118,13 +118,15 @@ struct WorkoutView: View {
                                                 onStartSet = { index in
                                                     stopPreviousRestTimer(index: index)
                                                 }
+                                                lastSetComplete = {
+                                                    moveToNextExercise()
+                                                }
                                             }
                                     }
                                     
                                     Spacer()
                                 }
                             }
-                            .padding(.top)
                             .background(
                                 Rectangle()
                                     .fill(.white)
@@ -160,9 +162,9 @@ struct WorkoutView: View {
             currentExerciseData = []
             for i in 0..<currentExercises[currentExerciseIndex].sets {
                 if i == 0 {
-                    currentExerciseData.append(ExerciseDataWidgetModel(weight: 0, time: 0.0, rest: 0.0, isAvailable: true, isStarted: false, clear: false, stopRestTimer: false))
+                    currentExerciseData.append(ExerciseDataWidgetModel(weight: 0, time: 0.0, rest: 0.0, isAvailable: true, isStarted: false, clear: false, stopRestTimer: false, isLast: false))
                 } else {
-                    currentExerciseData.append(ExerciseDataWidgetModel(weight: 0, time: 0.0, rest: 0.0, isAvailable: false, isStarted: false, clear: false, stopRestTimer: false))
+                    currentExerciseData.append(ExerciseDataWidgetModel(weight: 0, time: 0.0, rest: 0.0, isAvailable: false, isStarted: false, clear: false, stopRestTimer: false, isLast: false))
                 }
             }
             
@@ -181,7 +183,11 @@ struct WorkoutView: View {
 
     func addExerciseData(index: Int) {
         if index + 1 < currentExerciseData.count {
-            currentExerciseData[index + 1] = ExerciseDataWidgetModel(weight: 0, time: 0.0, rest: 0.0, isAvailable: true, isStarted: false, clear: false, stopRestTimer: false)
+            currentExerciseData[index + 1].isAvailable = true
+            
+            if index + 1 == currentExerciseData.count - 1 {
+                currentExerciseData[index + 1].isLast = true
+            }
         }
         else {
             withAnimation {
@@ -195,10 +201,6 @@ struct WorkoutView: View {
                     storageManager.program?.program[dayIndex].exercises[currentExerciseIndex].data = getAllExerciseDatas()
 
                 }
-                
-//                if currentExerciseIndex < currentExercises.count - 1 {
-//                    currentExerciseIndex += 1
-//                }
                 
                 resetFields()
             }
@@ -218,10 +220,17 @@ struct WorkoutView: View {
         
         currentExerciseData[index - 1].stopRestTimer = true
     }
+    
+    func moveToNextExercise() {
+        if currentExerciseIndex < currentExercises.count - 1 {
+            print("upping index")
+            currentExerciseIndex += 1
+        }
+    }
 }
 
 
 #Preview {
-    WorkoutView(storageManager: StorageManager(), onStartSet: { int1 in }, onDataEntryCompleteHandler: { int  in })
+    WorkoutView(storageManager: StorageManager(), onStartSet: { int1 in }, onDataEntryCompleteHandler: { int  in }, lastSetComplete: {})
 }
 

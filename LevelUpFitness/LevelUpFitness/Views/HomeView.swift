@@ -84,25 +84,14 @@ struct HomeView: View {
                             .padding(.bottom, 5)
                             .cornerRadius(15)
                             
-                            if databaseManager.workouts.count > 0 {
-                                HStack {
-                                    Text("Workouts")
-                                        .font(.custom("Sailec Bold", size: 20))
+                            if let todaysProgram = storageManager.program?.program.first(where: { $0.day == getCurrentWeekday() }) {
+                                
+                                if !todaysProgram.completed {
                                     
-                                    Spacer()
                                 }
-                                .padding(.horizontal)
-                                .padding(.bottom, 7)
-                                
-                                
-                                VStack (spacing: 10) {
-                                    ForEach(databaseManager.workouts.prefix(2), id: \.id) { workout in
-                                        WorkoutCard(workout: workout)
-                                    }
-                                }
-                                .padding(.top, 1)
-                                .padding(.bottom)
+ 
                             }
+                            
                             
                             VStack (spacing: 0) {
                                 HStack {
@@ -176,6 +165,16 @@ struct HomeView: View {
     
     func setDateString(date: String) -> [String] {
         return date.components(separatedBy: " ")
+    }
+    
+    func getCurrentWeekday() -> String {
+        let date = Date()
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "EEEE"
+        let weekday = dateFormatter.string(from: date)
+        
+        return weekday
     }
 }
 

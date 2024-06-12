@@ -21,7 +21,9 @@ struct ExerciseDataWidget: View {
     
     @Binding var onStartSet: ((Int) -> Void)
     @Binding var onDataEntryComplete: ((Int) -> Void)
+    @Binding var lastSetComplete: (() -> Void)
     
+    @FocusState private var isWeightTextFieldFocused: Bool
     
     var body: some View {
         VStack (spacing: 0) {
@@ -31,7 +33,8 @@ struct ExerciseDataWidget: View {
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .frame(width: 50)
                     .multilineTextAlignment(.center)
-                    .keyboardType(.numberPad)
+//                        .keyboardType(.numberPad)
+                    .focused($isWeightTextFieldFocused)
                 
                 Text("Time: ")
                 TextField("", text: $timeText)
@@ -92,13 +95,27 @@ struct ExerciseDataWidget: View {
             }
         }
         .opacity(exerciseDataWidgetModel.isAvailable ? 1 : 0.5)
+        .disabled(exerciseDataWidgetModel.isAvailable ? false : true)
         .onChange(of: exerciseDataWidgetModel) { newValue in
             if newValue.stopRestTimer  {
                 let weightValue = Int(weightText) ?? 0
                 let timeValue = Double(timeText) ?? 0.0
                 let restValue = Double(restText) ?? 0.0
                 
-                exerciseDataWidgetModel = ExerciseDataWidgetModel(weight: weightValue, time: timeValue, rest: restValue, isAvailable: false, isStarted: false, clear: false, stopRestTimer: false)
+                print("assigning val")
+                exerciseDataWidgetModel.weight = weightValue
+                exerciseDataWidgetModel.time = timeValue
+                exerciseDataWidgetModel.rest = restValue
+                exerciseDataWidgetModel.isAvailable = false
+                exerciseDataWidgetModel.isStarted = false
+                exerciseDataWidgetModel.stopRestTimer = false
+                
+                print(newValue.isLast)
+                if newValue.isLast {
+                    lastSetComplete()
+                    exerciseDataWidgetModel.isLast = false
+                }
+                
                 stopTimer()
             }
             
@@ -134,5 +151,5 @@ struct ExerciseDataWidget: View {
 }
 
 #Preview {
-    ExerciseDataWidget(exerciseDataWidgetModel: .constant(ExerciseDataWidgetModel(weight: 0, time: 0.0, rest: 0.0, isAvailable: true, isStarted: false, clear: false, stopRestTimer: false)), index: 0, onStartSet: .constant({ int1 in}), onDataEntryComplete: .constant({ int in }))
+    ExerciseDataWidget(exerciseDataWidgetModel: .constant(ExerciseDataWidgetModel(weight: 0, time: 0.0, rest: 0.0, isAvailable: true, isStarted: false, clear: false, stopRestTimer: false, isLast: false)), index: 0, onStartSet: .constant({ int1 in}), onDataEntryComplete: .constant({ int in }), lastSetComplete: .constant({}))
 }

@@ -80,6 +80,14 @@ export type AmplifyDependentResourcesAttributes = {
       "SortKeyName": "string",
       "SortKeyType": "string",
       "StreamArn": "string"
+    },
+    "LevelUpFitnessWorkoutsDB": {
+      "Arn": "string",
+      "Name": "string",
+      "PartitionKeyName": "string",
+      "PartitionKeyType": "string",
+      "Region": "string",
+      "StreamArn": "string"
     }
   }
 }

@@ -21,7 +21,8 @@
         "LevelUpFitnessDynamo": {},
         "LevelUpFitnessUserProgramsDB": {},
         "LevelUpFitnessBadgesDB": {},
-        "LevelUpFitnessUserBadgeInfoDB": {}
+        "LevelUpFitnessUserBadgeInfoDB": {},
+        "LevelUpFitnessWorkoutsDB": {}
       },
       "function": {
         "LevelUpFitnessDynamoAccessLambda": {

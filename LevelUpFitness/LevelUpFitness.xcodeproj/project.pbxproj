@@ -47,6 +47,8 @@
 		994E7DCF2C0551FE00BAD9E0 /* ProgramListWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994E7DCE2C0551FE00BAD9E0 /* ProgramListWidget.swift */; };
 		998475182BFC18F200295C6E /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998475172BFC18F200295C6E /* AuthenticationManager.swift */; };
 		9984753D2BFC315F00295C6E /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9984753C2BFC315F00295C6E /* StorageManager.swift */; };
+		998DA0152C1A18940078E882 /* ViewModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998DA0142C1A18940078E882 /* ViewModifiers.swift */; };
+		998DA0172C1A34840078E882 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998DA0162C1A34840078E882 /* ChatView.swift */; };
 		999A11CA2C19355D00D02158 /* WorkoutLibraryExercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999A11C92C19355D00D02158 /* WorkoutLibraryExercise.swift */; };
 		999F70652C06C80300B35A78 /* WorkoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999F70642C06C80300B35A78 /* WorkoutView.swift */; };
 		999F70672C0818E600B35A78 /* ProgramWorkoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999F70662C0818E600B35A78 /* ProgramWorkoutManager.swift */; };
@@ -110,6 +112,8 @@
 		994E7DCE2C0551FE00BAD9E0 /* ProgramListWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramListWidget.swift; sourceTree = "<group>"; };
 		998475172BFC18F200295C6E /* AuthenticationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationManager.swift; sourceTree = "<group>"; };
 		9984753C2BFC315F00295C6E /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
+		998DA0142C1A18940078E882 /* ViewModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModifiers.swift; sourceTree = "<group>"; };
+		998DA0162C1A34840078E882 /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
 		999A11C92C19355D00D02158 /* WorkoutLibraryExercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutLibraryExercise.swift; sourceTree = "<group>"; };
 		999F70642C06C80300B35A78 /* WorkoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutView.swift; sourceTree = "<group>"; };
 		999F70662C0818E600B35A78 /* ProgramWorkoutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramWorkoutManager.swift; sourceTree = "<group>"; };
@@ -205,9 +209,9 @@
 				99A67EE92BF451EF002DC3DC /* HomeView.swift */,
 				994E7DC82C03DF5C00BAD9E0 /* ProgramView.swift */,
 				999F70642C06C80300B35A78 /* WorkoutView.swift */,
+				999F70792C0FF2E200B35A78 /* ExerciseDataWidget.swift */,
 				991F8FE32C1527A900A134A5 /* ProgramStatisticsView.swift */,
 				994E7DCE2C0551FE00BAD9E0 /* ProgramListWidget.swift */,
-				999F70792C0FF2E200B35A78 /* ExerciseDataWidget.swift */,
 				99A67F052BF456A7002DC3DC /* PagesHolderView.swift */,
 				99F71F9E2C023A3D00E27B60 /* UsageTimeView.swift */,
 				994E7DB02C02643D00BAD9E0 /* LoginView.swift */,
@@ -224,6 +228,7 @@
 				991F8FF32C18DF9400A134A5 /* WeightProgressTracker.swift */,
 				991F8FF12C18D0A100A134A5 /* LibraryView.swift */,
 				99A5E37E2C1935E7004879BF /* WorkoutLibraryExerciseWidget.swift */,
+				998DA0162C1A34840078E882 /* ChatView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -304,6 +309,7 @@
 				99CFAAE72BEB075500EFF67E /* ContentView.swift */,
 				99CFAAE92BEB075700EFF67E /* Assets.xcassets */,
 				99CFAAEB2BEB075700EFF67E /* Preview Content */,
+				998DA0142C1A18940078E882 /* ViewModifiers.swift */,
 			);
 			path = LevelUpFitness;
 			sourceTree = "<group>";
@@ -460,8 +466,10 @@
 				994E7DC72C03DE5400BAD9E0 /* PascalCaseCodingKey.swift in Sources */,
 				994E7DB72C026A1D00BAD9E0 /* AuthStateObserver.swift in Sources */,
 				99A5E37F2C1935E7004879BF /* WorkoutLibraryExerciseWidget.swift in Sources */,
+				998DA0172C1A34840078E882 /* ChatView.swift in Sources */,
 				994E7DC52C03AC3E00BAD9E0 /* DatabaseManager.swift in Sources */,
 				994E7DB52C0266A000BAD9E0 /* RegisterView.swift in Sources */,
+				998DA0152C1A18940078E882 /* ViewModifiers.swift in Sources */,
 				994E7DB12C02643D00BAD9E0 /* LoginView.swift in Sources */,
 				991F8FEE2C17852900A134A5 /* UserBadgeInfo.swift in Sources */,
 				991F8FE02C15274000A134A5 /* StatisticsManager.swift in Sources */,

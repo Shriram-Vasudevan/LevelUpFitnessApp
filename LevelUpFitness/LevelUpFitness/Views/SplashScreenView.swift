@@ -9,7 +9,12 @@ import SwiftUI
 
 struct SplashScreenView: View {
     var body: some View {
-        Text("LevelUp Fitness")
+        ZStack {
+            Image("LevelUpFitnessLogo")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(height: 300)
+        }
     }
 }
 

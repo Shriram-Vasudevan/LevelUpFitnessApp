@@ -213,11 +213,13 @@ struct RestDistributionBar: View {
                                 .frame(maxWidth: reader.size.width)
                                 .padding(.horizontal)
                     
-                            Rectangle()
-                                .fill(Color.green)
-                                .frame(height: 40)
-                                .frame(maxWidth: reader.size.width * restTime / (workoutTime + restTime))
-                                .padding(.horizontal)
+                    UnevenRoundedRectangle(cornerRadii:
+                            RectangleCornerRadii(topLeading: 10, bottomLeading: 10)
+                    )
+                    .fill(Color.green)
+                    .frame(height: 40)
+                    .frame(maxWidth: reader.size.width * restTime / (workoutTime + restTime))
+                    .padding(.horizontal)
                 }
                 .frame(height: 40)
             }
@@ -227,5 +229,5 @@ struct RestDistributionBar: View {
 }
 
 #Preview {
-    ProgramStatisticsView(program: Program(program: [ProgramDay(day: "Monday", workout: "", completed: false, exercises: [Exercise(name: "", sets: 2, reps: "5", rpe: "", rest: 3, completed: false, data: [ExerciseData(from: ExerciseDataWidgetModel(weight: 2, time: 8.0, rest: 5.0, isAvailable: false, isStarted: false, clear: false, stopRestTimer: false))])])], programName: "program"))
+    ProgramStatisticsView(program: Program(program: [ProgramDay(day: "Monday", workout: "", completed: false, exercises: [Exercise(name: "", sets: 2, reps: "5", rpe: "", rest: 3, completed: false, data: [ExerciseData(from: ExerciseDataWidgetModel(weight: 2, time: 8.0, rest: 5.0, isAvailable: false, isStarted: false, clear: false, stopRestTimer: false, isLast: false))])])], programName: "program"))
 }

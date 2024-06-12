@@ -1,0 +1,10 @@
+{
+  "resourceName": "LevelUpFitnessWorkoutsDB",
+  "tableName": "workout-library-db",
+  "partitionKey": {
+    "fieldName": "Name",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}

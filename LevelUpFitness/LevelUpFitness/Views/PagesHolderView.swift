@@ -145,10 +145,9 @@ struct PagesHolderView: View {
                 }
                     
                 async let dailyVideo: ()? = storageManager.dailyVideo == nil ? storageManager.downloadDailyVideo() : nil
-                async let workouts = databaseManager.workouts.count <= 0 ? databaseManager.getWorkouts() : nil
                 async let userProgram = storageManager.program == nil ? storageManager.getUserProgram(badgeManager: badgeManager) : nil
                 
-                _ = await (dailyVideo, workouts, userProgram)
+                _ = await (dailyVideo, userProgram)
             }
         }
         .ignoresSafeArea(edges: .bottom)

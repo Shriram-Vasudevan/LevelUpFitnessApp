@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 extension Program {
     func getProgramCompletionPercentage() -> Double {
@@ -176,5 +177,12 @@ extension Exercise {
         }
         
         return totalRestDifferential / Double(totalDataPoints)
+    }
+}
+
+
+extension View {
+    func doneButtonToolbar(isFirstResponder: Binding<Bool>) -> some View {
+        self.modifier(DoneButtonToolbar(isFirstResponder: isFirstResponder))
     }
 }
