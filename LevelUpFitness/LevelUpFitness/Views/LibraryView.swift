@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct LibraryView: View {
-    @State var exercises: [WorkoutLibraryExercise] = [WorkoutLibraryExercise(name: "Lunge", image: ""), WorkoutLibraryExercise(name: "Russian Twist", image: ""), WorkoutLibraryExercise(name: "Deadlift", image: ""), WorkoutLibraryExercise(name: "Situp", image: ""), WorkoutLibraryExercise(name: "Pushup", image: ""), WorkoutLibraryExercise(name: "Pullup", image: ""), WorkoutLibraryExercise(name: "Plank", image: ""), WorkoutLibraryExercise(name: "Squat", image: ""), WorkoutLibraryExercise(name: "Benchpress", image: "")]
+    @ObservedObject var storageManager: StorageManager
     var body: some View {
         ZStack {
             Color.blue
@@ -36,11 +36,11 @@ struct LibraryView: View {
                         .frame(width: 20, height: 15)
                 }
                 .padding(.horizontal)
-                
+        
                 VStack {
                     ScrollView(.vertical) {
-                        ForEach(exercises, id: \.self) { exercise in
-                            WorkoutLibraryExerciseWidget(workoutLibraryExercise: exercise)
+                        ForEach(storageManager.exercises, id: \.id) { exercise in
+                            ExerciseLibraryExerciseWidget(exerciseLibraryExercise: exercise)
                         }
                         
                         HStack {
@@ -61,5 +61,5 @@ struct LibraryView: View {
 }
 
 #Preview {
-    LibraryView()
+    LibraryView(storageManager: StorageManager())
 }

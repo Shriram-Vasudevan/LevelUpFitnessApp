@@ -28,7 +28,7 @@ struct PagesHolderView: View {
                 case .profile:
                     Text("Workout")
                 case .library:
-                    LibraryView()
+                    LibraryView(storageManager: storageManager)
                         .preferredColorScheme(.light)
                 }
                 
@@ -145,9 +145,10 @@ struct PagesHolderView: View {
                 }
                     
                 async let dailyVideo: ()? = storageManager.dailyVideo == nil ? storageManager.downloadDailyVideo() : nil
-                async let userProgram = storageManager.program == nil ? storageManager.getUserProgram(badgeManager: badgeManager) : nil
+                async let userProgram: ()? = storageManager.program == nil ? storageManager.getUserProgram(badgeManager: badgeManager) : nil
+                async let exercises: ()? = storageManager.downloadExercises() 
                 
-                _ = await (dailyVideo, userProgram)
+                _ = await (dailyVideo, userProgram, exercises)
             }
         }
         .ignoresSafeArea(edges: .bottom)

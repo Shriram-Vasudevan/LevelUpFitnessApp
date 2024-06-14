@@ -39,7 +39,6 @@ class BadgeManager: ObservableObject {
             }
             
             self.userBadgeInfo = userBadgeInfo
-            print("the count: \(String(describing: self.userBadgeInfo?.weeks))")
             
             await modifyUserBadgeInfo(userBadgeInfo: userBadgeInfo, weeksUpdated: weeksUpdated)
         }
@@ -62,7 +61,6 @@ class BadgeManager: ObservableObject {
             let response = try await Amplify.API.put(request: request)
             
             let stringResponse = String(data: response, encoding: .utf8)
-            print("modify response: \(String(describing: stringResponse))")
         } catch {
             print("modify error: \(error)")
         }
@@ -75,7 +73,6 @@ class BadgeManager: ObservableObject {
             let response = try await Amplify.API.get(request: request)
             
             let stringResponse = String(data: response, encoding: .utf8)
-            print("got user badge info response: \(String(describing: stringResponse))")
             
             let jsonDecoder = JSONDecoder()
             jsonDecoder.keyDecodingStrategy = .custom { keys in
@@ -91,7 +88,6 @@ class BadgeManager: ObservableObject {
             let userBadgeInfo = try jsonDecoder.decode(UserBadgeInfo.self, from: response)
             
             self.userBadgeInfo = userBadgeInfo
-            print(self.userBadgeInfo?.weeks)
         } catch {
             print("badge info error: \(error)")
         }
@@ -103,7 +99,6 @@ class BadgeManager: ObservableObject {
             let response = try await Amplify.API.get(request: request)
             
             let stringResponse = String(data: response, encoding: .utf8)
-            print("got badges response: \(String(describing: stringResponse))")
             
             let jsonDecoder = JSONDecoder()
             jsonDecoder.keyDecodingStrategy = .custom { keys in

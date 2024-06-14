@@ -1,5 +1,5 @@
 //
-//  WorkoutLibraryExerciseWidget.swift
+//  ExerciseLibraryExerciseWidget.swift
 //  LevelUpFitness
 //
 //  Created by Shriram Vasudevan on 6/11/24.
@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct WorkoutLibraryExerciseWidget: View {
-    var workoutLibraryExercise: WorkoutLibraryExercise
+struct ExerciseLibraryExerciseWidget: View {
+    var exerciseLibraryExercise: ExerciseLibraryExerciseDownloaded
     
     var body: some View {
         VStack (spacing: 10) {
@@ -22,7 +22,7 @@ struct WorkoutLibraryExerciseWidget: View {
                 
                 Spacer()
                 
-                Text(workoutLibraryExercise.name)
+                Text(exerciseLibraryExercise.name)
                     .font(.custom("Sailec Bold", size: 20))
             }
             .padding(.horizontal)
@@ -33,5 +33,5 @@ struct WorkoutLibraryExerciseWidget: View {
 }
 
 #Preview {
-    WorkoutLibraryExerciseWidget(workoutLibraryExercise: WorkoutLibraryExercise(name: "Lunges", image: ""))
+    ExerciseLibraryExerciseWidget(exerciseLibraryExercise: ExerciseLibraryExerciseDownloaded(name: "Push-up", videoURL: URL(string: "Test")!))
 }

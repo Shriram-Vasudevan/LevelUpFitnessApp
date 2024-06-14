@@ -1,17 +1,6 @@
 {
   "version": 1,
   "paths": {
-    "/getWorkouts": {
-      "name": "/getWorkouts",
-      "lambdaFunction": "LevelUpFitnessDynamoAccessLambda",
-      "permissions": {
-        "setting": "private",
-        "auth": [
-          "read",
-          "update"
-        ]
-      }
-    },
     "/addUserProgram": {
       "name": "/addUserProgram",
       "lambdaFunction": "LevelUpFitnessDynamoAccessLambda",
@@ -56,6 +45,16 @@
     },
     "/getUserBadgeInfo": {
       "name": "/getUserBadgeInfo",
+      "lambdaFunction": "LevelUpFitnessDynamoAccessLambda",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "read"
+        ]
+      }
+    },
+    "/getExercises": {
+      "name": "/getExercises",
       "lambdaFunction": "LevelUpFitnessDynamoAccessLambda",
       "permissions": {
         "setting": "private",

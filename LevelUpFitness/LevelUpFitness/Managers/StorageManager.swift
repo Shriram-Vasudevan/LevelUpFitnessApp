@@ -8,28 +8,78 @@
 import Foundation
 import Amplify
 
-@MainActor
 class StorageManager: ObservableObject {
     @Published var dailyVideo: URL?
     @Published var program: Program?
     @Published var standardProgramNames: [String]?
     @Published var retrievingProgram: Bool = false
+    @Published var exercises: [ExerciseLibraryExerciseDownloaded] = []
     
-    
-    func downloadDailyVideo() async {
-        do {
-            let downloadTask = Amplify.Storage.downloadData(key: "DailyVideo/Video.mp4")
-//            for await progress in await downloadTask.progress {
-////                print(progress)
-//            }
-            let data = try await downloadTask.value
+    func downloadExercises() async {
+        do  {
+            print("here")
+            let exercises = try await getExercises()
             
-            if let url = saveVideoLocally(at: "DailyVideo", video: data) {
-                self.dailyVideo = url
+            for exercise in exercises {
+                guard let cdnURL = URL(string: exercise.cdnURL) else { return }
+                
+                print("the cdn url \(cdnURL)")
+                let downloadToFileURL = try saveExerciseToFiles(exerciseName: exercise.name)
+                
+                let task = URLSession.shared.downloadTask(with: cdnURL) { (location, response, error) in
+                    do {
+                        guard let location = location, error == nil else {
+                            print("Failed to download video: \(error?.localizedDescription ?? "Unknown error")")
+                            return
+                        }
+                        try FileManager.default.moveItem(at: location, to: downloadToFileURL)
+                        
+                        DispatchQueue.main.async {
+                            self.exercises.append(ExerciseLibraryExerciseDownloaded(name: exercise.name, videoURL: downloadToFileURL))
+                            print("appending")
+                            print(self.exercises.count)
+                            print(self.exercises)
+                        }
+                    }
+                    catch {
+                        print(error.localizedDescription)
+                    }
+                }
+                task.resume()
             }
+        } catch {
+            print(error.localizedDescription)
         }
-        catch {
-            print(error)
+    }
+    func downloadDailyVideo() async {
+//        do {
+//            let downloadTask = Amplify.Storage.downloadData(key: "DailyVideo/Video.mp4")
+//            let data = try await downloadTask.value
+//            
+//            if let url = saveVideoLocally(at: "DailyVideo", video: data) {
+//                self.dailyVideo = url
+//            }
+//        }
+//        catch {
+//            print(error)
+//        }
+    }
+    
+    func saveExerciseToFiles(exerciseName: String) throws -> URL {
+        do {
+            let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            
+            let exerciseDirectory = documentsDirectory.appendingPathComponent("Exercises", isDirectory: true)
+            
+            if !FileManager.default.fileExists(atPath: exerciseDirectory.absoluteString) {
+                try FileManager.default.createDirectory(at: exerciseDirectory, withIntermediateDirectories: true)
+            }
+            
+            let fileURL = exerciseDirectory.appendingPathComponent("\(exerciseName)-\(UUID().uuidString).mp4")
+            return fileURL
+        } catch {
+            print(error.localizedDescription)
+            throw FileError.failed
         }
     }
     
@@ -48,25 +98,32 @@ class StorageManager: ObservableObject {
     
     func getUserProgram(badgeManager: BadgeManager) async  {
         do {
-            retrievingProgram = true
+            DispatchQueue.main.async {
+                self.retrievingProgram = true
+            }
+
             let userID = try await Amplify.Auth.getCurrentUser().userId
             if let date = getPreviousMondayDate() {
                 let downloadTask = Amplify.Storage.downloadData(key: "UserPrograms/\(userID)/(\(date)).json")
-
+                
                 let data = try await downloadTask.value
                 
                 let decoder = JSONDecoder()
                 let decodedData = try decoder.decode(Program.self, from: data)
                 
-                print(decodedData)
-                
-                self.program = decodedData
+                DispatchQueue.main.async {
+                    self.program = decodedData
+                }
             }
-            self.retrievingProgram = false
+            DispatchQueue.main.async {
+                self.retrievingProgram = false
+            }
             
         } catch {
             print("user program retrieval error: \(error)")
-            self.retrievingProgram = false
+            DispatchQueue.main.async {
+                self.retrievingProgram = false
+            }
             
             if let programName = await getUserProgramDBRepresentation() {
                 await joinStandardProgram(programName: programName, badgeManager: badgeManager)
@@ -80,8 +137,6 @@ class StorageManager: ObservableObject {
     func getUserProgramDBRepresentation() async -> String? {
         do {
             let userID = try await Amplify.Auth.getCurrentUser().userId
-            
-            print("userid: \(userID)")
             
             let request = RESTRequest(apiName: "LevelUpFitnessDynamoAccessAPI", path: "/getUserProgramInfo", queryParameters: ["UserID" : userID])
             let response = try await Amplify.API.get(request: request)
@@ -98,7 +153,7 @@ class StorageManager: ObservableObject {
             return nil
         }
     }
-
+    
     
     func getStandardProgramNames() async {
         do {
@@ -161,7 +216,7 @@ class StorageManager: ObservableObject {
             
             if let date = getPreviousMondayDate() {
                 let storageOperation = Amplify.Storage.uploadFile(key: "UserPrograms/\(userID)/(\(date)).json", local: fileURL)
-                    
+                
                 let progress = try await storageOperation.value
                 print("Upload completed: \(progress)")
                 
@@ -191,6 +246,23 @@ class StorageManager: ObservableObject {
         }
     }
     
+    func getExercises() async throws -> [ExerciseLibraryExercise] {
+        do {
+            let request = RESTRequest(apiName: "LevelUpFitnessDynamoAccessAPI", path: "/getExercises")
+            let response = try await Amplify.API.get(request: request)
+            
+            print("getExercises: \(String(data: response, encoding: .utf8))")
+            let decoder = JSONDecoder()
+            
+            let exercises = try decoder.decode([ExerciseLibraryExercise].self, from: response)
+            
+            return exercises
+        } catch {
+            print("getExercises \(error.localizedDescription)")
+            throw APIError.failed
+        }
+    }
+    
     
     func uploadNewProgramStatus(completionHandler: @escaping () -> Void) async {
         do {
@@ -201,7 +273,6 @@ class StorageManager: ObservableObject {
             let jsonEncoder = JSONEncoder()
             let jsonData = try jsonEncoder.encode(program)
             let jsonString = String(data: jsonData, encoding: .utf8)
-            print(jsonString)
             
             let temporaryDirectory = FileManager.default.temporaryDirectory
             let fileURL = temporaryDirectory.appendingPathComponent("\(userID).json")
@@ -211,7 +282,6 @@ class StorageManager: ObservableObject {
                 let storageOperation = Amplify.Storage.uploadFile(key: "UserPrograms/\(userID)/(\(date)).json", local: fileURL)
                         
                 let progress = try await storageOperation.value
-                print("Upload completed: \(progress)")
                 completionHandler()
             }
         } catch {
@@ -234,9 +304,14 @@ class StorageManager: ObservableObject {
             return nil
         }
     }
+    
 
 }
 
 enum APIError: Error {
+    case failed
+}
+
+enum FileError: Error {
     case failed
 }

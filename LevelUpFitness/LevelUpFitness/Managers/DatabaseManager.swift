@@ -15,8 +15,6 @@ class DatabaseManager: ObservableObject {
     
     func getWorkouts() async {
         do {
-            print("here")
-            
             guard let userID = try? await Amplify.Auth.getCurrentUser().userId else { return }
             
             print(userID)

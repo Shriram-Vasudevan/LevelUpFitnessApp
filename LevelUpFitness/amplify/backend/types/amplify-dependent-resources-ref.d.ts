@@ -49,14 +49,12 @@ export type AmplifyDependentResourcesAttributes = {
       "SortKeyType": "string",
       "StreamArn": "string"
     },
-    "LevelUpFitnessDynamo": {
+    "LevelUpFitnessExercisesDB": {
       "Arn": "string",
       "Name": "string",
       "PartitionKeyName": "string",
       "PartitionKeyType": "string",
       "Region": "string",
-      "SortKeyName": "string",
-      "SortKeyType": "string",
       "StreamArn": "string"
     },
     "LevelUpFitnessStorage": {
@@ -79,14 +77,6 @@ export type AmplifyDependentResourcesAttributes = {
       "Region": "string",
       "SortKeyName": "string",
       "SortKeyType": "string",
-      "StreamArn": "string"
-    },
-    "LevelUpFitnessWorkoutsDB": {
-      "Arn": "string",
-      "Name": "string",
-      "PartitionKeyName": "string",
-      "PartitionKeyType": "string",
-      "Region": "string",
       "StreamArn": "string"
     }
   }

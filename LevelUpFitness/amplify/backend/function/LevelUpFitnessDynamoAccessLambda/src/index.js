@@ -9,19 +9,13 @@ const dynamoDb = new AWS.DynamoDB.DocumentClient()
  */
 exports.handler = async (event) => {
 
-    if (event.path == "/getWorkouts" && event.httpMethod == "GET") {
-        const UserID = event.queryStringParameters.UserID
-    
+    if (event.path == "/getExercises" && event.httpMethod == "GET") {
         const params = {
-            TableName: "workouts-db-dev",
-            KeyConditionExpression: "UserID = :userID",
-            ExpressionAttributeValues: {
-                ":userID": UserID
-            }
+            TableName: "exercises-db-dev",
         }
     
         try {
-            const data = await dynamoDb.query(params).promise()
+            const data = await dynamoDb.scan(params).promise()
     
             if (data.Items.length > 0) {
                 return {

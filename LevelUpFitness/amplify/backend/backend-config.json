@@ -117,7 +117,7 @@
       "providerPlugin": "awscloudformation",
       "service": "DynamoDB"
     },
-    "LevelUpFitnessDynamo": {
+    "LevelUpFitnessExercisesDB": {
       "providerPlugin": "awscloudformation",
       "service": "DynamoDB"
     },
@@ -131,10 +131,6 @@
       "service": "DynamoDB"
     },
     "LevelUpFitnessUserProgramsDB": {
-      "providerPlugin": "awscloudformation",
-      "service": "DynamoDB"
-    },
-    "LevelUpFitnessWorkoutsDB": {
       "providerPlugin": "awscloudformation",
       "service": "DynamoDB"
     }
