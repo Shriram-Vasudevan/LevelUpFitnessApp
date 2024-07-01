@@ -50,10 +50,10 @@ struct AchievementWidget: View {
                                 .frame(width: geometry.size.width * 0.7, height: 20)
                         }
                     }
-                    
+                        
                     Spacer()
                     
-                    Text("\(Int(CGFloat(userBadgeInfo.weeks) / CGFloat(badge.badgeCriteria.threshold) * 100))%")
+                    Text(userBadgeInfo.weeks > badge.badgeCriteria.threshold ? "100%" : "\(Int(CGFloat(userBadgeInfo.weeks) / CGFloat(badge.badgeCriteria.threshold) * 100))%")
                         .bold()
                 }
             }

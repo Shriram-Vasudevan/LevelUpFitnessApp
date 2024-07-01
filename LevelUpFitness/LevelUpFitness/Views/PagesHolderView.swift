@@ -20,7 +20,7 @@ struct PagesHolderView: View {
             VStack {
                 switch pageType {
                 case .home:
-                    HomeView(storageManager: storageManager, databaseManager: databaseManager, healthManager: healthManager)
+                    HomeView(storageManager: storageManager, databaseManager: databaseManager, healthManager: healthManager, pageType: $pageType)
                         .preferredColorScheme(.light)
                 case .program:
                     ProgramView(storageManager: storageManager, badgeManager: badgeManager)

@@ -8,7 +8,7 @@
 import Foundation
 
 struct ExerciseLibraryExerciseDownloaded: Codable, Identifiable {
-    var id = UUID()
+    var id: String
     var name: String
     var videoURL: URL
 }

@@ -33,5 +33,5 @@ struct ExerciseLibraryExerciseWidget: View {
 }
 
 #Preview {
-    ExerciseLibraryExerciseWidget(exerciseLibraryExercise: ExerciseLibraryExerciseDownloaded(name: "Push-up", videoURL: URL(string: "Test")!))
+    ExerciseLibraryExerciseWidget(exerciseLibraryExercise: ExerciseLibraryExerciseDownloaded(id: "Test", name: "Push-up", videoURL: URL(string: "Test")!))
 }

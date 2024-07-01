@@ -185,4 +185,19 @@ extension View {
     func doneButtonToolbar(isFirstResponder: Binding<Bool>) -> some View {
         self.modifier(DoneButtonToolbar(isFirstResponder: isFirstResponder))
     }
+    
+    func getSizeOfView(_ getSize: @escaping ((CGSize) -> Void)) -> some View {
+        return self
+            .background {
+                GeometryReader { geometry in
+                    Color.clear.preference(
+                        key: SizePreferenceKey.self,
+                        value: geometry.size
+                    )
+                    .onPreferenceChange(SizePreferenceKey.self) { value in
+                        getSize(value)
+                    }
+                }
+            }
+    }
 }

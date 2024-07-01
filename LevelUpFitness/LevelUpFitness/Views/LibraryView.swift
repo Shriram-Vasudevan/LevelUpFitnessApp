@@ -9,6 +9,9 @@ import SwiftUI
 
 struct LibraryView: View {
     @ObservedObject var storageManager: StorageManager
+    
+    @State var selectedExercise: ExerciseLibraryExerciseDownloaded?
+    
     var body: some View {
         ZStack {
             Color.blue
@@ -41,6 +44,10 @@ struct LibraryView: View {
                     ScrollView(.vertical) {
                         ForEach(storageManager.exercises, id: \.id) { exercise in
                             ExerciseLibraryExerciseWidget(exerciseLibraryExercise: exercise)
+                                .onTapGesture {
+                                    self.selectedExercise = exercise
+                                }
+                                
                         }
                         
                         HStack {
@@ -56,6 +63,9 @@ struct LibraryView: View {
                 )
                 .ignoresSafeArea(.all)
             }
+        }
+        .fullScreenCover(item: $selectedExercise) { exercise in
+            FullPageVideoView(videoURL: exercise.videoURL)
         }
     }
 }

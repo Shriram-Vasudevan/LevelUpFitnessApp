@@ -81,6 +81,9 @@
 		99DD3D502C1CD99D006C07B3 /* ExerciseLibraryExerciseDownloaded.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DD3D4F2C1CD99D006C07B3 /* ExerciseLibraryExerciseDownloaded.swift */; };
 		99DD3D522C1D0839006C07B3 /* ExerciseLibraryExerciseWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DD3D512C1D0839006C07B3 /* ExerciseLibraryExerciseWidget.swift */; };
 		99DD3D542C1D0871006C07B3 /* FullPageVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DD3D532C1D0871006C07B3 /* FullPageVideoView.swift */; };
+		99EEC6132C3201780044F906 /* LevelUpBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EEC6122C3201780044F906 /* LevelUpBar.swift */; };
+		99EEC6152C320FC30044F906 /* FitnessOptionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EEC6142C320FC30044F906 /* FitnessOptionType.swift */; };
+		99EEC6182C32F37A0044F906 /* SizePreferanceKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EEC6172C32F37A0044F906 /* SizePreferanceKey.swift */; };
 		99F71F9F2C023A3D00E27B60 /* UsageTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F71F9E2C023A3D00E27B60 /* UsageTimeView.swift */; };
 		E244B057B6BA41AE81672440 /* amplifyconfiguration.json in Resources */ = {isa = PBXBuildFile; fileRef = 4CBA503DE7750582F847DD00 /* amplifyconfiguration.json */; };
 /* End PBXBuildFile section */
@@ -150,6 +153,9 @@
 		99DD3D4F2C1CD99D006C07B3 /* ExerciseLibraryExerciseDownloaded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseLibraryExerciseDownloaded.swift; sourceTree = "<group>"; };
 		99DD3D512C1D0839006C07B3 /* ExerciseLibraryExerciseWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseLibraryExerciseWidget.swift; sourceTree = "<group>"; };
 		99DD3D532C1D0871006C07B3 /* FullPageVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullPageVideoView.swift; sourceTree = "<group>"; };
+		99EEC6122C3201780044F906 /* LevelUpBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelUpBar.swift; sourceTree = "<group>"; };
+		99EEC6142C320FC30044F906 /* FitnessOptionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessOptionType.swift; sourceTree = "<group>"; };
+		99EEC6172C32F37A0044F906 /* SizePreferanceKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizePreferanceKey.swift; sourceTree = "<group>"; };
 		99F71F9E2C023A3D00E27B60 /* UsageTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageTimeView.swift; sourceTree = "<group>"; };
 		C9EF97A8E6FAD1E27A905BF3 /* awsconfiguration.json */ = {isa = PBXFileReference; explicitFileType = text.json; path = awsconfiguration.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -213,6 +219,7 @@
 				99A67EE92BF451EF002DC3DC /* HomeView.swift */,
 				994E7DC82C03DF5C00BAD9E0 /* ProgramView.swift */,
 				999F70642C06C80300B35A78 /* WorkoutView.swift */,
+				991F8FF12C18D0A100A134A5 /* LibraryView.swift */,
 				999F70792C0FF2E200B35A78 /* ExerciseDataWidget.swift */,
 				991F8FE32C1527A900A134A5 /* ProgramStatisticsView.swift */,
 				994E7DCE2C0551FE00BAD9E0 /* ProgramListWidget.swift */,
@@ -230,10 +237,10 @@
 				999F70772C0FA57500B35A78 /* CommunityView.swift */,
 				999F70712C0EB4D400B35A78 /* AchievementWidget.swift */,
 				991F8FF32C18DF9400A134A5 /* WeightProgressTracker.swift */,
-				991F8FF12C18D0A100A134A5 /* LibraryView.swift */,
 				998DA0162C1A34840078E882 /* ChatView.swift */,
 				99DD3D512C1D0839006C07B3 /* ExerciseLibraryExerciseWidget.swift */,
 				99DD3D532C1D0871006C07B3 /* FullPageVideoView.swift */,
+				99EEC6122C3201780044F906 /* LevelUpBar.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -279,6 +286,7 @@
 				991F8FED2C17852900A134A5 /* UserBadgeInfo.swift */,
 				996919112C1CD12D00C0F664 /* ExerciseLibraryExercise.swift */,
 				99DD3D4F2C1CD99D006C07B3 /* ExerciseLibraryExerciseDownloaded.swift */,
+				99EEC6142C320FC30044F906 /* FitnessOptionType.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -304,6 +312,7 @@
 		99CFAAE42BEB075500EFF67E /* LevelUpFitness */ = {
 			isa = PBXGroup;
 			children = (
+				99EEC6162C32F3690044F906 /* PreferenceKeys */,
 				999F70682C096AA600B35A78 /* ViewModels */,
 				99A67F072BF55EEF002DC3DC /* Models */,
 				99A67F042BF4525B002DC3DC /* Info.plist */,
@@ -326,6 +335,14 @@
 				99CFAAEC2BEB075700EFF67E /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		99EEC6162C32F3690044F906 /* PreferenceKeys */ = {
+			isa = PBXGroup;
+			children = (
+				99EEC6172C32F37A0044F906 /* SizePreferanceKey.swift */,
+			);
+			path = PreferenceKeys;
 			sourceTree = "<group>";
 		};
 		DD9E74D5C9CEB2157F079D13 /* AmplifyConfig */ = {
@@ -452,11 +469,13 @@
 				994E7DC92C03DF5C00BAD9E0 /* ProgramView.swift in Sources */,
 				999F706E2C0EB08600B35A78 /* MetricsView.swift in Sources */,
 				999F70652C06C80300B35A78 /* WorkoutView.swift in Sources */,
+				99EEC6132C3201780044F906 /* LevelUpBar.swift in Sources */,
 				991F8FE62C154F5200A134A5 /* DayCompletion.swift in Sources */,
 				996919122C1CD12D00C0F664 /* ExerciseLibraryExercise.swift in Sources */,
 				999F70742C0F59EA00B35A78 /* StatisticsWidget.swift in Sources */,
 				994E7DC12C02950000BAD9E0 /* WorkoutCard.swift in Sources */,
 				9984753D2BFC315F00295C6E /* StorageManager.swift in Sources */,
+				99EEC6182C32F37A0044F906 /* SizePreferanceKey.swift in Sources */,
 				999F70722C0EB4D400B35A78 /* AchievementWidget.swift in Sources */,
 				991F8FE82C1680A800A134A5 /* ProgramDBRepresentation.swift in Sources */,
 				999F707A2C0FF2E200B35A78 /* ExerciseDataWidget.swift in Sources */,
@@ -470,6 +489,7 @@
 				991F8FEA2C17841300A134A5 /* BadgeManager.swift in Sources */,
 				991F8FF22C18D0A100A134A5 /* LibraryView.swift in Sources */,
 				99CFAAE62BEB075500EFF67E /* LevelUpFitnessApp.swift in Sources */,
+				99EEC6152C320FC30044F906 /* FitnessOptionType.swift in Sources */,
 				994E7DC72C03DE5400BAD9E0 /* PascalCaseCodingKey.swift in Sources */,
 				994E7DB72C026A1D00BAD9E0 /* AuthStateObserver.swift in Sources */,
 				998DA0172C1A34840078E882 /* ChatView.swift in Sources */,

@@ -6,13 +6,25 @@
 //
 
 import SwiftUI
+import AVFoundation
+import AVKit
 
 struct FullPageVideoView: View {
+    @State var videoURL: URL
+    
+    @State var avPlayer = AVPlayer()
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ZStack {
+            VideoPlayer(player: avPlayer)
+                .onAppear {
+                    avPlayer = AVPlayer(url: videoURL)
+                    avPlayer.play()
+                }
+        }
     }
 }
 
 #Preview {
-    FullPageVideoView()
+    FullPageVideoView(videoURL: URL(string: "Test")!)
 }

@@ -26,26 +26,35 @@ class StorageManager: ObservableObject {
                 print("the cdn url \(cdnURL)")
                 let downloadToFileURL = try saveExerciseToFiles(exerciseName: exercise.name)
                 
-                let task = URLSession.shared.downloadTask(with: cdnURL) { (location, response, error) in
-                    do {
-                        guard let location = location, error == nil else {
-                            print("Failed to download video: \(error?.localizedDescription ?? "Unknown error")")
-                            return
-                        }
-                        try FileManager.default.moveItem(at: location, to: downloadToFileURL)
-                        
-                        DispatchQueue.main.async {
-                            self.exercises.append(ExerciseLibraryExerciseDownloaded(name: exercise.name, videoURL: downloadToFileURL))
-                            print("appending")
-                            print(self.exercises.count)
-                            print(self.exercises)
-                        }
-                    }
-                    catch {
-                        print(error.localizedDescription)
-                    }
+                DispatchQueue.main.async {
+                    self.exercises.append(ExerciseLibraryExerciseDownloaded(id: exercise.id, name: exercise.name, videoURL: URL(string: "Test")!))
+                    print("appending")
+                    print(self.exercises.count)
+                    print(self.exercises)
                 }
-                task.resume()
+//                let task = URLSession.shared.downloadTask(with: cdnURL) { (location, response, error) in
+//                    do {
+//                        guard let location = location, error == nil else {
+//                            print("Failed to download video: \(error?.localizedDescription ?? "Unknown error")")
+//                            return
+//                        }
+//                        
+//                        print("the response \(response)")
+//                        
+//                        try FileManager.default.moveItem(at: location, to: downloadToFileURL)
+//                        
+//                        DispatchQueue.main.async {
+//                            self.exercises.append(ExerciseLibraryExerciseDownloaded(id: exercise.id, name: exercise.name, videoURL: downloadToFileURL))
+//                            print("appending")
+//                            print(self.exercises.count)
+//                            print(self.exercises)
+//                        }
+//                    }
+//                    catch {
+//                        print(error.localizedDescription)
+//                    }
+//                }
+//                task.resume()
             }
         } catch {
             print(error.localizedDescription)

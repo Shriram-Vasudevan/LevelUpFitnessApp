@@ -2,7 +2,7 @@
   "resourceName": "LevelUpFitnessExercisesDB",
   "tableName": "exercises-db",
   "partitionKey": {
-    "fieldName": "Name",
+    "fieldName": "ID",
     "fieldType": "string"
   },
   "gsi": [],
