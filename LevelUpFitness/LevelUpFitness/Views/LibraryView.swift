@@ -27,7 +27,7 @@ struct LibraryView: View {
                     
                     Spacer()
                     
-                    Text("Workout Library")
+                    Text("Exercise Library")
                         .font(.custom("EtruscoNowCondensed Bold", size: 35))
                         .foregroundColor(.white)
                     

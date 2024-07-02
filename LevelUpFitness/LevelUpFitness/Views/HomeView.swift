@@ -81,44 +81,40 @@ struct HomeView: View {
                                     }
                                     
                                     Button(action: {
-                                        self.pageType = .library
+                                        pageType = .library
                                     }, label: {
-                                        Text("Go to Library")
+                                        Image("ManExercising - PushUp")
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fill)
+//                                            .frame(width: .infinity)
                                     })
                                 }
                                 .getSizeOfView { contentSize = $0 }
-                                
-                                VStack {
-                                    HStack {
-                                        VStack(alignment: .leading) {
-                                            Text("Today's Program")
-                                                .font(.headline)
-                                            Text("Complete the program to level up!")
-                                                .font(.subheadline)
-                                                .foregroundColor(.gray)
-                                        }
-                                        
-                                        Spacer()
-                                    }
-                                    
-                                    if let todaysProgram = storageManager.program?.program.first(where: { $0.day == getCurrentWeekday() }) {
-                                        
-                                        if !todaysProgram.completed {
+                                if let todaysProgram = storageManager.program?.program.first(where: { $0.day == getCurrentWeekday() }) {
+                                    if !todaysProgram.completed {
+                                        VStack {
                                             HStack {
-                                                Text("Complete the program to level up!")
-                                                    .font(.subheadline)
-                                                    .foregroundColor(.gray)
+                                                VStack(alignment: .leading) {
+                                                    Text("Do Today's Program")
+                                                        .font(.headline)
+                                                    Text("Complete the program to level up!")
+                                                        .font(.subheadline)
+                                                        .foregroundColor(.gray)
+                                                }
+                                                
+                                                Spacer()
                                             }
-                                        } else {
-                                            HStack {
-                                                Text("You have completed today's program!")
-                                                    .font(.subheadline)
-                                                    .foregroundColor(.gray)
-                                            }
+                                            
+                                            ProgramListHomePreview(todaysProgram: todaysProgram)
+                                                .onTapGesture {
+                                                    pageType = .program
+                                                }
+                                            
+                                            Spacer()
                                         }
+                                        .getSizeOfView { contentSize = $0 }
                                     }
                                 }
-                                .getSizeOfView { contentSize = $0 }
                             }
                             .frame(minHeight: 80, idealHeight: contentSize.height)
                             .tabViewStyle(.page(indexDisplayMode: .never))

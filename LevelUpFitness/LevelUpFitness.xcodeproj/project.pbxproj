@@ -84,6 +84,7 @@
 		99EEC6132C3201780044F906 /* LevelUpBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EEC6122C3201780044F906 /* LevelUpBar.swift */; };
 		99EEC6152C320FC30044F906 /* FitnessOptionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EEC6142C320FC30044F906 /* FitnessOptionType.swift */; };
 		99EEC6182C32F37A0044F906 /* SizePreferanceKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EEC6172C32F37A0044F906 /* SizePreferanceKey.swift */; };
+		99EEC61C2C33905B0044F906 /* ProgramListHomePreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EEC61B2C33905B0044F906 /* ProgramListHomePreview.swift */; };
 		99F71F9F2C023A3D00E27B60 /* UsageTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F71F9E2C023A3D00E27B60 /* UsageTimeView.swift */; };
 		E244B057B6BA41AE81672440 /* amplifyconfiguration.json in Resources */ = {isa = PBXBuildFile; fileRef = 4CBA503DE7750582F847DD00 /* amplifyconfiguration.json */; };
 /* End PBXBuildFile section */
@@ -156,6 +157,7 @@
 		99EEC6122C3201780044F906 /* LevelUpBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelUpBar.swift; sourceTree = "<group>"; };
 		99EEC6142C320FC30044F906 /* FitnessOptionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessOptionType.swift; sourceTree = "<group>"; };
 		99EEC6172C32F37A0044F906 /* SizePreferanceKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizePreferanceKey.swift; sourceTree = "<group>"; };
+		99EEC61B2C33905B0044F906 /* ProgramListHomePreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramListHomePreview.swift; sourceTree = "<group>"; };
 		99F71F9E2C023A3D00E27B60 /* UsageTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageTimeView.swift; sourceTree = "<group>"; };
 		C9EF97A8E6FAD1E27A905BF3 /* awsconfiguration.json */ = {isa = PBXFileReference; explicitFileType = text.json; path = awsconfiguration.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -241,6 +243,7 @@
 				99DD3D512C1D0839006C07B3 /* ExerciseLibraryExerciseWidget.swift */,
 				99DD3D532C1D0871006C07B3 /* FullPageVideoView.swift */,
 				99EEC6122C3201780044F906 /* LevelUpBar.swift */,
+				99EEC61B2C33905B0044F906 /* ProgramListHomePreview.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -464,6 +467,7 @@
 				994E7DCB2C05289F00BAD9E0 /* Program.swift in Sources */,
 				999F70672C0818E600B35A78 /* ProgramWorkoutManager.swift in Sources */,
 				994E7DBD2C028F5B00BAD9E0 /* ConfirmationCodeView.swift in Sources */,
+				99EEC61C2C33905B0044F906 /* ProgramListHomePreview.swift in Sources */,
 				999F70782C0FA57500B35A78 /* CommunityView.swift in Sources */,
 				994E7DB32C02665300BAD9E0 /* KeyboardResponder.swift in Sources */,
 				994E7DC92C03DF5C00BAD9E0 /* ProgramView.swift in Sources */,
