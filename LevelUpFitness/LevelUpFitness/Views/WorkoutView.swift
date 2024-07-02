@@ -78,30 +78,33 @@ struct WorkoutView: View {
                                 VStack (spacing: 0) {
                                     Image("GuyAtTheGym")
                                         .resizable()
-                                        .frame(height:  200)
+                                        .aspectRatio(contentMode: .fill)
+                                        .cornerRadius(10)
+                                        .padding()
                                     
                                     
                                     HStack {
                                         VStack (alignment: .leading, spacing: 0) {
                                             Text(currentExercises[currentExerciseIndex].name)
-                                                .font(.custom("EtruscoNowCondensed Bold", size: 35))
-                                                .padding(.bottom, -7)
+                                                .font(.headline)
+                                                .bold()
+                                                .foregroundColor(.black)
                                             
-                                            HStack {
-                                                Image(systemName: "repeat")
-                                                    .foregroundColor(.black)
-                                                
-                                                Text("Reps Per Set: \(currentExercises[currentExerciseIndex].reps)")
-                                                Spacer()
-                                            }
-                                            
-                                            HStack {
-                                                Image(systemName: "timer")
-                                                    .foregroundColor(.black)
-                                                
-                                                Text("Recommended Rest: \(currentExercises[currentExerciseIndex].rest) seconds")
-                                                Spacer()
-                                            }
+//                                            HStack {
+//                                                Image(systemName: "repeat")
+//                                                    .foregroundColor(.black)
+//                                                
+//                                                Text("Reps Per Set: \(currentExercises[currentExerciseIndex].reps)")
+//                                                Spacer()
+//                                            }
+//                                            
+//                                            HStack {
+//                                                Image(systemName: "timer")
+//                                                    .foregroundColor(.black)
+//                                                
+//                                                Text("Recommended Rest: \(currentExercises[currentExerciseIndex].rest) seconds")
+//                                                Spacer()
+//                                            }
                                         }
                                         
                                         Spacer()
