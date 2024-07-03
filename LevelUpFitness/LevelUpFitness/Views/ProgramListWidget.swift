@@ -32,6 +32,7 @@ struct ProgramListWidget: View {
                         ForEach(todaysProgram.exercises, id: \.name) { exercise in
                             HStack {
                                 Text("\(exercise.name)")
+                                    .font(.custom("EtruscoNow Medium", size: 20))
                                 
                                 Spacer()
                                 
@@ -50,7 +51,7 @@ struct ProgramListWidget: View {
         }
         .padding()
         .background(
-            Rectangle()
+            RoundedRectangle(cornerRadius: 10)
                 .fill(.white)
                 .shadow(radius: 5)
         )

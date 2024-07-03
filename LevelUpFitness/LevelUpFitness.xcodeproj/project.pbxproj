@@ -45,6 +45,7 @@
 		994E7DC92C03DF5C00BAD9E0 /* ProgramView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994E7DC82C03DF5C00BAD9E0 /* ProgramView.swift */; };
 		994E7DCB2C05289F00BAD9E0 /* Program.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994E7DCA2C05289F00BAD9E0 /* Program.swift */; };
 		994E7DCF2C0551FE00BAD9E0 /* ProgramListWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994E7DCE2C0551FE00BAD9E0 /* ProgramListWidget.swift */; };
+		99569FC52C34CD06001DFCB8 /* JoinProgramWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99569FC42C34CD06001DFCB8 /* JoinProgramWidget.swift */; };
 		996919122C1CD12D00C0F664 /* ExerciseLibraryExercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 996919112C1CD12D00C0F664 /* ExerciseLibraryExercise.swift */; };
 		998475182BFC18F200295C6E /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998475172BFC18F200295C6E /* AuthenticationManager.swift */; };
 		9984753D2BFC315F00295C6E /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9984753C2BFC315F00295C6E /* StorageManager.swift */; };
@@ -116,6 +117,7 @@
 		994E7DC82C03DF5C00BAD9E0 /* ProgramView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramView.swift; sourceTree = "<group>"; };
 		994E7DCA2C05289F00BAD9E0 /* Program.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Program.swift; sourceTree = "<group>"; };
 		994E7DCE2C0551FE00BAD9E0 /* ProgramListWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramListWidget.swift; sourceTree = "<group>"; };
+		99569FC42C34CD06001DFCB8 /* JoinProgramWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinProgramWidget.swift; sourceTree = "<group>"; };
 		996919112C1CD12D00C0F664 /* ExerciseLibraryExercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseLibraryExercise.swift; sourceTree = "<group>"; };
 		998475172BFC18F200295C6E /* AuthenticationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationManager.swift; sourceTree = "<group>"; };
 		9984753C2BFC315F00295C6E /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
@@ -244,6 +246,7 @@
 				99DD3D532C1D0871006C07B3 /* FullPageVideoView.swift */,
 				99EEC6122C3201780044F906 /* LevelUpBar.swift */,
 				99EEC61B2C33905B0044F906 /* ProgramListHomePreview.swift */,
+				99569FC42C34CD06001DFCB8 /* JoinProgramWidget.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -467,6 +470,7 @@
 				994E7DCB2C05289F00BAD9E0 /* Program.swift in Sources */,
 				999F70672C0818E600B35A78 /* ProgramWorkoutManager.swift in Sources */,
 				994E7DBD2C028F5B00BAD9E0 /* ConfirmationCodeView.swift in Sources */,
+				99569FC52C34CD06001DFCB8 /* JoinProgramWidget.swift in Sources */,
 				99EEC61C2C33905B0044F906 /* ProgramListHomePreview.swift in Sources */,
 				999F70782C0FA57500B35A78 /* CommunityView.swift in Sources */,
 				994E7DB32C02665300BAD9E0 /* KeyboardResponder.swift in Sources */,

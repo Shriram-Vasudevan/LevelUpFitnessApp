@@ -133,6 +133,10 @@
     "LevelUpFitnessUserProgramsDB": {
       "providerPlugin": "awscloudformation",
       "service": "DynamoDB"
+    },
+    "LevelUpFitnessUserXPInfo": {
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB"
     }
   }
 }

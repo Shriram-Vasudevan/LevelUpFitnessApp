@@ -8,7 +8,6 @@ const dynamoDb = new AWS.DynamoDB.DocumentClient()
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
  */
 exports.handler = async (event) => {
-
     if (event.path == "/getExercises" && event.httpMethod == "GET") {
         const params = {
             TableName: "exercises-db-dev",
@@ -133,7 +132,7 @@ exports.handler = async (event) => {
         console.log("username: " + event.userName)
         const UserID = event.userName
 
-        const params = {
+        const badgeParams = {
             TableName: "user-badge-info-db-dev",
             Item: {
                 "UserID": UserID,
@@ -141,15 +140,31 @@ exports.handler = async (event) => {
                 "Weeks": 0
             }
         }
-
         try {
-            await dynamoDb.put(params).promise()
+            await dynamoDb.put(badgeParams).promise()
+            console.log("success")
+        } catch (error) {
+            console.log(error)
+        }
+
+        const xpParams = {
+            TableName: "user-xp-info-db-dev",
+            Item: {
+                "UserID": UserID,
+                "XP": 0, 
+                "Level": 0,
+                "XPNeeded": 100
+            }
+        }
+        try {
+            await dynamoDb.put(xpParams).promise()
             console.log("success")
             return event
         } catch (error) {
             console.log(error)
             return event
         }
+
     }
     else if (event.path === "/getUserBadgeInfo" && event.httpMethod === "GET") {
         const UserID = event.queryStringParameters.UserID;
@@ -271,6 +286,99 @@ exports.handler = async (event) => {
                 }
             }
 
+        }
+    }
+    else if (event.path == "/getUserXP" && event.httpMethod == "GET") {
+        const UserID = event.queryStringParameters.UserID
+
+        const params = {
+            TableName: "user-xp-info-db-dev",
+            Key: {
+                "UserID": UserID
+            }
+        }
+
+        try {
+            const response = await dynamoDb.get(params).promise()
+
+            return {
+                statusCode: 200,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "*"
+                },
+                body: JSON.stringify(response)
+            }
+        } catch (error) {
+            return {
+                statusCode: 500,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "*"
+                },
+                body: JSON.stringify(error)
+            }
+        }
+    }
+    else if (event.path == "/addUserXP" && event.httpMethod == "PUT") {
+        const UserID = String(event.queryStringParameters.UserID)
+        const incrementAmount = event.queryStringParameters.incrementAmount
+        const incrementLevel = Boolean(event.queryStringParameters.incrementLevel)
+
+        const params = {
+            TableName: "user-xp-info-db-dev",
+            Key: {
+                "UserID": UserID
+            },
+            ExpressionAttributeValues: {
+                ":inc": {
+                    "N": incrementAmount
+                }
+            },
+            UpdateExpression: "SET XP = XP + :inc"
+        }
+
+        try {
+            const data = await dynamoDb.update(params).promise()
+            console.log(data)
+        } catch (error) {
+            return {
+                statusCode: 500,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "*"
+                },
+                body: JSON.stringify(error)
+            }
+        }
+
+        if (incrementLevel) {
+            const params = {
+                TableName: "user-xp-info-db-dev",
+                Key: {
+                    "UserID": UserID
+                },
+                ExpressionAttributeValues: {
+                    ":inc": {
+                        "N": 1
+                    }
+                },
+                UpdateExpression: "SET Level = Level + :inc"
+            }
+
+            try {
+                const data = await dynamoDb.update(params).promise()
+                console.log(data)
+            } catch (error) {
+                return {
+                    statusCode: 500,
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
+                        "Access-Control-Allow-Headers": "*"
+                    },
+                    body: JSON.stringify(error)
+                }
+            }
         }
     }
 

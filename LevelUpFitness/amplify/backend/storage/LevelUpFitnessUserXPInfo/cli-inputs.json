@@ -1,0 +1,10 @@
+{
+  "resourceName": "LevelUpFitnessUserXPInfo",
+  "tableName": "user-xp-info-db",
+  "partitionKey": {
+    "fieldName": "UserID",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}

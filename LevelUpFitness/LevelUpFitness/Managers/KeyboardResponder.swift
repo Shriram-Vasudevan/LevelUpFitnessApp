@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+@MainActor
 class KeyboardResponder: ObservableObject {
     @Published var keyboardHeight: CGFloat = 0
 

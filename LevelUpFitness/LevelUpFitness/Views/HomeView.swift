@@ -52,50 +52,89 @@ struct HomeView: View {
                     .padding(.bottom, 10)
                     
                     ScrollView (.horizontal) {
-                        RoundedRectangle(cornerRadius: 7)
-                            .fill(
-                                LinearGradient(
-                                    gradient: Gradient(colors: [
-                                        Color(red: 0 / 255, green: 149 / 255, blue: 246 / 255),
-                                        Color(red: 0 / 255, green: 0 / 255, blue: 255 / 255)
-                                    ]),
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
+                        HStack {
+                            RoundedRectangle(cornerRadius: 7)
+                                .fill(
+                                    LinearGradient(
+                                        gradient: Gradient(colors: [
+                                            Color(red: 47 / 255, green: 196 / 255, blue: 298 / 255),
+                                            Color(red: 17 / 255, green: 150 / 255, blue: 238 / 255)
+                                        ]),
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    )
                                 )
-                            )
-                            .overlay (
-                                VStack {
-                                    
-                                    VStack (alignment: .center){
+                                .overlay (
+                                    VStack {
+                                        Spacer()
+                                        
+                                        Image("ManExercising - PushUp - No BG")
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                        
                                         Text("Complete some Exercises")
                                             .font(.headline)
                                             .foregroundColor(.white)
                                             .multilineTextAlignment(.center)
                                         
-                                        Text("More coming soon!")
-                                            .font(.subheadline)
-                                            .foregroundColor(.gray)
-                                            .multilineTextAlignment(.center)
+                                        Text("Start")
+                                            .font(.headline)
+                                            .foregroundColor(.blue)
+                                            .frame(minWidth: 0, maxWidth: .infinity)
+                                            .padding()
+                                            .background(
+                                                RoundedRectangle(cornerRadius: 5)
+                                                    .fill(.white)
+                                            )
                                     }
-                                    
-                                    Spacer()
-                                    
-                                    Text("Start")
-                                        .font(.headline)
-                                        .foregroundColor(.blue)
-                                        .frame(minWidth: 0, maxWidth: .infinity)
                                         .padding()
-                                        .background(
-                                            RoundedRectangle(cornerRadius: 5)
-                                                .fill(.white)
-                                        )
-                                }
-                                    .padding()
-                            )
-                            .frame(width: UIScreen.main.bounds.width / 2, height: UIScreen.main.bounds.height / 3.5)
+                                )
+                                .frame(width: UIScreen.main.bounds.width / 2, height: UIScreen.main.bounds.height / 3.5)
+                            
+                            RoundedRectangle(cornerRadius: 7)
+                                .fill(
+                                    LinearGradient(
+                                        gradient: Gradient(colors: [
+                                            Color(red: 152/255, green: 230/255, blue: 138/255),
+                                            Color(red: 17 / 255, green: 150 / 255, blue: 238 / 255)
+                                        ]),
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    )
+                                )
+                                .overlay (
+                                    VStack {
+                                        Spacer()
+                                        
+                                        Image("ManExercising - PushUp - No BG")
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                        
+                                        Text("Do your Program")
+                                            .font(.headline)
+                                            .foregroundColor(.white)
+                                            .multilineTextAlignment(.center)
+                                        
+                                        Text("Start")
+                                            .font(.headline)
+                                            .foregroundColor(.blue)
+                                            .frame(minWidth: 0, maxWidth: .infinity)
+                                            .padding()
+                                            .background(
+                                                RoundedRectangle(cornerRadius: 5)
+                                                    .fill(.white)
+                                            )
+                                    }
+                                        .padding()
+                                )
+                                .frame(width: UIScreen.main.bounds.width / 2, height: UIScreen.main.bounds.height / 3.5)
+                        }
+                        
                     }
+         
                 }
-                .padding()
+                .scrollIndicators(.hidden)
+                .padding([.vertical, .leading])
                  
                 
                 VStack (spacing: 10) {
@@ -203,6 +242,7 @@ struct HomeView: View {
                 Spacer()
             }
         }
+        .navigationBarBackButtonHidden()
     }
     
     func setDateString(date: String) -> [String] {

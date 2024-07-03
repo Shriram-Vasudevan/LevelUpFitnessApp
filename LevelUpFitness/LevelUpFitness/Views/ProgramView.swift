@@ -21,71 +21,29 @@ struct ProgramView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.blue
-                    .edgesIgnoringSafeArea(.all)
+                Color.white
                 
-                VStack (spacing: 0) {
+                VStack (spacing: 0){
                     HStack {
-                        Image(systemName: "line.3.horizontal")
-                            .resizable()
-                            .foregroundColor(.white)
-                            .frame(width: 20, height: 15)
-                            .hidden()
-                        
-                        Spacer()
-                        
                         Text("Your Program")
-                            .font(.custom("EtruscoNowCondensed Bold", size: 35))
-                            .foregroundColor(.white)
+                            .font(.custom("EtruscoNow Medium", size: 30))
+                            .bold()
                         
                         Spacer()
-                        
-                        Image(systemName: "line.3.horizontal")
-                            .resizable()
-                            .foregroundColor(.white)
-                           // .aspectRatio(contentMode: .fit)
-                            .frame(width: 20, height: 15)
                     }
                     .padding(.horizontal)
                     
                     if storageManager.program == nil && !storageManager.retrievingProgram {
                         VStack {
-                            HStack {
-                                Text("No Program Found \n Select One Below!")
-                                    .font(.custom("Sailec Medium", size: 20))
-                                    .multilineTextAlignment(.leading)
-                                    .foregroundColor(.black)
-                                
-                                Spacer()
-                            }
-                            .padding()
-                            
                             if let standardProgramNames = storageManager.standardProgramNames {
                                 
                                 ForEach(standardProgramNames, id: \.self) { name in
-                                    HStack {
-                                        Text(name)
-                                            .font(.custom("EtruscoNowCondensed Bold", size: 20))
-                                            .lineLimit(1)
-                                        
-                                        Spacer()
-                                        
-                                        Button(action: {
+                                    JoinProgramWidget()
+                                        .onTapGesture {
                                             Task {
                                                 await storageManager.joinStandardProgram(programName: name, badgeManager: badgeManager)
                                             }
-                                        }, label: {
-                                            Text("Join")
-                                                .bold()
-                                        })
-                                    }
-                                    .padding()
-                                    .background(
-                                        RoundedRectangle(cornerRadius: 15)
-                                            .fill(.white)
-                                            .shadow(radius: 5)
-                                    )
-                                    .padding(.horizontal)
+                                        }
                                 }
                             }
                             Spacer()
@@ -193,6 +151,7 @@ struct ProgramView: View {
                         .ignoresSafeArea(.all)
                     }
                 }
+                
             }
             .fullScreenCover(isPresented:  $navigateToWorkoutView, content: {
                 WorkoutView(storageManager: storageManager, onStartSet: {int1 in}, onDataEntryCompleteHandler: { int  in }, lastSetComplete: {})

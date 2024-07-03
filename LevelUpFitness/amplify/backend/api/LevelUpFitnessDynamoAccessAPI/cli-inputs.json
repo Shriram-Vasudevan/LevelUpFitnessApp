@@ -62,6 +62,26 @@
           "read"
         ]
       }
+    },
+    "/getUserXP": {
+      "name": "/getUserXP",
+      "lambdaFunction": "LevelUpFitnessDynamoAccessLambda",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "read"
+        ]
+      }
+    },
+    "/addUserXP": {
+      "name": "/addUserXP",
+      "lambdaFunction": "LevelUpFitnessDynamoAccessLambda",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "update"
+        ]
+      }
     }
   }
 }
