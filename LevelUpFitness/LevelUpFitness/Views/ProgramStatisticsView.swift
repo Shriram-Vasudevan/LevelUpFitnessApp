@@ -229,5 +229,5 @@ struct RestDistributionBar: View {
 }
 
 #Preview {
-    ProgramStatisticsView(program: Program(program: [ProgramDay(day: "Monday", workout: "", completed: false, exercises: [Exercise(name: "", sets: 2, reps: "5", rpe: "", rest: 3, completed: false, data: [ExerciseData(from: ExerciseDataWidgetModel(weight: 2, time: 8.0, rest: 5.0, isAvailable: false, isStarted: false, clear: false, stopRestTimer: false, isLast: false))])])], programName: "program"))
+    ProgramStatisticsView(program: Program(program: [ProgramDay(day: "Monday", workout: "", completed: false, exercises: [Exercise(name: "", sets: 2, reps: "5", rpe: "", rest: 3, completed: false, data: [ExerciseData(from: ExerciseDataWidgetModel(weight: 2, reps: 0, time: 8.0, rest: 5.0, isAvailable: false, isStarted: false, isResting: false, stopRestTimer: false, clear: false, isLast: false))])])], programName: "program"))
 }

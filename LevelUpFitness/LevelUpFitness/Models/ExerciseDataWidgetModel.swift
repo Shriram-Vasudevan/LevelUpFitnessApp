@@ -9,11 +9,13 @@ import Foundation
 
 struct ExerciseDataWidgetModel: Codable, Equatable {
     var weight: Int
+    var reps: Int
     var time: Double
     var rest: Double
     var isAvailable: Bool
     var isStarted: Bool
-    var clear: Bool
+    var isResting: Bool
     var stopRestTimer: Bool
+    var clear: Bool
     var isLast: Bool
 }
