@@ -27,7 +27,7 @@ struct ProgramDay: Codable {
 struct Exercise: Codable {
     var name: String
     var sets: Int
-    var reps: String
+    var reps: Int
     var rpe: String
     var rest: Int
     var completed: Bool
@@ -35,13 +35,13 @@ struct Exercise: Codable {
 }
 
 struct ExerciseData: Codable {
+    var sets: [ExerciseDataSet]
+}
+
+struct ExerciseDataSet: Codable {
     var weight: Int
+    var reps: Int
     var time: Double
     var rest: Double
-    
-    init(from model: ExerciseDataWidgetModel) {
-        self.weight = model.weight
-        self.time = model.time
-        self.rest = model.rest
-    }
 }
+

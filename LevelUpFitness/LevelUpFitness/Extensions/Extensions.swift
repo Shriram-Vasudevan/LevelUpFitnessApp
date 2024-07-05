@@ -126,7 +126,7 @@ extension ProgramDay {
         
         for exercise in exercises {
             for data in exercise.data {
-                totalTime += data.time
+                totalTime += 1.0 /*data.time*/
             }
         }
         
@@ -138,7 +138,7 @@ extension ProgramDay {
         
         for exercise in exercises {
             for data in exercise.data {
-                totalRestTime += data.rest
+                totalRestTime += 1 /*data.rest*/
             }
         }
         
@@ -150,7 +150,7 @@ extension ProgramDay {
         
         for exercise in exercises {
             for data in exercise.data {
-                totalWeight += data.weight
+                totalWeight += 1 /*data.weight*/
             }
         }
         
@@ -167,7 +167,8 @@ extension Exercise {
         var totalDataPoints = 0
         
         for exerciseData in data {
-            let restDifferential = abs(Double(exerciseData.rest) - Double(rest))
+//            let restDifferential = abs(Double(exerciseData.rest) - Double(rest))
+            let restDifferential = 0.0
             totalRestDifferential += restDifferential
             totalDataPoints += 1
         }

@@ -154,7 +154,7 @@ struct ProgramView: View {
                 
             }
             .fullScreenCover(isPresented:  $navigateToWorkoutView, content: {
-                WorkoutView(storageManager: storageManager, restComplete: {_ in}, lastRepComplete: {})
+                WorkoutView(storageManager: storageManager)
                     .preferredColorScheme(.light)
             })
             .fullScreenCover(isPresented:  $navigateToMetricsView, content: {

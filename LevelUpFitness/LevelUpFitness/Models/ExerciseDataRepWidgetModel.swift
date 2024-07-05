@@ -1,19 +1,18 @@
 //
-//  ExerciseDataWidgetModel.swift
+//  ExerciseDataRepWidgetModel.swift
 //  LevelUpFitness
 //
-//  Created by Shriram Vasudevan on 6/4/24.
+//  Created by Shriram Vasudevan on 7/5/24.
 //
 
 import Foundation
 
-struct ExerciseDataWidgetModel: Codable, Equatable {
-    var weight: Int
-    var reps: Int
+struct ExerciseDataRepWidgetModel {
+    var weight: Double
     var time: Double
     var rest: Double
     var isAvailable: Bool
-    var isStarted: Bool
+    var isExercising: Bool
     var isResting: Bool
     var stopRestTimer: Bool
     var clear: Bool
