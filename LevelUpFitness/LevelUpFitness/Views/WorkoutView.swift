@@ -78,6 +78,8 @@ struct WorkoutContent: View {
 
             ScrollView(.vertical) {
                 VStack(spacing: 0) {
+                    ExerciseVideoWidget(exercise: workoutManager.currentExercises[workoutManager.currentExerciseIndex])
+                    
                     ExerciseDataSetWidget(
                         model: $workoutManager.currentExerciseData.sets[workoutManager.currentSetIndex],
                         isLastSet: workoutManager.onLastSet,
