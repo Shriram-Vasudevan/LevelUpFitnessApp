@@ -78,7 +78,14 @@ struct WorkoutContent: View {
 
             ScrollView(.vertical) {
                 VStack(spacing: 0) {
-                    ExerciseDataSetWidget(model: $workoutManager.currentExerciseData.sets[workoutManager.currentSetIndex], isLastSet: workoutManager.onLastSet, setIndex: 0, setCompleted: $setCompleted, lastSetCompleted: $lastSetCompleted)
+                    ExerciseDataSetWidget(
+                        model: $workoutManager.currentExerciseData.sets[workoutManager.currentSetIndex],
+                        isLastSet: workoutManager.onLastSet,
+                        setIndex: workoutManager.currentSetIndex,
+                        setCompleted: $setCompleted,
+                        lastSetCompleted: $lastSetCompleted
+                    )
+                    .id(workoutManager.currentSetIndex) 
                     
                     Spacer()
                 }

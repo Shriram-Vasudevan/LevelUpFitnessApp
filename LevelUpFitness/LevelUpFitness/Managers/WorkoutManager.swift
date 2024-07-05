@@ -75,18 +75,19 @@ class WorkoutManager: ObservableObject {
 //
     func moveToNextSet() {
         if currentSetIndex < currentExerciseData.sets.count - 1 {
-            self.onLastSet = currentSetIndex + 1 == currentExerciseData.sets.count - 1
             currentSetIndex += 1
+            onLastSet = currentSetIndex == currentExerciseData.sets.count - 1
+            objectWillChange.send()
         }
     }
     
     func moveToNextExercise() {
         if currentExerciseIndex < currentExercises.count - 1 {
             print("Moving to next exercise")
-//            addExerciseData(index: currentExerciseIndex)
             currentSetIndex = 0
             currentExerciseIndex += 1
             initializeExerciseData()
+            objectWillChange.send()
         } else {
             print("Workout completed")
         }

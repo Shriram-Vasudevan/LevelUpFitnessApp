@@ -146,7 +146,7 @@ struct ExerciseDataSetWidget: View {
                         .rotationEffect(Angle(degrees: 270.0))
                         .animation(.linear)
 
-                    Text("\(timeText)")
+                    Text("\(restText)")
                         .font(.custom("EtruscoNowCondensed Bold", size: 65))
                 }
                 .frame(width: 175, height: 175)
