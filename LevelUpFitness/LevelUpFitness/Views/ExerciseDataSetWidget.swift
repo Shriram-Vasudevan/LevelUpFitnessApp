@@ -28,85 +28,197 @@ struct ExerciseDataSetWidget: View {
     @Binding var setCompleted: () -> Void
     @Binding var lastSetCompleted: () -> Void
     
+    @State var exerciseName: String
+    @State var exerciseReps: Int
+    @State var numberOfSets: Int
+    
     var body: some View {
         VStack  {
             HStack {
-                SetStatWidget(colorA: .blue, colorB: .cyan, stat: $weightText, text: "Weight")
+                VStack (alignment: .center, spacing: 0) {
+                    HStack {
+                        Text(exerciseName)
+                            .font(.custom("EtruscoNowCondensed Bold", size: 50))
+                            .multilineTextAlignment(.center)
+                            .padding(.bottom, -7)
+                            .padding(.top, -10)
+                            .lineLimit(1)
+                        
+                        Spacer()
+                    }
+                    
+                    HStack {
+                        Text("Reps per Set: \(exerciseReps)")
+                            .font(.headline)
+                            .foregroundColor(.black)
+                            .padding(.bottom)
+                        
+                        Spacer()
+                    }
+                }
                 
                 Spacer()
                 
-                SetStatWidget(colorA: .green, colorB: .cyan, stat: $repText, text: "Reps")
-                
+                SetCounterWidget(colorA: .blue, colorB: .cyan, stat: "\(setIndex + 1)", text: "of \(numberOfSets)", width: UIScreen.main.bounds.width / 6)
+                    .padding(.bottom, 10)
+            }
+            .padding([.horizontal, .bottom])
+            
+            VStack {
+                HStack {
+                    VStack {
+                       Text("Weight")
+                            .font(.custom("Sailec Bold", size: 20))
+                        
+                        TextField("", text: $weightText)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .frame(width: 65)
+                    }
+                    
+                    Spacer()
+                    
+                    Text("X")
+                    
+                    Spacer()
+                    
+                    VStack {
+                        Text("Reps")
+                             .font(.custom("Sailec Bold", size: 20))
+                         
+                         TextField("", text: $repText)
+                             .textFieldStyle(RoundedBorderTextFieldStyle())
+                             .frame(width: 65)
+                    }
+                }
+                .padding(.horizontal, 50)
+
                 Spacer()
                 
                 if !isExercising && !isResting {
-                    SetStatWidget(colorA: .blue, colorB: .purple, stat: $timeText, text: "Rep Time")
+                    ZStack {
+                        Circle()
+                            .stroke(lineWidth: 5.0)
+                            .opacity(0.3)
+                            .foregroundColor(Color.blue)
+
+                        Circle()
+                            .stroke(style: StrokeStyle(lineWidth: 10.0, lineCap: .round, lineJoin: .round))
+                            .foregroundColor(Color.blue)
+                            .rotationEffect(Angle(degrees: 270.0))
+
+                        Text("\(timeText)")
+                            .font(.custom("EtruscoNowCondensed Bold", size: 40))
+                            .bold()
+
+                    }
+                    .frame(width: UIScreen.main.bounds.width / 1.3)
                 }
                 else if isExercising {
-                    SetStatWidget(colorA: .blue, colorB: .purple, stat: $timeText, text: "Rep Time")
-                } else if isResting && !isExercising {
-                    SetStatWidget(colorA: .blue, colorB: .purple, stat: $restText, text: "Rest Time")
-                }
-            }
+                    ZStack {
+                        Circle()
+                            .stroke(lineWidth: 5.0)
+                            .opacity(0.3)
+                            .foregroundColor(Color.blue)
 
-            
-            if !isExercising && !isResting {
-                Button {
-                    startTimer(for: "time")
-                    isExercising = true
-                } label: {
-                    Text("Begin Reps")
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
-                        .frame(minWidth: 0, maxWidth: .infinity)
-                        .padding()
-                        .background(.blue)
-                        .cornerRadius(7)
-                        .shadow(radius: 3)
-                        .padding(.horizontal, 20)
-                        .padding(.vertical)
+                        Circle()
+                            .stroke(style: StrokeStyle(lineWidth: 10.0, lineCap: .round, lineJoin: .round))
+                            .foregroundColor(Color.blue)
+                            .rotationEffect(Angle(degrees: 270.0))
+                            
+                        
+                        Text("\(timeText)")
+                            .font(.custom("EtruscoNowCondensed Bold", size: 40))
+                            .bold()
+
+                    }
+                    .frame(width: UIScreen.main.bounds.width / 1.3)
+                } else if isResting && !isExercising {
+                    ZStack {
+                        Circle()
+                            .stroke(lineWidth: 5.0)
+                            .opacity(0.3)
+                            .foregroundColor(Color.blue)
+
+                        Circle()
+                            .stroke(style: StrokeStyle(lineWidth: 10.0, lineCap: .round, lineJoin: .round))
+                            .foregroundColor(Color.blue)
+                            .rotationEffect(Angle(degrees: 270.0))
+
+                        Text("\(restText)")
+                            .font(.custom("EtruscoNowCondensed Bold", size: 40))
+                            .bold()
+
+                    }
+                    .frame(width: UIScreen.main.bounds.width / 1.3)
                 }
-            }
-            else if isExercising {
-                Button {
-                    stopTimer()
-                    isExercising = false
-                    isResting = true
-                    startTimer(for: "rest")
-                } label: {
-                    Text("Begin Rest")
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
-                        .frame(minWidth: 0, maxWidth: .infinity)
-                        .padding()
-                        .background(.blue)
-                        .cornerRadius(7)
-                        .shadow(radius: 3)
-                        .padding(.horizontal, 20)
-                        .padding(.vertical)
+
+                
+                Spacer()
+                
+                
+                if !isExercising && !isResting {
+                    Button {
+                        startTimer(for: "time")
+                        isExercising = true
+                    } label: {
+                        Text("Begin Reps")
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                            .frame(minWidth: 0, maxWidth: .infinity)
+                            .padding()
+                            .background(.blue)
+                            .cornerRadius(7)
+                            .shadow(radius: 3)
+                            .padding(.horizontal, 20)
+                            .padding(.vertical)
+                            .padding(.bottom)
+                    }
                 }
-            }
-            else if isResting && !isExercising {
-                Button {
-                    stopTimer()
-                    isResting = false
-                    saveData()
-                    isLastSet ? lastSetCompleted() : setCompleted()
-                } label: {
-                    Text(isLastSet ? "Next Exercise" : "Next Set")
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
-                        .frame(minWidth: 0, maxWidth: .infinity)
-                        .padding()
-                        .background(.blue)
-                        .cornerRadius(7)
-                        .shadow(radius: 3)
-                        .padding(.horizontal, 20)
-                        .padding(.vertical)
+                else if isExercising {
+                    Button {
+                        stopTimer()
+                        isExercising = false
+                        isResting = true
+                        startTimer(for: "rest")
+                    } label: {
+                        Text("Begin Rest")
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                            .frame(minWidth: 0, maxWidth: .infinity)
+                            .padding()
+                            .background(.blue)
+                            .cornerRadius(7)
+                            .shadow(radius: 3)
+                            .padding(.horizontal, 20)
+                            .padding(.vertical)
+                            .padding(.bottom)
+                    }
+                }
+                else if isResting && !isExercising {
+                    Button {
+                        stopTimer()
+                        isResting = false
+                        saveData()
+                        isLastSet ? lastSetCompleted() : setCompleted()
+                    } label: {
+                        Text(isLastSet ? "Next Exercise" : "Next Set")
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                            .frame(minWidth: 0, maxWidth: .infinity)
+                            .padding()
+                            .background(.blue)
+                            .cornerRadius(7)
+                            .shadow(radius: 3)
+                            .padding(.horizontal, 20)
+                            .padding(.vertical)
+                            .padding(.bottom)
+                    }
                 }
             }
         }
-        .padding()
+        .transaction { transaction in
+            transaction.animation = nil
+        }
     }
     
     func saveData() {
@@ -146,5 +258,5 @@ struct ExerciseDataSetWidget: View {
 
 
 #Preview {
-    ExerciseDataSetWidget(model: .constant(ExerciseDataSet(weight: 10, reps: 5, time: 0.0, rest: 0.0)), isLastSet: false, setIndex: 0, setCompleted: .constant({}), lastSetCompleted: .constant({}))
+    ExerciseDataSetWidget(model: .constant(ExerciseDataSet(weight: 10, reps: 5, time: 0.0, rest: 0.0)), isLastSet: false, setIndex: 0, setCompleted: .constant({}), lastSetCompleted: .constant({}), exerciseName: "Deadlift", exerciseReps: 10, numberOfSets: 10)
 }

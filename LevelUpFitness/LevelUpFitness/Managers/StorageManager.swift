@@ -8,6 +8,7 @@
 import Foundation
 import Amplify
 
+@MainActor
 class StorageManager: ObservableObject {
     @Published var dailyVideo: URL?
     @Published var program: Program?

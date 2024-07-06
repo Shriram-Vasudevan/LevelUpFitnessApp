@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+@MainActor
 class WorkoutManager: ObservableObject {
     @Published var currentExercises: [Exercise] = []
     @Published var currentExerciseData: ExerciseData = ExerciseData(sets: [ExerciseDataSet(weight: 0, reps: 0, time: 0.0, rest: 0.0)])
@@ -42,6 +43,7 @@ class WorkoutManager: ObservableObject {
             }
             
             currentExerciseData = ExerciseData(sets: exerciseDataSets)
+            print(currentExerciseData.sets)
             
             print("Initialized exercise data for exercise \(currentExerciseIndex)")
         } else {
@@ -61,7 +63,22 @@ class WorkoutManager: ObservableObject {
         if currentExerciseIndex < currentExercises.count - 1 {
             print("Moving to next exercise")
             currentSetIndex = 0
-            currentExercises[currentExerciseIndex].completed = true
+            onLastSet = false
+            
+            if let programArray = storageManager.program?.program,
+               let programIndex = programArray.firstIndex(where: { $0.day == getCurrentWeekday() }) {
+                var todaysProgram = programArray[programIndex]
+                todaysProgram.exercises[currentExerciseIndex].completed = true
+                todaysProgram.exercises[currentExerciseIndex].data = currentExerciseData
+                
+                print(todaysProgram.exercises[currentExerciseIndex].name)
+                print(todaysProgram.exercises[currentExerciseIndex].completed)
+                
+                storageManager.program?.program[programIndex] = todaysProgram
+            }
+
+
+
             currentExerciseIndex += 1
             initializeExerciseData()
             objectWillChange.send()

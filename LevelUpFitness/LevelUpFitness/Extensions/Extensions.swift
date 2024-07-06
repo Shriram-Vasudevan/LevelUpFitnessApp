@@ -124,11 +124,11 @@ extension ProgramDay {
     func getTotalWorkoutTime() -> Double {
         var totalTime = 0.0
         
-        for exercise in exercises {
-            for data in exercise.data {
-                totalTime += 1.0 /*data.time*/
-            }
-        }
+//        for exercise in exercises {
+//            for data in exercise.data {
+//                totalTime += 1.0 /*data.time*/
+//            }
+//        }
         
         return totalTime
     }
@@ -136,11 +136,11 @@ extension ProgramDay {
     func getTotalRestTime() -> Double {
         var totalRestTime = 0.0
         
-        for exercise in exercises {
-            for data in exercise.data {
-                totalRestTime += 1 /*data.rest*/
-            }
-        }
+//        for exercise in exercises {
+//            for data in exercise.data {
+//                totalRestTime += 1 /*data.rest*/
+//            }
+//        }
         
         return totalRestTime
     }
@@ -148,11 +148,11 @@ extension ProgramDay {
     func getTotalWeightUsed() -> Int {
         var totalWeight = 0
         
-        for exercise in exercises {
-            for data in exercise.data {
-                totalWeight += 1 /*data.weight*/
-            }
-        }
+//        for exercise in exercises {
+//            for data in exercise.data {
+//                totalWeight += 1 /*data.weight*/
+//            }
+//        }
         
         return totalWeight
     }
@@ -161,18 +161,18 @@ extension ProgramDay {
 
 extension Exercise {
     func getAverageRestDifferential() -> Double {
-        guard data.count > 0 else { return 0.0 }
+       // guard data.count > 0 else { return 0.0 }
         
         var totalRestDifferential = 0.0
         var totalDataPoints = 0
         
-        for exerciseData in data {
-//            let restDifferential = abs(Double(exerciseData.rest) - Double(rest))
-            let restDifferential = 0.0
-            totalRestDifferential += restDifferential
-            totalDataPoints += 1
-        }
-        
+//        for exerciseData in data {
+////            let restDifferential = abs(Double(exerciseData.rest) - Double(rest))
+//            let restDifferential = 0.0
+//            totalRestDifferential += restDifferential
+//            totalDataPoints += 1
+//        }
+//        
         guard totalDataPoints > 0 else {
             return 0.0
         }

@@ -1,18 +1,17 @@
 //
-//  SetStatWidget.swift
+//  SetCounterWidget.swift
 //  LevelUpFitness
 //
-//  Created by Shriram Vasudevan on 7/5/24.
+//  Created by Shriram Vasudevan on 7/6/24.
 //
 
 import SwiftUI
 
-struct SetStatWidget: View {
-    
+struct SetCounterWidget: View {
     var colorA: Color
     var colorB: Color
     
-    @Binding var stat: String
+    @State var stat: String
     var text: String
     
     var width: CGFloat
@@ -57,16 +56,18 @@ struct SetStatWidget: View {
                         .clipped()
                         
                         VStack {
-                                                    
-                            TextField("", text: $stat)
-                                .font(.custom("EtruscoNowCondensed Bold", size: 45))
-                                .foregroundColor(.white)
-                                .multilineTextAlignment(.center)
-                            
                             Spacer()
                             
+                            Text(stat)
+                                .font(.custom("EtruscoNowCondensed Bold", size: 30))
+                                .foregroundColor(.white)
+                                .multilineTextAlignment(.center)
+                                
+                            
+
                             Text(text)
                                 .foregroundColor(.white)
+                              
                         }
 
                     }
@@ -77,5 +78,5 @@ struct SetStatWidget: View {
 }
 
 #Preview {
-    SetStatWidget(colorA: .blue, colorB: .cyan, stat: .constant("0.0"), text: "Weight", width: UIScreen.main.bounds.width / 3.5)
+    SetCounterWidget(colorA: .blue, colorB: .cyan, stat: "1", text: "of 5", width: UIScreen.main.bounds.width / 6)
 }

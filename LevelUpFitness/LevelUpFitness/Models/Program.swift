@@ -31,7 +31,7 @@ struct Exercise: Codable {
     var rpe: String
     var rest: Int
     var completed: Bool
-    var data: [ExerciseData]
+    var data: ExerciseData
 }
 
 struct ExerciseData: Codable {

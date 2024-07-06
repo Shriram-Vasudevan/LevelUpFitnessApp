@@ -74,57 +74,19 @@ struct WorkoutContent: View {
         VStack (spacing: 0) {
             WorkoutHeader(storageManager: storageManager, dismiss: dismiss)
             
-            ScrollView(.vertical) {
-                VStack(spacing: 0) {
-                    
-                    VStack (alignment: .center, spacing: 0) {
-                        ZStack {
-//                            HStack {
-//                                Button(action: {
-//                                    dismiss()
-//                                }, label: {
-//                                    Image(systemName: "x.square.fill")
-//                                        .resizable()
-//                                        .foregroundColor(.black)
-//                                        .frame(width: 25, height: 25)
-//                                })
-//                                
-//                                Spacer()
-//                            }
-//                            
-                            Text(workoutManager.currentExercises[workoutManager.currentExerciseIndex].name)
-                                .font(.custom("EtruscoNowCondensed Bold", size: 50))
-                                .multilineTextAlignment(.center)
-                                .padding(.bottom, -7)
-                                .padding(.top, -10)
-                                .lineLimit(1)
-                        }
-                        
-                        Text("Reps per Set: \(workoutManager.currentExercises[workoutManager.currentExerciseIndex].reps)")
-                            .font(.headline)
-                            .foregroundColor(.black)
-                            .padding(.bottom)
-                        
-                        Text("Set \(workoutManager.currentSetIndex + 1) / \(workoutManager.currentExerciseData.sets.count)")
-                            .bold()
-                            .multilineTextAlignment(.center)
-                            .foregroundColor(.black)
-                    }
-                    .padding([.horizontal, .bottom])
-                    
-                    ExerciseDataSetWidget(
-                        model: $workoutManager.currentExerciseData.sets[workoutManager.currentSetIndex],
-                        isLastSet: workoutManager.onLastSet,
-                        setIndex: workoutManager.currentSetIndex,
-                        setCompleted: $setCompleted,
-                        lastSetCompleted: $lastSetCompleted
-                    )
-                    .id(workoutManager.currentSetIndex)
-                    
-                    Spacer()
-                }
-            }
-            .background(Rectangle().fill(.white))
+            ExerciseDataSetWidget(
+                model: $workoutManager.currentExerciseData.sets[workoutManager.currentSetIndex],
+                isLastSet: workoutManager.onLastSet,
+                setIndex: workoutManager.currentSetIndex,
+                setCompleted: $setCompleted,
+                lastSetCompleted: $lastSetCompleted,
+                exerciseName: workoutManager.currentExercises[workoutManager.currentExerciseIndex].name, exerciseReps: workoutManager.currentExercises[workoutManager.currentExerciseIndex].reps, numberOfSets: workoutManager.currentExerciseData.sets.count
+            )
+            .id("\(workoutManager.currentExerciseIndex)-\(workoutManager.currentSetIndex)")
+            .background(
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .fill(.white)
+            )
             .edgesIgnoringSafeArea(.bottom)
         }
     }
