@@ -24,7 +24,8 @@ struct WorkoutView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.white
+                Color(red: 248/255.0, green: 4/255.0, blue: 76/255.0)
+                    .edgesIgnoringSafeArea(.all)
                 
                 if !workoutManager.hasExercisesForToday() {
                     Text("No exercises for today")
@@ -70,56 +71,62 @@ struct WorkoutContent: View {
     @Binding var lastSetCompleted: () -> Void
     
     var body: some View {
-        ScrollView(.vertical) {
-            VStack(spacing: 0) {
-                VStack (alignment: .center, spacing: 0) {
-                    ZStack {
-                        HStack {
-                            Button(action: {
-                                dismiss()
-                            }, label: {
-                                Image(systemName: "x.square.fill")
-                                    .resizable()
-                                    .foregroundColor(.black)
-                                    .frame(width: 25, height: 25)
-                            })
-                            
-                            Spacer()
+        VStack (spacing: 0) {
+            WorkoutHeader(storageManager: storageManager, dismiss: dismiss)
+            
+            ScrollView(.vertical) {
+                VStack(spacing: 0) {
+                    
+                    VStack (alignment: .center, spacing: 0) {
+                        ZStack {
+//                            HStack {
+//                                Button(action: {
+//                                    dismiss()
+//                                }, label: {
+//                                    Image(systemName: "x.square.fill")
+//                                        .resizable()
+//                                        .foregroundColor(.black)
+//                                        .frame(width: 25, height: 25)
+//                                })
+//                                
+//                                Spacer()
+//                            }
+//                            
+                            Text(workoutManager.currentExercises[workoutManager.currentExerciseIndex].name)
+                                .font(.custom("EtruscoNowCondensed Bold", size: 50))
+                                .multilineTextAlignment(.center)
+                                .padding(.bottom, -7)
+                                .padding(.top, -10)
+                                .lineLimit(1)
                         }
                         
-                        Text(workoutManager.currentExercises[workoutManager.currentExerciseIndex].name)
-                            .font(.custom("EtruscoNowCondensed Bold", size: 50))
+                        Text("Reps per Set: \(workoutManager.currentExercises[workoutManager.currentExerciseIndex].reps)")
+                            .font(.headline)
+                            .foregroundColor(.black)
+                            .padding(.bottom)
+                        
+                        Text("Set \(workoutManager.currentSetIndex + 1) / \(workoutManager.currentExerciseData.sets.count)")
+                            .bold()
                             .multilineTextAlignment(.center)
-                            .padding(.bottom, -7)
-                            .padding(.top, -10)
-                            .lineLimit(1)
+                            .foregroundColor(.black)
                     }
+                    .padding([.horizontal, .bottom])
                     
-                    Text("Reps per Set: \(workoutManager.currentExercises[workoutManager.currentExerciseIndex].reps)")
-                        .font(.headline)
-                        .foregroundColor(.black)
-                        .padding(.bottom)
+                    ExerciseDataSetWidget(
+                        model: $workoutManager.currentExerciseData.sets[workoutManager.currentSetIndex],
+                        isLastSet: workoutManager.onLastSet,
+                        setIndex: workoutManager.currentSetIndex,
+                        setCompleted: $setCompleted,
+                        lastSetCompleted: $lastSetCompleted
+                    )
+                    .id(workoutManager.currentSetIndex)
                     
-                    Text("Set \(workoutManager.currentSetIndex + 1) / \(workoutManager.currentExerciseData.sets.count)")
-                        .bold()
-                        .multilineTextAlignment(.center)
-                        .foregroundColor(.black)
+                    Spacer()
                 }
-                .padding([.horizontal, .bottom])
-                
-                ExerciseDataSetWidget(
-                    model: $workoutManager.currentExerciseData.sets[workoutManager.currentSetIndex],
-                    isLastSet: workoutManager.onLastSet,
-                    setIndex: workoutManager.currentSetIndex,
-                    setCompleted: $setCompleted,
-                    lastSetCompleted: $lastSetCompleted
-                )
-                .id(workoutManager.currentSetIndex)
-                
-                Spacer()
             }
+            .background(Rectangle().fill(.white))
+            .edgesIgnoringSafeArea(.bottom)
         }
-        .background(Rectangle().fill(.white))
     }
 }
 
@@ -128,34 +135,48 @@ struct WorkoutHeader: View {
     @ObservedObject var storageManager: StorageManager
     
     var dismiss: DismissAction
-    var saveAction: () -> Void
-    
+
     var body: some View {
         ZStack {
-            HStack {
-                Image("GuyAtTheGym")
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 60, height: 60)
-                    .clipped()
-                    .cornerRadius(5)
-                    
-                VStack (alignment: .leading) {
-                    Text(storageManager.program?.programName ?? "Today's Workout")
-                        .font(.custom("EtruscoNowCondensed Bold", size: 20))
-                        .lineLimit(1)
-                    
-                    Text("Push Yourself Today!")
-                        .font(.caption)
-                        .foregroundColor(.gray)
-                    
-                    Spacer()
-                }
-                .frame(height: 60)
-                
-                Spacer()
-            }
-        }
+           HStack {
+               Button(action: {
+                   dismiss()
+               }, label: {
+                   Image(systemName: "xmark")
+                       .foregroundColor(.white)
+               })
+               
+               Text("Close")
+                   .foregroundColor(.white)
+               
+               Spacer()
+               
+               Button(action: {
+                   Task {
+                       await storageManager.uploadNewProgramStatus(completionHandler: {
+                           dismiss()
+                       })
+                   }
+               }) {
+                   Text("Save")
+                       .fontWeight(.bold)
+                       .foregroundColor(.white)
+               }
+               
+           }
+           .padding(.horizontal)
+           
+           HStack {
+               Spacer()
+               
+               Text("Workout")
+                   .bold()
+                   .foregroundColor(.white)
+               
+               Spacer()
+           }
+           .padding(.horizontal)
+       }
         .padding(.bottom, 10)
     }
 }

@@ -122,6 +122,7 @@ class StorageManager: ObservableObject {
                 
                 DispatchQueue.main.async {
                     self.program = decodedData
+                    print(self.program)
                 }
             }
             DispatchQueue.main.async {
