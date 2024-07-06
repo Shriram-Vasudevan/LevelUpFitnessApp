@@ -80,15 +80,19 @@ struct HomeView: View {
                                             .foregroundColor(.white)
                                             .multilineTextAlignment(.center)
                                         
-                                        Text("Start")
-                                            .font(.headline)
-                                            .foregroundColor(.blue)
-                                            .frame(minWidth: 0, maxWidth: .infinity)
-                                            .padding()
-                                            .background(
-                                                RoundedRectangle(cornerRadius: 5)
-                                                    .fill(.white)
-                                            )
+                                        Button(action: {
+                                            pageType = .library
+                                        }, label: {
+                                            Text("Start")
+                                                .font(.headline)
+                                                .foregroundColor(.blue)
+                                                .frame(minWidth: 0, maxWidth: .infinity)
+                                                .padding()
+                                                .background(
+                                                    RoundedRectangle(cornerRadius: 5)
+                                                        .fill(.white)
+                                                )
+                                        })
                                     }
                                         .padding()
                                 )
@@ -118,15 +122,20 @@ struct HomeView: View {
                                             .foregroundColor(.white)
                                             .multilineTextAlignment(.center)
                                         
-                                        Text("Start")
-                                            .font(.headline)
-                                            .foregroundColor(.blue)
-                                            .frame(minWidth: 0, maxWidth: .infinity)
-                                            .padding()
-                                            .background(
-                                                RoundedRectangle(cornerRadius: 5)
-                                                    .fill(.white)
-                                            )
+                                        Button {
+                                            pageType = .program
+                                        } label: {
+                                            Text("Start")
+                                                .font(.headline)
+                                                .foregroundColor(.blue)
+                                                .frame(minWidth: 0, maxWidth: .infinity)
+                                                .padding()
+                                                .background(
+                                                    RoundedRectangle(cornerRadius: 5)
+                                                        .fill(.white)
+                                                )
+                                        }
+
                                     }
                                         .padding()
                                 )
