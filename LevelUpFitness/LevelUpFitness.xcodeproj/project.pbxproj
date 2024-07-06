@@ -19,6 +19,7 @@
 		991F8FEE2C17852900A134A5 /* UserBadgeInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991F8FED2C17852900A134A5 /* UserBadgeInfo.swift */; };
 		991F8FF22C18D0A100A134A5 /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991F8FF12C18D0A100A134A5 /* LibraryView.swift */; };
 		991F8FF42C18DF9400A134A5 /* WeightProgressTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991F8FF32C18DF9400A134A5 /* WeightProgressTracker.swift */; };
+		993DF23F2C38AFEF00BBC1BF /* SetStatWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993DF23E2C38AFEF00BBC1BF /* SetStatWidget.swift */; };
 		994BE7082C01483D00959EB5 /* AWSAPIPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 994BE7072C01483D00959EB5 /* AWSAPIPlugin */; };
 		994BE70A2C01483D00959EB5 /* AWSCloudWatchLoggingPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 994BE7092C01483D00959EB5 /* AWSCloudWatchLoggingPlugin */; };
 		994BE70C2C01483D00959EB5 /* AWSCognitoAuthPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 994BE70B2C01483D00959EB5 /* AWSCognitoAuthPlugin */; };
@@ -103,6 +104,7 @@
 		991F8FED2C17852900A134A5 /* UserBadgeInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserBadgeInfo.swift; sourceTree = "<group>"; };
 		991F8FF12C18D0A100A134A5 /* LibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryView.swift; sourceTree = "<group>"; };
 		991F8FF32C18DF9400A134A5 /* WeightProgressTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightProgressTracker.swift; sourceTree = "<group>"; };
+		993DF23E2C38AFEF00BBC1BF /* SetStatWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetStatWidget.swift; sourceTree = "<group>"; };
 		994E7DB02C02643D00BAD9E0 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		994E7DB22C02665300BAD9E0 /* KeyboardResponder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardResponder.swift; sourceTree = "<group>"; };
 		994E7DB42C0266A000BAD9E0 /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
@@ -225,6 +227,7 @@
 				999F70642C06C80300B35A78 /* WorkoutView.swift */,
 				991F8FF12C18D0A100A134A5 /* LibraryView.swift */,
 				99B6274B2C388D4700482E3B /* ExerciseDataSetWidget.swift */,
+				993DF23E2C38AFEF00BBC1BF /* SetStatWidget.swift */,
 				991F8FE32C1527A900A134A5 /* ProgramStatisticsView.swift */,
 				994E7DCE2C0551FE00BAD9E0 /* ProgramListWidget.swift */,
 				99A67F052BF456A7002DC3DC /* PagesHolderView.swift */,
@@ -478,6 +481,7 @@
 				999F706E2C0EB08600B35A78 /* MetricsView.swift in Sources */,
 				999F70652C06C80300B35A78 /* WorkoutView.swift in Sources */,
 				99EEC6132C3201780044F906 /* LevelUpBar.swift in Sources */,
+				993DF23F2C38AFEF00BBC1BF /* SetStatWidget.swift in Sources */,
 				991F8FE62C154F5200A134A5 /* DayCompletion.swift in Sources */,
 				99B6274A2C38871600482E3B /* ExerciseDataRepWidgetModel.swift in Sources */,
 				996919122C1CD12D00C0F664 /* ExerciseLibraryExercise.swift in Sources */,

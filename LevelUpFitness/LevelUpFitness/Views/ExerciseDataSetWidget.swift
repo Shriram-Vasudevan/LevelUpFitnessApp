@@ -31,54 +31,26 @@ struct ExerciseDataSetWidget: View {
     var body: some View {
         VStack  {
             HStack {
-                Text("Set \(setIndex + 1)")
-                    .font(.custom("EtruscoNowCondensed Bold", size: 35))
+                SetStatWidget(colorA: .blue, colorB: .cyan, stat: $weightText, text: "Weight")
                 
                 Spacer()
-            }
-            
-            HStack {
-                Text("Weight: ")
-                    .bold()
-                TextField("", text: $weightText)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .frame(width: 50)
-                    .multilineTextAlignment(.center)
+                
+                SetStatWidget(colorA: .green, colorB: .cyan, stat: $repText, text: "Reps")
                 
                 Spacer()
-            }
-            
-            HStack {
-                Text("Reps: ")
-                    .bold()
-                TextField("", text: $repText)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .frame(width: 50)
-                    .multilineTextAlignment(.center)
                 
-                Spacer()
+                if !isExercising && !isResting {
+                    SetStatWidget(colorA: .blue, colorB: .purple, stat: $timeText, text: "Rep Time")
+                }
+                else if isExercising {
+                    SetStatWidget(colorA: .blue, colorB: .purple, stat: $timeText, text: "Rep Time")
+                } else if isResting && !isExercising {
+                    SetStatWidget(colorA: .blue, colorB: .purple, stat: $restText, text: "Rest Time")
+                }
             }
-            .padding(.bottom)
+
             
             if !isExercising && !isResting {
-                ZStack {
-                    Circle()
-                        .stroke(lineWidth: 5.0)
-                        .opacity(0.3)
-                        .foregroundColor(Color.blue)
-                    
-                    Circle()
-                        .trim(from: 0.0, to: 360.0)
-                        .stroke(style: StrokeStyle(lineWidth: 10.0, lineCap: .round, lineJoin: .round))
-                        .foregroundColor(Color.blue)
-                        .rotationEffect(Angle(degrees: 270.0))
-                        .animation(.linear)
-                    
-                    Text("\(timeText)")
-                        .font(.custom("EtruscoNowCondensed Bold", size: 65))
-                }
-                .frame(width: 175, height: 175)
-                
                 Button {
                     startTimer(for: "time")
                     isExercising = true
@@ -96,24 +68,6 @@ struct ExerciseDataSetWidget: View {
                 }
             }
             else if isExercising {
-                ZStack {
-                    Circle()
-                        .stroke(lineWidth: 5.0)
-                        .opacity(0.3)
-                        .foregroundColor(Color.blue)
-                    
-                    Circle()
-                        .trim(from: 0.0, to: 360.0)
-                        .stroke(style: StrokeStyle(lineWidth: 10.0, lineCap: .round, lineJoin: .round))
-                        .foregroundColor(Color.blue)
-                        .rotationEffect(Angle(degrees: 270.0))
-                        .animation(.linear)
-                    
-                    Text("\(timeText)")
-                        .font(.custom("EtruscoNowCondensed Bold", size: 65))
-                }
-                .frame(width: 175, height: 175)
-                
                 Button {
                     stopTimer()
                     isExercising = false
@@ -133,24 +87,6 @@ struct ExerciseDataSetWidget: View {
                 }
             }
             else if isResting && !isExercising {
-                ZStack {
-                    Circle()
-                        .stroke(lineWidth: 5.0)
-                        .opacity(0.3)
-                        .foregroundColor(Color.blue)
-
-                    Circle()
-                        .trim(from: 0.0, to: 360.0)
-                        .stroke(style: StrokeStyle(lineWidth: 10.0, lineCap: .round, lineJoin: .round))
-                        .foregroundColor(Color.blue)
-                        .rotationEffect(Angle(degrees: 270.0))
-                        .animation(.linear)
-
-                    Text("\(restText)")
-                        .font(.custom("EtruscoNowCondensed Bold", size: 65))
-                }
-                .frame(width: 175, height: 175)
-                
                 Button {
                     stopTimer()
                     isResting = false

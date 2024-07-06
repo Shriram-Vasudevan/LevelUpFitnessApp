@@ -9,6 +9,8 @@ import SwiftUI
 
 struct WorkoutView: View {
     @StateObject private var workoutManager: WorkoutManager
+    @ObservedObject private var storageManager: StorageManager
+    
     @Environment(\.dismiss) var dismiss
     
     @State private var setCompleted: () -> Void = {}
@@ -16,13 +18,13 @@ struct WorkoutView: View {
     
     init(storageManager: StorageManager) {
         _workoutManager = StateObject(wrappedValue: WorkoutManager(storageManager: storageManager))
+        self.storageManager = storageManager
     }
     
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.blue
-                    .edgesIgnoringSafeArea(.all)
+                Color.white
                 
                 if !workoutManager.hasExercisesForToday() {
                     Text("No exercises for today")
@@ -36,7 +38,7 @@ struct WorkoutView: View {
                             }
                         }
                 } else {
-                    WorkoutContent(workoutManager: workoutManager, dismiss: dismiss, setCompleted: $setCompleted, lastSetCompleted: $lastSetCompleted)
+                    WorkoutContent(workoutManager: workoutManager, storageManager: storageManager, dismiss: dismiss, setCompleted: $setCompleted, lastSetCompleted: $lastSetCompleted)
                 }
             }
             .navigationBarBackButtonHidden()
@@ -62,99 +64,102 @@ struct WorkoutView: View {
 
 struct WorkoutContent: View {
     @ObservedObject var workoutManager: WorkoutManager
+    @ObservedObject var storageManager: StorageManager
     var dismiss: DismissAction
     @Binding var setCompleted: () -> Void
     @Binding var lastSetCompleted: () -> Void
     
     var body: some View {
-        VStack(spacing: 0) {
-            WorkoutHeader(dismiss: dismiss, saveAction: {
-                Task {
-                    await workoutManager.storageManager.uploadNewProgramStatus(completionHandler: {
-                        dismiss()
-                    })
-                }
-            })
-
-            ScrollView(.vertical) {
-                VStack(spacing: 0) {
-                    ExerciseVideoWidget(exercise: workoutManager.currentExercises[workoutManager.currentExerciseIndex])
+        ScrollView(.vertical) {
+            VStack(spacing: 0) {
+                VStack (alignment: .center, spacing: 0) {
+                    ZStack {
+                        HStack {
+                            Button(action: {
+                                dismiss()
+                            }, label: {
+                                Image(systemName: "x.square.fill")
+                                    .resizable()
+                                    .foregroundColor(.black)
+                                    .frame(width: 25, height: 25)
+                            })
+                            
+                            Spacer()
+                        }
+                        
+                        Text(workoutManager.currentExercises[workoutManager.currentExerciseIndex].name)
+                            .font(.custom("EtruscoNowCondensed Bold", size: 50))
+                            .multilineTextAlignment(.center)
+                            .padding(.bottom, -7)
+                            .padding(.top, -10)
+                            .lineLimit(1)
+                    }
                     
-                    ExerciseDataSetWidget(
-                        model: $workoutManager.currentExerciseData.sets[workoutManager.currentSetIndex],
-                        isLastSet: workoutManager.onLastSet,
-                        setIndex: workoutManager.currentSetIndex,
-                        setCompleted: $setCompleted,
-                        lastSetCompleted: $lastSetCompleted
-                    )
-                    .id(workoutManager.currentSetIndex) 
+                    Text("Reps per Set: \(workoutManager.currentExercises[workoutManager.currentExerciseIndex].reps)")
+                        .font(.headline)
+                        .foregroundColor(.black)
+                        .padding(.bottom)
                     
-                    Spacer()
+                    Text("Set \(workoutManager.currentSetIndex + 1) / \(workoutManager.currentExerciseData.sets.count)")
+                        .bold()
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(.black)
                 }
+                .padding([.horizontal, .bottom])
+                
+                ExerciseDataSetWidget(
+                    model: $workoutManager.currentExerciseData.sets[workoutManager.currentSetIndex],
+                    isLastSet: workoutManager.onLastSet,
+                    setIndex: workoutManager.currentSetIndex,
+                    setCompleted: $setCompleted,
+                    lastSetCompleted: $lastSetCompleted
+                )
+                .id(workoutManager.currentSetIndex)
+                
+                Spacer()
             }
-            .background(Rectangle().fill(.white))
-            .ignoresSafeArea(.all)
         }
+        .background(Rectangle().fill(.white))
     }
 }
 
 
 struct WorkoutHeader: View {
+    @ObservedObject var storageManager: StorageManager
+    
     var dismiss: DismissAction
     var saveAction: () -> Void
     
     var body: some View {
         ZStack {
             HStack {
-                Button(action: { 
-                    dismiss()
-                }) {
-                    Image(systemName: "xmark")
-                        .foregroundColor(.white)
+                Image("GuyAtTheGym")
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 60, height: 60)
+                    .clipped()
+                    .cornerRadius(5)
+                    
+                VStack (alignment: .leading) {
+                    Text(storageManager.program?.programName ?? "Today's Workout")
+                        .font(.custom("EtruscoNowCondensed Bold", size: 20))
+                        .lineLimit(1)
+                    
+                    Text("Push Yourself Today!")
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                    
+                    Spacer()
                 }
+                .frame(height: 60)
                 
-                Text("Close").foregroundColor(.white)
                 Spacer()
-                Button(action: saveAction) {
-                    Text("Save")
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
-                }
             }
-            .padding(.horizontal)
-            
-            Text("Workout")
-                .bold()
-                .foregroundColor(.white)
         }
         .padding(.bottom, 10)
     }
 }
 
-struct ExerciseVideoWidget: View {
-    var exercise: Exercise
-    
-    var body: some View {
-        VStack(spacing: 0) {
-            Image("GuyAtTheGym")
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .cornerRadius(10)
-                .padding()
-            
-            HStack {
-                VStack(alignment: .leading, spacing: 0) {
-                    Text(exercise.name)
-                        .font(.headline)
-                        .bold()
-                        .foregroundColor(.black)
-                }
-                Spacer()
-            }
-            .padding([.horizontal, .bottom])
-        }
-    }
-}
 
 #Preview {
     WorkoutView(storageManager: StorageManager())

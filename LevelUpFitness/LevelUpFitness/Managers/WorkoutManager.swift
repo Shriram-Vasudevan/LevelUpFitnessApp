@@ -25,11 +25,13 @@ class WorkoutManager: ObservableObject {
         if let todaysProgram = storageManager.program?.program.first(where: { $0.day == getCurrentWeekday() }) {
             self.currentExercises = todaysProgram.exercises
             
-            if let (index, _) = todaysProgram.exercises.enumerated().first(where: { $0.element.completed == false }) {
-                self.currentExerciseIndex = index
-            } else {
-                print("All exercises completed")
-                return
+            if currentExerciseIndex == 0 {
+                if let (index, _) = todaysProgram.exercises.enumerated().first(where: { $0.element.completed == false }) {
+                    self.currentExerciseIndex = index
+                } else {
+                    print("All exercises completed")
+                    return
+                }
             }
             
             var exerciseDataSets: [ExerciseDataSet] = []
@@ -46,33 +48,7 @@ class WorkoutManager: ObservableObject {
             print("No program found for today")
         }
     }
-//    
-//    func addExerciseData(index: Int) {
-//        if index + 1 < currentExerciseData.count {
-//            currentExerciseData[index + 1].isAvailable = true
-//            
-////            if index + 1 == currentExerciseData.count - 1 {
-////                currentExerciseData[index + 1].isLast = true
-////            }
-//        }
-//        else {
-//            withAnimation {
-//
-//                currentExercises[currentExerciseIndex].completed = true
-//                
-//                if let dayIndex = storageManager.program?.program.firstIndex(where: { $0.day == getCurrentWeekday() }) {
-//                    storageManager.program?.program[dayIndex].exercises = currentExercises
-//                    
-//                    storageManager.program?.program[dayIndex].exercises[currentExerciseIndex].data = getAllExerciseDatas()
-//
-//                }
-//                
-//                resetFields()
-//            }
-//        }
-//    }
-//    
-//
+    
     func moveToNextSet() {
         if currentSetIndex < currentExerciseData.sets.count - 1 {
             currentSetIndex += 1
@@ -85,6 +61,7 @@ class WorkoutManager: ObservableObject {
         if currentExerciseIndex < currentExercises.count - 1 {
             print("Moving to next exercise")
             currentSetIndex = 0
+            currentExercises[currentExerciseIndex].completed = true
             currentExerciseIndex += 1
             initializeExerciseData()
             objectWillChange.send()
