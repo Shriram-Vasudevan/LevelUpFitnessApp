@@ -99,6 +99,7 @@ class BadgeManager: ObservableObject {
             let response = try await Amplify.API.get(request: request)
             
             let stringResponse = String(data: response, encoding: .utf8)
+            print("badge response: \(stringResponse)" )
             
             let jsonDecoder = JSONDecoder()
             jsonDecoder.keyDecodingStrategy = .custom { keys in

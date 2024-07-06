@@ -32,6 +32,7 @@ struct ExerciseDataSetWidget: View {
     @State var exerciseReps: Int
     @State var numberOfSets: Int
     
+    @State var exitWorkout: () -> Void
     var body: some View {
         VStack  {
             HStack {
@@ -138,23 +139,19 @@ struct ExerciseDataSetWidget: View {
                             .stroke(lineWidth: 5.0)
                             .opacity(0.3)
                             .foregroundColor(Color.blue)
-
+                        
                         Circle()
                             .stroke(style: StrokeStyle(lineWidth: 10.0, lineCap: .round, lineJoin: .round))
                             .foregroundColor(Color.blue)
                             .rotationEffect(Angle(degrees: 270.0))
-
+                        
                         Text("\(restText)")
                             .font(.custom("EtruscoNowCondensed Bold", size: 40))
                             .bold()
-
+                        
                     }
                     .frame(width: UIScreen.main.bounds.width / 1.3)
                 }
-
-                
-                Spacer()
-                
                 
                 if !isExercising && !isResting {
                     Button {
@@ -214,10 +211,20 @@ struct ExerciseDataSetWidget: View {
                             .padding(.bottom)
                     }
                 }
+                
+                Button(action: {
+                    exitWorkout()
+                }, label: {
+                    Image(systemName: "flag.checkered.circle.fill")
+                        .resizable()
+                        .foregroundColor(.white)
+                        .frame(width: 60, height: 60)
+                        .shadow(radius: 5)
+                })
+                
+                Spacer()
+                
             }
-        }
-        .transaction { transaction in
-            transaction.animation = nil
         }
     }
     
@@ -258,5 +265,5 @@ struct ExerciseDataSetWidget: View {
 
 
 #Preview {
-    ExerciseDataSetWidget(model: .constant(ExerciseDataSet(weight: 10, reps: 5, time: 0.0, rest: 0.0)), isLastSet: false, setIndex: 0, setCompleted: .constant({}), lastSetCompleted: .constant({}), exerciseName: "Deadlift", exerciseReps: 10, numberOfSets: 10)
+    ExerciseDataSetWidget(model: .constant(ExerciseDataSet(weight: 10, reps: 5, time: 0.0, rest: 0.0)), isLastSet: false, setIndex: 0, setCompleted: .constant({}), lastSetCompleted: .constant({}), exerciseName: "Deadlift", exerciseReps: 10, numberOfSets: 10, exitWorkout: {})
 }

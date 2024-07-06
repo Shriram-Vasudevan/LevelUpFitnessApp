@@ -80,7 +80,9 @@ struct WorkoutContent: View {
                 setIndex: workoutManager.currentSetIndex,
                 setCompleted: $setCompleted,
                 lastSetCompleted: $lastSetCompleted,
-                exerciseName: workoutManager.currentExercises[workoutManager.currentExerciseIndex].name, exerciseReps: workoutManager.currentExercises[workoutManager.currentExerciseIndex].reps, numberOfSets: workoutManager.currentExerciseData.sets.count
+                exerciseName: workoutManager.currentExercises[workoutManager.currentExerciseIndex].name, exerciseReps: workoutManager.currentExercises[workoutManager.currentExerciseIndex].reps, numberOfSets: workoutManager.currentExerciseData.sets.count, exitWorkout: {
+                    dismiss()
+                }
             )
             .id("\(workoutManager.currentExerciseIndex)-\(workoutManager.currentSetIndex)")
             .background(
@@ -96,50 +98,50 @@ struct WorkoutContent: View {
 struct WorkoutHeader: View {
     @ObservedObject var storageManager: StorageManager
     
+    @State var timeText: String = "00:00"
+    @State var timer: Timer?
+    @State var elapsedTime: Double = 0.0
+    
     var dismiss: DismissAction
 
     var body: some View {
         ZStack {
-           HStack {
-               Button(action: {
-                   dismiss()
-               }, label: {
-                   Image(systemName: "xmark")
-                       .foregroundColor(.white)
-               })
-               
-               Text("Close")
-                   .foregroundColor(.white)
-               
-               Spacer()
-               
-               Button(action: {
-                   Task {
-                       await storageManager.uploadNewProgramStatus(completionHandler: {
-                           dismiss()
-                       })
-                   }
-               }) {
-                   Text("Save")
-                       .fontWeight(.bold)
-                       .foregroundColor(.white)
-               }
-               
-           }
-           .padding(.horizontal)
-           
-           HStack {
-               Spacer()
-               
-               Text("Workout")
-                   .bold()
-                   .foregroundColor(.white)
-               
-               Spacer()
-           }
-           .padding(.horizontal)
+            HStack {
+                Text("Workout Time")
+                    .font(.custom("EtruscoNowCondensed Bold", size: 35))
+                    .foregroundColor(.white)
+                
+                Spacer()
+                
+                Text(timeText)
+                    .font(.custom("Sailec Bold", size: 30))
+                    .foregroundColor(.white)
+                    .padding(.top, 5)
+            }
+            .padding(.horizontal)
        }
-        .padding(.bottom, 10)
+        .onAppear {
+            startTimer()
+        }
+        .onDisappear {
+            stopTimer()
+        }
+    }
+    
+    func startTimer() {
+            elapsedTime = 0.0
+            
+            timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: { _ in
+                elapsedTime += 0.1
+                let minutes = Int(elapsedTime) / 60
+                let seconds = Int(elapsedTime) % 60
+                timeText = String(format: "%02d:%02d", minutes, seconds)
+            })
+        }
+    
+    func stopTimer() {
+        timer?.invalidate()
+        timer = nil
     }
 }
 
