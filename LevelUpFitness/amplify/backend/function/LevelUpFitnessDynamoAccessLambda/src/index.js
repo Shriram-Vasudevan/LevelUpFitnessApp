@@ -152,7 +152,7 @@ exports.handler = async (event) => {
             Item: {
                 "UserID": UserID,
                 "XP": 0, 
-                "Level": 0,
+                "Level": 1,
                 "XPNeeded": 100
             }
         }
@@ -359,13 +359,14 @@ exports.handler = async (event) => {
                     "UserID": UserID
                 },
                 ExpressionAttributeValues: {
-                    ":inc": {
-                        "N": 1
-                    }
+                    ":inc": 1,
+                    ":one": 1,
+                    ":multiplier": 100
                 },
-                UpdateExpression: "SET Level = Level + :inc"
+                UpdateExpression: "SET Level = Level + :inc, SET XPNeeded = (Level + :one) * (Level + :one) * :multiplier",
+                ReturnValues: "ALL_NEW"
             }
-
+        
             try {
                 const data = await dynamoDb.update(params).promise()
                 console.log(data)
@@ -379,7 +380,7 @@ exports.handler = async (event) => {
                     body: JSON.stringify(error)
                 }
             }
-        }
+        }        
     }
 
     return {

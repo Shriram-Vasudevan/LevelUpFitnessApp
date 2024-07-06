@@ -7,6 +7,7 @@ struct HomeView: View {
     @ObservedObject var storageManager: StorageManager
     @ObservedObject var databaseManager: DatabaseManager
     @ObservedObject var healthManager: HealthManager
+    @ObservedObject var xpManager: XPManager
     
     @State var avPlayer = AVPlayer()
     
@@ -34,22 +35,24 @@ struct HomeView: View {
                 .padding(.bottom, -10)
                 
                 VStack () {
-                    HStack {
-                        LevelCircularProgressBar(progress: 35, level: 2)
-                            .frame(width: 50, height: 50)
-                            .padding(.trailing, 5)
-                        
-                        VStack(alignment: .leading) {
-                            Text("Let's get that Level Up!")
-                                .font(.headline)
-                            Text("Here's how you can do that")
-                                .font(.subheadline)
-                                .foregroundColor(.gray)
+                    if let userXPData = xpManager.userXPData {
+                        HStack {
+                            LevelCircularProgressBar(progress: Double(userXPData.xp / userXPData.xpNeeded), level: userXPData.level)
+                                .frame(width: 50, height: 50)
+                                .padding(.trailing, 5)
+                            
+                            VStack(alignment: .leading) {
+                                Text("Let's get that Level Up!")
+                                    .font(.headline)
+                                Text("Here's how you can do that")
+                                    .font(.subheadline)
+                                    .foregroundColor(.gray)
+                            }
+                            
+                            Spacer()
                         }
-                        
-                        Spacer()
+                        .padding(.bottom, 10)
                     }
-                    .padding(.bottom, 10)
                     
                     ScrollView (.horizontal) {
                         HStack {
@@ -286,5 +289,5 @@ struct LevelCircularProgressBar: View {
 }
 
 #Preview {
-    HomeView(storageManager: StorageManager(), databaseManager: DatabaseManager(), healthManager: HealthManager(), pageType: .constant(.home))
+    HomeView(storageManager: StorageManager(), databaseManager: DatabaseManager(), healthManager: HealthManager(), xpManager: XPManager(), pageType: .constant(.home))
 }
