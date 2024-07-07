@@ -36,22 +36,7 @@ struct HomeView: View {
                 
                 VStack () {
                     if let userXPData = xpManager.userXPData {
-                        HStack {
-                            LevelCircularProgressBar(progress: Double(userXPData.xp / userXPData.xpNeeded), level: userXPData.level)
-                                .frame(width: 50, height: 50)
-                                .padding(.trailing, 5)
-                            
-                            VStack(alignment: .leading) {
-                                Text("Let's get that Level Up!")
-                                    .font(.headline)
-                                Text("Here's how you can do that")
-                                    .font(.subheadline)
-                                    .foregroundColor(.gray)
-                            }
-                            
-                            Spacer()
-                        }
-                        .padding(.bottom, 10)
+                        LevelWidget(userXPData: userXPData)
                     }
                     
                     ScrollView (.horizontal) {
@@ -230,27 +215,27 @@ struct HomeView: View {
                     .padding(.horizontal)
                 }
                 
-                VStack() {
-                    if !days.isEmpty {
-                        HStack() {
-                            Chart {
-                                ForEach(days.keys.sorted(), id: \.self) { date in
-                                    let randomUsageTime = Int.random(in: 5..<30)
-                                    
-                                    BarMark(
-                                       x: .value("Date", date),
-                                       y: .value("Time", randomUsageTime)
-                                   )
-                                }
-                            }
-                            .chartYAxis {
-                                AxisMarks(position: .leading)
-                            }
-                        }
-                    }
-                }
-                .padding([.horizontal, .bottom])
-                
+//                VStack() {
+//                    if !days.isEmpty {
+//                        HStack() {
+//                            Chart {
+//                                ForEach(days.keys.sorted(), id: \.self) { date in
+//                                    let randomUsageTime = Int.random(in: 5..<30)
+//                                    
+//                                    BarMark(
+//                                       x: .value("Date", date),
+//                                       y: .value("Time", randomUsageTime)
+//                                   )
+//                                }
+//                            }
+//                            .chartYAxis {
+//                                AxisMarks(position: .leading)
+//                            }
+//                        }
+//                    }
+//                }
+//                .padding([.horizontal, .bottom])
+//                
                 Spacer()
             }
         }
@@ -269,31 +254,6 @@ struct HomeView: View {
         let weekday = dateFormatter.string(from: date)
         
         return weekday
-    }
-}
-
-
-struct LevelCircularProgressBar: View {
-    var progress: Double
-    var level: Int
-    var body: some View {
-        ZStack {
-            Circle()
-                .stroke(lineWidth: 5.0)
-                .opacity(0.3)
-                .foregroundColor(Color.blue)
-
-            Circle()
-                .trim(from: 0.0, to: CGFloat(min(self.progress / 100, 1.0)))
-                .stroke(style: StrokeStyle(lineWidth: 5.0, lineCap: .round, lineJoin: .round))
-                .foregroundColor(Color.blue)
-                .rotationEffect(Angle(degrees: 270.0))
-                .animation(.linear)
-
-            Text("\(level)")
-                .font(.headline)
-                .bold()
-        }
     }
 }
 

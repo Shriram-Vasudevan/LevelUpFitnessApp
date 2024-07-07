@@ -195,3 +195,36 @@ extension View {
             }
     }
 }
+
+extension CGPoint: VectorArithmetic {
+    public mutating func scale(by rhs: Double) {
+        self.x *= CGFloat(rhs)
+        self.y *= CGFloat(rhs)
+    }
+
+    public var magnitudeSquared: Double {
+        return Double(x * x + y * y)
+    }
+
+    public static var zero: CGPoint {
+        return CGPoint(x: 0, y: 0)
+    }
+
+    public static func + (lhs: CGPoint, rhs: CGPoint) -> CGPoint {
+        return CGPoint(x: lhs.x + rhs.x, y: lhs.y + rhs.y)
+    }
+
+    public static func += (lhs: inout CGPoint, rhs: CGPoint) {
+        lhs.x += rhs.x
+        lhs.y += rhs.y
+    }
+
+    public static func - (lhs: CGPoint, rhs: CGPoint) -> CGPoint {
+        return CGPoint(x: lhs.x - rhs.x, y: lhs.y - rhs.y)
+    }
+
+    public static func -= (lhs: inout CGPoint, rhs: CGPoint) {
+        lhs.x -= rhs.x
+        lhs.y -= rhs.y
+    }
+}

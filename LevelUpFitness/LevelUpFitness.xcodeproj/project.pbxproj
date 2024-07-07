@@ -19,6 +19,10 @@
 		991F8FEE2C17852900A134A5 /* UserBadgeInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991F8FED2C17852900A134A5 /* UserBadgeInfo.swift */; };
 		991F8FF22C18D0A100A134A5 /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991F8FF12C18D0A100A134A5 /* LibraryView.swift */; };
 		991F8FF42C18DF9400A134A5 /* WeightProgressTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991F8FF32C18DF9400A134A5 /* WeightProgressTracker.swift */; };
+		993871A62C3A1CBF00FFAF8A /* LevelWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993871A52C3A1CBF00FFAF8A /* LevelWidget.swift */; };
+		993871A82C3A242700FFAF8A /* LevelCircularProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993871A72C3A242700FFAF8A /* LevelCircularProgressView.swift */; };
+		993871AA2C3A25D600FFAF8A /* SubLevelCircularWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993871A92C3A25D600FFAF8A /* SubLevelCircularWidget.swift */; };
+		993871AC2C3A385700FFAF8A /* DailyTargetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993871AB2C3A385700FFAF8A /* DailyTargetView.swift */; };
 		993DF23F2C38AFEF00BBC1BF /* SetStatWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993DF23E2C38AFEF00BBC1BF /* SetStatWidget.swift */; };
 		993DF2412C397C5C00BBC1BF /* SetCounterWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993DF2402C397C5C00BBC1BF /* SetCounterWidget.swift */; };
 		9945E0BA2C39A15F00EA19D2 /* XPManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9945E0B92C39A15E00EA19D2 /* XPManager.swift */; };
@@ -107,6 +111,10 @@
 		991F8FED2C17852900A134A5 /* UserBadgeInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserBadgeInfo.swift; sourceTree = "<group>"; };
 		991F8FF12C18D0A100A134A5 /* LibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryView.swift; sourceTree = "<group>"; };
 		991F8FF32C18DF9400A134A5 /* WeightProgressTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightProgressTracker.swift; sourceTree = "<group>"; };
+		993871A52C3A1CBF00FFAF8A /* LevelWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelWidget.swift; sourceTree = "<group>"; };
+		993871A72C3A242700FFAF8A /* LevelCircularProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelCircularProgressView.swift; sourceTree = "<group>"; };
+		993871A92C3A25D600FFAF8A /* SubLevelCircularWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubLevelCircularWidget.swift; sourceTree = "<group>"; };
+		993871AB2C3A385700FFAF8A /* DailyTargetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyTargetView.swift; sourceTree = "<group>"; };
 		993DF23E2C38AFEF00BBC1BF /* SetStatWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetStatWidget.swift; sourceTree = "<group>"; };
 		993DF2402C397C5C00BBC1BF /* SetCounterWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetCounterWidget.swift; sourceTree = "<group>"; };
 		9945E0B92C39A15E00EA19D2 /* XPManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XPManager.swift; sourceTree = "<group>"; };
@@ -258,6 +266,10 @@
 				99EEC6122C3201780044F906 /* LevelUpBar.swift */,
 				99EEC61B2C33905B0044F906 /* ProgramListHomePreview.swift */,
 				99569FC42C34CD06001DFCB8 /* JoinProgramWidget.swift */,
+				993871A52C3A1CBF00FFAF8A /* LevelWidget.swift */,
+				993871A72C3A242700FFAF8A /* LevelCircularProgressView.swift */,
+				993871A92C3A25D600FFAF8A /* SubLevelCircularWidget.swift */,
+				993871AB2C3A385700FFAF8A /* DailyTargetView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -481,6 +493,7 @@
 				991F8FDA2C13EB3900A134A5 /* HealthManager.swift in Sources */,
 				994E7DC32C02955300BAD9E0 /* Workout.swift in Sources */,
 				994E7DCB2C05289F00BAD9E0 /* Program.swift in Sources */,
+				993871AC2C3A385700FFAF8A /* DailyTargetView.swift in Sources */,
 				994E7DBD2C028F5B00BAD9E0 /* ConfirmationCodeView.swift in Sources */,
 				99569FC52C34CD06001DFCB8 /* JoinProgramWidget.swift in Sources */,
 				99EEC61C2C33905B0044F906 /* ProgramListHomePreview.swift in Sources */,
@@ -499,6 +512,7 @@
 				994E7DC12C02950000BAD9E0 /* WorkoutCard.swift in Sources */,
 				9984753D2BFC315F00295C6E /* StorageManager.swift in Sources */,
 				993DF2412C397C5C00BBC1BF /* SetCounterWidget.swift in Sources */,
+				993871A82C3A242700FFAF8A /* LevelCircularProgressView.swift in Sources */,
 				99EEC6182C32F37A0044F906 /* SizePreferanceKey.swift in Sources */,
 				999F70722C0EB4D400B35A78 /* AchievementWidget.swift in Sources */,
 				991F8FE82C1680A800A134A5 /* ProgramDBRepresentation.swift in Sources */,
@@ -512,6 +526,7 @@
 				991F8FEA2C17841300A134A5 /* BadgeManager.swift in Sources */,
 				991F8FF22C18D0A100A134A5 /* LibraryView.swift in Sources */,
 				99CFAAE62BEB075500EFF67E /* LevelUpFitnessApp.swift in Sources */,
+				993871AA2C3A25D600FFAF8A /* SubLevelCircularWidget.swift in Sources */,
 				99B627482C38561D00482E3B /* WorkoutManager.swift in Sources */,
 				99EEC6152C320FC30044F906 /* FitnessOptionType.swift in Sources */,
 				994E7DC72C03DE5400BAD9E0 /* PascalCaseCodingKey.swift in Sources */,
@@ -521,6 +536,7 @@
 				9945E0BA2C39A15F00EA19D2 /* XPManager.swift in Sources */,
 				99DD3D522C1D0839006C07B3 /* ExerciseLibraryExerciseWidget.swift in Sources */,
 				994E7DB52C0266A000BAD9E0 /* RegisterView.swift in Sources */,
+				993871A62C3A1CBF00FFAF8A /* LevelWidget.swift in Sources */,
 				998DA0152C1A18940078E882 /* ViewModifiers.swift in Sources */,
 				994E7DB12C02643D00BAD9E0 /* LoginView.swift in Sources */,
 				99DD3D502C1CD99D006C07B3 /* ExerciseLibraryExerciseDownloaded.swift in Sources */,
