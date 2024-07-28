@@ -21,6 +21,16 @@
           "read"
         ]
       }
+    },
+    "/leaveProgram": {
+      "name": "/leaveProgram",
+      "lambdaFunction": "LevelUpFitnessS3AccessLambda",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "delete"
+        ]
+      }
     }
   }
 }

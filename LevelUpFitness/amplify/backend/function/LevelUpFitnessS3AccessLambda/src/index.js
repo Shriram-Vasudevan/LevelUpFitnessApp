@@ -15,10 +15,11 @@ const s3 = new AWS.S3();
 exports.handler = async (event) => {
     if (event.path == "/getUserProgram" && event.httpMethod == "GET") {
         const UserID = event.queryStringParameters.UserID
-
+        const ProgramName = event.queryStringParameters.ProgramName
+        
         const params =  {
             Bucket: "level-up-fitness-storage-bucket33cf0-dev",
-            Key: `public/UserPrograms/${UserID}.json`
+            Key: `public/UserPrograms/${UserID}/${ProgramName}.json`
         }
 
         try {
@@ -81,8 +82,37 @@ exports.handler = async (event) => {
             };
         }
     }
-    else if (event.path == "/getStandardProgram" && event.httpMethod == "GET") {
+    else if (event.path == "/leaveProgram" && event.httpMethod == "DELETE") {
+        const UserID = event.queryStringParameters.UserID
+        const ProgramName = event.queryStringParameters.ProgramName
 
+        const params = {
+            Bucket: "level-up-fitness-storage-bucket33cf0-dev",
+            Key: `public/UserPrograms/${UserID}/${ProgramName}`
+        }
+
+        try {
+            const response = await s3.deleteObject(params).promise()
+
+            return {
+                statusCode: 200,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "*"
+                },
+                body: JSON.stringify("Success")
+            };
+        } catch (error) {
+            console.log(error);
+            return {
+                statusCode: 500,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "*"
+                },
+                body: JSON.stringify(error),
+            };
+        }
     }
 
     return {

@@ -152,18 +152,18 @@ exports.handler = async (event) => {
             Item: {
                 "UserID": UserID,
                 "XP": 0, 
-                "Level": 1,
+                "Level": 0,
                 "XPNeeded": 100
             }
         }
         try {
             await dynamoDb.put(xpParams).promise()
             console.log("success")
-            return event
         } catch (error) {
             console.log(error)
-            return event
         }
+
+        return event
 
     }
     else if (event.path === "/getUserBadgeInfo" && event.httpMethod === "GET") {
@@ -359,14 +359,13 @@ exports.handler = async (event) => {
                     "UserID": UserID
                 },
                 ExpressionAttributeValues: {
-                    ":inc": 1,
-                    ":one": 1,
-                    ":multiplier": 100
+                    ":inc": {
+                        "N": 1
+                    }
                 },
-                UpdateExpression: "SET Level = Level + :inc, SET XPNeeded = (Level + :one) * (Level + :one) * :multiplier",
-                ReturnValues: "ALL_NEW"
+                UpdateExpression: "SET Level = Level + :inc"
             }
-        
+
             try {
                 const data = await dynamoDb.update(params).promise()
                 console.log(data)
@@ -380,7 +379,41 @@ exports.handler = async (event) => {
                     body: JSON.stringify(error)
                 }
             }
-        }        
+        }
+    }
+    else if (event.path == "/leaveProgram" && event.httpMethod == "DELETE") {
+        const UserID = event.queryStringParameters.UserID
+
+        const params = {
+            TableName: "user-programs-db-dev",
+            Key: {
+                "UserID": UserID
+            }
+        }
+
+        try {
+            const response = await dynamoDb.delete(params).promise()
+
+            return {
+                statusCode: 200,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "*"
+                },
+                body: JSON.stringify("Successfully Left Program")
+            }
+
+        } catch (error) {
+            console.log(error)
+            return {
+                statusCode: 500,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "*"
+                },
+                body: JSON.stringify(error)
+            }
+        }
     }
 
     return {

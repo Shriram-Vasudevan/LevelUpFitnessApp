@@ -58,7 +58,7 @@ struct LevelWidget: View {
                 .fill(.white)
                 .shadow(radius: 3)
         )
-        .padding()
+//        .padding()
        
     }
 }

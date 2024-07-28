@@ -82,6 +82,16 @@
           "update"
         ]
       }
+    },
+    "/leaveProgram": {
+      "name": "/leaveProgram",
+      "lambdaFunction": "LevelUpFitnessDynamoAccessLambda",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "delete"
+        ]
+      }
     }
   }
 }

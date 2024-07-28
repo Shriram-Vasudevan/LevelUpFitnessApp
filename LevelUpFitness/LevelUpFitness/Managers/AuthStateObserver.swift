@@ -19,7 +19,7 @@ class AuthStateObserver: ObservableObject {
     func checkAuthState() {
         Task {
             do {
-//                await Amplify.Auth.signOut()
+               // await Amplify.Auth.signOut()
                 
                 let authResult = try await Amplify.Auth.fetchAuthSession()
                 DispatchQueue.main.sync {

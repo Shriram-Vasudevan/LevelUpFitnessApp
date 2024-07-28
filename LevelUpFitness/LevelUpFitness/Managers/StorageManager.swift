@@ -113,8 +113,10 @@ class StorageManager: ObservableObject {
             }
 
             let userID = try await Amplify.Auth.getCurrentUser().userId
+            guard let program = self.program else { return }
+            
             if let date = getPreviousMondayDate() {
-                let downloadTask = Amplify.Storage.downloadData(key: "UserPrograms/\(userID)/(\(date)).json")
+                let downloadTask = Amplify.Storage.downloadData(key: "UserPrograms/\(userID)/\(program.programName)(\(date)).json")
                 
                 let data = try await downloadTask.value
                 
@@ -226,7 +228,7 @@ class StorageManager: ObservableObject {
             let userID = try await Amplify.Auth.getCurrentUser().userId
             
             if let date = getPreviousMondayDate() {
-                let storageOperation = Amplify.Storage.uploadFile(key: "UserPrograms/\(userID)/(\(date)).json", local: fileURL)
+                let storageOperation = Amplify.Storage.uploadFile(key: "UserPrograms/\(userID)/\(programName)/(\(date)).json", local: fileURL)
                 
                 let progress = try await storageOperation.value
                 print("Upload completed: \(progress)")
@@ -316,6 +318,35 @@ class StorageManager: ObservableObject {
         }
     }
     
+    func leaveProgramDB() async {
+        do {
+            let userID = try await Amplify.Auth.getCurrentUser().userId
+            guard let program = self.program else { return }
+            
+            let request = RESTRequest(apiName: "LevelUpFitnessDynamoAccessAPI", path: "/leaveProgram", queryParameters: ["UserID" : userID])
+            
+            let response = try await Amplify.API.delete(request: request)
+            
+            print(String(data: response, encoding: .utf8))
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    func leaveProgramS3() async {
+        do {
+            let userID = try await Amplify.Auth.getCurrentUser().userId
+            guard let program = self.program else { return }
+            
+            let request = RESTRequest(apiName: "LevelUpFitnessDynamoAccessAPI", path: "/leaveProgram", queryParameters: ["UserID" : userID, "ProgramName" : program.programName])
+            
+            let response = try await Amplify.API.delete(request: request)
+            
+            print(String(data: response, encoding: .utf8))
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
 
 }
 

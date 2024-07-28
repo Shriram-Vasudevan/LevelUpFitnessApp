@@ -34,7 +34,7 @@ struct HomeView: View {
                 .padding(.horizontal)
                 .padding(.bottom, -10)
                 
-                VStack () {
+                VStack (spacing: 20) {
                     if let userXPData = xpManager.userXPData {
                         LevelWidget(userXPData: userXPData)
                     }
@@ -131,7 +131,7 @@ struct HomeView: View {
          
                 }
                 .scrollIndicators(.hidden)
-                .padding([.vertical, .leading])
+                .padding([.vertical, .horizontal])
                  
                 
                 VStack (spacing: 10) {

@@ -120,6 +120,40 @@ struct ProgramView: View {
                                     .frame(height: (UIScreen.main.bounds.width - 10) / 2)
                                     .padding(.horizontal)
                                     
+                                    
+                                    Button(action: {
+                                        Task {
+                                            async let dbDelete: () = storageManager.leaveProgramDB()
+                                            async let s3Delete: () = storageManager.leaveProgramS3()
+                                            
+                                            await [dbDelete, s3Delete]
+                                        }
+                                    }, label: {
+                                        Rectangle()
+                                            .fill(.white)
+                                            .frame(minWidth: 0, maxWidth: .infinity)
+                                            .frame(height: UIScreen.main.bounds.height / 5)
+                                            .shadow(radius: 5)
+                                            .overlay (
+                                                Text("Leave \nProgram")
+                                                    .font(.custom("Sailec Bold", size: 25))
+                                                    .multilineTextAlignment(.leading)
+                                                    .foregroundColor(.black)
+                                                    .padding(),
+                                                alignment: .topLeading
+                                            )
+                                            .overlay (
+                                                Image("Exit")
+                                                    .resizable()
+                                                    .aspectRatio(contentMode: .fit)
+                                                    .frame(width: 60, height: 60)
+                                                    .padding(),
+                                                alignment: .bottomTrailing
+                                            )
+                                            .padding(.horizontal)
+                                    })
+
+                                    
                                     HStack {
                                         Text("Achievements")
                                             .font(.custom("EtruscoNowCondensed Bold", size: 35))

@@ -47,4 +47,5 @@ class DatabaseManager: ObservableObject {
             print(error)
         }
     }
+
 }
