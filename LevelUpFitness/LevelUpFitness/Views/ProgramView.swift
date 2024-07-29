@@ -18,6 +18,8 @@ struct ProgramView: View {
     
     @Environment(\.dismiss) var dismiss
     
+    @State var showConfirmationWidget: Bool = false
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -42,6 +44,8 @@ struct ProgramView: View {
                                         .onTapGesture {
                                             Task {
                                                 await storageManager.joinStandardProgram(programName: name, badgeManager: badgeManager)
+                                                
+                                                storageManager.program = nil
                                             }
                                         }
                                 }
@@ -122,12 +126,7 @@ struct ProgramView: View {
                                     
                                     
                                     Button(action: {
-                                        Task {
-                                            async let dbDelete: () = storageManager.leaveProgramDB()
-                                            async let s3Delete: () = storageManager.leaveProgramS3()
-                                            
-                                            await [dbDelete, s3Delete]
-                                        }
+                                        showConfirmationWidget = true
                                     }, label: {
                                         Rectangle()
                                             .fill(.white)
@@ -186,6 +185,14 @@ struct ProgramView: View {
                     }
                 }
                 
+                if showConfirmationWidget {
+                    ConfirmLeaveProgramWidget(isOpen: $showConfirmationWidget, confirmed: {
+                        Task {
+                            await leaveProgram()
+                        }
+                    })
+                }
+                
             }
             .fullScreenCover(isPresented:  $navigateToWorkoutView, content: {
                 WorkoutView(storageManager: storageManager)
@@ -202,6 +209,13 @@ struct ProgramView: View {
 //            })
             .navigationBarBackButtonHidden()
         }
+    }
+    
+    func leaveProgram() async {
+        async let dbDelete: () = storageManager.leaveProgramDB()
+        async let s3Delete: () = storageManager.leaveProgramS3()
+        
+        await [dbDelete, s3Delete]
     }
 }
 
