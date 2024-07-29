@@ -107,44 +107,44 @@ class StorageManager: ObservableObject {
     }
     
     func getUserProgram(badgeManager: BadgeManager) async  {
-        do {
-            DispatchQueue.main.async {
-                self.retrievingProgram = true
-            }
-
-            let userID = try await Amplify.Auth.getCurrentUser().userId
-            guard let program = self.program else { return }
-            
-            if let date = getPreviousMondayDate() {
-                let downloadTask = Amplify.Storage.downloadData(key: "UserPrograms/\(userID)/\(program.programName)(\(date)).json")
-                
-                let data = try await downloadTask.value
-                
-                let decoder = JSONDecoder()
-                let decodedData = try decoder.decode(Program.self, from: data)
-                
+        if let programName = await getUserProgramDBRepresentation() {
+            do {
                 DispatchQueue.main.async {
-                    self.program = decodedData
-                    print(self.program)
+                    self.retrievingProgram = true
                 }
-            }
-            DispatchQueue.main.async {
-                self.retrievingProgram = false
-            }
-            
-        } catch {
-            print("user program retrieval error: \(error)")
-            DispatchQueue.main.async {
-                self.retrievingProgram = false
-            }
-            
-            if let programName = await getUserProgramDBRepresentation() {
+                
+                let userID = try await Amplify.Auth.getCurrentUser().userId
+                
+                    if let date = getPreviousMondayDate() {
+                        let downloadTask = Amplify.Storage.downloadData(key: "UserPrograms/\(userID)/\(programName)/(\(date)).json")
+                        
+                        let data = try await downloadTask.value
+                        
+                        let decoder = JSONDecoder()
+                        let decodedData = try decoder.decode(Program.self, from: data)
+                        
+                        DispatchQueue.main.async {
+                            self.program = decodedData
+                            print(self.program)
+                        }
+                    DispatchQueue.main.async {
+                        self.retrievingProgram = false
+                    }
+                }
+                
+            } catch {
+                print("user program retrieval error: \(error)")
+                DispatchQueue.main.async {
+                    self.retrievingProgram = false
+                }
+                
                 await joinStandardProgram(programName: programName, badgeManager: badgeManager)
             }
-            else {
-                await getStandardProgramNames()
-            }
         }
+        else {
+            await getStandardProgramNames()
+        }
+
     }
     
     func getUserProgramDBRepresentation() async -> String? {
@@ -195,7 +195,7 @@ class StorageManager: ObservableObject {
             
             let decoder = JSONDecoder()
             let decodedData = try decoder.decode(Program.self, from: data)
-            
+
             await temporarilySaveStandardProgram(programName: programName, data: data) { success, url in
                 if success, let fileURL = url {
                     await self.uploadStandardProgram(fileURL: fileURL, programName: programName, badgeManager: badgeManager) { success in
@@ -323,13 +323,17 @@ class StorageManager: ObservableObject {
             let userID = try await Amplify.Auth.getCurrentUser().userId
             guard let program = self.program else { return }
             
-            let request = RESTRequest(apiName: "LevelUpFitnessDynamoAccessAPI", path: "/leaveProgram", queryParameters: ["UserID" : userID])
+            let request = RESTRequest(apiName: "LevelUpFitnessDynamoAccessAPI", path: "/leaveProgram", queryParameters: ["UserID" : "\(userID)", "ProgramName" : "\(program.programName)"])
             
             let response = try await Amplify.API.delete(request: request)
             
             print(String(data: response, encoding: .utf8))
+            
+            if self.standardProgramNames == nil {
+                await getStandardProgramNames()
+            }
         } catch {
-            print(error.localizedDescription)
+            print(error)
         }
     }
     
@@ -338,13 +342,13 @@ class StorageManager: ObservableObject {
             let userID = try await Amplify.Auth.getCurrentUser().userId
             guard let program = self.program else { return }
             
-            let request = RESTRequest(apiName: "LevelUpFitnessDynamoAccessAPI", path: "/leaveProgram", queryParameters: ["UserID" : userID, "ProgramName" : program.programName])
+            let request = RESTRequest(apiName: "LevelUpFitnessS3AccessAPI", path: "/leaveProgram", queryParameters: ["UserID" : userID, "ProgramName" : program.programName])
             
             let response = try await Amplify.API.delete(request: request)
             
             print(String(data: response, encoding: .utf8))
         } catch {
-            print(error.localizedDescription)
+            print(error)
         }
     }
 

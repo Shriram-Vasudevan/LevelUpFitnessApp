@@ -21,6 +21,7 @@ struct ConfirmLeaveProgramWidget: View {
                 Button(action: {
                     withAnimation {
                         confirmed()
+                        close()
                     }
                 }) {
                     Text("Confirm")

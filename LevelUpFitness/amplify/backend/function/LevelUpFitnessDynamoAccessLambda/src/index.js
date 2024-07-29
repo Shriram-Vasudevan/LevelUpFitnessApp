@@ -1,21 +1,21 @@
-const AWS = require('aws-sdk')
-const { DocumentClient } =  require('aws-sdk/clients/dynamodb')
-const { json } = require('stream/consumers')
+const AWS = require('aws-sdk');
+const { DocumentClient } = require('aws-sdk/clients/dynamodb');
+const { json } = require('stream/consumers');
 
-const dynamoDb = new AWS.DynamoDB.DocumentClient()
+const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
 /**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
  */
 exports.handler = async (event) => {
-    if (event.path == "/getExercises" && event.httpMethod == "GET") {
+    if (event.path === "/getExercises" && event.httpMethod === "GET") {
         const params = {
-            TableName: "exercises-db-dev",
-        }
-    
+            TableName: "exercises-db-dev"
+        };
+
         try {
-            const data = await dynamoDb.scan(params).promise()
-    
+            const data = await dynamoDb.scan(params).promise();
+
             if (data.Items.length > 0) {
                 return {
                     statusCode: 200,
@@ -24,7 +24,7 @@ exports.handler = async (event) => {
                         "Access-Control-Allow-Headers": "*"
                     },
                     body: JSON.stringify(data.Items)
-                }
+                };
             } else {
                 return {
                     statusCode: 404,
@@ -33,10 +33,10 @@ exports.handler = async (event) => {
                         "Access-Control-Allow-Headers": "*"
                     },
                     body: JSON.stringify({ message: "No workouts found for the given UserID" })
-                }
+                };
             }
         } catch (error) {
-            console.log(error)
+            console.log(error);
             return {
                 statusCode: 500,
                 headers: {
@@ -44,24 +44,23 @@ exports.handler = async (event) => {
                     "Access-Control-Allow-Headers": "*"
                 },
                 body: JSON.stringify(error)
-            }
+            };
         }
-    }
-    else if (event.path == "/addUserProgram" && event.httpMethod == "PUT") {
+    } else if (event.path === "/addUserProgram" && event.httpMethod === "PUT") {
         try {
-            const UserID = event.queryStringParameters.UserID
-            const Program = event.queryStringParameters.Program
-    
+            const UserID = event.queryStringParameters.UserID;
+            const Program = event.queryStringParameters.Program;
+
             const params = {
                 TableName: "user-programs-db-dev",
                 Item: {
                     UserID: UserID,
                     Program: Program
                 }
-            }
-    
-            const response = await dynamoDb.put(params).promise()
-    
+            };
+
+            const response = await dynamoDb.put(params).promise();
+
             return {
                 statusCode: 200,
                 headers: {
@@ -69,9 +68,9 @@ exports.handler = async (event) => {
                     "Access-Control-Allow-Headers": "*"
                 },
                 body: JSON.stringify(response)
-            }
+            };
         } catch (error) {
-            console.log(error)
+            console.log(error);
             return {
                 statusCode: 500,
                 headers: {
@@ -79,11 +78,10 @@ exports.handler = async (event) => {
                     "Access-Control-Allow-Headers": "*"
                 },
                 body: JSON.stringify(error)
-            }
+            };
         }
-    }
-    else if (event.path == "/getUserProgramInfo" && event.httpMethod == "GET") {
-        const UserID = event.queryStringParameters.UserID
+    } else if (event.path === "/getUserProgramInfo" && event.httpMethod === "GET") {
+        const UserID = event.queryStringParameters.UserID;
 
         const params = {
             TableName: "user-programs-db-dev",
@@ -91,10 +89,10 @@ exports.handler = async (event) => {
             ExpressionAttributeValues: {
                 ":userID": UserID
             }
-        }
+        };
 
         try {
-            const data = await dynamoDb.query(params).promise()
+            const data = await dynamoDb.query(params).promise();
 
             if (data.Items.length > 0) {
                 return {
@@ -104,7 +102,7 @@ exports.handler = async (event) => {
                         "Access-Control-Allow-Headers": "*"
                     },
                     body: JSON.stringify(data.Items[0])
-                }
+                };
             } else {
                 return {
                     statusCode: 404,
@@ -113,10 +111,10 @@ exports.handler = async (event) => {
                         "Access-Control-Allow-Headers": "*"
                     },
                     body: JSON.stringify({ message: "No Program found for the given UserID" })
-                }
+                };
             }
         } catch (error) {
-            print(error)
+            console.log(error);
             return {
                 statusCode: 500,
                 headers: {
@@ -124,49 +122,47 @@ exports.handler = async (event) => {
                     "Access-Control-Allow-Headers": "*"
                 },
                 body: JSON.stringify(error)
-            }
+            };
         }
-    }
-    else if (event.triggerSource == "PostConfirmation_ConfirmSignUp" && event.userName != null) {
-        console.log("here")
-        console.log("username: " + event.userName)
-        const UserID = event.userName
+    } else if (event.triggerSource === "PostConfirmation_ConfirmSignUp" && event.userName != null) {
+        console.log("here");
+        console.log("username: " + event.userName);
+        const UserID = event.userName;
 
         const badgeParams = {
             TableName: "user-badge-info-db-dev",
             Item: {
-                "UserID": UserID,
-                "BadgesEarned": [],
-                "Weeks": 0
+                UserID: UserID,
+                BadgesEarned: [],
+                Weeks: 0
             }
-        }
+        };
         try {
-            await dynamoDb.put(badgeParams).promise()
-            console.log("success")
+            await dynamoDb.put(badgeParams).promise();
+            console.log("success");
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
 
         const xpParams = {
             TableName: "user-xp-info-db-dev",
             Item: {
-                "UserID": UserID,
-                "XP": 0, 
-                "Level": 0,
-                "XPNeeded": 100
+                UserID: UserID,
+                XP: 0,
+                Level: 0,
+                XPNeeded: 100
             }
-        }
+        };
         try {
-            await dynamoDb.put(xpParams).promise()
-            console.log("success")
+            await dynamoDb.put(xpParams).promise();
+            console.log("success");
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
 
-        return event
+        return event;
 
-    }
-    else if (event.path === "/getUserBadgeInfo" && event.httpMethod === "GET") {
+    } else if (event.path === "/getUserBadgeInfo" && event.httpMethod === "GET") {
         const UserID = event.queryStringParameters.UserID;
 
         console.log(`UserID: ${UserID}`);
@@ -174,7 +170,7 @@ exports.handler = async (event) => {
         const params = {
             TableName: "user-badge-info-db-dev",
             Key: {
-                "UserID": UserID
+                UserID: UserID
             }
         };
 
@@ -203,27 +199,26 @@ exports.handler = async (event) => {
                 })
             };
         }
-    }
-    else if (event.path == "/modifyUserBadgeInfo" && event.httpMethod == "PUT") {
-        const body = JSON.parse(event.body)
-        console.log("Weeks: " + body.Weeks)
+    } else if (event.path === "/modifyUserBadgeInfo" && event.httpMethod === "PUT") {
+        const body = JSON.parse(event.body);
+        console.log("Weeks: " + body.Weeks);
 
         let updateParts = [];
 
-        if (body.Weeks == true) {
-            console.log("Weeks")
+        if (body.Weeks) {
+            console.log("Weeks");
             updateParts.push("Weeks = if_not_exists(Weeks, :numberDefault) + :increment");
         }
 
         updateParts.push("BadgesEarned = list_append(if_not_exists(BadgesEarned, :badgeDefault), :badges)");
 
         let updateExpression = "SET " + updateParts.join(", ");
-        console.log(updateExpression)
-        
+        console.log(updateExpression);
+
         const params = {
             TableName: "user-badge-info-db-dev",
             Key: {
-                "UserID": body.UserID
+                UserID: body.UserID
             },
             UpdateExpression: updateExpression,
             ExpressionAttributeValues: {
@@ -232,11 +227,11 @@ exports.handler = async (event) => {
                 ":badgeDefault": [],
                 ":badges": body.Badges
             }
-        }
+        };
 
         try {
-            const data = await dynamoDb.update(params).promise()
-            console.log("updated")
+            const data = await dynamoDb.update(params).promise();
+            console.log("updated");
             return {
                 statusCode: 200,
                 headers: {
@@ -244,9 +239,9 @@ exports.handler = async (event) => {
                     "Access-Control-Allow-Headers": "*"
                 },
                 body: JSON.stringify("Successfully Updated! " + data)
-            }
+            };
         } catch (error) {
-            console.log(error)
+            console.log(error);
             return {
                 statusCode: 500,
                 headers: {
@@ -254,19 +249,18 @@ exports.handler = async (event) => {
                     "Access-Control-Allow-Headers": "*"
                 },
                 body: JSON.stringify(error)
-            }
-        }
-       
-    }
-    else if (event.path == "/getBadges" && event.httpMethod == "GET") {
-        const params = {
-            TableName: "badges-db-dev",
+            };
         }
 
-        console.log("heres")
+    } else if (event.path === "/getBadges" && event.httpMethod === "GET") {
+        const params = {
+            TableName: "badges-db-dev"
+        };
+
+        console.log("heres");
 
         try {
-            const data = await dynamoDb.scan(params).promise()
+            const data = await dynamoDb.scan(params).promise();
 
             return {
                 statusCode: 200,
@@ -275,31 +269,30 @@ exports.handler = async (event) => {
                     "Access-Control-Allow-Headers": "*"
                 },
                 body: JSON.stringify(data.Items)
-            }
+            };
         } catch (error) {
-            console.log(error)
+            console.log(error);
             return {
                 statusCode: 500,
                 headers: {
                     "Access-Control-Allow-Origin": "*",
                     "Access-Control-Allow-Headers": "*"
                 }
-            }
+            };
 
         }
-    }
-    else if (event.path == "/getUserXP" && event.httpMethod == "GET") {
-        const UserID = event.queryStringParameters.UserID
+    } else if (event.path === "/getUserXP" && event.httpMethod === "GET") {
+        const UserID = event.queryStringParameters.UserID;
 
         const params = {
             TableName: "user-xp-info-db-dev",
             Key: {
-                "UserID": UserID
+                UserID: UserID
             }
-        }
+        };
 
         try {
-            const response = await dynamoDb.get(params).promise()
+            const response = await dynamoDb.get(params).promise();
 
             return {
                 statusCode: 200,
@@ -308,7 +301,7 @@ exports.handler = async (event) => {
                     "Access-Control-Allow-Headers": "*"
                 },
                 body: JSON.stringify(response)
-            }
+            };
         } catch (error) {
             return {
                 statusCode: 500,
@@ -317,30 +310,27 @@ exports.handler = async (event) => {
                     "Access-Control-Allow-Headers": "*"
                 },
                 body: JSON.stringify(error)
-            }
+            };
         }
-    }
-    else if (event.path == "/addUserXP" && event.httpMethod == "PUT") {
-        const UserID = String(event.queryStringParameters.UserID)
-        const incrementAmount = event.queryStringParameters.incrementAmount
-        const incrementLevel = Boolean(event.queryStringParameters.incrementLevel)
+    } else if (event.path === "/addUserXP" && event.httpMethod === "PUT") {
+        const UserID = String(event.queryStringParameters.UserID);
+        const incrementAmount = event.queryStringParameters.incrementAmount;
+        const incrementLevel = Boolean(event.queryStringParameters.incrementLevel);
 
         const params = {
             TableName: "user-xp-info-db-dev",
             Key: {
-                "UserID": UserID
+                UserID: UserID
             },
             ExpressionAttributeValues: {
-                ":inc": {
-                    "N": incrementAmount
-                }
+                ":inc": incrementAmount
             },
             UpdateExpression: "SET XP = XP + :inc"
-        }
+        };
 
         try {
-            const data = await dynamoDb.update(params).promise()
-            console.log(data)
+            const data = await dynamoDb.update(params).promise();
+            console.log(data);
         } catch (error) {
             return {
                 statusCode: 500,
@@ -349,26 +339,24 @@ exports.handler = async (event) => {
                     "Access-Control-Allow-Headers": "*"
                 },
                 body: JSON.stringify(error)
-            }
+            };
         }
 
         if (incrementLevel) {
             const params = {
                 TableName: "user-xp-info-db-dev",
                 Key: {
-                    "UserID": UserID
+                    UserID: UserID
                 },
                 ExpressionAttributeValues: {
-                    ":inc": {
-                        "N": 1
-                    }
+                    ":inc": 1
                 },
                 UpdateExpression: "SET Level = Level + :inc"
-            }
+            };
 
             try {
-                const data = await dynamoDb.update(params).promise()
-                console.log(data)
+                const data = await dynamoDb.update(params).promise();
+                console.log(data);
             } catch (error) {
                 return {
                     statusCode: 500,
@@ -377,22 +365,23 @@ exports.handler = async (event) => {
                         "Access-Control-Allow-Headers": "*"
                     },
                     body: JSON.stringify(error)
-                }
+                };
             }
         }
-    }
-    else if (event.path == "/leaveProgram" && event.httpMethod == "DELETE") {
-        const UserID = event.queryStringParameters.UserID
+    } else if (event.path === "/leaveProgram" && event.httpMethod === "DELETE") {
+        const UserID = event.queryStringParameters.UserID;
+        const ProgramName = event.queryStringParameters.ProgramName;
 
         const params = {
             TableName: "user-programs-db-dev",
             Key: {
-                "UserID": UserID
+                UserID: UserID,
+                Program: ProgramName
             }
-        }
+        };
 
         try {
-            const response = await dynamoDb.delete(params).promise()
+            const response = await dynamoDb.delete(params).promise();
 
             return {
                 statusCode: 200,
@@ -401,10 +390,10 @@ exports.handler = async (event) => {
                     "Access-Control-Allow-Headers": "*"
                 },
                 body: JSON.stringify("Successfully Left Program")
-            }
+            };
 
         } catch (error) {
-            console.log(error)
+            console.log(error);
             return {
                 statusCode: 500,
                 headers: {
@@ -412,7 +401,7 @@ exports.handler = async (event) => {
                     "Access-Control-Allow-Headers": "*"
                 },
                 body: JSON.stringify(error)
-            }
+            };
         }
     }
 
@@ -423,5 +412,5 @@ exports.handler = async (event) => {
             "Access-Control-Allow-Headers": "*"
         },
         body: JSON.stringify('Hello from Lambda!')
-    }
-}
+    };
+};

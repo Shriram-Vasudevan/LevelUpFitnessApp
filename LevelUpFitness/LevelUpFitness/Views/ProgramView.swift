@@ -19,6 +19,8 @@ struct ProgramView: View {
     @Environment(\.dismiss) var dismiss
     
     @State var showConfirmationWidget: Bool = false
+
+    @State var programPageType: ProgramPageTypes = .newProgram
     
     var body: some View {
         NavigationStack {
@@ -37,19 +39,73 @@ struct ProgramView: View {
                     
                     if storageManager.program == nil && !storageManager.retrievingProgram {
                         VStack {
-                            if let standardProgramNames = storageManager.standardProgramNames {
-                                
-                                ForEach(standardProgramNames, id: \.self) { name in
-                                    JoinProgramWidget()
-                                        .onTapGesture {
-                                            Task {
-                                                await storageManager.joinStandardProgram(programName: name, badgeManager: badgeManager)
+                            
+                            HStack(spacing: 0) {
+                                Button(action: {
+                                    programPageType = .newProgram
+                                }, label: {
+                                    VStack(spacing: 0) {
+                                        HStack {
+                                            Image("JoinProgram")
+                                                .resizable()
+                                                .frame(width: 20, height: 20)
+                                                .padding(EdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 0))
                                                 
-                                                storageManager.program = nil
-                                            }
+                                            
+                                            Text("Join Program")
+                                                .font(Font.system(size: 18))
+                                                .foregroundColor(Color.black)
+                                                .padding(EdgeInsets(top: 10, leading: 3, bottom: 10, trailing: 15))
+                                                .fontWeight(programPageType == .newProgram ? .bold : .regular)
                                         }
+                                        .frame(height: 52)
+                                        .frame(maxWidth: .infinity)
+                                        Rectangle().fill(programPageType == .newProgram ? Color.blue : Color.clear)
+                                            .frame(height: 3)
+                                    }
+                                })
+                                
+                                Button(action: {
+                                    programPageType = .pastPrograms
+                                }, label: {
+                                    VStack(spacing: 0) {
+                                        HStack {
+                                            Image("PastPrograms")
+                                                .resizable()
+                                                .frame(width: 20, height: 20)
+                                                .padding(EdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 0))
+                                            
+                                            Text("Past Programs")
+                                                .font(Font.system(size: 18))
+                                                .foregroundColor(Color.black)
+                                                .padding(EdgeInsets(top: 10, leading: 3, bottom: 10, trailing: 15))
+                                                .fontWeight(programPageType == .pastPrograms ? .bold : .regular)
+                                        }
+                                        .frame(height: 52)
+                                        .frame(maxWidth: .infinity)
+                                        Rectangle().fill(programPageType == .pastPrograms ? Color.blue : Color.clear)
+                                            .frame(height: 3)
+                                    }
+                                })
+                            }
+                            .padding(.horizontal)
+                            
+                            if programPageType == .newProgram {
+                                if let standardProgramNames = storageManager.standardProgramNames {
+                                    
+                                    ForEach(standardProgramNames, id: \.self) { name in
+                                        JoinProgramWidget()
+                                            .onTapGesture {
+                                                Task {
+                                                    await storageManager.joinStandardProgram(programName: name, badgeManager: badgeManager)
+                                                    
+                                                    storageManager.program = nil
+                                                }
+                                            }
+                                    }
                                 }
                             }
+                            
                             Spacer()
                         }
                         .background(
@@ -165,9 +221,14 @@ struct ProgramView: View {
                                     ForEach(badgeManager.badges.sorted(by: { $0.badgeCriteria.threshold < $1.badgeCriteria.threshold }), id: \.id) { badge in
                                         
                                         if let userBadgeInfo = badgeManager.userBadgeInfo {
-                                            if !userBadgeInfo.badgesEarned.contains(badge.id) {
+                                            if userBadgeInfo.badgesEarned.contains(badge.id) {
                                                 AchievementWidget(userBadgeInfo: userBadgeInfo, badge: badge)
                                                     .padding(.bottom)
+                                            }
+                                            else {
+                                                AchievementWidget(userBadgeInfo: userBadgeInfo, badge: badge)
+                                                    .padding(.bottom)
+                                                    .opacity(0.7)
                                             }
                                         }
                                         
@@ -213,10 +274,17 @@ struct ProgramView: View {
     
     func leaveProgram() async {
         async let dbDelete: () = storageManager.leaveProgramDB()
-        async let s3Delete: () = storageManager.leaveProgramS3()
+//        async let s3Delete: () = storageManager.leaveProgramS3()
         
-        await [dbDelete, s3Delete]
+        await [dbDelete]
+        
+        storageManager.program = nil
     }
+}
+
+struct Tab {
+    var text: String
+    var image: Image
 }
 
 #Preview {

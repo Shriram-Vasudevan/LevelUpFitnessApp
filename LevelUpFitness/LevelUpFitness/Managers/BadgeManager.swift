@@ -87,6 +87,7 @@ class BadgeManager: ObservableObject {
             
             let userBadgeInfo = try jsonDecoder.decode(UserBadgeInfo.self, from: response)
             
+            print("badges earned \(userBadgeInfo.badgesEarned)")
             self.userBadgeInfo = userBadgeInfo
         } catch {
             print("badge info error: \(error)")
