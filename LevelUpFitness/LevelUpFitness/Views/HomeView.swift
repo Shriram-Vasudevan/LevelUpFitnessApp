@@ -131,8 +131,17 @@ struct HomeView: View {
          
                 }
                 .scrollIndicators(.hidden)
-                .padding([.vertical, .horizontal])
+                .padding([.top, .horizontal])
                  
+                TimeSpentWidget(data: [
+                    TimeData(day: "Mon", value: 5),
+                    TimeData(day: "Tue", value: 10),
+                    TimeData(day: "Wed", value: 7),
+                    TimeData(day: "Thu", value: 12),
+                    TimeData(day: "Fri", value: 6),
+                    TimeData(day: "Sat", value: 15),
+                    TimeData(day: "Sun", value: 9)
+                ])
                 
                 VStack (spacing: 10) {
                     HStack {
@@ -147,7 +156,8 @@ struct HomeView: View {
                 }
                 .padding()
                 
-
+                
+                
                 
 //                        VStack(spacing: 0) {
 //                            if let url = storageManager.dailyVideo {

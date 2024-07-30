@@ -114,13 +114,50 @@ exports.handler = async (event) => {
             };
         }
     }
+    else if (event.path == "/getUserProgramNames" && event.httpMethod == "GET") {
+        const UserID = event.queryStringParameters.UserID
 
+        const params = {
+            Bucket: "level-up-fitness-storage-bucket33cf0-dev",
+            Key: `public/UserPrograms/${UserID}`
+        }
+
+        try {
+            const response = await s3.listObjectsV2(params).promise()
+
+            const objectsList = response.Contents ? response.Contents.map(item => item.Key.split('/').pop()) : [];
+
+            if (objectsList.length > 0) {
+                objectsList.shift();
+            }
+
+            return {
+                statusCode: 200,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "*"
+                },
+                body: JSON.stringify(objectsList)
+            }
+        } catch (error) {
+            console.log(error)
+
+            return {
+                statusCode: 500,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "*"
+                },
+                body: JSON.stringify(error)
+            }
+        }
+    }
     return {
         statusCode: 200,
         headers: {
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Headers": "*"
         },
-        body: JSON.stringify('Hello from Lambda!'),
+        body: JSON.stringify('Hello from Lambda!')
     };
 };

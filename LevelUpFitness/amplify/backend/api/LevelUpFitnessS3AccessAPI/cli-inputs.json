@@ -31,6 +31,16 @@
           "delete"
         ]
       }
+    },
+    "/getUserProgramNames": {
+      "name": "/getUserProgramNames",
+      "lambdaFunction": "LevelUpFitnessS3AccessLambda",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "read"
+        ]
+      }
     }
   }
 }

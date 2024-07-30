@@ -105,6 +105,9 @@ struct ProgramView: View {
                                     }
                                 }
                             }
+                            else if programPageType == .pastPrograms {
+                                PastProgramsView(storageManager: self.storageManager)
+                            }
                             
                             Spacer()
                         }

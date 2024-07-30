@@ -12,9 +12,10 @@ import Amplify
 class StorageManager: ObservableObject {
     @Published var dailyVideo: URL?
     @Published var program: Program?
-    @Published var standardProgramNames: [String]?
     @Published var retrievingProgram: Bool = false
     @Published var exercises: [ExerciseLibraryExerciseDownloaded] = []
+    @Published var standardProgramNames: [String]?
+    @Published var userProgramNames: [String]?
     
     func downloadExercises() async {
         do  {
@@ -186,6 +187,25 @@ class StorageManager: ObservableObject {
         }
     }
     
+    func getUserProgramNames() async {
+        do {
+            let restRequest = RESTRequest(apiName: "LevelUpFitnessS3AccessAPI", path: "/getStandardProgramNames")
+            let response = try await Amplify.API.get(request: restRequest)
+            
+            let jsonString = String(data: response, encoding: .utf8)
+            
+            print(jsonString)
+            
+            if let array = try JSONSerialization.jsonObject(with: response) as? [String] {
+                self.userProgramNames = array.map({ String($0.dropLast(5))})
+            } else {
+                print("Error getting names")
+            }
+        } catch {
+            print(error)
+        }
+    }
+    
     func joinStandardProgram(programName: String, badgeManager: BadgeManager) async {
         do {
             print("StandardPrograms/\(programName).json")
@@ -351,6 +371,7 @@ class StorageManager: ObservableObject {
             print(error)
         }
     }
+    
 
 }
 

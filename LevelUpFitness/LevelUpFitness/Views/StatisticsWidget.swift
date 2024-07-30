@@ -52,6 +52,7 @@ struct StatisticsWidget: View {
                             lineWidth: 2
                         )
                         .frame(width: width, height: 20)
+                        .clipped()
                         .padding(.top)
                         
                         VStack {
