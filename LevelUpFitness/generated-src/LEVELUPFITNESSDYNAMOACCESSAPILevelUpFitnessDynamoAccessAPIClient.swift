@@ -204,50 +204,6 @@ public class LEVELUPFITNESSDYNAMOACCESSAPILevelUpFitnessDynamoAccessAPIClient: A
      
      return type: 
      */
-    public func addUserXPOptions() -> AWSTask<AnyObject> {
-	    let headerParameters = [
-                   "Content-Type": "application/json",
-                   "Accept": "application/json",
-                   
-	            ]
-	    
-	    let queryParameters:[String:Any] = [:]
-	    
-	    let pathParameters:[String:Any] = [:]
-	    
-	    return self.invokeHTTPRequest("OPTIONS", urlString: "/addUserXP", pathParameters: pathParameters, queryParameters: queryParameters, headerParameters: headerParameters, body: nil, responseClass: nil)
-	}
-
-	
-    /*
-     
-     
-     @param proxy 
-     
-     return type: 
-     */
-    public func addUserXPProxyOptions(proxy: String) -> AWSTask<AnyObject> {
-	    let headerParameters = [
-                   "Content-Type": "application/json",
-                   "Accept": "application/json",
-                   
-	            ]
-	    
-	    let queryParameters:[String:Any] = [:]
-	    
-	    var pathParameters:[String:Any] = [:]
-	    pathParameters["proxy"] = proxy
-	    
-	    return self.invokeHTTPRequest("OPTIONS", urlString: "/addUserXP/{proxy+}", pathParameters: pathParameters, queryParameters: queryParameters, headerParameters: headerParameters, body: nil, responseClass: nil)
-	}
-
-	
-    /*
-     
-     
-     
-     return type: 
-     */
     public func getBadgesOptions() -> AWSTask<AnyObject> {
 	    let headerParameters = [
                    "Content-Type": "application/json",
@@ -547,6 +503,50 @@ public class LEVELUPFITNESSDYNAMOACCESSAPILevelUpFitnessDynamoAccessAPIClient: A
 	    pathParameters["proxy"] = proxy
 	    
 	    return self.invokeHTTPRequest("OPTIONS", urlString: "/modifyUserBadgeInfo/{proxy+}", pathParameters: pathParameters, queryParameters: queryParameters, headerParameters: headerParameters, body: nil, responseClass: nil)
+	}
+
+	
+    /*
+     
+     
+     
+     return type: 
+     */
+    public func updateUserXPOptions() -> AWSTask<AnyObject> {
+	    let headerParameters = [
+                   "Content-Type": "application/json",
+                   "Accept": "application/json",
+                   
+	            ]
+	    
+	    let queryParameters:[String:Any] = [:]
+	    
+	    let pathParameters:[String:Any] = [:]
+	    
+	    return self.invokeHTTPRequest("OPTIONS", urlString: "/updateUserXP", pathParameters: pathParameters, queryParameters: queryParameters, headerParameters: headerParameters, body: nil, responseClass: nil)
+	}
+
+	
+    /*
+     
+     
+     @param proxy 
+     
+     return type: 
+     */
+    public func updateUserXPProxyOptions(proxy: String) -> AWSTask<AnyObject> {
+	    let headerParameters = [
+                   "Content-Type": "application/json",
+                   "Accept": "application/json",
+                   
+	            ]
+	    
+	    let queryParameters:[String:Any] = [:]
+	    
+	    var pathParameters:[String:Any] = [:]
+	    pathParameters["proxy"] = proxy
+	    
+	    return self.invokeHTTPRequest("OPTIONS", urlString: "/updateUserXP/{proxy+}", pathParameters: pathParameters, queryParameters: queryParameters, headerParameters: headerParameters, body: nil, responseClass: nil)
 	}
 
 

@@ -81,7 +81,11 @@ struct WorkoutContent: View {
                 setCompleted: $setCompleted,
                 lastSetCompleted: $lastSetCompleted,
                 exerciseName: workoutManager.currentExercises[workoutManager.currentExerciseIndex].name, exerciseReps: workoutManager.currentExercises[workoutManager.currentExerciseIndex].reps, numberOfSets: workoutManager.currentExerciseData.sets.count, exitWorkout: {
-                    dismiss()
+                    Task {
+                        await storageManager.uploadNewProgramStatus(completionHandler: {
+                                dismiss()
+                            })
+                    }
                 }
             )
             .id("\(workoutManager.currentExerciseIndex)-\(workoutManager.currentSetIndex)")

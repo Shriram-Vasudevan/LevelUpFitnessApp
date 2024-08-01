@@ -38,6 +38,9 @@ struct HomeView: View {
                     if let userXPData = xpManager.userXPData {
                         LevelWidget(userXPData: userXPData)
                     }
+                    else {
+                        LevelWidget(userXPData: XPData(userID: UUID().uuidString, xp: 0, level: 0, xpNeeded: 0, subLevels: Sublevels(strength: Sublevel(level: 0, xp: 0, xpNeeded: 0), power: Sublevel(level: 0, xp: 0, xpNeeded: 0), endurance: Sublevel(level: 0, xp: 0, xpNeeded: 0), mobility: Sublevel(level: 0, xp: 0, xpNeeded: 0))))
+                    }
                     
                     ScrollView (.horizontal) {
                         HStack {
@@ -133,15 +136,9 @@ struct HomeView: View {
                 .scrollIndicators(.hidden)
                 .padding([.top, .horizontal])
                  
-                TimeSpentWidget(data: [
-                    TimeData(day: "Mon", value: 5),
-                    TimeData(day: "Tue", value: 10),
-                    TimeData(day: "Wed", value: 7),
-                    TimeData(day: "Thu", value: 12),
-                    TimeData(day: "Fri", value: 6),
-                    TimeData(day: "Sat", value: 15),
-                    TimeData(day: "Sun", value: 9)
-                ])
+                if let program = storageManager.program {
+                    TimeSpentWidget(program: program)
+                }
                 
                 VStack (spacing: 10) {
                     HStack {

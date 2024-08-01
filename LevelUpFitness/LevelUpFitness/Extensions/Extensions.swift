@@ -73,6 +73,16 @@ extension Program {
         
         return totalTime
     }
+    
+    func getAverageWorkoutTime() -> Double {
+        var totalTime = 0.0
+        
+        for day in program {
+            totalTime += day.getTotalWorkoutTime()
+        }
+        
+        return totalTime / Double(program.count)
+    }
 
     func getTotalRestTime() -> Double {
         var totalRestTime = 0.0

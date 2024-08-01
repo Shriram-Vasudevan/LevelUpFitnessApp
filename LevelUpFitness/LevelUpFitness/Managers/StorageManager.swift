@@ -303,19 +303,21 @@ class StorageManager: ObservableObject {
             
             print(userID)
             
-            let jsonEncoder = JSONEncoder()
-            let jsonData = try jsonEncoder.encode(program)
-            let jsonString = String(data: jsonData, encoding: .utf8)
-            
-            let temporaryDirectory = FileManager.default.temporaryDirectory
-            let fileURL = temporaryDirectory.appendingPathComponent("\(userID).json")
-            
-            try jsonData.write(to: fileURL)
-            if let date = getPreviousMondayDate() {
-                let storageOperation = Amplify.Storage.uploadFile(key: "UserPrograms/\(userID)/(\(date)).json", local: fileURL)
-                        
-                let progress = try await storageOperation.value
-                completionHandler()
+            if let program = self.program {
+                let jsonEncoder = JSONEncoder()
+                let jsonData = try jsonEncoder.encode(program)
+                let jsonString = String(data: jsonData, encoding: .utf8)
+                
+                let temporaryDirectory = FileManager.default.temporaryDirectory
+                let fileURL = temporaryDirectory.appendingPathComponent("\(userID).json")
+                
+                try jsonData.write(to: fileURL)
+                if let date = getPreviousMondayDate() {
+                    let storageOperation = Amplify.Storage.uploadFile(key: "UserPrograms/\(userID)/\(program.programName)/(\(date)).json", local: fileURL)
+                            
+                    let progress = try await storageOperation.value
+                    completionHandler()
+                }
             }
         } catch {
             print(error.localizedDescription)

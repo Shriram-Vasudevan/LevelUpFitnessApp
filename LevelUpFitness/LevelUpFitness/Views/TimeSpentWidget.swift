@@ -1,15 +1,8 @@
-//
-//  TimeSpentWidget.swift
-//  LevelUpFitness
-//
-//  Created by Shriram Vasudevan on 7/30/24.
-//
-
 import SwiftUI
 import Charts
 
 struct TimeSpentWidget: View {
-    var data: [TimeData]
+    var program: Program
     
     var body: some View {
         VStack (spacing: 10){
@@ -39,13 +32,13 @@ struct TimeSpentWidget: View {
             
             GeometryReader { geometry in
                 HStack {
-                    StatisticsWidget(width: geometry.size.width / 3, colorA: .blue, colorB: .cyan, stat: 45, text: "min. average")
+                    StatisticsWidget(width: geometry.size.width / 3, colorA: .blue, colorB: .cyan, stat: program.getAverageWorkoutTime() / 60, text: "min. average")
                     
                     Chart {
-                        ForEach(data, id: \.id) { data in
+                        ForEach(program.program, id: \.self) { programDay in
                             LineMark (
-                                x: .value("Day", data.day),
-                                y: .value("Time", data.value)
+                                x: .value("Day", String(programDay.day.prefix(3))),
+                                y: .value("Time", programDay.getTotalWorkoutTime() / 60)
                             )
                             .foregroundStyle(.blue)
                             .lineStyle(StrokeStyle(lineWidth: 3, lineCap: .round, lineJoin: .round))
@@ -77,14 +70,13 @@ struct TimeSpentWidget: View {
     }
 }
 
+
 #Preview {
-    TimeSpentWidget(data: [
-        TimeData(day: "Mon", value: 5),
-        TimeData(day: "Tue", value: 10),
-        TimeData(day: "Wed", value: 7),
-        TimeData(day: "Thu", value: 12),
-        TimeData(day: "Fri", value: 6),
-        TimeData(day: "Sat", value: 15),
-        TimeData(day: "Sun", value: 9)
-    ])
+    TimeSpentWidget(program: Program(program: [ProgramDay(day: "Monday", workout: "", completed: false, exercises: [Exercise(name: "", sets: 2, reps: 5, rpe: "", rest: 3, completed: false, data: ExerciseData(sets: [ExerciseDataSet(weight: 0, reps: 1, time: 0.0, rest: 0.0)]))]),
+       ProgramDay(day: "Tuesday", workout: "", completed: false, exercises: [Exercise(name: "", sets: 2, reps: 5, rpe: "", rest: 3, completed: false, data: ExerciseData(sets: [ExerciseDataSet(weight: 0, reps: 1, time: 0.0, rest: 0.0)]))]),
+       ProgramDay(day: "Wednesday", workout: "", completed: false, exercises: [Exercise(name: "", sets: 2, reps: 5, rpe: "", rest: 3, completed: false, data: ExerciseData(sets: [ExerciseDataSet(weight: 0, reps: 1, time: 0.0, rest: 0.0)]))]),
+       ProgramDay(day: "Thursday", workout: "", completed: false, exercises: [Exercise(name: "", sets: 2, reps: 5, rpe: "", rest: 3, completed: false, data: ExerciseData(sets: [ExerciseDataSet(weight: 0, reps: 1, time: 0.0, rest: 0.0)]))]),
+       ProgramDay(day: "Friday", workout: "", completed: false, exercises: [Exercise(name: "", sets: 2, reps: 5, rpe: "", rest: 3, completed: false, data: ExerciseData(sets: [ExerciseDataSet(weight: 0, reps: 1, time: 0.0, rest: 0.0)]))]),
+       ProgramDay(day: "Saturday", workout: "", completed: false, exercises: [Exercise(name: "", sets: 2, reps: 5, rpe: "", rest: 3, completed: false, data: ExerciseData(sets: [ExerciseDataSet(weight: 0, reps: 1, time: 0.0, rest: 0.0)]))]),
+       ProgramDay(day: "Sunday", workout: "", completed: false, exercises: [Exercise(name: "", sets: 2, reps: 5, rpe: "", rest: 3, completed: false, data: ExerciseData(sets: [ExerciseDataSet(weight: 0, reps: 1, time: 0.0, rest: 0.0)]))])], programName: "TestProgram"))
 }

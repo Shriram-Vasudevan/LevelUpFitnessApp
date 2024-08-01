@@ -32,22 +32,22 @@ struct LevelWidget: View {
             .padding(.bottom)
             
             HStack {
-                SubLevelCircularWidget(level: 2, image: "Dumbell", name: "Strength")
+                SubLevelCircularWidget(level: userXPData.subLevels.strength.level, image: "Dumbell", name: "Strength")
                     .frame(width: UIScreen.main.bounds.width / 4.5, height: UIScreen.main.bounds.width / 4.5)
                 
                 Spacer()
                 
-                SubLevelCircularWidget(level: 1, image: "Running", name: "Endurance")
+                SubLevelCircularWidget(level: userXPData.subLevels.endurance.level, image: "Running", name: "Endurance")
                     .frame(width: UIScreen.main.bounds.width / 4.5, height: UIScreen.main.bounds.width / 4.5)
                 
                 Spacer()
                 
-                SubLevelCircularWidget(level: 3, image: "Power", name: "Power")
+                SubLevelCircularWidget(level: userXPData.subLevels.power.level, image: "Power", name: "Power")
                     .frame(width: UIScreen.main.bounds.width / 4.5, height: UIScreen.main.bounds.width / 4.5)
                 
                 Spacer()
                 
-                SubLevelCircularWidget(level: 1, image: "360", name: "Mobility")
+                SubLevelCircularWidget(level: userXPData.subLevels.mobility.level, image: "360", name: "Mobility")
                     .frame(width: UIScreen.main.bounds.width / 4.5, height: UIScreen.main.bounds.width / 4.5)
     
             }
@@ -64,5 +64,5 @@ struct LevelWidget: View {
 }
 
 #Preview {
-    LevelWidget(userXPData: XPData(userID: "", xp: 102, level: 2, xpNeeded: 150))
+    LevelWidget(userXPData: XPData(userID: "", xp: 102, level: 2, xpNeeded: 150, subLevels: Sublevels(strength: Sublevel(level: 0, xp: 0, xpNeeded: 0), power: Sublevel(level: 0, xp: 0, xpNeeded: 0), endurance: Sublevel(level: 0, xp: 0, xpNeeded: 0), mobility: Sublevel(level: 0, xp: 0, xpNeeded: 0))))
 }

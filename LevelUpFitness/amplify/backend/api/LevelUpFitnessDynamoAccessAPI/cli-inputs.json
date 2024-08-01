@@ -73,16 +73,6 @@
         ]
       }
     },
-    "/addUserXP": {
-      "name": "/addUserXP",
-      "lambdaFunction": "LevelUpFitnessDynamoAccessLambda",
-      "permissions": {
-        "setting": "private",
-        "auth": [
-          "update"
-        ]
-      }
-    },
     "/leaveProgram": {
       "name": "/leaveProgram",
       "lambdaFunction": "LevelUpFitnessDynamoAccessLambda",
@@ -90,6 +80,17 @@
         "setting": "private",
         "auth": [
           "delete"
+        ]
+      }
+    },
+    "/updateUserXP": {
+      "name": "/updateUserXP",
+      "lambdaFunction": "LevelUpFitnessDynamoAccessLambda",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "update"
         ]
       }
     }

@@ -38,37 +38,56 @@ class XPManager: ObservableObject {
         }
     }
     
-    func addXPLocally(increment: Int) async {
-        guard var userXPData = userXPData else {
-            print("User XP data is not available.")
-            return
-        }
-        
-        let currentXP = userXPData.xp
-        let xpNeeded = userXPData.xpNeeded
-        
-        let newXP = currentXP + increment
-        let incrementLevel = newXP > xpNeeded
-        
-        if incrementLevel {
-            userXPData.level += 1
-            userXPData.xp = newXP
-            userXPData.xpNeeded = Int(pow(Double(userXPData.level), 2) * 100)
-        } else {
-            userXPData.xp = newXP
-        }
-        self.userXPData? = userXPData
-        
+    func addXPLocally(todaysProgram: ProgramDay) async {
         do {
             let userID = try await Amplify.Auth.getCurrentUser().userId
-            var request = RESTRequest(apiName: "LevelUpFitnessDynamoAccessAPI", path: "/addUserXP", queryParameters: ["UserID" : userID, "incrementAmount": "\(increment)", "incrementLevel": "\(incrementLevel)"])
+            guard var userXPData = userXPData else {
+                print("User XP data is not available.")
+                return
+            }
             
-            let response = try await Amplify.API.put(request: request)
+            var totalIncrement = 0
+            var completedCount = todaysProgram.exercises.filter({ $0.completed }).count
             
-            print("modify response: \(String(data: response, encoding: .utf8))")
+            totalIncrement += completedCount
+            
+            let currentXP = userXPData.xp
+            let xpNeeded = userXPData.xpNeeded
+            
+            let newXP = currentXP + totalIncrement
+            let incrementLevel = newXP > xpNeeded
+            
+            if incrementLevel {
+                userXPData.level += 1
+                userXPData.xp = newXP
+                userXPData.xpNeeded = Int(pow(Double(userXPData.level), 2) * 100)
+            } else {
+                userXPData.xp = newXP
+            }
+            
+            self.userXPData? = userXPData
+            
+            var jsonEncoder = JSONEncoder()
+            jsonEncoder.outputFormatting = .prettyPrinted
+            let jsonData = try jsonEncoder.encode(userXPData)
+            
+            let request = RESTRequest(apiName: "LevelUpFitnessDynamoAccessAPI", path: "/updateUserXP", queryParameters: ["UserID" : userID], body: jsonData)
+            let restResponse = try await Amplify.API.put(request: request)
+            
+            print("Update XP Response: \(String(data: restResponse, encoding: .utf8))")
         } catch {
-            print("xp error \(error)")
+            print("Update XP \(error)")
         }
+    }
+    
+    func getCurrentWeekday() -> String {
+        let date = Date()
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "EEEE"
+        let weekday = dateFormatter.string(from: date)
+        
+        return weekday
     }
 
 }

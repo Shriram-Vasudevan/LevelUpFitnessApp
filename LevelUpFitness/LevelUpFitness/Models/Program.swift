@@ -17,14 +17,14 @@ struct Program: Codable {
         
     }
 }
-struct ProgramDay: Codable {
+struct ProgramDay: Codable, Hashable {
     var day: String
     var workout: String
     var completed: Bool
     var exercises: [Exercise]
 }
 
-struct Exercise: Codable {
+struct Exercise: Codable, Hashable {
     var name: String
     var sets: Int
     var reps: Int
@@ -34,11 +34,11 @@ struct Exercise: Codable {
     var data: ExerciseData
 }
 
-struct ExerciseData: Codable {
+struct ExerciseData: Codable, Hashable {
     var sets: [ExerciseDataSet]
 }
 
-struct ExerciseDataSet: Codable {
+struct ExerciseDataSet: Codable, Hashable {
     var weight: Int
     var reps: Int
     var time: Double
