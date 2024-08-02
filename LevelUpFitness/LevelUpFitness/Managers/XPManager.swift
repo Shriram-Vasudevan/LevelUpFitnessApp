@@ -74,7 +74,8 @@ class XPManager: ObservableObject {
             jsonEncoder.outputFormatting = .prettyPrinted
             let jsonData = try jsonEncoder.encode(userXPData)
 
-            let request = RESTRequest(apiName: "LevelUpFitnessDynamoAccessAPI", path: "/updateUserXP", queryParameters: ["UserID" : userID], body: jsonData)
+            print(String(data: jsonData, encoding: .utf8))
+            let request = RESTRequest(apiName: "LevelUpFitnessDynamoAccessAPI", path: "/updateUserXP", body: jsonData)
             let restResponse = try await Amplify.API.put(request: request)
             
             print("Update XP Response: \(String(data: restResponse, encoding: .utf8))")

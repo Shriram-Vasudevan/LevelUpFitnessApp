@@ -313,11 +313,57 @@ exports.handler = async (event) => {
             };
         }
     } else if (event.path === "/updateUserXP" && event.httpMethod === "PUT") {
-        const UserID = String(event.queryStringParameters.UserID);
-        const incrementAmount = event.queryStringParameters.incrementAmount;
-        const incrementLevel = Boolean(event.queryStringParameters.incrementLevel);
-
+        const body = JSON.parse(event.body)
+        const UserID = body.UserID
+        const Level = body.Level;
+        const Sublevels = body.Sublevels;
+        const XP = body.XP;
+        const XPNeeded = body.XPNeeded;
     
+        const params = {
+            TableName: "user-xp-info-db-dev",
+            Key: {
+                UserID: UserID
+            },
+            UpdateExpression: "set #lvl = :lvl, #sub = :sub, #xp = :xp, #xpNeeded = :xpNeeded",
+            ExpressionAttributeNames: {
+                "#lvl": "Level",
+                "#sub": "Sublevels",
+                "#xp": "XP",
+                "#xpNeeded": "XPNeeded"
+            },
+            ExpressionAttributeValues: {
+                ":lvl": Level,
+                ":sub": Sublevels,
+                ":xp": XP,
+                ":xpNeeded": XPNeeded
+            }
+        }
+
+        try {
+            await dynamoDb.update(params).promise()
+
+            return {
+                statusCode: 200,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "*"
+                },
+                body: JSON.stringify("Successfully added XP")
+            };
+
+        } catch (error) {
+            console.log(error)
+
+            return {
+                statusCode: 500,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "*"
+                },
+                body: JSON.stringify(error)
+            };
+        }
     } else if (event.path === "/leaveProgram" && event.httpMethod === "DELETE") {
         const UserID = event.queryStringParameters.UserID;
         const ProgramName = event.queryStringParameters.ProgramName;
