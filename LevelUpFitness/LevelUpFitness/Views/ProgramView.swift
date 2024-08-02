@@ -10,6 +10,7 @@ import SwiftUI
 struct ProgramView: View {
     @ObservedObject var storageManager: StorageManager
     @ObservedObject var badgeManager: BadgeManager
+    @ObservedObject var xpManager: XPManager
     
     @State var navigateToWorkoutView: Bool = false
     @State var navigateToMetricsView: Bool = false
@@ -259,7 +260,7 @@ struct ProgramView: View {
                 
             }
             .fullScreenCover(isPresented:  $navigateToWorkoutView, content: {
-                WorkoutView(storageManager: storageManager)
+                WorkoutView(storageManager: storageManager, xpManager: xpManager)
                     .preferredColorScheme(.light)
             })
             .fullScreenCover(isPresented:  $navigateToMetricsView, content: {
@@ -291,6 +292,6 @@ struct Tab {
 }
 
 #Preview {
-    ProgramView(storageManager: StorageManager(), badgeManager: BadgeManager())
+    ProgramView(storageManager: StorageManager(), badgeManager: BadgeManager(), xpManager: XPManager())
 }
 

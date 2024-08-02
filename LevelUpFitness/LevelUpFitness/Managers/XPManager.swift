@@ -47,8 +47,9 @@ class XPManager: ObservableObject {
             }
             
             var totalIncrement = 0
-            var completedCount = todaysProgram.exercises.filter({ $0.completed }).count
+            let completedCount = todaysProgram.exercises.filter({ $0.completed }).count
             
+     
             totalIncrement += completedCount
             
             let currentXP = userXPData.xp
@@ -67,10 +68,12 @@ class XPManager: ObservableObject {
             
             self.userXPData? = userXPData
             
-            var jsonEncoder = JSONEncoder()
+        
+            print(userXPData)
+            let jsonEncoder = JSONEncoder()
             jsonEncoder.outputFormatting = .prettyPrinted
             let jsonData = try jsonEncoder.encode(userXPData)
-            
+
             let request = RESTRequest(apiName: "LevelUpFitnessDynamoAccessAPI", path: "/updateUserXP", queryParameters: ["UserID" : userID], body: jsonData)
             let restResponse = try await Amplify.API.put(request: request)
             

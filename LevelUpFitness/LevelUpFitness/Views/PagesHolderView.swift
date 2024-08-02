@@ -24,7 +24,7 @@ struct PagesHolderView: View {
                     HomeView(storageManager: storageManager, databaseManager: databaseManager, healthManager: healthManager, xpManager: xpManager, pageType: $pageType)
                         .preferredColorScheme(.light)
                 case .program:
-                    ProgramView(storageManager: storageManager, badgeManager: badgeManager)
+                    ProgramView(storageManager: storageManager, badgeManager: badgeManager, xpManager: xpManager)
                         .preferredColorScheme(.light)
                 case .profile:
                     Text("Workout")

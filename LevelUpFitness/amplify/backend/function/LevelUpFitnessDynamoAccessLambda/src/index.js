@@ -312,62 +312,12 @@ exports.handler = async (event) => {
                 body: JSON.stringify(error)
             };
         }
-    } else if (event.path === "/addUserXP" && event.httpMethod === "PUT") {
+    } else if (event.path === "/updateUserXP" && event.httpMethod === "PUT") {
         const UserID = String(event.queryStringParameters.UserID);
         const incrementAmount = event.queryStringParameters.incrementAmount;
         const incrementLevel = Boolean(event.queryStringParameters.incrementLevel);
 
-        const params = {
-            TableName: "user-xp-info-db-dev",
-            Key: {
-                UserID: UserID
-            },
-            ExpressionAttributeValues: {
-                ":inc": incrementAmount
-            },
-            UpdateExpression: "SET XP = XP + :inc"
-        };
-
-        try {
-            const data = await dynamoDb.update(params).promise();
-            console.log(data);
-        } catch (error) {
-            return {
-                statusCode: 500,
-                headers: {
-                    "Access-Control-Allow-Origin": "*",
-                    "Access-Control-Allow-Headers": "*"
-                },
-                body: JSON.stringify(error)
-            };
-        }
-
-        if (incrementLevel) {
-            const params = {
-                TableName: "user-xp-info-db-dev",
-                Key: {
-                    UserID: UserID
-                },
-                ExpressionAttributeValues: {
-                    ":inc": 1
-                },
-                UpdateExpression: "SET Level = Level + :inc"
-            };
-
-            try {
-                const data = await dynamoDb.update(params).promise();
-                console.log(data);
-            } catch (error) {
-                return {
-                    statusCode: 500,
-                    headers: {
-                        "Access-Control-Allow-Origin": "*",
-                        "Access-Control-Allow-Headers": "*"
-                    },
-                    body: JSON.stringify(error)
-                };
-            }
-        }
+    
     } else if (event.path === "/leaveProgram" && event.httpMethod === "DELETE") {
         const UserID = event.queryStringParameters.UserID;
         const ProgramName = event.queryStringParameters.ProgramName;

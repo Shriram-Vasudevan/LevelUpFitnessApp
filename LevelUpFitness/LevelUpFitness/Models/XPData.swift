@@ -19,7 +19,7 @@ struct XPData: Codable {
         case xp = "XP"
         case level = "Level"
         case xpNeeded = "XPNeeded"
-        case subLevels = "SubLevels"
+        case subLevels = "Sublevels"
     }
 }
 
@@ -37,7 +37,6 @@ struct Sublevels: Codable {
     }
 }
 
-
 struct Sublevel: Codable {
     var level: Int
     var xp: Int
@@ -45,7 +44,7 @@ struct Sublevel: Codable {
     
     enum CodingKeys: String, CodingKey {
         case level = "Level"
-        case xp = "xp"
+        case xp = "XP"
         case xpNeeded = "XPNeeded"
     }
 }

@@ -10,15 +10,17 @@ import SwiftUI
 struct WorkoutView: View {
     @StateObject private var workoutManager: WorkoutManager
     @ObservedObject private var storageManager: StorageManager
+    @ObservedObject private var xpManager: XPManager
     
     @Environment(\.dismiss) var dismiss
     
     @State private var setCompleted: () -> Void = {}
     @State private var lastSetCompleted: () -> Void = {}
     
-    init(storageManager: StorageManager) {
+    init(storageManager: StorageManager, xpManager: XPManager) {
         _workoutManager = StateObject(wrappedValue: WorkoutManager(storageManager: storageManager))
         self.storageManager = storageManager
+        self.xpManager = xpManager
     }
     
     var body: some View {
@@ -39,7 +41,7 @@ struct WorkoutView: View {
                             }
                         }
                 } else {
-                    WorkoutContent(workoutManager: workoutManager, storageManager: storageManager, dismiss: dismiss, setCompleted: $setCompleted, lastSetCompleted: $lastSetCompleted)
+                    WorkoutContent(workoutManager: workoutManager, storageManager: storageManager, xpManager: xpManager, dismiss: dismiss, setCompleted: $setCompleted, lastSetCompleted: $lastSetCompleted)
                 }
             }
             .navigationBarBackButtonHidden()
@@ -66,6 +68,8 @@ struct WorkoutView: View {
 struct WorkoutContent: View {
     @ObservedObject var workoutManager: WorkoutManager
     @ObservedObject var storageManager: StorageManager
+    @ObservedObject var xpManager: XPManager
+    
     var dismiss: DismissAction
     @Binding var setCompleted: () -> Void
     @Binding var lastSetCompleted: () -> Void
@@ -82,9 +86,14 @@ struct WorkoutContent: View {
                 lastSetCompleted: $lastSetCompleted,
                 exerciseName: workoutManager.currentExercises[workoutManager.currentExerciseIndex].name, exerciseReps: workoutManager.currentExercises[workoutManager.currentExerciseIndex].reps, numberOfSets: workoutManager.currentExerciseData.sets.count, exitWorkout: {
                     Task {
-                        await storageManager.uploadNewProgramStatus(completionHandler: {
-                                dismiss()
-                            })
+                        if let todaysProgram = storageManager.program?.program.first(where: { $0.day == getCurrentWeekday() }) {
+                            
+                            await xpManager.addXPLocally(todaysProgram: todaysProgram)
+                            
+                            await storageManager.uploadNewProgramStatus(completionHandler: {
+                                    dismiss()
+                                })
+                        }
                     }
                 }
             )
@@ -95,6 +104,14 @@ struct WorkoutContent: View {
             )
             .edgesIgnoringSafeArea(.bottom)
         }
+    }
+    
+    func getCurrentWeekday() -> String {
+        let date = Date()
+        var dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "EEEE"
+        
+        return dateFormatter.string(from: date)
     }
 }
 
@@ -151,6 +168,6 @@ struct WorkoutHeader: View {
 
 
 #Preview {
-    WorkoutView(storageManager: StorageManager())
+    WorkoutView(storageManager: StorageManager(), xpManager: XPManager())
 }
 
