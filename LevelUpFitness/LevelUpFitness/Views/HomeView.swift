@@ -32,6 +32,7 @@ struct HomeView: View {
                     Image(systemName: "bell")
                 }
                 .padding(.horizontal)
+                .padding(.top)
                 .padding(.bottom, -10)
                 
                 VStack (spacing: 20) {

@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "paths": {
+    "/createCustomProgramRequest": {
+      "name": "/createCustomProgramRequest",
+      "lambdaFunction": "LevelUpFitnessCustomProgramRequestLambda",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ]
+      }
+    }
+  }
+}

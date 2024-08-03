@@ -100,6 +100,9 @@
 		99EEC6182C32F37A0044F906 /* SizePreferanceKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EEC6172C32F37A0044F906 /* SizePreferanceKey.swift */; };
 		99EEC61C2C33905B0044F906 /* ProgramListHomePreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EEC61B2C33905B0044F906 /* ProgramListHomePreview.swift */; };
 		99F71F9F2C023A3D00E27B60 /* UsageTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F71F9E2C023A3D00E27B60 /* UsageTimeView.swift */; };
+		99FC9E442C5EADC800DAFFAC /* XPAdditionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC9E432C5EADC800DAFFAC /* XPAdditionType.swift */; };
+		99FC9E462C5EC1F900DAFFAC /* AnalyticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC9E452C5EC1F900DAFFAC /* AnalyticsView.swift */; };
+		99FC9E482C5EC56B00DAFFAC /* RequestCustomProgramWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC9E472C5EC56B00DAFFAC /* RequestCustomProgramWidget.swift */; };
 		E244B057B6BA41AE81672440 /* amplifyconfiguration.json in Resources */ = {isa = PBXBuildFile; fileRef = 4CBA503DE7750582F847DD00 /* amplifyconfiguration.json */; };
 /* End PBXBuildFile section */
 
@@ -187,6 +190,9 @@
 		99EEC6172C32F37A0044F906 /* SizePreferanceKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizePreferanceKey.swift; sourceTree = "<group>"; };
 		99EEC61B2C33905B0044F906 /* ProgramListHomePreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramListHomePreview.swift; sourceTree = "<group>"; };
 		99F71F9E2C023A3D00E27B60 /* UsageTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageTimeView.swift; sourceTree = "<group>"; };
+		99FC9E432C5EADC800DAFFAC /* XPAdditionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XPAdditionType.swift; sourceTree = "<group>"; };
+		99FC9E452C5EC1F900DAFFAC /* AnalyticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsView.swift; sourceTree = "<group>"; };
+		99FC9E472C5EC56B00DAFFAC /* RequestCustomProgramWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestCustomProgramWidget.swift; sourceTree = "<group>"; };
 		C9EF97A8E6FAD1E27A905BF3 /* awsconfiguration.json */ = {isa = PBXFileReference; explicitFileType = text.json; path = awsconfiguration.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -283,6 +289,8 @@
 				998ADA692C56FA28008C2795 /* ConfirmLeaveProgramWidget.swift */,
 				995B94B82C596EEF007AECF0 /* TimeSpentWidget.swift */,
 				995B94BC2C5986F3007AECF0 /* PastProgramsView.swift */,
+				99FC9E452C5EC1F900DAFFAC /* AnalyticsView.swift */,
+				99FC9E472C5EC56B00DAFFAC /* RequestCustomProgramWidget.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -332,6 +340,7 @@
 				9945E0BB2C39A19300EA19D2 /* XPData.swift */,
 				997328EA2C57EDA6007708A9 /* ProgramPageTypes.swift */,
 				995B94BA2C596F0B007AECF0 /* TimeData.swift */,
+				99FC9E432C5EADC800DAFFAC /* XPAdditionType.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -541,6 +550,7 @@
 				99F71F9F2C023A3D00E27B60 /* UsageTimeView.swift in Sources */,
 				99DD3D542C1D0871006C07B3 /* FullPageVideoView.swift in Sources */,
 				994E7DCF2C0551FE00BAD9E0 /* ProgramListWidget.swift in Sources */,
+				99FC9E482C5EC56B00DAFFAC /* RequestCustomProgramWidget.swift in Sources */,
 				991F8FEA2C17841300A134A5 /* BadgeManager.swift in Sources */,
 				991F8FF22C18D0A100A134A5 /* LibraryView.swift in Sources */,
 				99CFAAE62BEB075500EFF67E /* LevelUpFitnessApp.swift in Sources */,
@@ -550,6 +560,7 @@
 				994E7DC72C03DE5400BAD9E0 /* PascalCaseCodingKey.swift in Sources */,
 				994E7DB72C026A1D00BAD9E0 /* AuthStateObserver.swift in Sources */,
 				998DA0172C1A34840078E882 /* ChatView.swift in Sources */,
+				99FC9E462C5EC1F900DAFFAC /* AnalyticsView.swift in Sources */,
 				994E7DC52C03AC3E00BAD9E0 /* DatabaseManager.swift in Sources */,
 				9945E0BA2C39A15F00EA19D2 /* XPManager.swift in Sources */,
 				99DD3D522C1D0839006C07B3 /* ExerciseLibraryExerciseWidget.swift in Sources */,
@@ -564,6 +575,7 @@
 				999F706C2C0E71E000B35A78 /* WorkoutExitWarningView.swift in Sources */,
 				99A67F092BF55EFE002DC3DC /* PageType.swift in Sources */,
 				999F70762C0F6D9C00B35A78 /* Double.swift in Sources */,
+				99FC9E442C5EADC800DAFFAC /* XPAdditionType.swift in Sources */,
 				995B94BB2C596F0B007AECF0 /* TimeData.swift in Sources */,
 				994E7DB92C026BE500BAD9E0 /* AuthCheckView.swift in Sources */,
 			);

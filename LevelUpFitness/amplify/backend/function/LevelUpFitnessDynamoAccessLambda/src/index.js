@@ -150,7 +150,29 @@ exports.handler = async (event) => {
                 UserID: UserID,
                 XP: 0,
                 Level: 0,
-                XPNeeded: 100
+                XPNeeded: 50,
+                Sublevels: {
+                    Endurance: {
+                        Level: 0,
+                        XP: 0,
+                        XPNeeded: 25
+                    },
+                    Mobility: {
+                        Level: 0,
+                        XP: 0,
+                        XPNeeded: 25
+                    },
+                    Power: {
+                        Level: 0,
+                        XP: 0,
+                        XPNeeded: 25
+                    },
+                    Strength: {
+                        Level: 0,
+                        XP: 0,
+                        XPNeeded: 25
+                    }
+                }
             }
         };
         try {
@@ -399,7 +421,7 @@ exports.handler = async (event) => {
                 body: JSON.stringify(error)
             };
         }
-    }
+    } 
 
     return {
         statusCode: 200,

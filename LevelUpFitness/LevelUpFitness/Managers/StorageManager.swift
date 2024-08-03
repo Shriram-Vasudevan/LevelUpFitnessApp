@@ -189,7 +189,7 @@ class StorageManager: ObservableObject {
     
     func getUserProgramNames() async {
         do {
-            let restRequest = RESTRequest(apiName: "LevelUpFitnessS3AccessAPI", path: "/getStandardProgramNames")
+            let restRequest = RESTRequest(apiName: "LevelUpFitnessS3AccessAPI", path: "/getUserProgramNames")
             let response = try await Amplify.API.get(request: restRequest)
             
             let jsonString = String(data: response, encoding: .utf8)

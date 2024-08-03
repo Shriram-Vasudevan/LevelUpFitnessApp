@@ -30,6 +30,7 @@ class AuthStateObserver: ObservableObject {
                         Task {
                             print("signed in")
                             await AuthenticationManager.getUsername()
+                            await AuthenticationManager.getName()
                         }
                     }
                 }

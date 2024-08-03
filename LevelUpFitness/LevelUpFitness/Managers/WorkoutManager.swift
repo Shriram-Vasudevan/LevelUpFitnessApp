@@ -17,9 +17,11 @@ class WorkoutManager: ObservableObject {
     @Published var onLastSet: Bool = false
 
     var storageManager: StorageManager
+    var xpManager: XPManager
     
-    init(storageManager: StorageManager) {
+    init(storageManager: StorageManager, xpManager: XPManager) {
         self.storageManager = storageManager
+        self.xpManager = xpManager
     }
    
     func initializeExerciseData() {
@@ -75,6 +77,8 @@ class WorkoutManager: ObservableObject {
                 print(todaysProgram.exercises[currentExerciseIndex].completed)
                 
                 storageManager.program?.program[programIndex] = todaysProgram
+                
+                xpManager.addXP(increment: 1, type: .totalXP)
             }
 
 

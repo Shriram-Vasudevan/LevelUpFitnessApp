@@ -22,21 +22,27 @@
         "LevelUpFitnessBadgesDB": {},
         "LevelUpFitnessUserBadgeInfoDB": {},
         "LevelUpFitnessExercisesDB": {},
-        "LevelUpFitnessUserXPInfo": {}
+        "LevelUpFitnessUserXPInfo": {},
+        "LevelUpFitnessCustomProgramRequestDB": {}
       },
       "function": {
         "LevelUpFitnessDynamoAccessLambda": {
           "deploymentBucketName": "amplify-levelupfitnessapp-dev-33cf0-deployment",
-          "s3Key": "amplify-builds/LevelUpFitnessDynamoAccessLambda-7272756a614763517959-build.zip"
+          "s3Key": "amplify-builds/LevelUpFitnessDynamoAccessLambda-76547230373262353834-build.zip"
         },
         "LevelUpFitnessS3AccessLambda": {
           "deploymentBucketName": "amplify-levelupfitnessapp-dev-33cf0-deployment",
-          "s3Key": "amplify-builds/LevelUpFitnessS3AccessLambda-794d4f4a6d4e5a6f4748-build.zip"
+          "s3Key": "amplify-builds/LevelUpFitnessS3AccessLambda-77543549546167394d38-build.zip"
+        },
+        "LevelUpFitnessCustomProgramRequestLambda": {
+          "deploymentBucketName": "amplify-levelupfitnessapp-dev-33cf0-deployment",
+          "s3Key": "amplify-builds/LevelUpFitnessCustomProgramRequestLambda-69446242583770615757-build.zip"
         }
       },
       "api": {
         "LevelUpFitnessDynamoAccessAPI": {},
-        "LevelUpFitnessS3AccessAPI": {}
+        "LevelUpFitnessS3AccessAPI": {},
+        "LevelUpFitnessCustomProgramRequestAPI": {}
       }
     }
   }

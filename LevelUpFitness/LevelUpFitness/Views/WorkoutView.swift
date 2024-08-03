@@ -18,7 +18,7 @@ struct WorkoutView: View {
     @State private var lastSetCompleted: () -> Void = {}
     
     init(storageManager: StorageManager, xpManager: XPManager) {
-        _workoutManager = StateObject(wrappedValue: WorkoutManager(storageManager: storageManager))
+        _workoutManager = StateObject(wrappedValue: WorkoutManager(storageManager: storageManager, xpManager: xpManager))
         self.storageManager = storageManager
         self.xpManager = xpManager
     }
@@ -88,7 +88,7 @@ struct WorkoutContent: View {
                     Task {
                         if let todaysProgram = storageManager.program?.program.first(where: { $0.day == getCurrentWeekday() }) {
                             
-                            await xpManager.addXPLocally(todaysProgram: todaysProgram)
+                            await xpManager.addXPToDB(todaysProgram: todaysProgram)
                             
                             await storageManager.uploadNewProgramStatus(completionHandler: {
                                     dismiss()

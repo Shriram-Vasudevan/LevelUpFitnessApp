@@ -1,0 +1,14 @@
+{
+  "resourceName": "LevelUpFitnessCustomProgramRequestDB",
+  "tableName": "custom-program-request-db",
+  "partitionKey": {
+    "fieldName": "UserID",
+    "fieldType": "string"
+  },
+  "sortKey": {
+    "fieldName": "Time",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}

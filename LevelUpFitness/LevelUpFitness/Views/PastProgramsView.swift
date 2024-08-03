@@ -11,7 +11,13 @@ struct PastProgramsView: View {
     @ObservedObject var storageManager: StorageManager
     var body: some View {
         ZStack {
-            
+            VStack {
+                if let userProgramNames = storageManager.userProgramNames {
+                    ForEach(userProgramNames, id: \.self) { name in
+                        
+                    }
+                }
+            }
         }
         .onAppear {
             if storageManager.userProgramNames == nil {

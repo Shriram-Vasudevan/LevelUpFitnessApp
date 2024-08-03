@@ -16,7 +16,7 @@ struct LevelWidget: View {
                 LevelCircularProgressBar(progress: Double(userXPData.xp) / Double(userXPData.xpNeeded), level: userXPData.level)
                     .frame(width: 60, height: 60)
                     .padding(.trailing, 5)
-                    .padding(.leading, 5)
+                    .padding(.leading)
                 
                 VStack(alignment: .leading) {
                     Text("Let's get that Level Up!")

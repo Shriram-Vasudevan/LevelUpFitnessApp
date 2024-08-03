@@ -104,6 +104,8 @@ struct ProgramView: View {
                                                 }
                                             }
                                     }
+                                    
+                                    RequestCustomProgramWidget()
                                 }
                             }
                             else if programPageType == .pastPrograms {

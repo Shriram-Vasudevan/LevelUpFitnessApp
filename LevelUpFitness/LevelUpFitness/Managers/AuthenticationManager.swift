@@ -14,6 +14,7 @@ import SwiftUI
 //Handles Sign In + Login Stuff
 class AuthenticationManager: ObservableObject {
     static var username: String = ""
+    static var name: String = ""
     
     func login(username: String, password: String, completion: @escaping (Bool, String?, Error?) async -> Void) async {
         do {
@@ -174,17 +175,23 @@ class AuthenticationManager: ObservableObject {
             let userAttributes = try await Amplify.Auth.fetchUserAttributes()
             print("User attributes - \(userAttributes)")
             
-            var username = "Username"
-            for attribute in userAttributes {
-                if attribute.key == AuthUserAttributeKey.custom("username") {
-                    print(attribute.key)
-                    username = attribute.value
-                    break
-                }
-            }
+            var usernameAttribute = userAttributes.first(where: { $0.key == .custom("username") })
             
-            AuthenticationManager.username = username
+            AuthenticationManager.username = usernameAttribute?.value ?? ""
             print("the username: " + AuthenticationManager.username)
+        } catch {
+            print("Unexpected error: \(error)")
+        }
+    }
+    
+    static func getName() async {
+        do {
+            let userAttributes = try await Amplify.Auth.fetchUserAttributes()
+            
+            let nameAttribute = userAttributes.first(where: { $0.key == .name })
+            
+            AuthenticationManager.name = nameAttribute?.value ?? ""
+            print("the username: " + AuthenticationManager.name)
         } catch {
             print("Unexpected error: \(error)")
         }

@@ -1,5 +1,10 @@
 export type AmplifyDependentResourcesAttributes = {
   "api": {
+    "LevelUpFitnessCustomProgramRequestAPI": {
+      "ApiId": "string",
+      "ApiName": "string",
+      "RootUrl": "string"
+    },
     "LevelUpFitnessDynamoAccessAPI": {
       "ApiId": "string",
       "ApiName": "string",
@@ -23,6 +28,13 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "function": {
+    "LevelUpFitnessCustomProgramRequestLambda": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
     "LevelUpFitnessDynamoAccessLambda": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
@@ -40,6 +52,16 @@ export type AmplifyDependentResourcesAttributes = {
   },
   "storage": {
     "LevelUpFitnessBadgesDB": {
+      "Arn": "string",
+      "Name": "string",
+      "PartitionKeyName": "string",
+      "PartitionKeyType": "string",
+      "Region": "string",
+      "SortKeyName": "string",
+      "SortKeyType": "string",
+      "StreamArn": "string"
+    },
+    "LevelUpFitnessCustomProgramRequestDB": {
       "Arn": "string",
       "Name": "string",
       "PartitionKeyName": "string",

@@ -38,37 +38,66 @@ class XPManager: ObservableObject {
         }
     }
     
-    func addXPLocally(todaysProgram: ProgramDay) async {
+    func addXP(increment: Int, type: XPAdditionType) {
+        guard var userXPData = userXPData else {
+            print("User XP data is not available.")
+            return
+        }
+        
+        switch type {
+            case .totalXP:
+                userXPData.xp += increment
+            
+                let incrementLevel = userXPData.xp > userXPData.xpNeeded
+                if incrementLevel {
+                    userXPData.level += 1
+                    userXPData.xpNeeded += userXPData.level * 40
+                }
+
+            case .strength:
+                userXPData.subLevels.strength.xp += increment
+            
+                let incrementLevel = userXPData.subLevels.strength.xp > userXPData.subLevels.strength.xpNeeded
+                if incrementLevel {
+                    userXPData.subLevels.strength.level += 1
+                    userXPData.subLevels.strength.xpNeeded +=  userXPData.subLevels.strength.level * 20
+                }
+            case .power:
+                userXPData.subLevels.power.xp += increment
+            
+                let incrementLevel = userXPData.subLevels.power.xp > userXPData.subLevels.power.xpNeeded
+                if incrementLevel {
+                    userXPData.subLevels.power.level += 1
+                    userXPData.subLevels.power.xpNeeded +=  userXPData.subLevels.power.level * 20
+                }
+            case .endurance:
+                userXPData.subLevels.endurance.xp += increment
+            
+                let incrementLevel = userXPData.subLevels.endurance.xp > userXPData.subLevels.endurance.xpNeeded
+                if incrementLevel {
+                    userXPData.subLevels.endurance.level += 1
+                    userXPData.subLevels.endurance.xpNeeded +=  userXPData.subLevels.endurance.level * 20
+                }
+            case .mobility:
+                userXPData.subLevels.mobility.xp += increment
+            
+                let incrementLevel = userXPData.subLevels.mobility.xp > userXPData.subLevels.mobility.xpNeeded
+                if incrementLevel {
+                    userXPData.subLevels.mobility.level += 1
+                    userXPData.subLevels.mobility.xpNeeded +=  userXPData.subLevels.mobility.level * 20
+                }
+            }
+        
+        self.userXPData = userXPData
+    }
+    
+    func addXPToDB(todaysProgram: ProgramDay) async {
         do {
-            let userID = try await Amplify.Auth.getCurrentUser().userId
-            guard var userXPData = userXPData else {
+            guard let userXPData = userXPData else {
                 print("User XP data is not available.")
                 return
             }
             
-            var totalIncrement = 0
-            let completedCount = todaysProgram.exercises.filter({ $0.completed }).count
-            
-     
-            totalIncrement += completedCount
-            
-            let currentXP = userXPData.xp
-            let xpNeeded = userXPData.xpNeeded
-            
-            let newXP = currentXP + totalIncrement
-            let incrementLevel = newXP > xpNeeded
-            
-            if incrementLevel {
-                userXPData.level += 1
-                userXPData.xp = newXP
-                userXPData.xpNeeded = Int(pow(Double(userXPData.level), 2) * 100)
-            } else {
-                userXPData.xp = newXP
-            }
-            
-            self.userXPData? = userXPData
-            
-        
             print(userXPData)
             let jsonEncoder = JSONEncoder()
             jsonEncoder.outputFormatting = .prettyPrinted

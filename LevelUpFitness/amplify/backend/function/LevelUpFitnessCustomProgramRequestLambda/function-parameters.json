@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "storage": {
+      "LevelUpFitnessCustomProgramRequestDB": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}

@@ -1,5 +1,19 @@
 {
   "api": {
+    "LevelUpFitnessCustomProgramRequestAPI": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "LevelUpFitnessCustomProgramRequestLambda"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    },
     "LevelUpFitnessDynamoAccessAPI": {
       "dependsOn": [
         {
@@ -58,6 +72,22 @@
     }
   },
   "function": {
+    "LevelUpFitnessCustomProgramRequestLambda": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn",
+            "StreamArn"
+          ],
+          "category": "storage",
+          "resourceName": "LevelUpFitnessCustomProgramRequestDB"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "LevelUpFitnessDynamoAccessLambda": {
       "build": true,
       "providerPlugin": "awscloudformation",
@@ -79,6 +109,22 @@
     }
   },
   "parameters": {
+    "AMPLIFY_function_LevelUpFitnessCustomProgramRequestLambda_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "LevelUpFitnessCustomProgramRequestLambda"
+        }
+      ]
+    },
+    "AMPLIFY_function_LevelUpFitnessCustomProgramRequestLambda_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "LevelUpFitnessCustomProgramRequestLambda"
+        }
+      ]
+    },
     "AMPLIFY_function_LevelUpFitnessDynamoAccessLambda_deploymentBucketName": {
       "usedBy": [
         {
@@ -114,6 +160,10 @@
   },
   "storage": {
     "LevelUpFitnessBadgesDB": {
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB"
+    },
+    "LevelUpFitnessCustomProgramRequestDB": {
       "providerPlugin": "awscloudformation",
       "service": "DynamoDB"
     },
