@@ -184,6 +184,43 @@ extension Exercise {
     }
 }
 
+extension Sublevels {
+    func getAverage() -> Int {
+        return Int((mobility.level + strength.level + endurance.level) / 3)
+    }
+}
+
+extension BodyAreas {
+    func attribute(for key: String) -> XPAttribute? {
+            switch key.lowercased() {
+                case "back":
+                    print("back")
+                    return back
+                case "legs":
+                    print("legs")
+                    return legs
+                case "chest":
+                    print("chest")
+                    return chest
+                case "shoulders":
+                    return shoulders
+                case "core":
+                    return core
+                default:
+                    return nil
+            }
+    }
+}
+extension XPAttribute {
+    mutating func incrementXP(increment: Int) {
+        xp += increment
+        if xp > xpNeeded {
+            level += 1
+            xpNeeded +=  level * 20
+        }
+    }
+}
+
 
 extension View {
     func doneButtonToolbar(isFirstResponder: Binding<Bool>) -> some View {
@@ -237,4 +274,12 @@ extension CGPoint: VectorArithmetic {
         lhs.x -= rhs.x
         lhs.y -= rhs.y
     }
+    
 }
+
+extension String {
+    func capitalizingFirstLetter() -> String {
+        return prefix(1).capitalized + dropFirst()
+    }
+}
+

@@ -78,10 +78,21 @@ class WorkoutManager: ObservableObject {
                 
                 storageManager.program?.program[programIndex] = todaysProgram
                 
-                xpManager.addXP(increment: 1, type: .totalXP)
+                switch todaysProgram.exercises[currentExerciseIndex].area {
+                    case "Legs":
+                        xpManager.addXP(increment: 1, type: .legs)
+                    case "Back":
+                        xpManager.addXP(increment: 1, type: .back)
+                    case "Shoulders":
+                        xpManager.addXP(increment: 1, type: .shoulders)
+                    case "Core":
+                        xpManager.addXP(increment: 1, type: .core)
+                    case "Chest":
+                        xpManager.addXP(increment: 1, type: .chest)
+                    default:
+                        break
+                }
             }
-
-
 
             currentExerciseIndex += 1
             initializeExerciseData()

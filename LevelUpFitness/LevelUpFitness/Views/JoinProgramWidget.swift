@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct JoinProgramWidget: View {
+    var programName: String
     var body: some View {
         Image("GuyAtTheGym")
             .resizable()
@@ -18,7 +19,7 @@ struct JoinProgramWidget: View {
             .brightness(-0.5)
             .overlay (
                 VStack {
-                    Text("Maximized Muscle Manipulation Program: Aesthetic")
+                    Text(programName)
                         .font(.custom("EtruscoNowCondensed Bold", size: 30))
                         .foregroundColor(.white)
                         .multilineTextAlignment(.center)
@@ -31,5 +32,5 @@ struct JoinProgramWidget: View {
 }
 
 #Preview {
-    JoinProgramWidget()
+    JoinProgramWidget(programName: "Program")
 }

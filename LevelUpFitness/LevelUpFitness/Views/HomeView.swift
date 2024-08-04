@@ -40,7 +40,7 @@ struct HomeView: View {
                         LevelWidget(userXPData: userXPData)
                     }
                     else {
-                        LevelWidget(userXPData: XPData(userID: UUID().uuidString, xp: 0, level: 0, xpNeeded: 0, subLevels: Sublevels(strength: Sublevel(level: 0, xp: 0, xpNeeded: 0), power: Sublevel(level: 0, xp: 0, xpNeeded: 0), endurance: Sublevel(level: 0, xp: 0, xpNeeded: 0), mobility: Sublevel(level: 0, xp: 0, xpNeeded: 0))))
+                        LevelWidget(userXPData: XPData(userID: "", level: 0, subLevels: Sublevels(mobility: XPAttribute(xp: 0, level: 0, xpNeeded: 0), endurance: XPAttribute(xp: 0, level: 0, xpNeeded: 0), strength: XPAttribute(xp: 0, level: 0, xpNeeded: 0), bodyAreas: BodyAreas(back: XPAttribute(xp: 0, level: 0, xpNeeded: 0), legs: XPAttribute(xp: 0, level: 0, xpNeeded: 0), chest: XPAttribute(xp: 0, level: 0, xpNeeded: 0), shoulders: XPAttribute(xp: 0, level: 0, xpNeeded: 0), core: XPAttribute(xp: 0, level: 0, xpNeeded: 0)))))
                     }
                     
                     ScrollView (.horizontal) {

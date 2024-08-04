@@ -148,29 +148,54 @@ exports.handler = async (event) => {
             TableName: "user-xp-info-db-dev",
             Item: {
                 UserID: UserID,
-                XP: 0,
-                Level: 0,
-                XPNeeded: 50,
+                Level: 1,
                 Sublevels: {
                     Endurance: {
-                        Level: 0,
+                        Level: 1,
                         XP: 0,
                         XPNeeded: 25
                     },
                     Mobility: {
-                        Level: 0,
-                        XP: 0,
-                        XPNeeded: 25
-                    },
-                    Power: {
-                        Level: 0,
+                        Level: 1,
                         XP: 0,
                         XPNeeded: 25
                     },
                     Strength: {
-                        Level: 0,
+                        Level: 1,
                         XP: 0,
                         XPNeeded: 25
+                    },
+                    Areas: {
+                        Back: {
+                            Level: 1,
+                            XP: 0,
+                            XPNeeded: 25
+                        },
+                        Back: {
+                            Level: 1,
+                            XP: 0,
+                            XPNeeded: 25
+                        },
+                        Back: {
+                            Level: 1,
+                            XP: 0,
+                            XPNeeded: 25
+                        },
+                        Back: {
+                            Level: 1,
+                            XP: 0,
+                            XPNeeded: 25
+                        },
+                        Back: {
+                            Level: 1,
+                            XP: 0,
+                            XPNeeded: 25
+                        },
+                        Back: {
+                            Level: 1,
+                            XP: 0,
+                            XPNeeded: 25
+                        }      
                     }
                 }
             }

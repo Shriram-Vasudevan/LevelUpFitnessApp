@@ -25,6 +25,7 @@ struct LevelCircularProgressBar: View {
                 .font(.custom("EtruscoNowCondensed Bold", size: 40))
                 .foregroundColor(.white)
                 .bold()
+                .scaledToFill()
         }
     }
 }

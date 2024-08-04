@@ -30,6 +30,7 @@ struct Exercise: Codable, Hashable {
     var reps: Int
     var rpe: String
     var rest: Int
+    var area: String
     var completed: Bool
     var data: ExerciseData
 }

@@ -40,7 +40,6 @@ struct ProgramView: View {
                     
                     if storageManager.program == nil && !storageManager.retrievingProgram {
                         VStack {
-                            
                             HStack(spacing: 0) {
                                 Button(action: {
                                     programPageType = .newProgram
@@ -95,12 +94,10 @@ struct ProgramView: View {
                                 if let standardProgramNames = storageManager.standardProgramNames {
                                     
                                     ForEach(standardProgramNames, id: \.self) { name in
-                                        JoinProgramWidget()
+                                        JoinProgramWidget(programName: name)
                                             .onTapGesture {
                                                 Task {
                                                     await storageManager.joinStandardProgram(programName: name, badgeManager: badgeManager)
-                                                    
-                                                    storageManager.program = nil
                                                 }
                                             }
                                     }

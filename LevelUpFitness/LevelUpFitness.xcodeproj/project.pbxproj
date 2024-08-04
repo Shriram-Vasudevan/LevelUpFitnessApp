@@ -19,6 +19,8 @@
 		991F8FEE2C17852900A134A5 /* UserBadgeInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991F8FED2C17852900A134A5 /* UserBadgeInfo.swift */; };
 		991F8FF22C18D0A100A134A5 /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991F8FF12C18D0A100A134A5 /* LibraryView.swift */; };
 		991F8FF42C18DF9400A134A5 /* WeightProgressTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991F8FF32C18DF9400A134A5 /* WeightProgressTracker.swift */; };
+		992F26A32C60079200F25400 /* ProgramSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992F26A22C60079200F25400 /* ProgramSummaryView.swift */; };
+		992F26A52C6032A100F25400 /* FullLevelBreakdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992F26A42C6032A100F25400 /* FullLevelBreakdownView.swift */; };
 		993871A62C3A1CBF00FFAF8A /* LevelWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993871A52C3A1CBF00FFAF8A /* LevelWidget.swift */; };
 		993871A82C3A242700FFAF8A /* LevelCircularProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993871A72C3A242700FFAF8A /* LevelCircularProgressView.swift */; };
 		993871AA2C3A25D600FFAF8A /* SubLevelCircularWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993871A92C3A25D600FFAF8A /* SubLevelCircularWidget.swift */; };
@@ -119,6 +121,8 @@
 		991F8FED2C17852900A134A5 /* UserBadgeInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserBadgeInfo.swift; sourceTree = "<group>"; };
 		991F8FF12C18D0A100A134A5 /* LibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryView.swift; sourceTree = "<group>"; };
 		991F8FF32C18DF9400A134A5 /* WeightProgressTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightProgressTracker.swift; sourceTree = "<group>"; };
+		992F26A22C60079200F25400 /* ProgramSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramSummaryView.swift; sourceTree = "<group>"; };
+		992F26A42C6032A100F25400 /* FullLevelBreakdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullLevelBreakdownView.swift; sourceTree = "<group>"; };
 		993871A52C3A1CBF00FFAF8A /* LevelWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelWidget.swift; sourceTree = "<group>"; };
 		993871A72C3A242700FFAF8A /* LevelCircularProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelCircularProgressView.swift; sourceTree = "<group>"; };
 		993871A92C3A25D600FFAF8A /* SubLevelCircularWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubLevelCircularWidget.swift; sourceTree = "<group>"; };
@@ -291,6 +295,8 @@
 				995B94BC2C5986F3007AECF0 /* PastProgramsView.swift */,
 				99FC9E452C5EC1F900DAFFAC /* AnalyticsView.swift */,
 				99FC9E472C5EC56B00DAFFAC /* RequestCustomProgramWidget.swift */,
+				992F26A22C60079200F25400 /* ProgramSummaryView.swift */,
+				992F26A42C6032A100F25400 /* FullLevelBreakdownView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -544,6 +550,7 @@
 				999F70722C0EB4D400B35A78 /* AchievementWidget.swift in Sources */,
 				991F8FE82C1680A800A134A5 /* ProgramDBRepresentation.swift in Sources */,
 				991F8FF42C18DF9400A134A5 /* WeightProgressTracker.swift in Sources */,
+				992F26A32C60079200F25400 /* ProgramSummaryView.swift in Sources */,
 				998475182BFC18F200295C6E /* AuthenticationManager.swift in Sources */,
 				991F8FE42C1527A900A134A5 /* ProgramStatisticsView.swift in Sources */,
 				991F8FE22C15278500A134A5 /* Extensions.swift in Sources */,
@@ -565,6 +572,7 @@
 				9945E0BA2C39A15F00EA19D2 /* XPManager.swift in Sources */,
 				99DD3D522C1D0839006C07B3 /* ExerciseLibraryExerciseWidget.swift in Sources */,
 				994E7DB52C0266A000BAD9E0 /* RegisterView.swift in Sources */,
+				992F26A52C6032A100F25400 /* FullLevelBreakdownView.swift in Sources */,
 				993871A62C3A1CBF00FFAF8A /* LevelWidget.swift in Sources */,
 				998DA0152C1A18940078E882 /* ViewModifiers.swift in Sources */,
 				994E7DB12C02643D00BAD9E0 /* LoginView.swift in Sources */,

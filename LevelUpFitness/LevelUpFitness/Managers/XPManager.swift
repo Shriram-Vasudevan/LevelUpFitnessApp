@@ -45,48 +45,25 @@ class XPManager: ObservableObject {
         }
         
         switch type {
-            case .totalXP:
-                userXPData.xp += increment
-            
-                let incrementLevel = userXPData.xp > userXPData.xpNeeded
-                if incrementLevel {
-                    userXPData.level += 1
-                    userXPData.xpNeeded += userXPData.level * 40
-                }
-
             case .strength:
-                userXPData.subLevels.strength.xp += increment
-            
-                let incrementLevel = userXPData.subLevels.strength.xp > userXPData.subLevels.strength.xpNeeded
-                if incrementLevel {
-                    userXPData.subLevels.strength.level += 1
-                    userXPData.subLevels.strength.xpNeeded +=  userXPData.subLevels.strength.level * 20
-                }
-            case .power:
-                userXPData.subLevels.power.xp += increment
-            
-                let incrementLevel = userXPData.subLevels.power.xp > userXPData.subLevels.power.xpNeeded
-                if incrementLevel {
-                    userXPData.subLevels.power.level += 1
-                    userXPData.subLevels.power.xpNeeded +=  userXPData.subLevels.power.level * 20
-                }
+                userXPData.subLevels.strength.incrementXP(increment: increment)
             case .endurance:
-                userXPData.subLevels.endurance.xp += increment
-            
-                let incrementLevel = userXPData.subLevels.endurance.xp > userXPData.subLevels.endurance.xpNeeded
-                if incrementLevel {
-                    userXPData.subLevels.endurance.level += 1
-                    userXPData.subLevels.endurance.xpNeeded +=  userXPData.subLevels.endurance.level * 20
-                }
+                userXPData.subLevels.endurance.incrementXP(increment: increment)
             case .mobility:
-                userXPData.subLevels.mobility.xp += increment
-            
-                let incrementLevel = userXPData.subLevels.mobility.xp > userXPData.subLevels.mobility.xpNeeded
-                if incrementLevel {
-                    userXPData.subLevels.mobility.level += 1
-                    userXPData.subLevels.mobility.xpNeeded +=  userXPData.subLevels.mobility.level * 20
-                }
+                userXPData.subLevels.mobility.incrementXP(increment: increment)
+            case .back:
+                userXPData.subLevels.bodyAreas.back.incrementXP(increment: increment)
+            case .legs:
+                userXPData.subLevels.bodyAreas.legs.incrementXP(increment: increment)
+            case .core:
+                userXPData.subLevels.bodyAreas.core.incrementXP(increment: increment)
+            case .shoulders:
+                userXPData.subLevels.bodyAreas.shoulders.incrementXP(increment: increment)
+            case .chest:
+                userXPData.subLevels.bodyAreas.chest.incrementXP(increment: increment)
             }
+        
+        userXPData.level = userXPData.subLevels.getAverage()
         
         self.userXPData = userXPData
     }

@@ -12,4 +12,5 @@ struct ExerciseLibraryExerciseDownloaded: Codable, Identifiable {
     var name: String
     var videoURL: URL
     var description: String
+    var bodyArea: String
 }

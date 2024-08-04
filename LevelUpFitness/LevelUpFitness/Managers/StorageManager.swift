@@ -29,7 +29,7 @@ class StorageManager: ObservableObject {
                 let downloadToFileURL = try saveExerciseToFiles(exerciseName: exercise.name)
                 
                 DispatchQueue.main.async {
-                    self.exercises.append(ExerciseLibraryExerciseDownloaded(id: exercise.id, name: exercise.name, videoURL: URL(string: "Test")!, description: exercise.description))
+                    self.exercises.append(ExerciseLibraryExerciseDownloaded(id: exercise.id, name: exercise.name, videoURL: URL(string: "Test")!, description: exercise.description, bodyArea: exercise.bodyArea))
                     print("appending")
                     print(self.exercises.count)
                     print(self.exercises)

@@ -29,7 +29,7 @@ struct PagesHolderView: View {
                 case .profile:
                     Text("Workout")
                 case .library:
-                    LibraryView(storageManager: storageManager)
+                    LibraryView(storageManager: storageManager, xpManager: xpManager)
                         .preferredColorScheme(.light)
                 }
                 
