@@ -188,19 +188,29 @@ extension Sublevels {
     func getAverage() -> Int {
         return Int((mobility.level + strength.level + endurance.level) / 3)
     }
+    
+    func attribute(for key: String) -> XPAttribute? {
+        switch key.lowercased() {
+            case "strength":
+                return strength
+            case "endurance":
+                return endurance
+            case "mobility":
+                return mobility
+            default:
+                return nil
+            }
+    }
 }
 
 extension BodyAreas {
     func attribute(for key: String) -> XPAttribute? {
             switch key.lowercased() {
                 case "back":
-                    print("back")
                     return back
                 case "legs":
-                    print("legs")
                     return legs
                 case "chest":
-                    print("chest")
                     return chest
                 case "shoulders":
                     return shoulders
@@ -211,6 +221,7 @@ extension BodyAreas {
             }
     }
 }
+
 extension XPAttribute {
     mutating func incrementXP(increment: Int) {
         xp += increment

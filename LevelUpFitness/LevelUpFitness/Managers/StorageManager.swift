@@ -82,7 +82,7 @@ class StorageManager: ObservableObject {
             
             let exerciseDirectory = documentsDirectory.appendingPathComponent("Exercises", isDirectory: true)
             
-            if !FileManager.default.fileExists(atPath: exerciseDirectory.absoluteString) {
+            if !FileManager.default.fileExists(atPath: exerciseDirectory.path) {
                 try FileManager.default.createDirectory(at: exerciseDirectory, withIntermediateDirectories: true)
             }
             
@@ -107,7 +107,7 @@ class StorageManager: ObservableObject {
         }
     }
     
-    func getUserProgram(badgeManager: BadgeManager) async  {
+    func getUserProgram(badgeManager: BadgeManager) async {
         if let programName = await getUserProgramDBRepresentation() {
             do {
                 DispatchQueue.main.async {
@@ -115,38 +115,59 @@ class StorageManager: ObservableObject {
                 }
                 
                 let userID = try await Amplify.Auth.getCurrentUser().userId
+                guard let date = getPreviousMondayDate() else {
+                    self.retrievingProgram = false
+                    return
+                }
                 
-                    if let date = getPreviousMondayDate() {
-                        let downloadTask = Amplify.Storage.downloadData(key: "UserPrograms/\(userID)/\(programName)/(\(date)).json")
-                        
-                        let data = try await downloadTask.value
-                        
+                if !userProgramSaved(userID: userID, programName: programName, date: date) {
+                    let downloadTask = Amplify.Storage.downloadData(key: "UserPrograms/\(userID)/\(programName)/(\(date)).json")
+                    
+                    let data = try await downloadTask.value
+                    
+                    let decoder = JSONDecoder()
+                    let decodedData = try decoder.decode(Program.self, from: data)
+                    
+                    DispatchQueue.main.async {
+                        self.program = decodedData
+                        print(self.program)
+                    }
+
+                    try cacheUserProgram(userID: userID, programName: programName, date: date, program: decodedData)
+                    
+                    DispatchQueue.main.async {
+                        self.retrievingProgram = false
+                    }
+                } else {
+                    if let fileURL = getUserProgramFileURL(userID: userID, programName: programName, date: date) {
+                        let data = try Data(contentsOf: fileURL)
                         let decoder = JSONDecoder()
                         let decodedData = try decoder.decode(Program.self, from: data)
                         
                         DispatchQueue.main.async {
                             self.program = decodedData
-                            print(self.program)
+                            self.retrievingProgram = false
                         }
-                    DispatchQueue.main.async {
-                        self.retrievingProgram = false
+                    } else {
+                        DispatchQueue.main.async {
+                            self.retrievingProgram = false
+                        }
                     }
+                    print("Program loaded from local cache")
                 }
-                
             } catch {
-                print("user program retrieval error: \(error)")
+                print("User program retrieval error: \(error)")
                 DispatchQueue.main.async {
                     self.retrievingProgram = false
                 }
                 
                 await joinStandardProgram(programName: programName, badgeManager: badgeManager)
             }
-        }
-        else {
+        } else {
             await getStandardProgramNames()
         }
-
     }
+
     
     func getUserProgramDBRepresentation() async -> String? {
         do {
@@ -301,19 +322,15 @@ class StorageManager: ObservableObject {
         do {
             let userID = try await Amplify.Auth.getCurrentUser().userId
             
-            print(userID)
-            
-            if let program = self.program {
+            if let program = self.program, let date = getPreviousMondayDate() {
                 let jsonEncoder = JSONEncoder()
                 let jsonData = try jsonEncoder.encode(program)
                 let jsonString = String(data: jsonData, encoding: .utf8)
                 
-                let temporaryDirectory = FileManager.default.temporaryDirectory
-                let fileURL = temporaryDirectory.appendingPathComponent("\(userID).json")
+                try cacheUserProgram(userID: userID, programName: program.programName, date: date, program: program)
                 
-                try jsonData.write(to: fileURL)
-                if let date = getPreviousMondayDate() {
-                    let storageOperation = Amplify.Storage.uploadFile(key: "UserPrograms/\(userID)/\(program.programName)/(\(date)).json", local: fileURL)
+                if let url = getUserProgramFileURL(userID: userID, programName: program.programName, date: date) {
+                    let storageOperation = Amplify.Storage.uploadFile(key: "UserPrograms/\(userID)/\(program.programName)/(\(date)).json", local: url)
                             
                     let progress = try await storageOperation.value
                     completionHandler()
@@ -374,6 +391,52 @@ class StorageManager: ObservableObject {
         }
     }
     
+    func getUserProgramFileURL(userID: String, programName: String, date: String) -> URL? {
+        guard let documentsDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return nil }
+        return documentsDirectoryURL.appendingPathComponent("Programs/\(userID)/\(programName)/\(date).json")
+    }
+
+    func userProgramSaved(userID: String, programName: String, date: String) -> Bool {
+        print("checking save")
+        guard let fileURL = getUserProgramFileURL(userID: userID, programName: programName, date: date) else { return false }
+        
+        print("save \(FileManager.default.fileExists(atPath: fileURL.path))")
+        return FileManager.default.fileExists(atPath: fileURL.path)
+    }
+
+    func cacheUserProgram(userID: String, programName: String, date: String, program: Program) throws {
+        print("Attempting to cache")
+        guard let documentsDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+        let programsDirectoryURL = documentsDirectoryURL.appendingPathComponent("Programs")
+        let userProgramsDirectoryURL = programsDirectoryURL.appendingPathComponent(userID)
+        let specificUserProgramDirectory = userProgramsDirectoryURL.appendingPathComponent(programName)
+        let fileURL = specificUserProgramDirectory.appendingPathComponent("\(date).json")
+        
+        print("the path " + fileURL.path)
+        
+        do {
+            if !FileManager.default.fileExists(atPath: programsDirectoryURL.path) {
+                try FileManager.default.createDirectory(at: programsDirectoryURL, withIntermediateDirectories: true)
+            }
+            
+            if !FileManager.default.fileExists(atPath: userProgramsDirectoryURL.path) {
+                try FileManager.default.createDirectory(at: userProgramsDirectoryURL, withIntermediateDirectories: true)
+            }
+            
+            if !FileManager.default.fileExists(atPath: specificUserProgramDirectory.path) {
+                try FileManager.default.createDirectory(at: specificUserProgramDirectory, withIntermediateDirectories: true)
+            }
+            
+            let jsonEncoder = JSONEncoder()
+            let data = try jsonEncoder.encode(program)
+            
+            try data.write(to: fileURL, options: .atomic)
+        } catch {
+            print("Failed to cache: \(error)")
+            throw FileError.failed
+        }
+    }
+
 
 }
 
