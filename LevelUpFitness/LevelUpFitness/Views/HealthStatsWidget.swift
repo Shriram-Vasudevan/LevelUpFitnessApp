@@ -42,7 +42,7 @@ struct HealthStatsWidget: View {
                 
                 Spacer()
                 
-                HealthStatWidgetComponent(stat: stat2, text: text2, imageName: imageName2)
+                HealthStatWidgetComponent(stat: stat3, text: text3, imageName: imageName3)
             }
         }
         .padding()
