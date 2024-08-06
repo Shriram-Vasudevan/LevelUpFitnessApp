@@ -26,7 +26,8 @@ struct ProgramView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.white
+                Color(red: 240 / 255.0, green: 244 / 255.0, blue: 252 / 255.0)
+                    .ignoresSafeArea(.all)
                 
                 VStack (spacing: 0){
                     HStack {
@@ -135,7 +136,7 @@ struct ProgramView: View {
                                                 Rectangle()
                                                     .fill(.white)
                                                     .frame(width: squareWidth, height: squareWidth)
-                                                    .shadow(radius: 5)
+                                                 
                                                     .overlay (
                                                         Text("Message \nLuke")
                                                             .font(.custom("Sailec Bold", size: 25))
@@ -160,7 +161,7 @@ struct ProgramView: View {
                                                 Rectangle()
                                                     .fill(.white)
                                                     .frame(width: squareWidth, height: squareWidth)
-                                                    .shadow(radius: 5)
+                                             
                                                     .overlay (
                                                         Text("Your \nMetrics")
                                                             .font(.custom("Sailec Bold", size: 25))
@@ -241,11 +242,6 @@ struct ProgramView: View {
                                 }
                             }
                         }
-                        .background(
-                            Rectangle()
-                                .fill(.white)
-                        )
-                        .ignoresSafeArea(.all)
                     }
                 }
                 

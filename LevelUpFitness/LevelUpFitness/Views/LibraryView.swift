@@ -23,6 +23,9 @@ struct LibraryView: View {
     
     var body: some View {
         ZStack {
+            Color(red: 240 / 255.0, green: 244 / 255.0, blue: 252 / 255.0)
+                .ignoresSafeArea(.all)
+            
             ScrollView(.vertical) {
                 VStack (spacing: 0) {
                     HStack {

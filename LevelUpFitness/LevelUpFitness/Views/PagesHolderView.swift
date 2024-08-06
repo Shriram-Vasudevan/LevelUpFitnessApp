@@ -26,8 +26,6 @@ struct PagesHolderView: View {
                 case .program:
                     ProgramView(storageManager: storageManager, badgeManager: badgeManager, xpManager: xpManager)
                         .preferredColorScheme(.light)
-                case .profile:
-                    Text("Workout")
                 case .library:
                     LibraryView(storageManager: storageManager, xpManager: xpManager)
                         .preferredColorScheme(.light)
@@ -109,30 +107,7 @@ struct PagesHolderView: View {
                         
                     }
                     
-                    ZStack {
-                        VStack {
-                            Button(action: {
-                                pageType = .profile
-                            }, label: {
-                                VStack {
-                                    Image(pageType == .profile ? "ProfileBlue" : "ProfileGrey")
-                                        .resizable()
-                                        .frame(width: 30, height: 30)
-                                        .aspectRatio(contentMode:  .fill)
-                                        .foregroundColor(pageType == .profile ? .blue : .gray)
-                                    
-                                    
-                                    Text("Profile")
-                                        .font(.caption)
-                                        .foregroundColor(pageType == .profile ? .blue : .gray)
-                                    
-                                }
-                                .padding(.bottom)
-                            })
-                        }
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        
-                    }
+                    
                     
                 }
                 .padding(.horizontal)

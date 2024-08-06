@@ -103,6 +103,19 @@ extension Program {
         
         return totalWeight
     }
+    
+    func getMostFrequentMuscleGroups() -> [MuscleGroupStat] {
+        var muscleGroupCounts: [String: Int] = [:]
+        
+        for day in program {
+            for exercise in day.exercises {
+                muscleGroupCounts[exercise.area, default: 0] += 1
+            }
+        }
+        
+        let sortedMuscleGroups = muscleGroupCounts.sorted { $0.value > $1.value }
+        return sortedMuscleGroups.map { MuscleGroupStat(area: $0.key, count: $0.value) }
+    }
 }
 
 extension ProgramDay {
@@ -160,7 +173,7 @@ extension ProgramDay {
         
         for exercise in exercises {
             for set in exercise.data.sets {
-                totalWeight += set.weight
+                totalWeight += set.weight * set.reps
             }
         }
         

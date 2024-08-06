@@ -35,6 +35,12 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             try Amplify.add(plugin: AWSS3StoragePlugin())
             try Amplify.configure()
             print("Amplify configured successfully")
+            
+            #if targetEnvironment(simulator)
+                if let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.path {
+                    print("Documents Directory: \(documentsPath)")
+                }
+            #endif
         } catch {
             print("An error occurred setting up Amplify: \(error)")
         }

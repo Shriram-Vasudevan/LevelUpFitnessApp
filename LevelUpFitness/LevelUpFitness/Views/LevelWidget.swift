@@ -10,8 +10,36 @@ import SwiftUI
 struct LevelWidget: View {
     @State var userXPData: XPData
     
+    var openFullBreakdownView: () -> Void
+    var openLevelUpInfoView: () -> Void
+    
     var body: some View {
         VStack {
+            HStack {
+                Spacer()
+                
+                Button {
+                    openLevelUpInfoView()
+                } label: {
+                    Image(systemName: "info.circle")
+                        .foregroundColor(.black)
+                }
+                
+                Button {
+                    openFullBreakdownView()
+                } label: {
+                    Image(systemName: "arrow.right")
+                        .foregroundColor(.black)
+                        .padding(7)
+                        .background(
+                            RoundedRectangle(cornerRadius: 15)
+                                .fill(.gray.opacity(0.1))
+                        )
+                }
+
+            }
+            .padding(.horizontal)
+            .padding(.bottom, -15)
             HStack {
                 LevelCircularProgressBar(progress: 1.0, level: userXPData.level)
                     .frame(width: 60, height: 60)
@@ -54,7 +82,8 @@ struct LevelWidget: View {
         .background(
             RoundedRectangle(cornerRadius: 10)
                 .fill(.white)
-                .shadow(radius: 3)
+//                .fill(LinearGradient(colors: [Color(red: 67 / 255.0, green: 24 / 255.0, blue: 44 / 255.0), Color(red: 44 / 255.0, green: 67 / 255.0, blue: 24 / 255.0)], startPoint: .top, endPoint: .bottom))
+        
         )
 //        .padding()
        
@@ -62,5 +91,5 @@ struct LevelWidget: View {
 }
 
 #Preview {
-    LevelWidget(userXPData: XPData(userID: "", level: 2, subLevels: Sublevels(mobility: XPAttribute(xp: 0, level: 0, xpNeeded: 0), endurance: XPAttribute(xp: 0, level: 0, xpNeeded: 0), strength: XPAttribute(xp: 0, level: 0, xpNeeded: 0), bodyAreas: BodyAreas(back: XPAttribute(xp: 0, level: 0, xpNeeded: 0), legs: XPAttribute(xp: 0, level: 0, xpNeeded: 0), chest: XPAttribute(xp: 0, level: 0, xpNeeded: 0), shoulders: XPAttribute(xp: 0, level: 0, xpNeeded: 0), core: XPAttribute(xp: 0, level: 0, xpNeeded: 0)))))
+    LevelWidget(userXPData: XPData(userID: "", level: 2, subLevels: Sublevels(mobility: XPAttribute(xp: 0, level: 0, xpNeeded: 0), endurance: XPAttribute(xp: 0, level: 0, xpNeeded: 0), strength: XPAttribute(xp: 0, level: 0, xpNeeded: 0), bodyAreas: BodyAreas(back: XPAttribute(xp: 0, level: 0, xpNeeded: 0), legs: XPAttribute(xp: 0, level: 0, xpNeeded: 0), chest: XPAttribute(xp: 0, level: 0, xpNeeded: 0), shoulders: XPAttribute(xp: 0, level: 0, xpNeeded: 0), core: XPAttribute(xp: 0, level: 0, xpNeeded: 0)))), openFullBreakdownView: {}, openLevelUpInfoView: {})
 }

@@ -1,233 +1,214 @@
-//
-//  ProgramStatisticsView.swift
-//  LevelUpFitness
-//
-//  Created by Shriram Vasudevan on 6/8/24.
-//
-
 import SwiftUI
 import Charts
 
 struct ProgramStatisticsView: View {
     @State var program: Program
-    
     @Environment(\.dismiss) var dismiss
+    @State private var selectedTab = 0
     
     var body: some View {
-        ZStack {
-            Color.blue
-                .edgesIgnoringSafeArea(.all)
-            
-            VStack {
-                ZStack {
+        NavigationView {
+            ZStack {
+                Color(UIColor.systemBackground).edgesIgnoringSafeArea(.all)
+                
+                VStack(spacing: 0) {
                     HStack {
+                        Button(action: { dismiss() }) {
+                            Image(systemName: "chevron.left")
+                                .foregroundColor(.primary)
+                        }
+                        Spacer()
+                        Text("Program Insights")
+                            .font(.title2)
+                            .fontWeight(.bold)
+                        Spacer()
                         Button(action: {
-                            dismiss()
-                        }, label: {
-                            Image(systemName: "xmark")
-                                .foregroundColor(.white)
-                        })
-                        
-                        Text("Close")
-                            .foregroundColor(.white)
-                        
-                        Spacer()
-                        
-                        
-                    }
-                    .padding(.horizontal)
-                    
-                    HStack {
-                        Spacer()
-                        
-                        Text("Metrics")
-                            .bold()
-                            .foregroundColor(.white)
-                        
-                        Spacer()
-                    }
-              
-                }
-                
-                VStack {
-                    
-                    ScrollView(.vertical) {
-                        Group {
-                            HStack {
-                                ProgramCircularProgressBar(progress: program.getProgramCompletionPercentage())
-                                    .frame(width: 50, height: 50)
-                                    .padding(.vertical)
-                                    .padding(.trailing, 5)
-                                
-                                VStack(alignment: .leading) {
-                                    Text("Percentage of Program")
-                                        .font(.headline)
-                                    Text("completed this week")
-                                        .font(.subheadline)
-                                        .foregroundColor(.gray)
-                                }
-                                
-                                Spacer()
-                            }
-                            .padding(.horizontal)
                             
-                            HStack {
-                                Text("Here's the Breakdown")
-                                    .font(.headline)
-                                
-                                Spacer()
-                            }
-                            .padding(.horizontal)
-                            
-                            Chart {
-                                ForEach(program.getDayCompletionPercentages()) { kvp in
-                                    
-                                    BarMark(
-                                       x: .value("Date", kvp.day),
-                                       y: .value("Percentage", kvp.percentage)
-                                   )
-                                }
-                            }
-                            .chartYAxis {
-                                AxisMarks(position: .leading)
-                            }
-                            .chartYScale(domain: 0...100)
-                            .frame(height: 200)
-                            .padding(.horizontal)
+                        }) {
+                            Image(systemName: "info.circle")
+                                .foregroundColor(.primary)
                         }
-                        
-                        VStack (spacing: 0) {
-                            HStack {
-                                Text("Rest Metrics")
-                                    .font(.title3)
-                                    .bold()
-                                
-                                Spacer()
-                            }
-                            .padding()
-                            
-                            RestDistributionBar(restTime: program.getTotalRestTime(), workoutTime: program.getTotalWorkoutTime())
-                                .padding(.bottom)
-      
-                            HStack {
-                                VStack {
-                                    Text("\(String(format: "%.1f", program.getAverageRestDifferential())) s")
-                                    Text("Avg. Rest Differential")
-                                        .font(.headline)
-                                        .multilineTextAlignment(.center)
-                                }
-                                .frame(maxWidth: .infinity)
-
-                                Divider()
-
-                                VStack {
-                                    Text("\(String(format: "%.1f", program.getTotalWorkoutTime())) s")
-                                    Text("Total Workout Time")
-                                        .font(.headline)
-                                        .multilineTextAlignment(.center)
-                                }
-                                .frame(maxWidth: .infinity)
-
-                                Divider()
-
-                                VStack {
-                                    Text("\(String(format: "%.1f", program.getTotalRestTime())) s")
-                                    Text("Total Rest Time")
-                                        .font(.headline)
-                                        .multilineTextAlignment(.center)
-                                }
-                                .frame(maxWidth: .infinity)
-                            }
-                            
-
-                        }
-                        Spacer()
                     }
+                    .padding()
+                    .background(Color(UIColor.secondarySystemBackground))
+                    
+                    Picker("", selection: $selectedTab) {
+                        Text("Overview").tag(0)
+                        Text("Daily").tag(1)
+                        Text("Time").tag(2)
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+                    .padding([.horizontal, .top])
+                    
+                    
+                    selectedTabContent
                 }
-                .padding(.top, 7)
-                .background(
-                    Rectangle()
-                        .fill(.white)
-                )
-                .ignoresSafeArea(.all)
+            }
+            .navigationBarHidden(true)
+        }
+    }
+    
+
+    @ViewBuilder
+    private var selectedTabContent: some View {
+        ScrollView {
+            VStack(spacing: 20) {
+                switch selectedTab {
+                case 0: overviewTab
+                case 1: dailyTab
+                case 2: timeTab
+                default: EmptyView()
+                }
+            }
+            .padding()
+        }
+    }
+    
+    private var overviewTab: some View {
+        VStack(spacing: 20) {
+            HStack(spacing: 20) {
+                statCard(title: "Program Completion", value: "\(Int(program.getProgramCompletionPercentage()))%", icon: "chart.pie.fill", color: .blue)
+                statCard(title: "Total Weight", value: "\(program.getTotalWeightUsed()) kg", icon: "dumbbell.fill", color: .green)
             }
             
-            
-        }
-    }
-}
-
-struct ProgramCircularProgressBar: View {
-    var progress: Double
-
-    var body: some View {
-        ZStack {
-            Circle()
-                .stroke(lineWidth: 5.0)
-                .opacity(0.3)
-                .foregroundColor(Color.blue)
-
-            Circle()
-                .trim(from: 0.0, to: CGFloat(min(self.progress / 100, 1.0)))
-                .stroke(style: StrokeStyle(lineWidth: 5.0, lineCap: .round, lineJoin: .round))
-                .foregroundColor(Color.blue)
-                .rotationEffect(Angle(degrees: 270.0))
-                .animation(.linear)
-
-            Text(String(format: "%.0f%%", min(self.progress, 100.0)))
-                .font(.headline)
-                .bold()
-        }
-    }
-}
-
-struct RestDistributionBar: View {
-    var restTime: Double
-    var workoutTime: Double
-
-    var body: some View {
-        ZStack {
-            VStack (spacing: 0) {
+            VStack(alignment: .leading, spacing: 10) {
+                Text("Workout Time")
+                    .font(.headline)
                 HStack {
-                    Rectangle()
-                        .fill(.green)
-                        .frame(width: 10, height: 10)
-                    
-                    Text("Rest")
-                    
-                    Rectangle()
-                        .fill(.blue)
-                        .frame(width: 10, height: 10)
-                    
-                    Text("Workout")
-                    
-                    Spacer()
+                    Gauge(value: program.getTotalWorkoutTime(), in: 0...max(program.getTotalWorkoutTime() + program.getTotalRestTime(), 1)) {
+                        Text("Workout")
+                    } currentValueLabel: {
+                        Text(formatTime(program.getTotalWorkoutTime()))
+                    }
+                    .gaugeStyle(.accessoryLinear)
+                    .tint(.blue)
                 }
-                .padding(.horizontal)
-                .padding(.bottom, 10)
-                
-                GeometryReader { reader in
-                    RoundedRectangle(cornerRadius: 10)
-                                .fill(Color.blue)
-                                .frame(height: 40)
-                                .frame(maxWidth: reader.size.width)
-                                .padding(.horizontal)
-                    
-                    UnevenRoundedRectangle(cornerRadii:
-                            RectangleCornerRadii(topLeading: 10, bottomLeading: 10)
-                    )
-                    .fill(Color.green)
-                    .frame(height: 40)
-                    .frame(maxWidth: reader.size.width * restTime / (workoutTime + restTime))
-                    .padding(.horizontal)
-                }
-                .frame(height: 40)
             }
+            .padding()
+            .background(Color(UIColor.secondarySystemBackground))
+            .cornerRadius(12)
+            
+            VStack(alignment: .leading, spacing: 10) {
+                Text("Top Muscle Groups")
+                    .font(.headline)
+                
+                ForEach(program.getMostFrequentMuscleGroups().prefix(4), id: \.self) { stat in
+                    HStack {
+                        Text(stat.area)
+                        
+                        Spacer()
+                        
+                        Text("\(stat.count)")
+                    }
+                }
+            }
+            .padding()
+            .background(Color(UIColor.secondarySystemBackground))
+            .cornerRadius(12)
+            
+        }
+    }
+    
+    private var dailyTab: some View {
+        VStack(spacing: 20) {
+            Chart {
+                ForEach(program.getDayCompletionPercentages()) { day in
+                    LineMark(
+                        x: .value("Day", day.day),
+                        y: .value("Completion", day.percentage)
+                    )
+                    .foregroundStyle(Color.blue.gradient)
+                    .symbol(Circle().strokeBorder(lineWidth: 2))
+                }
+            }
+            .frame(height: 200)
+            .chartYAxis {
+                AxisMarks(position: .leading)
+            }
+            .chartYScale(domain: 0...100)
+            
+            Text("Daily Completion Percentage")
+                .font(.headline)
+            
+            ForEach(program.getDayCompletionPercentages()) { day in
+                HStack {
+                    Text(day.day)
+                    Spacer()
+                    Text("\(Int(day.percentage))%")
+                        .foregroundColor(.blue)
+                }
+                .padding(.vertical, 5)
+            }
+        }
+        .padding()
+        .background(Color(UIColor.secondarySystemBackground))
+        .cornerRadius(12)
+    }
+    
+    private var timeTab: some View {
+        VStack(spacing: 20) {
+            statCard(title: "Avg. Rest Differential", value: formatTime(program.getAverageRestDifferential()), icon: "stopwatch", color: .orange)
+            
+            VStack(alignment: .leading, spacing: 10) {
+                Text("Rest vs Workout Time")
+                    .font(.headline)
+                HStack {
+                    Gauge(value: program.getTotalRestTime(), in: 0...max(program.getTotalWorkoutTime() + program.getTotalRestTime(), 1)) {
+                        Text("Rest")
+                    } currentValueLabel: {
+                        Text(formatTime(program.getTotalRestTime()))
+                    }
+                    .gaugeStyle(.accessoryLinear)
+                    .tint(.green)
+                }
+            }
+            .padding()
+            .background(Color(UIColor.secondarySystemBackground))
+            .cornerRadius(12)
+            
+            HStack(spacing: 20) {
+                statCard(title: "Total Rest Time", value: formatTime(program.getTotalRestTime()), icon: "bed.double.fill", color: .green)
+                statCard(title: "Total Workout Time", value: formatTime(program.getTotalWorkoutTime()), icon: "figure.walk", color: .blue)
+            }
+        }
+    }
+    
+    private func statCard(title: String, value: String, icon: String, color: Color) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack {
+                Image(systemName: icon)
+                    .foregroundColor(color)
+                Text(title)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+            }
+            Text(value)
+                .font(.title2)
+                .fontWeight(.bold)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding()
+        .background(Color(UIColor.secondarySystemBackground))
+        .cornerRadius(12)
+    }
+    
 
+    private func formatTime(_ seconds: Double) -> String {
+        let hours = Int(seconds) / 3600
+        let minutes = (Int(seconds) % 3600) / 60
+        let remainingSeconds = Int(seconds) % 60
+        
+        if hours > 0 {
+            return "\(hours)h \(minutes)m"
+        } else if minutes > 0 {
+            return "\(minutes)m \(remainingSeconds)s"
+        } else {
+            return "\(remainingSeconds)s"
         }
     }
 }
 
+// Add this preview provider at the bottom of your file
 #Preview {
     ProgramStatisticsView(program: Program(program: [ProgramDay(day: "", workout: "", completed: false, exercises: [Exercise(name: "", sets: 1, reps: 1, rpe: "", rest: 1, area: "test", completed: false, data: ExerciseData(sets: [ExerciseDataSet(weight: 0, reps: 10, time: 0.0, rest: 0.0)]))])], programName: ""))
 }

@@ -64,7 +64,6 @@ struct TimeSpentWidget: View {
         .background(
             RoundedRectangle(cornerRadius: 7)
                 .fill(Color.white)
-                .shadow(radius: 3)
         )
         .padding()
         

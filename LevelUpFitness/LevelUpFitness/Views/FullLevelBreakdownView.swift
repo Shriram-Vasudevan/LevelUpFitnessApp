@@ -93,6 +93,7 @@ struct FullLevelBreakdownView: View {
                 }
             }
         }
+        .navigationBarBackButtonHidden()
     }
 }
 

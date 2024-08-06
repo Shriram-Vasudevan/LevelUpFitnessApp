@@ -53,7 +53,6 @@ struct ProgramListWidget: View {
         .background(
             RoundedRectangle(cornerRadius: 10)
                 .fill(.white)
-                .shadow(radius: 5)
         )
         .padding(.horizontal)
         .padding(.bottom)
