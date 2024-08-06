@@ -5,10 +5,10 @@ struct TimeSpentWidget: View {
     var program: Program
     
     var body: some View {
-        VStack (spacing: 10){
+        VStack (spacing: 15){
             HStack {
                 Text("Time Spent Exercising")
-                    .font(.custom("EtruscoNowCondensed Bold", size: 20))
+                    .font(.custom("EtruscoNow Medium", size: 17))
                     .foregroundColor(.black)
                 
                 Spacer()

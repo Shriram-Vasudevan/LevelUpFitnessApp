@@ -19,10 +19,12 @@
 		991F8FEE2C17852900A134A5 /* UserBadgeInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991F8FED2C17852900A134A5 /* UserBadgeInfo.swift */; };
 		991F8FF22C18D0A100A134A5 /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991F8FF12C18D0A100A134A5 /* LibraryView.swift */; };
 		991F8FF42C18DF9400A134A5 /* WeightProgressTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991F8FF32C18DF9400A134A5 /* WeightProgressTracker.swift */; };
+		991FB4402C628084006B4ACE /* HealthStatsWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991FB43F2C628084006B4ACE /* HealthStatsWidget.swift */; };
 		992F26A32C60079200F25400 /* ProgramSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992F26A22C60079200F25400 /* ProgramSummaryView.swift */; };
 		992F26A52C6032A100F25400 /* FullLevelBreakdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992F26A42C6032A100F25400 /* FullLevelBreakdownView.swift */; };
 		992F26A72C61225300F25400 /* LevelInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992F26A62C61225300F25400 /* LevelInfoView.swift */; };
 		992F26A92C61808000F25400 /* MuscleGroupStat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992F26A82C61808000F25400 /* MuscleGroupStat.swift */; };
+		992F26AB2C626FC300F25400 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992F26AA2C626FC300F25400 /* ProfileView.swift */; };
 		993871A62C3A1CBF00FFAF8A /* LevelWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993871A52C3A1CBF00FFAF8A /* LevelWidget.swift */; };
 		993871A82C3A242700FFAF8A /* LevelCircularProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993871A72C3A242700FFAF8A /* LevelCircularProgressView.swift */; };
 		993871AA2C3A25D600FFAF8A /* SubLevelCircularWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993871A92C3A25D600FFAF8A /* SubLevelCircularWidget.swift */; };
@@ -123,10 +125,13 @@
 		991F8FED2C17852900A134A5 /* UserBadgeInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserBadgeInfo.swift; sourceTree = "<group>"; };
 		991F8FF12C18D0A100A134A5 /* LibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryView.swift; sourceTree = "<group>"; };
 		991F8FF32C18DF9400A134A5 /* WeightProgressTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightProgressTracker.swift; sourceTree = "<group>"; };
+		991FB43F2C628084006B4ACE /* HealthStatsWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthStatsWidget.swift; sourceTree = "<group>"; };
 		992F26A22C60079200F25400 /* ProgramSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramSummaryView.swift; sourceTree = "<group>"; };
 		992F26A42C6032A100F25400 /* FullLevelBreakdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullLevelBreakdownView.swift; sourceTree = "<group>"; };
 		992F26A62C61225300F25400 /* LevelInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelInfoView.swift; sourceTree = "<group>"; };
 		992F26A82C61808000F25400 /* MuscleGroupStat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuscleGroupStat.swift; sourceTree = "<group>"; };
+		992F26AA2C626FC300F25400 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		992F26AC2C62747800F25400 /* LevelUpFitness.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LevelUpFitness.entitlements; sourceTree = "<group>"; };
 		993871A52C3A1CBF00FFAF8A /* LevelWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelWidget.swift; sourceTree = "<group>"; };
 		993871A72C3A242700FFAF8A /* LevelCircularProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelCircularProgressView.swift; sourceTree = "<group>"; };
 		993871A92C3A25D600FFAF8A /* SubLevelCircularWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubLevelCircularWidget.swift; sourceTree = "<group>"; };
@@ -302,6 +307,8 @@
 				992F26A22C60079200F25400 /* ProgramSummaryView.swift */,
 				992F26A42C6032A100F25400 /* FullLevelBreakdownView.swift */,
 				992F26A62C61225300F25400 /* LevelInfoView.swift */,
+				992F26AA2C626FC300F25400 /* ProfileView.swift */,
+				991FB43F2C628084006B4ACE /* HealthStatsWidget.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -378,6 +385,7 @@
 		99CFAAE42BEB075500EFF67E /* LevelUpFitness */ = {
 			isa = PBXGroup;
 			children = (
+				992F26AC2C62747800F25400 /* LevelUpFitness.entitlements */,
 				99EEC6162C32F3690044F906 /* PreferenceKeys */,
 				999F70682C096AA600B35A78 /* ViewModels */,
 				99A67F042BF4525B002DC3DC /* Info.plist */,
@@ -527,6 +535,7 @@
 				99A67F062BF456A7002DC3DC /* PagesHolderView.swift in Sources */,
 				995B94BD2C5986F3007AECF0 /* PastProgramsView.swift in Sources */,
 				994E7DBB2C026BFE00BAD9E0 /* SplashScreenView.swift in Sources */,
+				992F26AB2C626FC300F25400 /* ProfileView.swift in Sources */,
 				99CFAAE82BEB075500EFF67E /* ContentView.swift in Sources */,
 				991F8FDA2C13EB3900A134A5 /* HealthManager.swift in Sources */,
 				994E7DC32C02955300BAD9E0 /* Workout.swift in Sources */,
@@ -538,6 +547,7 @@
 				999F70782C0FA57500B35A78 /* CommunityView.swift in Sources */,
 				994E7DB32C02665300BAD9E0 /* KeyboardResponder.swift in Sources */,
 				994E7DC92C03DF5C00BAD9E0 /* ProgramView.swift in Sources */,
+				991FB4402C628084006B4ACE /* HealthStatsWidget.swift in Sources */,
 				999F706E2C0EB08600B35A78 /* MetricsView.swift in Sources */,
 				999F70652C06C80300B35A78 /* WorkoutView.swift in Sources */,
 				99EEC6132C3201780044F906 /* LevelUpBar.swift in Sources */,
@@ -724,6 +734,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = LevelUpFitness/LevelUpFitness.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"LevelUpFitness/Preview Content\"";
@@ -744,7 +755,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.LevelUpFitnessApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.LevelUpFitnessV1App;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -757,6 +768,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = LevelUpFitness/LevelUpFitness.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"LevelUpFitness/Preview Content\"";
@@ -777,7 +789,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.LevelUpFitnessApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.LevelUpFitnessV1App;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

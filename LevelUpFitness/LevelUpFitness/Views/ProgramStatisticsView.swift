@@ -14,7 +14,7 @@ struct ProgramStatisticsView: View {
                 VStack(spacing: 0) {
                     HStack {
                         Button(action: { dismiss() }) {
-                            Image(systemName: "chevron.left")
+                            Image(systemName: "xmark")
                                 .foregroundColor(.primary)
                         }
                         Spacer()
@@ -54,10 +54,10 @@ struct ProgramStatisticsView: View {
         ScrollView {
             VStack(spacing: 20) {
                 switch selectedTab {
-                case 0: overviewTab
-                case 1: dailyTab
-                case 2: timeTab
-                default: EmptyView()
+                    case 0: overviewTab
+                    case 1: dailyTab
+                    case 2: timeTab
+                    default: EmptyView()
                 }
             }
             .padding()

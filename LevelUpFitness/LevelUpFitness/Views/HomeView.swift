@@ -171,6 +171,20 @@ struct HomeView: View {
                         .scrollIndicators(.hidden)
                         .padding([.top, .horizontal])
                          
+                        if let steps = healthManager.todaysSteps, let calories = healthManager.todaysCalories, let distance = (healthManager.todaysDistance)  {
+                            HStack {
+                                Text("Today's Health Breakdown")
+                                    .font(.custom("EtruscoNow Medium", size: 25))
+                                    .bold()
+                                
+                                Spacer()
+                            }
+                            .padding(.top)
+                            
+                            HealthStatsWidget(stat1: steps, text1: "Steps", imageName1: "figure.walk", stat2: calories, text2: "Calories", imageName2: "flame.fill", stat3: distance, text3: "Distance", imageName3: "app.connected.to.app.below.fill")
+                        }
+
+                        
                         if let program = storageManager.program {
                             TimeSpentWidget(program: program)
                         }
@@ -187,43 +201,7 @@ struct HomeView: View {
                             
                         }
                         .padding()
-                        
-                        
-                        
-                        
-        //                        VStack(spacing: 0) {
-        //                            if let url = storageManager.dailyVideo {
-        //                                VideoPlayer(player: avPlayer)
-        //                                    .aspectRatio(contentMode: .fill)
-        //                                    .frame(height: 200)
-        //                                    .onAppear {
-        //                                        avPlayer = AVPlayer(url: url)
-        //                                    }
-        //                                    .cornerRadius(10)
-        //                                    .overlay (
-        //                                        RoundedRectangle(cornerRadius: 10)
-        //                                            .stroke(.black, lineWidth: 2)
-        //                                    )
-        //
-        //                            } else {
-        //                                Rectangle()
-        //                                    .fill(.white)
-        //                                    .stroke(.black, lineWidth: 2)
-        //                                    .frame(height: 200)
-        //                                    .overlay (
-        //                                        Image("GuyAtTheGym")
-        //                                            .resizable()
-        //                                            .aspectRatio(contentMode: .fill)
-        //                                            .padding(.horizontal)
-        //                                            .clipped()
-        //                                    )
-        //                                    .cornerRadius(10)
-        //                            }
-        //                        }
-        //                        .padding()
-        //                        .padding(.bottom, 5)
-        //                        .cornerRadius(15)
-        //
+
                         VStack (spacing: 0) {
                             HStack {
                                 VStack (alignment: .leading) {
@@ -246,10 +224,6 @@ struct HomeView: View {
                                 let squareWidth = (totalWidth - padding) / 2
                                 
                                 HStack(spacing: padding) {
-                                    if let steps = healthManager.todaysSteps {
-                                        StatisticsWidget(width: squareWidth, colorA: Color(red: 0 / 255, green: 149 / 255, blue: 246 / 255), colorB: Color(red: 0 / 255, green: 0 / 255, blue: 255 / 255), stat: steps, text: "Steps Today")
-                                    }
-                                    
                                     StatisticsWidget(width: squareWidth, colorA: Color(red: 152/255, green: 230/255, blue: 138/255), colorB: .green, stat: 180.5, text: "Current Weight")
                                 }
                             }
