@@ -180,6 +180,7 @@ struct HomeView: View {
                                 Spacer()
                             }
                             .padding(.top)
+                            .padding(.horizontal)
                             
                             HealthStatsWidget(stat1: steps, text1: "Steps", imageName1: "figure.walk", stat2: calories, text2: "Calories", imageName2: "flame.fill", stat3: distance, text3: "Distance", imageName3: "app.connected.to.app.below.fill")
                         }
