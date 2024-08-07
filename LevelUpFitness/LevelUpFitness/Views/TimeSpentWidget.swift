@@ -5,71 +5,66 @@ struct TimeSpentWidget: View {
     var program: Program
     
     var body: some View {
-        VStack (spacing: 15){
+        VStack(spacing: 0) {
             HStack {
-                Text("Time Spent Exercising")
-                    .font(.custom("EtruscoNow Medium", size: 17))
-                    .foregroundColor(.black)
+                Image(systemName: "timer")
+                    .foregroundColor(.primary)
+                
+                Text("Exercise Time")
+                    .font(.headline)
+                    .foregroundColor(.primary)
                 
                 Spacer()
                 
-                Button {
-                    // Add action here
-                } label: {
+                Button(action: {
+           
+                }) {
                     HStack {
-                        Text("View more Analytics")
-                            .font(.caption)
+                        Text("More")
+                            .font(.subheadline)
                             .foregroundColor(.black)
                         
                         Image(systemName: "chevron.right")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 5)
                             .foregroundColor(.black)
                     }
                 }
             }
+            .padding(.bottom, 5)
             
-            GeometryReader { geometry in
-                HStack {
-                    StatisticsWidget(width: geometry.size.width / 3, colorA: .blue, colorB: .cyan, stat: program.getAverageWorkoutTime() / 60, text: "min. average")
-                    
-                    Chart {
-                        ForEach(program.program, id: \.self) { programDay in
-                            LineMark (
-                                x: .value("Day", String(programDay.day.prefix(3))),
-                                y: .value("Time", programDay.getTotalWorkoutTime() / 60)
-                            )
-                            .foregroundStyle(.blue)
-                            .lineStyle(StrokeStyle(lineWidth: 3, lineCap: .round, lineJoin: .round))
-                            .symbol(Circle().strokeBorder(lineWidth: 2))
-                        }
-                    }
-                    .chartXAxis {
-                        AxisMarks(preset: .aligned, position: .bottom, values: .automatic)
-                    }
-                    .chartYAxis {
-                        AxisMarks(preset: .aligned, position: .leading, values: .automatic)
-                    }
-                    .chartYScale(domain: 0...60)
-                    .frame(height: geometry.size.width / 3)
-         
+            Text(String(format: "%.1f", program.getAverageWorkoutTime() / 60))
+                .font(.system(size: 36, weight: .bold, design: .rounded))
+                + Text(" min")
+                .font(.system(size: 20, weight: .medium, design: .rounded))
+            
+            Text("Average")
+                .foregroundColor(.gray)
+                .padding(.bottom, 10)
+            
+            Chart {
+                ForEach(program.program, id: \.self) { programDay in
+                    LineMark(
+                        x: .value("Day", String(programDay.day.prefix(3))),
+                        y: .value("Time", programDay.getTotalWorkoutTime() / 60)
+                    )
+                    .foregroundStyle(Color.blue.gradient)
+                    .lineStyle(StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round))
                 }
             }
-            .frame(height: UIScreen.main.bounds.height / 8)
-            
+            .chartXAxis(.hidden)
+            .chartYAxis(.hidden)
+            .chartYScale(domain: 0...60)
+            .frame(height: 70) // Reduced height from 100 to 70
+            .padding(.horizontal)
         }
-        .padding(.top, 5)
-        .padding([.horizontal, .bottom])
+        .padding()
         .background(
-            RoundedRectangle(cornerRadius: 7)
-                .fill(Color.white)
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color(UIColor.systemBackground))
+                .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 5)
         )
         .padding()
-        
     }
 }
-
 
 #Preview {
     TimeSpentWidget(program: Program(program: [ProgramDay(day: "Monday", workout: "", completed: false, exercises: [Exercise(name: "", sets: 2, reps: 5, rpe: "", rest: 3, area: "test", completed: false, data: ExerciseData(sets: [ExerciseDataSet(weight: 0, reps: 1, time: 0.0, rest: 0.0)]))]),

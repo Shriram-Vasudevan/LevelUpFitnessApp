@@ -171,6 +171,12 @@ struct HomeView: View {
                         .scrollIndicators(.hidden)
                         .padding([.top, .horizontal])
                          
+                        RecommendedExerciseWidget(exercise: Exercise(name: "Pull-ups", sets: 5, reps: 5, rpe: "", rest: 5, area: "Back", completed: false, data: ExerciseData(sets: [ExerciseDataSet(weight: 5, reps: 5, time: 5.0, rest: 5.0)])))
+                        
+                        if let program = storageManager.program {
+                            TimeSpentWidget(program: program)
+                        }
+                        
                         if let steps = healthManager.todaysSteps, let calories = healthManager.todaysCalories, let distance = (healthManager.todaysDistance)  {
                             HStack {
                                 Text("Today's Health Breakdown")
@@ -185,10 +191,6 @@ struct HomeView: View {
                             HealthStatsWidget(stat1: steps, text1: "Steps", imageName1: "figure.walk", stat2: calories, text2: "Calories", imageName2: "flame.fill", stat3: distance, text3: "Distance", imageName3: "app.connected.to.app.below.fill")
                         }
 
-                        
-                        if let program = storageManager.program {
-                            TimeSpentWidget(program: program)
-                        }
                         
                         VStack (spacing: 10) {
                             HStack {
