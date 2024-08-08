@@ -9,9 +9,11 @@ import SwiftUI
 
 struct ExerciseLibraryExerciseWidget: View {
     var exerciseLibraryExercise: ExerciseLibraryExerciseDownloaded
+    var userXPData: XPData
     
     var body: some View {
         HStack {
+            
             Image("GuyAtTheGym")
                 .resizable()
                 .aspectRatio(contentMode: .fill)
@@ -38,5 +40,5 @@ struct ExerciseLibraryExerciseWidget: View {
 }
 
 #Preview {
-    ExerciseLibraryExerciseWidget(exerciseLibraryExercise: ExerciseLibraryExerciseDownloaded(id: "Test", name: "Push-up", videoURL: URL(string: "Test")!, description: "Develops upper body and back muscles · Advanced", bodyArea: ""))
+    ExerciseLibraryExerciseWidget(exerciseLibraryExercise: ExerciseLibraryExerciseDownloaded(id: "Test", name: "Push-up", videoURL: URL(string: "Test")!, description: "Develops upper body and back muscles · Advanced", bodyArea: "", level: 3), userXPData: XPData(userID: "", level: 2, subLevels: Sublevels(mobility: XPAttribute(xp: 0, level: 0, xpNeeded: 0), endurance: XPAttribute(xp: 0, level: 0, xpNeeded: 0), strength: XPAttribute(xp: 0, level: 0, xpNeeded: 0), bodyAreas: BodyAreas(back: XPAttribute(xp: 0, level: 0, xpNeeded: 0), legs: XPAttribute(xp: 0, level: 0, xpNeeded: 0), chest: XPAttribute(xp: 0, level: 0, xpNeeded: 0), shoulders: XPAttribute(xp: 0, level: 0, xpNeeded: 0), core: XPAttribute(xp: 0, level: 0, xpNeeded: 0)))))
 }

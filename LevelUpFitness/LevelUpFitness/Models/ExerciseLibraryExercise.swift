@@ -13,6 +13,7 @@ struct ExerciseLibraryExercise: Codable {
     var name: String
     var description: String
     var bodyArea: String
+    var level: Int
     
     enum CodingKeys: String, CodingKey {
         case id = "ID"
@@ -20,5 +21,6 @@ struct ExerciseLibraryExercise: Codable {
         case cdnURL = "CDNURL"
         case description = "Description"
         case bodyArea = "BodyArea"
+        case level = "Level"
     }
 }

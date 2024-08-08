@@ -23,40 +23,24 @@ class StorageManager: ObservableObject {
             let exercises = try await getExercises()
             
             for exercise in exercises {
-                guard let cdnURL = URL(string: exercise.cdnURL) else { return }
+                let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+                let exerciseDirectory = documentsDirectory.appendingPathComponent("Exercises", isDirectory: true)
+                let fileURL = exerciseDirectory.appendingPathComponent("\(exercise.name)-\(exercise.id).mp4")
                 
-                print("the cdn url \(cdnURL)")
-                let downloadToFileURL = try saveExerciseToFiles(exerciseName: exercise.name)
-                
-                DispatchQueue.main.async {
-                    self.exercises.append(ExerciseLibraryExerciseDownloaded(id: exercise.id, name: exercise.name, videoURL: URL(string: "Test")!, description: exercise.description, bodyArea: exercise.bodyArea))
-                    print("appending")
-                    print(self.exercises.count)
-                    print(self.exercises)
+                if !FileManager.default.fileExists(atPath: fileURL.path) {
+                    guard let cdnURL = URL(string: exercise.cdnURL) else { return }
+                    
+                    print("the cdn url \(cdnURL)")
+                    try saveExerciseToFile(exercise: exercise, cdnURL: cdnURL)
                 }
-//                let task = URLSession.shared.downloadTask(with: cdnURL) { (location, response, error) in
-//                    do {
-//                        guard let location = location, error == nil else {
-//                            print("Failed to download video: \(error?.localizedDescription ?? "Unknown error")")
-//                            return
-//                        }
-//                        
-//                        print("the response \(response)")
-//                        
-//                        try FileManager.default.moveItem(at: location, to: downloadToFileURL)
-//                        
-//                        DispatchQueue.main.async {
-//                            self.exercises.append(ExerciseLibraryExerciseDownloaded(id: exercise.id, name: exercise.name, videoURL: downloadToFileURL))
-//                            print("appending")
-//                            print(self.exercises.count)
-//                            print(self.exercises)
-//                        }
-//                    }
-//                    catch {
-//                        print(error.localizedDescription)
-//                    }
-//                }
-//                task.resume()
+                else {
+                    DispatchQueue.main.async {
+                        self.exercises.append(ExerciseLibraryExerciseDownloaded(id: exercise.id, name: exercise.name, videoURL: fileURL, description: exercise.description, bodyArea: exercise.bodyArea, level: exercise.level))
+                        print("Appending")
+                        print("Number of exercises: \(self.exercises.count)")
+                        print("Exercises: \(self.exercises)")
+                    }
+                }
             }
         } catch {
             print(error.localizedDescription)
@@ -76,36 +60,6 @@ class StorageManager: ObservableObject {
 //        }
     }
     
-    func saveExerciseToFiles(exerciseName: String) throws -> URL {
-        do {
-            let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-            
-            let exerciseDirectory = documentsDirectory.appendingPathComponent("Exercises", isDirectory: true)
-            
-            if !FileManager.default.fileExists(atPath: exerciseDirectory.path) {
-                try FileManager.default.createDirectory(at: exerciseDirectory, withIntermediateDirectories: true)
-            }
-            
-            let fileURL = exerciseDirectory.appendingPathComponent("\(exerciseName)-\(UUID().uuidString).mp4")
-            return fileURL
-        } catch {
-            print(error.localizedDescription)
-            throw FileError.failed
-        }
-    }
-    
-    func saveVideoLocally(at path: String, video: Data) -> URL? {
-        let temporaryDirectory = FileManager.default.temporaryDirectory
-        let videoURL = temporaryDirectory.appendingPathComponent(path).appendingPathExtension("mp4")
-        
-        do {
-            try video.write(to: videoURL, options: .atomic)
-            return videoURL
-        } catch {
-            print(error)
-            return nil
-        }
-    }
     
     func getUserProgram(badgeManager: BadgeManager) async {
         if let programName = await getUserProgramDBRepresentation() {
@@ -436,7 +390,59 @@ class StorageManager: ObservableObject {
             throw FileError.failed
         }
     }
+    
+    func saveExerciseToFile(exercise: ExerciseLibraryExercise, cdnURL: URL) throws {
+        do {
+            let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            let exerciseDirectory = documentsDirectory.appendingPathComponent("Exercises", isDirectory: true)
+            let fileURL = exerciseDirectory.appendingPathComponent("\(exercise.name)-\(exercise.id).mp4")
+            
+            if !FileManager.default.fileExists(atPath: exerciseDirectory.path) {
+                try FileManager.default.createDirectory(at: exerciseDirectory, withIntermediateDirectories: true)
+            }
+            
+            
+            let task = URLSession.shared.downloadTask(with: cdnURL) { (location, response, error) in
+                guard let location = location, error == nil else {
+                    print("Failed to download video: \(error?.localizedDescription ?? "Unknown error")")
+                    return
+                }
+                
+                print("The response: \(String(describing: response))")
+                
+                do {
+                    try FileManager.default.moveItem(at: location, to: fileURL)
+                    DispatchQueue.main.async {
+                        self.exercises.append(ExerciseLibraryExerciseDownloaded(id: exercise.id, name: exercise.name, videoURL: fileURL, description: exercise.description, bodyArea: exercise.bodyArea, level: exercise.level))
+                        print("Appending")
+                        print("Number of exercises: \(self.exercises.count)")
+                        print("Exercises: \(self.exercises)")
+                    }
+                } catch {
+                    print("File move error: \(error.localizedDescription)")
+                }
+            }
 
+            task.resume()
+
+        } catch {
+            print(error.localizedDescription)
+            throw FileError.failed
+        }
+    }
+    
+    func saveVideoLocally(at path: String, video: Data) -> URL? {
+        let temporaryDirectory = FileManager.default.temporaryDirectory
+        let videoURL = temporaryDirectory.appendingPathComponent(path).appendingPathExtension("mp4")
+        
+        do {
+            try video.write(to: videoURL, options: .atomic)
+            return videoURL
+        } catch {
+            print(error)
+            return nil
+        }
+    }
 
 }
 

@@ -7,10 +7,11 @@
 
 import Foundation
 
-struct ExerciseLibraryExerciseDownloaded: Codable, Identifiable {
+struct ExerciseLibraryExerciseDownloaded: Codable, Identifiable, Hashable {
     var id: String
     var name: String
     var videoURL: URL
     var description: String
     var bodyArea: String
+    var level: Int
 }

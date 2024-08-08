@@ -10,6 +10,7 @@ import AVFoundation
 import AVKit
 
 struct FullPageVideoView: View {
+    
     @State var videoURL: URL
     
     @State var avPlayer = AVPlayer()

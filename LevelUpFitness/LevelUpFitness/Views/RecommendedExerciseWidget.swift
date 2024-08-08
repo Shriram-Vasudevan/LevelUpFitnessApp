@@ -61,7 +61,7 @@ struct RecommendedExerciseWidget: View {
         )
         .cornerRadius(10)
         .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 5)
-        .padding()
+
     }
 }
 

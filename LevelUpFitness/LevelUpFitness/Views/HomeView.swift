@@ -172,9 +172,11 @@ struct HomeView: View {
                         .padding([.top, .horizontal])
                          
                         RecommendedExerciseWidget(exercise: Exercise(name: "Pull-ups", sets: 5, reps: 5, rpe: "", rest: 5, area: "Back", completed: false, data: ExerciseData(sets: [ExerciseDataSet(weight: 5, reps: 5, time: 5.0, rest: 5.0)])))
+                            .padding([.top, .horizontal])
                         
                         if let program = storageManager.program {
                             TimeSpentWidget(program: program)
+                                .padding([.top, .horizontal])
                         }
                         
                         if let steps = healthManager.todaysSteps, let calories = healthManager.todaysCalories, let distance = (healthManager.todaysDistance)  {
