@@ -51,7 +51,8 @@ struct RecommendedExerciseWidget: View {
             }
             .padding(.top, -20)
         }
-        .padding(20)
+        .padding([.horizontal, .top], 20)
+        .padding(.bottom, 5)
         .background(
             LinearGradient(gradient: Gradient(colors: [
                 Color(red: 0.4, green: 0.2, blue: 0.7),
