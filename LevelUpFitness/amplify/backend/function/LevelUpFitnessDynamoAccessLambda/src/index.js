@@ -149,6 +149,8 @@ exports.handler = async (event) => {
             Item: {
                 UserID: UserID,
                 Level: 1,
+                XP: 0,
+                XPNeeded: 50,
                 Sublevels: {
                     Endurance: {
                         Level: 1,

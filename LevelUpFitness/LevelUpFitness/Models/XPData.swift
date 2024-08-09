@@ -10,11 +10,15 @@ import Foundation
 struct XPData: Codable {
     var userID: String
     var level: Int
+    var xp: Int
+    var xpNeeded: Int
     var subLevels: Sublevels
     
     enum CodingKeys: String, CodingKey {
         case userID = "UserID"
         case level = "Level"
+        case xp = "XP"
+        case xpNeeded = "XPNeeded"
         case subLevels = "Sublevels"
     }
 }

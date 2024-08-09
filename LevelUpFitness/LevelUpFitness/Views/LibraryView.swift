@@ -92,10 +92,10 @@ struct LibraryView: View {
                                             .padding(.horizontal)
                                         } else {
                                             ForEach(filteredExercises) { exercise in
-                                                ExerciseLibraryExerciseWidget(exerciseLibraryExercise: exercise, userXPData: userXPData)
-                                                    .onTapGesture {
-                                                        self.selectedExercise = exercise
-                                                    }
+                                                ExerciseLibraryExerciseWidget(exerciseLibraryExercise: exercise, userXPData: userXPData, exerciseSelected: {
+                                                    self.selectedExercise = exercise
+                                                })
+                                                    
                                                     .padding(.bottom)
                                             }
                                         }
