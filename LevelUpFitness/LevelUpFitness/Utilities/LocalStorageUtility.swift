@@ -8,6 +8,44 @@
 import Foundation
 
 class LocalStorageUtility {
+    static func appendDataToDocumentsDirectoryFile(at path: String, data: Data) {
+        guard let documentsDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+        let fileURL = documentsDirectoryURL.appendingPathComponent(path)
+        
+        
+        guard let newlineData = "\n".data(using: .utf8) else {
+            print("Failed to encode the newline character as UTF-8 data.")
+            return
+        }
+        
+        do {
+            if let fileHandle = FileHandle(forWritingAtPath: fileURL.path) {
+                try fileHandle.seekToEnd()
+                fileHandle.write(data)
+                fileHandle.write(newlineData)
+                try fileHandle.close()
+            } else {
+                try data.write(to: fileURL)
+                try "\n".write(to: fileURL, atomically: true, encoding: .utf8)
+            }
+        } catch {
+            print(error)
+        }
+    }
+    
+    static func readDocumentsDirectoryJSONStringFile(at path: String) -> String? {
+        guard let documentsDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return nil }
+        let fileURL = documentsDirectoryURL.appendingPathComponent(path)
+        
+        do {
+            let fileContent = try String(contentsOf: fileURL, encoding: .utf8)
+            return fileContent
+        } catch {
+            print(error)
+            return nil
+        }
+    }
+    
     static func temporarilySaveStandardProgram(programName: String, data: Data, completionHandler: @escaping (Bool, URL?) async -> Void) async {
         let temporaryDirectory = FileManager.default.temporaryDirectory
         let fileURL = temporaryDirectory.appendingPathComponent(programName).appendingPathExtension("json")

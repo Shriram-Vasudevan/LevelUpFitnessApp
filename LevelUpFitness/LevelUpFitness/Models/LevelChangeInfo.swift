@@ -12,5 +12,5 @@ struct LevelChangeInfo: Codable {
     var keyword: String
     var description: String
     var change: Int
-    var timestamp: Date
+    var timestamp: String
 }

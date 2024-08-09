@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 extension Array where Element == Program {
-    func checkWeightTend() -> Int {
+    func getWeightTrendContribution() -> Int {
         var totalTrend = 0
         var totalExerciseCount = 0
 
@@ -52,9 +52,49 @@ extension Array where Element == Program {
         guard totalExerciseCount > 0 else { return 0 }
 
         let maxTrendValue = totalExerciseCount * 2
-        let normalizedTrend = Int((Double(totalTrend) / Double(maxTrendValue)) * 20)
+        let normalizedTrend = (Double(totalTrend) / Double(maxTrendValue)) * 20 - 10
         
-        return normalizedTrend
+        return Swift.max(-10, Swift.min(10, Int(normalizedTrend)))
+    }
+    
+    func getRestDifferentialContribution() -> Int {
+        var totalDifferential = 0
+        var totalExerciseCount = 0
+        
+        var restDifferentials: [String: [Double]] = [:]
+        
+        for program in self {
+            for day in program.program {
+                for exercise in day.exercises {
+                    let exerciseName = exercise.name
+                    let prescribedRest = Double(exercise.rest)
+                    let actualRestAverage = exercise.data.sets.reduce(0.0) { $0 + $1.rest } / Double(exercise.data.sets.count)
+                    
+                    let differential = abs(prescribedRest - actualRestAverage)
+                    
+                    if restDifferentials[exerciseName] == nil {
+                        restDifferentials[exerciseName] = []
+                    }
+                    restDifferentials[exerciseName]?.append(differential)
+                }
+            }
+        }
+        
+        for (_, differentials) in restDifferentials {
+            guard differentials.count > 0 else { continue }
+            
+            let averageDifferential = differentials.reduce(0.0, +) / Double(differentials.count)
+            totalDifferential += Int(averageDifferential)
+            totalExerciseCount += 1
+        }
+        
+        guard totalExerciseCount > 0 else { return 0 }
+        
+        let averageDifferential = Double(totalDifferential) / Double(totalExerciseCount)
+        
+        let normalizedTrend = 10 - (averageDifferential / 10) * 20
+
+        return Swift.max(-10, Swift.min(10, Int(normalizedTrend)))
     }
 }
 
