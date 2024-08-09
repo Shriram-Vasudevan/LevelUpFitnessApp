@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PagesHolderView: View {
-    @StateObject var storageManager = StorageManager()
+    @StateObject var programManager = ProgramManager()
     @StateObject var databaseManager = DatabaseManager()
     @StateObject var healthManager = HealthManager()
     @StateObject var badgeManager = BadgeManager()
@@ -21,13 +21,13 @@ struct PagesHolderView: View {
             VStack {
                 switch pageType {
                 case .home:
-                    HomeView(storageManager: storageManager, databaseManager: databaseManager, healthManager: healthManager, xpManager: xpManager, pageType: $pageType)
+                    HomeView(programManager: programManager, databaseManager: databaseManager, healthManager: healthManager, xpManager: xpManager, pageType: $pageType)
                         .preferredColorScheme(.light)
                 case .program:
-                    ProgramView(storageManager: storageManager, badgeManager: badgeManager, xpManager: xpManager)
+                    ProgramView(programManager: programManager, badgeManager: badgeManager, xpManager: xpManager)
                         .preferredColorScheme(.light)
                 case .library:
-                    LibraryView(storageManager: storageManager, xpManager: xpManager)
+                    LibraryView(programManager: programManager, xpManager: xpManager)
                         .preferredColorScheme(.light)
                 }
                 
@@ -120,11 +120,10 @@ struct PagesHolderView: View {
                     healthManager.getInitialHealthData()
                 }
                     
-                async let dailyVideo: ()? = storageManager.dailyVideo == nil ? storageManager.downloadDailyVideo() : nil
-                async let userProgram: ()? = storageManager.program == nil ? storageManager.getUserProgram(badgeManager: badgeManager) : nil
-                async let exercises: ()? = storageManager.downloadExercises() 
+                async let userProgram: ()? = programManager.program == nil ? programManager.getUserProgram(badgeManager: badgeManager) : nil
+                async let exercises: ()? = programManager.downloadExercises()
                 
-                _ = await (dailyVideo, userProgram, exercises)
+                _ = await (userProgram, exercises)
             }
         }
         .ignoresSafeArea(edges: .bottom)

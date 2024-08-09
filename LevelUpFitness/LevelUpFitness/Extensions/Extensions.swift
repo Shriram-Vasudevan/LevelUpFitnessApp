@@ -8,6 +8,57 @@
 import Foundation
 import SwiftUI
 
+extension Array where Element == Program {
+    func checkWeightTend() -> Int {
+        var totalTrend = 0
+        var totalExerciseCount = 0
+
+        var exerciseAverages: [String: [Double]] = [:]
+
+        for program in self {
+            for day in program.program {
+                for exercise in day.exercises {
+                    let exerciseName = exercise.name
+                    let totalWeight = exercise.data.sets.reduce(0) { $0 + $1.weight }
+                    let averageWeight = Double(totalWeight) / Double(exercise.data.sets.count)
+                    
+                    if exerciseAverages[exerciseName] == nil {
+                        exerciseAverages[exerciseName] = []
+                    }
+                    exerciseAverages[exerciseName]?.append(averageWeight)
+                }
+            }
+        }
+
+        for (_, averages) in exerciseAverages {
+            guard averages.count > 1 else { continue }
+            
+            var previousAverage = averages.first!
+            var exerciseTrend = 0
+            
+            for currentAverage in averages.dropFirst() {
+                if currentAverage > previousAverage {
+                    exerciseTrend += 1
+                } else if currentAverage < previousAverage {
+                    exerciseTrend -= 1
+                }
+                previousAverage = currentAverage
+            }
+            
+            totalTrend += exerciseTrend
+            totalExerciseCount += (averages.count - 1)
+        }
+        
+        guard totalExerciseCount > 0 else { return 0 }
+
+        let maxTrendValue = totalExerciseCount * 2
+        let normalizedTrend = Int((Double(totalTrend) / Double(maxTrendValue)) * 20)
+        
+        return normalizedTrend
+    }
+}
+
+
 extension Program {
     func getProgramCompletionPercentage() -> Double {
         let totalDays = program.count

@@ -16,16 +16,16 @@ class WorkoutManager: ObservableObject {
     @Published var currentSetIndex: Int = 0
     @Published var onLastSet: Bool = false
 
-    var storageManager: StorageManager
+    var programManager: ProgramManager
     var xpManager: XPManager
     
-    init(storageManager: StorageManager, xpManager: XPManager) {
-        self.storageManager = storageManager
+    init(programManager: ProgramManager, xpManager: XPManager) {
+        self.programManager = programManager
         self.xpManager = xpManager
     }
    
     func initializeExerciseData() {
-        if let todaysProgram = storageManager.program?.program.first(where: { $0.day == getCurrentWeekday() }) {
+        if let todaysProgram = programManager.program?.program.first(where: { $0.day == getCurrentWeekday() }) {
             self.currentExercises = todaysProgram.exercises
             
             if currentExerciseIndex == 0 {
@@ -67,7 +67,7 @@ class WorkoutManager: ObservableObject {
             currentSetIndex = 0
             onLastSet = false
             
-            if let programArray = storageManager.program?.program,
+            if let programArray = programManager.program?.program,
                let programIndex = programArray.firstIndex(where: { $0.day == getCurrentWeekday() }) {
                 var todaysProgram = programArray[programIndex]
                 todaysProgram.exercises[currentExerciseIndex].completed = true
@@ -76,7 +76,7 @@ class WorkoutManager: ObservableObject {
                 print(todaysProgram.exercises[currentExerciseIndex].name)
                 print(todaysProgram.exercises[currentExerciseIndex].completed)
                 
-                storageManager.program?.program[programIndex] = todaysProgram
+                programManager.program?.program[programIndex] = todaysProgram
                 
                 switch todaysProgram.exercises[currentExerciseIndex].area {
                     case "Legs":

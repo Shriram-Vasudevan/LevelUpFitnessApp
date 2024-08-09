@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ProgramListWidget: View {
-    @ObservedObject var storageManager: StorageManager
+    @ObservedObject var programManager: ProgramManager
     
     @Binding var navigateToWorkoutView: Bool
     
@@ -27,7 +27,7 @@ struct ProgramListWidget: View {
                 .padding(.bottom, 5)
             
             ZStack {
-                if let todaysProgram = storageManager.program?.program.first(where: { $0.day == getCurrentWeekday() }) {
+                if let todaysProgram = programManager.program?.program.first(where: { $0.day == getCurrentWeekday() }) {
                     VStack(spacing: 5) {
                         ForEach(todaysProgram.exercises, id: \.name) { exercise in
                             HStack {
@@ -75,5 +75,5 @@ struct ProgramListWidget: View {
 }
 
 #Preview {
-    ProgramListWidget(storageManager: StorageManager(), navigateToWorkoutView: .constant(false))
+    ProgramListWidget(programManager: ProgramManager(), navigateToWorkoutView: .constant(false))
 }

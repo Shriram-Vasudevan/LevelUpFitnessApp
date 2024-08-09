@@ -9,7 +9,7 @@ import SwiftUI
 
 struct WorkoutView: View {
     @StateObject private var workoutManager: WorkoutManager
-    @ObservedObject private var storageManager: StorageManager
+    @ObservedObject private var programManager: ProgramManager
     @ObservedObject private var xpManager: XPManager
     
     @Environment(\.dismiss) var dismiss
@@ -17,9 +17,9 @@ struct WorkoutView: View {
     @State private var setCompleted: () -> Void = {}
     @State private var lastSetCompleted: () -> Void = {}
     
-    init(storageManager: StorageManager, xpManager: XPManager) {
-        _workoutManager = StateObject(wrappedValue: WorkoutManager(storageManager: storageManager, xpManager: xpManager))
-        self.storageManager = storageManager
+    init(programManager: ProgramManager, xpManager: XPManager) {
+        _workoutManager = StateObject(wrappedValue: WorkoutManager(programManager: programManager, xpManager: xpManager))
+        self.programManager = programManager
         self.xpManager = xpManager
     }
     
@@ -41,7 +41,7 @@ struct WorkoutView: View {
                             }
                         }
                 } else {
-                    WorkoutContent(workoutManager: workoutManager, storageManager: storageManager, xpManager: xpManager, dismiss: dismiss, setCompleted: $setCompleted, lastSetCompleted: $lastSetCompleted)
+                    WorkoutContent(workoutManager: workoutManager, programManager: programManager, xpManager: xpManager, dismiss: dismiss, setCompleted: $setCompleted, lastSetCompleted: $lastSetCompleted)
                 }
             }
             .navigationBarBackButtonHidden()
@@ -67,7 +67,7 @@ struct WorkoutView: View {
 
 struct WorkoutContent: View {
     @ObservedObject var workoutManager: WorkoutManager
-    @ObservedObject var storageManager: StorageManager
+    @ObservedObject var programManager: ProgramManager
     @ObservedObject var xpManager: XPManager
     
     var dismiss: DismissAction
@@ -76,7 +76,7 @@ struct WorkoutContent: View {
     
     var body: some View {
         VStack (spacing: 0) {
-            WorkoutHeader(storageManager: storageManager, dismiss: dismiss)
+            WorkoutHeader(dismiss: dismiss)
             
             ExerciseDataSetWidget(
                 model: $workoutManager.currentExerciseData.sets[workoutManager.currentSetIndex],
@@ -86,12 +86,16 @@ struct WorkoutContent: View {
                 lastSetCompleted: $lastSetCompleted,
                 exerciseName: workoutManager.currentExercises[workoutManager.currentExerciseIndex].name, exerciseReps: workoutManager.currentExercises[workoutManager.currentExerciseIndex].reps, numberOfSets: workoutManager.currentExerciseData.sets.count, exitWorkout: {
                     Task {
-                        if let todaysProgram = storageManager.program?.program.first(where: { $0.day == getCurrentWeekday() }) {
+                        if let todaysProgram = programManager.program?.program.first(where: { $0.day == getCurrentWeekday() }) {
                             
                             await xpManager.addXPToDB(todaysProgram: todaysProgram)
                             
-                            await storageManager.uploadNewProgramStatus(completionHandler: {
-                                    dismiss()
+                            await programManager.uploadNewProgramStatus(completion: { success in
+                                    if success {
+                                        dismiss()
+                                    } else {
+                                        
+                                    }
                                 })
                         }
                     }
@@ -117,8 +121,6 @@ struct WorkoutContent: View {
 
 
 struct WorkoutHeader: View {
-    @ObservedObject var storageManager: StorageManager
-    
     @State var timeText: String = "00:00"
     @State var timer: Timer?
     @State var elapsedTime: Double = 0.0
@@ -168,6 +170,6 @@ struct WorkoutHeader: View {
 
 
 #Preview {
-    WorkoutView(storageManager: StorageManager(), xpManager: XPManager())
+    WorkoutView(programManager: ProgramManager(), xpManager: XPManager())
 }
 

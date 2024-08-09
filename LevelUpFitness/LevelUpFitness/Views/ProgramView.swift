@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ProgramView: View {
-    @ObservedObject var storageManager: StorageManager
+    @ObservedObject var programManager: ProgramManager
     @ObservedObject var badgeManager: BadgeManager
     @ObservedObject var xpManager: XPManager
     
@@ -39,7 +39,7 @@ struct ProgramView: View {
                     }
                     .padding(.horizontal)
                     
-                    if storageManager.program == nil && !storageManager.retrievingProgram {
+                    if programManager.program == nil && !programManager.retrievingProgram {
                         VStack {
                             HStack(spacing: 0) {
                                 Button(action: {
@@ -92,13 +92,13 @@ struct ProgramView: View {
                             .padding(.horizontal)
                             
                             if programPageType == .newProgram {
-                                if let standardProgramNames = storageManager.standardProgramNames {
+                                if let standardProgramNames = programManager.standardProgramNames {
                                     
                                     ForEach(standardProgramNames, id: \.self) { name in
                                         JoinProgramWidget(programName: name)
                                             .onTapGesture {
                                                 Task {
-                                                    await storageManager.joinStandardProgram(programName: name, badgeManager: badgeManager)
+                                                    await programManager.joinStandardProgram(programName: name, badgeManager: badgeManager)
                                                 }
                                             }
                                     }
@@ -107,7 +107,7 @@ struct ProgramView: View {
                                 }
                             }
                             else if programPageType == .pastPrograms {
-                                PastProgramsView(storageManager: self.storageManager)
+                                PastProgramsView(programManager: self.programManager)
                             }
                             
                             Spacer()
@@ -121,7 +121,7 @@ struct ProgramView: View {
                         VStack {
                             ScrollView(.vertical) {
                                 VStack (spacing: 0) {
-                                    ProgramListWidget(storageManager: storageManager, navigateToWorkoutView: $navigateToWorkoutView)
+                                    ProgramListWidget(programManager: programManager, navigateToWorkoutView: $navigateToWorkoutView)
                                         .padding(.top)
                                        
                                     GeometryReader { geometry in
@@ -248,37 +248,26 @@ struct ProgramView: View {
                 if showConfirmationWidget {
                     ConfirmLeaveProgramWidget(isOpen: $showConfirmationWidget, confirmed: {
                         Task {
-                            await leaveProgram()
+                            await programManager.leaveProgram()
                         }
                     })
                 }
                 
             }
             .fullScreenCover(isPresented:  $navigateToWorkoutView, content: {
-                WorkoutView(storageManager: storageManager, xpManager: xpManager)
+                WorkoutView(programManager: programManager, xpManager: xpManager)
                     .preferredColorScheme(.light)
             })
             .fullScreenCover(isPresented:  $navigateToMetricsView, content: {
-                if let program = storageManager.program {
+                if let program = programManager.program {
                     ProgramStatisticsView(program: program)
                         .preferredColorScheme(.light)
                 }
             })
-//            .navigationDestination(isPresented: $navigateToWorkoutView, destination: {
-//                WorkoutView(storageManager: storageManager)
-//            })
             .navigationBarBackButtonHidden()
         }
     }
-    
-    func leaveProgram() async {
-        async let dbDelete: () = storageManager.leaveProgramDB()
-//        async let s3Delete: () = storageManager.leaveProgramS3()
-        
-        await [dbDelete]
-        
-        storageManager.program = nil
-    }
+
 }
 
 struct Tab {
@@ -287,6 +276,6 @@ struct Tab {
 }
 
 #Preview {
-    ProgramView(storageManager: StorageManager(), badgeManager: BadgeManager(), xpManager: XPManager())
+    ProgramView(programManager: ProgramManager(), badgeManager: BadgeManager(), xpManager: XPManager())
 }
 

@@ -8,11 +8,12 @@
 import SwiftUI
 
 struct PastProgramsView: View {
-    @ObservedObject var storageManager: StorageManager
+    @ObservedObject var programManager: ProgramManager
+    
     var body: some View {
         ZStack {
             VStack {
-                if let userProgramNames = storageManager.userProgramNames {
+                if let userProgramNames = programManager.userProgramNames {
                     ForEach(userProgramNames, id: \.self) { name in
                         
                     }
@@ -20,9 +21,9 @@ struct PastProgramsView: View {
             }
         }
         .onAppear {
-            if storageManager.userProgramNames == nil {
+            if programManager.userProgramNames == nil {
                 Task {
-                    await storageManager.getUserProgramNames()
+                    await programManager.getUserProgramNames()
                 }
             }
         }
@@ -30,5 +31,5 @@ struct PastProgramsView: View {
 }
 
 #Preview {
-(    PastProgramsView(storageManager: StorageManager())
+(    PastProgramsView(programManager: ProgramManager())
 )}

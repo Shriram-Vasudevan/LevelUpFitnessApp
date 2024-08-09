@@ -4,7 +4,7 @@ import AVKit
 
 
 struct HomeView: View {
-    @ObservedObject var storageManager: StorageManager
+    @ObservedObject var programManager: ProgramManager
     @ObservedObject var databaseManager: DatabaseManager
     @ObservedObject var healthManager: HealthManager
     @ObservedObject var xpManager: XPManager
@@ -70,7 +70,7 @@ struct HomeView: View {
                                 })
                             }
                             else {
-                                LevelWidget(userXPData: XPData(userID: "", level: 0, subLevels: Sublevels(mobility: XPAttribute(xp: 0, level: 0, xpNeeded: 0), endurance: XPAttribute(xp: 0, level: 0, xpNeeded: 0), strength: XPAttribute(xp: 0, level: 0, xpNeeded: 0), bodyAreas: BodyAreas(back: XPAttribute(xp: 0, level: 0, xpNeeded: 0), legs: XPAttribute(xp: 0, level: 0, xpNeeded: 0), chest: XPAttribute(xp: 0, level: 0, xpNeeded: 0), shoulders: XPAttribute(xp: 0, level: 0, xpNeeded: 0), core: XPAttribute(xp: 0, level: 0, xpNeeded: 0)))), openFullBreakdownView: {
+                                LevelWidget(userXPData: XPData(userID: "", level: 0, xp: 0, xpNeeded: 15, subLevels: Sublevels(mobility: XPAttribute(xp: 0, level: 0, xpNeeded: 0), endurance: XPAttribute(xp: 0, level: 0, xpNeeded: 0), strength: XPAttribute(xp: 0, level: 0, xpNeeded: 0), bodyAreas: BodyAreas(back: XPAttribute(xp: 0, level: 0, xpNeeded: 0), legs: XPAttribute(xp: 0, level: 0, xpNeeded: 0), chest: XPAttribute(xp: 0, level: 0, xpNeeded: 0), shoulders: XPAttribute(xp: 0, level: 0, xpNeeded: 0), core: XPAttribute(xp: 0, level: 0, xpNeeded: 0)))), openFullBreakdownView: {
                                     showFullLevelBreakdownView = true
                                 }, openLevelUpInfoView: {
                                     showLevelUpInformationView = true
@@ -174,7 +174,7 @@ struct HomeView: View {
                         RecommendedExerciseWidget(exercise: Exercise(name: "Pull-ups", sets: 5, reps: 5, rpe: "", rest: 5, area: "Back", completed: false, data: ExerciseData(sets: [ExerciseDataSet(weight: 5, reps: 5, time: 5.0, rest: 5.0)])))
                             .padding([.top, .horizontal])
                         
-                        if let program = storageManager.program {
+                        if let program = programManager.program {
                             TimeSpentWidget(program: program)
                                 .padding([.top, .horizontal])
                         }
@@ -289,5 +289,5 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeView(storageManager: StorageManager(), databaseManager: DatabaseManager(), healthManager: HealthManager(), xpManager: XPManager(), pageType: .constant(.home))
+    HomeView(programManager: ProgramManager(), databaseManager: DatabaseManager(), healthManager: HealthManager(), xpManager: XPManager(), pageType: .constant(.home))
 }

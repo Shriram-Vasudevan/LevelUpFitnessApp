@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct LibraryView: View {
-    @ObservedObject var storageManager: StorageManager
+    @ObservedObject var programManager: ProgramManager
     @ObservedObject var xpManager: XPManager
     
     @State var selectedExercise: ExerciseLibraryExerciseDownloaded?
@@ -82,7 +82,7 @@ struct LibraryView: View {
                                     }
                                     .padding(.horizontal)
                                     
-                                    let filteredExercises = storageManager.exercises.filter { $0.bodyArea == key.capitalizingFirstLetter() }
+                                    let filteredExercises = programManager.exercises.filter { $0.bodyArea == key.capitalizingFirstLetter() }
                                         if filteredExercises.isEmpty {
                                             HStack {
                                                 Text("No exercises for \(key)")
@@ -114,5 +114,5 @@ struct LibraryView: View {
 }
 
 #Preview {
-    LibraryView(storageManager: StorageManager(), xpManager: XPManager())
+    LibraryView(programManager: ProgramManager(), xpManager: XPManager())
 }
