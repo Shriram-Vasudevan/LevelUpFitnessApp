@@ -61,9 +61,9 @@ class XPManager: ObservableObject {
                 userXPData.subLevels.bodyAreas.shoulders.incrementXP(increment: increment)
             case .chest:
                 userXPData.subLevels.bodyAreas.chest.incrementXP(increment: increment)
-            }
-        
-        userXPData.level = userXPData.subLevels.getAverage()
+            case .total:
+                userXPData.level += increment
+        }
         
         self.userXPData = userXPData
     }

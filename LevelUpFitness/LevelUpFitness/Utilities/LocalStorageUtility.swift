@@ -8,6 +8,32 @@
 import Foundation
 
 class LocalStorageUtility {
+    static func fileModifiedInLast24Hours(at path: String) -> Bool {
+        guard let documentsDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return false }
+        let fileURL = documentsDirectoryURL.appendingPathComponent(path)
+        
+        do {
+            let fileInfo = try FileManager.default.attributesOfItem(atPath: fileURL.path)
+            
+            if let modificationDate = fileInfo[FileAttributeKey.modificationDate] as? Date {
+                let currentDate = Date()
+                
+                let timeInterval = currentDate.timeIntervalSince(modificationDate)
+                
+                if timeInterval <= 86400 {
+                    return true
+                } else {
+                    return false
+                }
+            }
+        } catch {
+            print(error)
+            return false
+        }
+        
+        return false
+    }
+    
     static func appendDataToDocumentsDirectoryFile(at path: String, data: Data) {
         guard let documentsDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
         let fileURL = documentsDirectoryURL.appendingPathComponent(path)

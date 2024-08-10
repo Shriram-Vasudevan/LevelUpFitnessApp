@@ -1,14 +1,15 @@
 //
-//  LevelManager.swift
+//  LevelChangeManager.swift
 //  LevelUpFitness
 //
-//  Created by Shriram Vasudevan on 8/9/24.
+//  Created by Shriram Vasudevan on 8/10/24.
 //
-
 import Foundation
 import Amplify
 
 class LevelManager: ObservableObject {
+    @Published var levelChanges: [LevelChangeInfo] = []
+    
     var programManager: ProgramManager
     var xpManager: XPManager
     
@@ -17,10 +18,22 @@ class LevelManager: ObservableObject {
         self.xpManager = xpManager
     }
     
+    func performLevelChanges() async {
+        do {
+            let userID = try await Amplify.Auth.getCurrentUser().userId
+            
+            if !LocalStorageUtility.fileModifiedInLast24Hours(at: "\(userID)-LevelChangeInfo.json") {
+                
+            }
+        } catch {
+            print(error)
+        }
+    }
+    
     func addProgramWorkoutTrendContribution(programs: [Program]) async {
         do {
-            guard let userID = try? await Amplify.Auth.getCurrentUser().userId else { return }
-                    
+            let userID = try await Amplify.Auth.getCurrentUser().userId
+            
             let contribution = programs.getWeightTrendContribution()
             
             let levelChangeInfo = LevelChangeInfo(keyword: "Weight", description: "This is a measure of how much weight you've been lifting over the past few weeks", change: contribution, timestamp: Date().ISO8601Format())
@@ -70,6 +83,8 @@ class LevelManager: ObservableObject {
                     continue
                 }
             }
+            
+            self.levelChanges = levelChanges
         } catch {
             print(error)
         }
