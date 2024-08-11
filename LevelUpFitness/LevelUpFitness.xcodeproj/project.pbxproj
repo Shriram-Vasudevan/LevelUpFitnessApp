@@ -31,6 +31,7 @@
 		991FB46B2C66B5ED006B4ACE /* ProgramManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991FB46A2C66B5ED006B4ACE /* ProgramManager.swift */; };
 		991FB46F2C682055006B4ACE /* ChallengeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991FB46E2C682055006B4ACE /* ChallengeManager.swift */; };
 		991FB4712C68223E006B4ACE /* LevelChangeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991FB4702C68223E006B4ACE /* LevelChangeManager.swift */; };
+		991FB4752C69394D006B4ACE /* LevelChangeWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991FB4742C69394D006B4ACE /* LevelChangeWidget.swift */; };
 		992F26A32C60079200F25400 /* ProgramSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992F26A22C60079200F25400 /* ProgramSummaryView.swift */; };
 		992F26A52C6032A100F25400 /* FullLevelBreakdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992F26A42C6032A100F25400 /* FullLevelBreakdownView.swift */; };
 		992F26A72C61225300F25400 /* LevelInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992F26A62C61225300F25400 /* LevelInfoView.swift */; };
@@ -147,6 +148,7 @@
 		991FB46A2C66B5ED006B4ACE /* ProgramManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramManager.swift; sourceTree = "<group>"; };
 		991FB46E2C682055006B4ACE /* ChallengeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeManager.swift; sourceTree = "<group>"; };
 		991FB4702C68223E006B4ACE /* LevelChangeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelChangeManager.swift; sourceTree = "<group>"; };
+		991FB4742C69394D006B4ACE /* LevelChangeWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelChangeWidget.swift; sourceTree = "<group>"; };
 		992F26A22C60079200F25400 /* ProgramSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramSummaryView.swift; sourceTree = "<group>"; };
 		992F26A42C6032A100F25400 /* FullLevelBreakdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullLevelBreakdownView.swift; sourceTree = "<group>"; };
 		992F26A62C61225300F25400 /* LevelInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelInfoView.swift; sourceTree = "<group>"; };
@@ -344,6 +346,7 @@
 				991FB4472C62C085006B4ACE /* RecommendedExerciseWidget.swift */,
 				991FB4492C653C38006B4ACE /* IndividualExerciseView.swift */,
 				991FB44B2C654A69006B4ACE /* VerticalLevelBanner.swift */,
+				991FB4742C69394D006B4ACE /* LevelChangeWidget.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -628,6 +631,7 @@
 				993871AA2C3A25D600FFAF8A /* SubLevelCircularWidget.swift in Sources */,
 				99B627482C38561D00482E3B /* WorkoutManager.swift in Sources */,
 				99EEC6152C320FC30044F906 /* FitnessOptionType.swift in Sources */,
+				991FB4752C69394D006B4ACE /* LevelChangeWidget.swift in Sources */,
 				994E7DC72C03DE5400BAD9E0 /* PascalCaseCodingKey.swift in Sources */,
 				994E7DB72C026A1D00BAD9E0 /* AuthStateObserver.swift in Sources */,
 				998DA0172C1A34840078E882 /* ChatView.swift in Sources */,

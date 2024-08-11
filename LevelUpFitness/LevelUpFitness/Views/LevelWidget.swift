@@ -9,9 +9,11 @@ import SwiftUI
 
 struct LevelWidget: View {
     @State var userXPData: XPData
+    var levelChanges: [LevelChangeInfo]
     
     var openFullBreakdownView: () -> Void
     var openLevelUpInfoView: () -> Void
+
     
     var body: some View {
         VStack {
@@ -62,20 +64,29 @@ struct LevelWidget: View {
             }
             .padding(.bottom)
             
-            HStack {
-                SubLevelCircularWidget(level: userXPData.subLevels.strength.level, image: "Dumbell", name: "Strength")
-                    .frame(width: UIScreen.main.bounds.width / 4, height: UIScreen.main.bounds.width / 4)
-                
-                Spacer()
-                
-                SubLevelCircularWidget(level: userXPData.subLevels.endurance.level, image: "Running", name: "Endurance")
-                    .frame(width: UIScreen.main.bounds.width / 4, height: UIScreen.main.bounds.width / 4)
-                
-                Spacer()
-                
-                SubLevelCircularWidget(level: userXPData.subLevels.mobility.level, image: "360", name: "Mobility")
-                    .frame(width: UIScreen.main.bounds.width / 4, height: UIScreen.main.bounds.width / 4)
-    
+            if levelChanges.count > 0 {
+                HStack {
+                    ForEach(levelChanges, id: \.id) { levelChange in
+                        LevelChangeWidget(levelChangeInfo: levelChange)
+                            .frame(width: UIScreen.main.bounds.width / 5, height: UIScreen.main.bounds.width / 5)
+                    }
+                }
+            } else {
+                HStack {
+                    SubLevelCircularWidget(level: userXPData.subLevels.strength.level, image: "Dumbell", name: "Strength")
+                        .frame(width: UIScreen.main.bounds.width / 4, height: UIScreen.main.bounds.width / 4)
+                    
+                    Spacer()
+                    
+                    SubLevelCircularWidget(level: userXPData.subLevels.endurance.level, image: "Running", name: "Endurance")
+                        .frame(width: UIScreen.main.bounds.width / 4, height: UIScreen.main.bounds.width / 4)
+                    
+                    Spacer()
+                    
+                    SubLevelCircularWidget(level: userXPData.subLevels.mobility.level, image: "360", name: "Mobility")
+                        .frame(width: UIScreen.main.bounds.width / 4, height: UIScreen.main.bounds.width / 4)
+        
+                }
             }
         }
         .padding(.vertical)
@@ -91,5 +102,5 @@ struct LevelWidget: View {
 }
 
 #Preview {
-    LevelWidget(userXPData: XPData(userID: "", level: 2, xp: 0, xpNeeded: 50, subLevels: Sublevels(mobility: XPAttribute(xp: 0, level: 0, xpNeeded: 0), endurance: XPAttribute(xp: 0, level: 0, xpNeeded: 0), strength: XPAttribute(xp: 0, level: 0, xpNeeded: 0), bodyAreas: BodyAreas(back: XPAttribute(xp: 0, level: 0, xpNeeded: 0), legs: XPAttribute(xp: 0, level: 0, xpNeeded: 0), chest: XPAttribute(xp: 0, level: 0, xpNeeded: 0), shoulders: XPAttribute(xp: 0, level: 0, xpNeeded: 0), core: XPAttribute(xp: 0, level: 0, xpNeeded: 0)))), openFullBreakdownView: {}, openLevelUpInfoView: {})
+    LevelWidget(userXPData: XPData(userID: "", level: 2, xp: 0, xpNeeded: 50, subLevels: Sublevels(mobility: XPAttribute(xp: 0, level: 0, xpNeeded: 0), endurance: XPAttribute(xp: 0, level: 0, xpNeeded: 0), strength: XPAttribute(xp: 0, level: 0, xpNeeded: 0), bodyAreas: BodyAreas(back: XPAttribute(xp: 0, level: 0, xpNeeded: 0), legs: XPAttribute(xp: 0, level: 0, xpNeeded: 0), chest: XPAttribute(xp: 0, level: 0, xpNeeded: 0), shoulders: XPAttribute(xp: 0, level: 0, xpNeeded: 0), core: XPAttribute(xp: 0, level: 0, xpNeeded: 0)))), levelChanges: [LevelChangeInfo(keyword: "Weight", description: "Weight trend", change: -5, timestamp: ""), LevelChangeInfo(keyword: "Weight", description: "Weight trend", change: 5, timestamp: ""), LevelChangeInfo(keyword: "Weight", description: "Weight trend", change: -1, timestamp: ""), LevelChangeInfo(keyword: "Weight", description: "Weight trend", change: 0, timestamp: "")], openFullBreakdownView: {}, openLevelUpInfoView: {})
 }

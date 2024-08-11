@@ -18,8 +18,10 @@ class LocalStorageUtility {
                 let files = try FileManager.default.contentsOfDirectory(atPath: directoryURL.path)
                 
                 for file in files {
-                    let fileInfo = try FileManager.default.attributesOfItem(atPath: file)
+                    let fileURL = directoryURL.appendingPathComponent(file)
+                    let fileInfo = try FileManager.default.attributesOfItem(atPath: fileURL.path)
                     if let modificationDate = fileInfo[FileAttributeKey.modificationDate] as? Date {
+                        print("fileName: \(file)")
                         programs.append((file, modificationDate))
                     }
                 }
@@ -30,22 +32,28 @@ class LocalStorageUtility {
                 var programObjects: [Program] = []
                 
                 for (fileName, _) in programsSorted.prefix(5) {
+                    guard fileName.hasSuffix(".json") else {
+                        print("Skipping non-JSON file: \(fileName)")
+                        continue
+                    }
+                    
                     let fileURL = directoryURL.appendingPathComponent(fileName)
                     let jsonData = try Data(contentsOf: fileURL)
                     let decodedData = try jsonDecoder.decode(Program.self, from: jsonData)
                     programObjects.append(decodedData)
                 }
                 
+                print("the program objects \(programObjects)")
                 return programObjects
-            }
-            else {
+            } else {
                 return nil
             }
         } catch {
-            print(error)
+            print("Error in getCachedUserPrograms: \(error)")
             return nil
         }
     }
+
     
     static func fileModifiedInLast24Hours(at path: String) -> Bool {
         guard let documentsDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return false }
@@ -54,29 +62,34 @@ class LocalStorageUtility {
         do {
             let fileInfo = try FileManager.default.attributesOfItem(atPath: fileURL.path)
             
-            if let modificationDate = fileInfo[FileAttributeKey.modificationDate] as? Date {
+            if let creationDate = fileInfo[FileAttributeKey.creationDate] as? Date {
                 let currentDate = Date()
+                let timeSinceCreation = currentDate.timeIntervalSince(creationDate)
                 
-                let timeInterval = currentDate.timeIntervalSince(modificationDate)
-                
-                if timeInterval <= 86400 {
-                    return true
-                } else {
+                if timeSinceCreation <= 20 {
                     return false
                 }
             }
+
+            if let modificationDate = fileInfo[FileAttributeKey.modificationDate] as? Date {
+                let currentDate = Date()
+                let timeSinceModification = currentDate.timeIntervalSince(modificationDate)
+                
+                if timeSinceModification <= 86400 {
+                    return true
+                }
+            }
         } catch {
-            print(error)
+            print("Error checking file attributes: \(error)")
             return false
         }
         
         return false
     }
-    
+
     static func appendDataToDocumentsDirectoryFile(at path: String, data: Data) {
         guard let documentsDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
         let fileURL = documentsDirectoryURL.appendingPathComponent(path)
-        
         
         guard let newlineData = "\n".data(using: .utf8) else {
             print("Failed to encode the newline character as UTF-8 data.")
@@ -84,44 +97,66 @@ class LocalStorageUtility {
         }
         
         do {
-            if let fileHandle = FileHandle(forWritingAtPath: fileURL.path) {
-                try fileHandle.seekToEnd()
-                fileHandle.write(data)
-                fileHandle.write(newlineData)
-                try fileHandle.close()
+            let directoryURL = fileURL.deletingLastPathComponent()
+            if !FileManager.default.fileExists(atPath: directoryURL.path) {
+                try FileManager.default.createDirectory(at: directoryURL, withIntermediateDirectories: true, attributes: nil)
+            }
+            
+            if FileManager.default.fileExists(atPath: fileURL.path) {
+                if let fileHandle = FileHandle(forWritingAtPath: fileURL.path) {
+                    defer {
+                        try? fileHandle.close()
+                    }
+                    try fileHandle.seekToEnd()
+                    fileHandle.write(data)
+                    fileHandle.write(newlineData)
+                }
             } else {
-                try data.write(to: fileURL)
-                try "\n".write(to: fileURL, atomically: true, encoding: .utf8)
+                try (data + newlineData).write(to: fileURL)
             }
         } catch {
-            print(error)
+            print("Error in appendDataToDocumentsDirectoryFile: \(error)")
         }
     }
+
     
     static func clearFile(at path: String) {
         guard let documentsDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
         let fileURL = documentsDirectoryURL.appendingPathComponent(path)
         
         do {
+            let directoryURL = fileURL.deletingLastPathComponent()
+            if !FileManager.default.fileExists(atPath: directoryURL.path) {
+                try FileManager.default.createDirectory(at: directoryURL, withIntermediateDirectories: true, attributes: nil)
+            }
+            
+            // Clear the file contents
             try "".write(to: fileURL, atomically: true, encoding: .utf8)
             print("File cleared successfully at path: \(path)")
         } catch {
             print("Error clearing file: \(error)")
         }
     }
+
     
     static func readDocumentsDirectoryJSONStringFile(at path: String) -> String? {
         guard let documentsDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return nil }
         let fileURL = documentsDirectoryURL.appendingPathComponent(path)
         
         do {
+            guard FileManager.default.fileExists(atPath: fileURL.path) else {
+                print("File does not exist at path: \(fileURL.path)")
+                return nil
+            }
+            
             let fileContent = try String(contentsOf: fileURL, encoding: .utf8)
             return fileContent
         } catch {
-            print(error)
+            print("Error in readDocumentsDirectoryJSONStringFile: \(error)")
             return nil
         }
     }
+
     
     static func temporarilySaveStandardProgram(programName: String, data: Data, completionHandler: @escaping (Bool, URL?) async -> Void) async {
         let temporaryDirectory = FileManager.default.temporaryDirectory

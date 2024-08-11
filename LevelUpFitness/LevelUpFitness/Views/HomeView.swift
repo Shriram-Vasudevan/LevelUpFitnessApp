@@ -8,6 +8,7 @@ struct HomeView: View {
     @ObservedObject var databaseManager: DatabaseManager
     @ObservedObject var healthManager: HealthManager
     @ObservedObject var xpManager: XPManager
+    @ObservedObject var levelChangeManager: LevelChangeManager
     
     @State var avPlayer = AVPlayer()
     
@@ -63,14 +64,14 @@ struct HomeView: View {
                         
                         VStack (spacing: 20) {
                             if let userXPData = xpManager.userXPData {
-                                LevelWidget(userXPData: userXPData, openFullBreakdownView: {
+                                LevelWidget(userXPData: userXPData, levelChanges: levelChangeManager.levelChanges, openFullBreakdownView: {
                                     showFullLevelBreakdownView = true
                                 }, openLevelUpInfoView: {
                                     showLevelUpInformationView = true
                                 })
                             }
                             else {
-                                LevelWidget(userXPData: XPData(userID: "", level: 0, xp: 0, xpNeeded: 15, subLevels: Sublevels(mobility: XPAttribute(xp: 0, level: 0, xpNeeded: 0), endurance: XPAttribute(xp: 0, level: 0, xpNeeded: 0), strength: XPAttribute(xp: 0, level: 0, xpNeeded: 0), bodyAreas: BodyAreas(back: XPAttribute(xp: 0, level: 0, xpNeeded: 0), legs: XPAttribute(xp: 0, level: 0, xpNeeded: 0), chest: XPAttribute(xp: 0, level: 0, xpNeeded: 0), shoulders: XPAttribute(xp: 0, level: 0, xpNeeded: 0), core: XPAttribute(xp: 0, level: 0, xpNeeded: 0)))), openFullBreakdownView: {
+                                LevelWidget(userXPData: XPData(userID: "", level: 0, xp: 0, xpNeeded: 15, subLevels: Sublevels(mobility: XPAttribute(xp: 0, level: 0, xpNeeded: 0), endurance: XPAttribute(xp: 0, level: 0, xpNeeded: 0), strength: XPAttribute(xp: 0, level: 0, xpNeeded: 0), bodyAreas: BodyAreas(back: XPAttribute(xp: 0, level: 0, xpNeeded: 0), legs: XPAttribute(xp: 0, level: 0, xpNeeded: 0), chest: XPAttribute(xp: 0, level: 0, xpNeeded: 0), shoulders: XPAttribute(xp: 0, level: 0, xpNeeded: 0), core: XPAttribute(xp: 0, level: 0, xpNeeded: 0)))), levelChanges: [], openFullBreakdownView: {
                                     showFullLevelBreakdownView = true
                                 }, openLevelUpInfoView: {
                                     showLevelUpInformationView = true
@@ -289,5 +290,5 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeView(programManager: ProgramManager(), databaseManager: DatabaseManager(), healthManager: HealthManager(), xpManager: XPManager(), pageType: .constant(.home))
+    HomeView(programManager: ProgramManager(), databaseManager: DatabaseManager(), healthManager: HealthManager(), xpManager: XPManager(), levelChangeManager: LevelChangeManager(), pageType: .constant(.home))
 }
