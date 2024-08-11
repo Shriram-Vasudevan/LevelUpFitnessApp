@@ -57,7 +57,7 @@ extension Array where Element == Program {
         return Swift.max(-10, Swift.min(10, Int(normalizedTrend)))
     }
     
-    func getRestDifferentialContribution() -> Int {
+    func getRestDifferentialTrendContribution() -> Int {
         var totalDifferential = 0
         var totalExerciseCount = 0
         
@@ -94,6 +94,80 @@ extension Array where Element == Program {
         
         let normalizedTrend = 10 - (averageDifferential / 10) * 20
 
+        return Swift.max(-10, Swift.min(10, Int(normalizedTrend)))
+    }
+    
+    func getConsistencyTrendContribution() -> Int {
+        var programCompletionRates: [Double] = []
+        
+        for program in self {
+            let totalDays = program.program.count
+            let completedDays = program.program.filter { $0.completed }.count
+            
+            guard totalDays > 0 else { continue }
+            
+            let completionRate = Double(completedDays) / Double(totalDays)
+            programCompletionRates.append(completionRate)
+        }
+        
+        guard programCompletionRates.count > 1 else { return 0 }
+        
+        var previousRate = programCompletionRates.first!
+        var trendScore = 0
+        
+        for currentRate in programCompletionRates.dropFirst() {
+            if currentRate > previousRate {
+                trendScore += 1
+            } else if currentRate < previousRate {
+                trendScore -= 1
+            }
+            previousRate = currentRate
+        }
+        
+        let maxTrendValue = (programCompletionRates.count - 1) * 2
+        let normalizedTrend = (Double(trendScore) / Double(maxTrendValue)) * 20 - 10
+        
+        return Swift.max(-10, Swift.min(10, Int(normalizedTrend)))
+    }
+    
+    func getRestTimeTrendContribution() -> Int {
+        var programRestTimeAverages: [Double] = []
+        
+        for program in self {
+            var totalRestTime = 0.0
+            var totalSets = 0
+            
+            for day in program.program {
+                for exercise in day.exercises {
+                    let totalRestForExercise = exercise.data.sets.reduce(0.0) { $0 + $1.rest }
+                    totalRestTime += totalRestForExercise
+                    totalSets += exercise.data.sets.count
+                }
+            }
+            
+            guard totalSets > 0 else { continue }
+            
+            let averageRestTime = totalRestTime / Double(totalSets)
+            programRestTimeAverages.append(averageRestTime)
+        }
+        
+        guard programRestTimeAverages.count > 1 else { return 0 }
+        
+        var previousAverage = programRestTimeAverages.first!
+        var restTimeTrendScore = 0
+        
+        for currentAverage in programRestTimeAverages.dropFirst() {
+            if currentAverage < previousAverage {
+                restTimeTrendScore += 1
+            } else if currentAverage > previousAverage {
+                restTimeTrendScore -= 1
+            }
+            previousAverage = currentAverage
+        }
+        
+        let maxTrendValue = (programRestTimeAverages.count - 1) * 2
+        let normalizedTrend = (Double(restTimeTrendScore) / Double(maxTrendValue)) * 20 - 10
+        
         return Swift.max(-10, Swift.min(10, Int(normalizedTrend)))
     }
 }

@@ -8,6 +8,45 @@
 import Foundation
 
 class LocalStorageUtility {
+    static func getCachedUserPrograms(at path: String) -> [Program]? {
+        do {
+            guard let documentsDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return nil }
+            let directoryURL = documentsDirectoryURL.appendingPathComponent(path)
+            
+            if FileManager.default.fileExists(atPath: directoryURL.path) {
+                var programs: [(String, Date)] = []
+                let files = try FileManager.default.contentsOfDirectory(atPath: directoryURL.path)
+                
+                for file in files {
+                    let fileInfo = try FileManager.default.attributesOfItem(atPath: file)
+                    if let modificationDate = fileInfo[FileAttributeKey.modificationDate] as? Date {
+                        programs.append((file, modificationDate))
+                    }
+                }
+                
+                let programsSorted = programs.sorted { $0.1 > $1.1 }
+                
+                let jsonDecoder = JSONDecoder()
+                var programObjects: [Program] = []
+                
+                for (fileName, _) in programsSorted.prefix(5) {
+                    let fileURL = directoryURL.appendingPathComponent(fileName)
+                    let jsonData = try Data(contentsOf: fileURL)
+                    let decodedData = try jsonDecoder.decode(Program.self, from: jsonData)
+                    programObjects.append(decodedData)
+                }
+                
+                return programObjects
+            }
+            else {
+                return nil
+            }
+        } catch {
+            print(error)
+            return nil
+        }
+    }
+    
     static func fileModifiedInLast24Hours(at path: String) -> Bool {
         guard let documentsDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return false }
         let fileURL = documentsDirectoryURL.appendingPathComponent(path)
@@ -56,6 +95,18 @@ class LocalStorageUtility {
             }
         } catch {
             print(error)
+        }
+    }
+    
+    static func clearFile(at path: String) {
+        guard let documentsDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+        let fileURL = documentsDirectoryURL.appendingPathComponent(path)
+        
+        do {
+            try "".write(to: fileURL, atomically: true, encoding: .utf8)
+            print("File cleared successfully at path: \(path)")
+        } catch {
+            print("Error clearing file: \(error)")
         }
     }
     
