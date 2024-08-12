@@ -108,58 +108,12 @@
       "service": "Lambda"
     }
   },
-  "parameters": {
-    "AMPLIFY_function_LevelUpFitnessCustomProgramRequestLambda_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "LevelUpFitnessCustomProgramRequestLambda"
-        }
-      ]
-    },
-    "AMPLIFY_function_LevelUpFitnessCustomProgramRequestLambda_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "LevelUpFitnessCustomProgramRequestLambda"
-        }
-      ]
-    },
-    "AMPLIFY_function_LevelUpFitnessDynamoAccessLambda_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "LevelUpFitnessDynamoAccessLambda"
-        }
-      ]
-    },
-    "AMPLIFY_function_LevelUpFitnessDynamoAccessLambda_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "LevelUpFitnessDynamoAccessLambda"
-        }
-      ]
-    },
-    "AMPLIFY_function_LevelUpFitnessS3AccessLambda_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "LevelUpFitnessS3AccessLambda"
-        }
-      ]
-    },
-    "AMPLIFY_function_LevelUpFitnessS3AccessLambda_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "LevelUpFitnessS3AccessLambda"
-        }
-      ]
-    }
-  },
   "storage": {
     "LevelUpFitnessBadgesDB": {
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB"
+    },
+    "LevelUpFitnessChallengesDB": {
       "providerPlugin": "awscloudformation",
       "service": "DynamoDB"
     },
@@ -177,6 +131,10 @@
       "service": "S3"
     },
     "LevelUpFitnessUserBadgeInfoDB": {
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB"
+    },
+    "LevelUpFitnessUserChallengesDB": {
       "providerPlugin": "awscloudformation",
       "service": "DynamoDB"
     },

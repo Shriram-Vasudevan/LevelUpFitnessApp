@@ -10,8 +10,9 @@ import SwiftUI
 struct LibraryView: View {
     @ObservedObject var programManager: ProgramManager
     @ObservedObject var xpManager: XPManager
+    @ObservedObject var exerciseManager: ExerciseManager
     
-    @State var selectedExercise: ExerciseLibraryExerciseDownloaded?
+    @State var selectedExercise: ExerciseLibraryExercise?
     
     let bodyAreaKeys = [
             BodyAreas.CodingKeys.back.rawValue,
@@ -82,7 +83,7 @@ struct LibraryView: View {
                                     }
                                     .padding(.horizontal)
                                     
-                                    let filteredExercises = programManager.exercises.filter { $0.bodyArea == key.capitalizingFirstLetter() }
+                                    let filteredExercises = exerciseManager.exercises.filter { $0.bodyArea == key.capitalizingFirstLetter() }
                                         if filteredExercises.isEmpty {
                                             HStack {
                                                 Text("No exercises for \(key)")
@@ -91,7 +92,7 @@ struct LibraryView: View {
                                             }
                                             .padding(.horizontal)
                                         } else {
-                                            ForEach(filteredExercises) { exercise in
+                                            ForEach(filteredExercises, id: \.id) { exercise in
                                                 ExerciseLibraryExerciseWidget(exerciseLibraryExercise: exercise, userXPData: userXPData, exerciseSelected: {
                                                     self.selectedExercise = exercise
                                                 })
@@ -114,5 +115,5 @@ struct LibraryView: View {
 }
 
 #Preview {
-    LibraryView(programManager: ProgramManager(), xpManager: XPManager())
+    LibraryView(programManager: ProgramManager(), xpManager: XPManager(), exerciseManager: ExerciseManager())
 }

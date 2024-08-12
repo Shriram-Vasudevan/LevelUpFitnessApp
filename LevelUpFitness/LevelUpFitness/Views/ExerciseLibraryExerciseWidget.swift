@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ExerciseLibraryExerciseWidget: View {
-    var exerciseLibraryExercise: ExerciseLibraryExerciseDownloaded
+    var exerciseLibraryExercise: ExerciseLibraryExercise
     var userXPData: XPData
     
     var isLocked: Bool {
@@ -84,5 +84,5 @@ struct ExerciseLibraryExerciseWidget: View {
 }
 
 #Preview {
-    ExerciseLibraryExerciseWidget(exerciseLibraryExercise: ExerciseLibraryExerciseDownloaded(id: "Test", name: "Push-up", videoURL: URL(string: "Test")!, description: "Develops upper body and back muscles · Advanced", bodyArea: "", level: 3), userXPData: XPData(userID: "", level: 2, xp: 0, xpNeeded: 50, subLevels: Sublevels(mobility: XPAttribute(xp: 0, level: 0, xpNeeded: 0), endurance: XPAttribute(xp: 0, level: 0, xpNeeded: 0), strength: XPAttribute(xp: 0, level: 0, xpNeeded: 0), bodyAreas: BodyAreas(back: XPAttribute(xp: 0, level: 0, xpNeeded: 0), legs: XPAttribute(xp: 0, level: 0, xpNeeded: 0), chest: XPAttribute(xp: 0, level: 0, xpNeeded: 0), shoulders: XPAttribute(xp: 0, level: 0, xpNeeded: 0), core: XPAttribute(xp: 0, level: 0, xpNeeded: 0)))), exerciseSelected: {})
+    ExerciseLibraryExerciseWidget(exerciseLibraryExercise: ExerciseLibraryExercise(id: "Test", cdnURL: "", name: "Push-up", description: "Develops upper body and back muscles · Advanced", bodyArea: "", level: 3), userXPData: XPData(userID: "", level: 2, xp: 0, xpNeeded: 50, subLevels: Sublevels(mobility: XPAttribute(xp: 0, level: 0, xpNeeded: 0), endurance: XPAttribute(xp: 0, level: 0, xpNeeded: 0), strength: XPAttribute(xp: 0, level: 0, xpNeeded: 0), bodyAreas: BodyAreas(back: XPAttribute(xp: 0, level: 0, xpNeeded: 0), legs: XPAttribute(xp: 0, level: 0, xpNeeded: 0), chest: XPAttribute(xp: 0, level: 0, xpNeeded: 0), shoulders: XPAttribute(xp: 0, level: 0, xpNeeded: 0), core: XPAttribute(xp: 0, level: 0, xpNeeded: 0)))), exerciseSelected: {})
 }

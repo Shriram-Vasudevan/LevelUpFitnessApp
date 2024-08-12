@@ -102,7 +102,7 @@ class ProgramS3Utility {
                 
                 try await ProgramDynamoDBUtility.addProgramToDB(programName: programName)
                 
-                await badgeManager.checkIfBadgesEarned(weeksUpdated: true)
+                //await badgeManager.checkIfBadgesEarned(weeksUpdated: true)
                 completion(true)
             } else {
                 print("Failed to get date")

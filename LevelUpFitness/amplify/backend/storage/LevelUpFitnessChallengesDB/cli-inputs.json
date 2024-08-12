@@ -1,0 +1,10 @@
+{
+  "resourceName": "LevelUpFitnessChallengesDB",
+  "tableName": "challenges-db",
+  "partitionKey": {
+    "fieldName": "ID",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}

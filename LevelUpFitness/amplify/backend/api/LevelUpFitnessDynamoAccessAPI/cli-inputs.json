@@ -93,6 +93,18 @@
           "update"
         ]
       }
+    },
+    "/startChallenge": {
+      "name": "/startChallenge",
+      "lambdaFunction": "LevelUpFitnessDynamoAccessLambda",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update"
+        ]
+      }
     }
   }
 }

@@ -88,8 +88,6 @@ struct WorkoutContent: View {
                     Task {
                         if let todaysProgram = programManager.program?.program.first(where: { $0.day == getCurrentWeekday() }) {
                             
-                            await xpManager.addXPToDB(todaysProgram: todaysProgram)
-                            
                             await programManager.uploadNewProgramStatus(completion: { success in
                                     if success {
                                         dismiss()

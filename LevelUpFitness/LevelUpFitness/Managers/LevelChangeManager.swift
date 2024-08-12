@@ -6,6 +6,7 @@
 //
 import Foundation
 import Amplify
+import Combine
 
 @MainActor
 class LevelChangeManager: ObservableObject {
@@ -14,7 +15,11 @@ class LevelChangeManager: ObservableObject {
     let allProperties = ["Weight", "Rest", "Endurance", "Consistency",]
     var currentProperties: [String] = []
     
-    init() {
+    var xpManager: XPManager
+    
+    init(xpManager: XPManager) {
+        self.xpManager = xpManager
+        
         Task {
             await getLevelChanges()
             await addNewProgramLevelChanges()
@@ -41,6 +46,9 @@ class LevelChangeManager: ObservableObject {
                         }
                     }
                     
+                    
+                    await xpManager.addXPToDB()
+                    
                     print("level chagnes \(self.levelChanges)")
                 }
             }
@@ -64,8 +72,8 @@ class LevelChangeManager: ObservableObject {
             }
             
             guard let fileContent = LocalStorageUtility.readDocumentsDirectoryJSONStringFile(at: filePath) else { return }
-            
-            let levelChangeStrings = fileContent.components(separatedBy: .newlines)
+
+            let levelChangeStrings = fileContent.components(separatedBy: .newlines).filter { !$0.isEmpty }
             var levelChanges: [LevelChangeInfo] = []
             
             let jsonDecoder = JSONDecoder()
@@ -73,24 +81,25 @@ class LevelChangeManager: ObservableObject {
             
             for levelChangeString in levelChangeStrings {
                 if let levelChangeData = levelChangeString.data(using: .utf8) {
-                    let levelChange = try jsonDecoder.decode(LevelChangeInfo.self, from: levelChangeData)
-                    levelChanges.append(levelChange)
-                    loadedProperties.append(levelChange.keyword)
-                }
-                else {
-                    continue
+                    do {
+                        let levelChange = try jsonDecoder.decode(LevelChangeInfo.self, from: levelChangeData)
+                        levelChanges.append(levelChange)
+                        loadedProperties.append(levelChange.keyword)
+                    } catch {
+                        print("Failed to decode line: \(levelChangeString), error: \(error)")
+                        continue
+                    }
                 }
             }
             
             self.levelChanges = levelChanges
-            print("the level changes: \(levelChanges)")
+            print("The level changes: \(levelChanges)")
             self.currentProperties = loadedProperties
         } catch {
-            print("hi")
             print("getLevelChanges \(error)")
         }
-        
     }
+
     
     func performProgramLevelChange(selectedProperty: String, programs: [Program]) async {
         switch selectedProperty {
@@ -120,6 +129,8 @@ class LevelChangeManager: ObservableObject {
             
             LocalStorageUtility.appendDataToDocumentsDirectoryFile(at: "\(userID)-LevelChangeInfo.json", data: jsonData)
             levelChanges.append(levelChangeInfo)
+            
+            xpManager.addXP(increment: contribution, type: .total)
         } catch {
             print(error)
         }
@@ -138,6 +149,8 @@ class LevelChangeManager: ObservableObject {
             
             LocalStorageUtility.appendDataToDocumentsDirectoryFile(at: "\(userID)-LevelChangeInfo.json", data: jsonData)
             levelChanges.append(levelChangeInfo)
+            
+            xpManager.addXP(increment: contribution, type: .total)
         } catch {
             print(error)
         }
@@ -156,6 +169,8 @@ class LevelChangeManager: ObservableObject {
             
             LocalStorageUtility.appendDataToDocumentsDirectoryFile(at: "\(userID)-LevelChangeInfo.json", data: jsonData)
             levelChanges.append(levelChangeInfo)
+            
+            xpManager.addXP(increment: contribution, type: .total)
         } catch {
             print(error)
         }
@@ -174,6 +189,8 @@ class LevelChangeManager: ObservableObject {
             
             LocalStorageUtility.appendDataToDocumentsDirectoryFile(at: "\(userID)-LevelChangeInfo.json", data: jsonData)
             levelChanges.append(levelChangeInfo)
+            
+            xpManager.addXP(increment: contribution, type: .total)
         } catch {
             print(error)
         }

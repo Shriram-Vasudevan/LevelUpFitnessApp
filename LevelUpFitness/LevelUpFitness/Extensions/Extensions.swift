@@ -9,6 +9,14 @@ import Foundation
 import SwiftUI
 
 extension Array where Element == Program {
+    
+    private func calculateScaledTrendScore(rawScore: Int, maxScore: Int) -> Int {
+        guard maxScore != 0 else { return 0 } 
+        let scaleFactor = Double(10) / Double(maxScore)
+        let scaledScore = Double(rawScore) * scaleFactor
+        return Swift.max(-10, Swift.min(10, Int(scaledScore)))
+    }
+
     func getWeightTrendContribution() -> Int {
         var totalTrend = 0
         var totalExerciseCount = 0
@@ -52,9 +60,7 @@ extension Array where Element == Program {
         guard totalExerciseCount > 0 else { return 0 }
 
         let maxTrendValue = totalExerciseCount * 2
-        let normalizedTrend = (Double(totalTrend) / Double(maxTrendValue)) * 20 - 10
-        
-        return Swift.max(-10, Swift.min(10, Int(normalizedTrend)))
+        return calculateScaledTrendScore(rawScore: totalTrend, maxScore: maxTrendValue)
     }
     
     func getRestDifferentialTrendContribution() -> Int {
@@ -90,11 +96,8 @@ extension Array where Element == Program {
         
         guard totalExerciseCount > 0 else { return 0 }
         
-        let averageDifferential = Double(totalDifferential) / Double(totalExerciseCount)
-        
-        let normalizedTrend = 10 - (averageDifferential / 10) * 20
-
-        return Swift.max(-10, Swift.min(10, Int(normalizedTrend)))
+        let maxDifferential = totalExerciseCount * 10
+        return calculateScaledTrendScore(rawScore: -totalDifferential, maxScore: maxDifferential)
     }
     
     func getConsistencyTrendContribution() -> Int {
@@ -125,9 +128,7 @@ extension Array where Element == Program {
         }
         
         let maxTrendValue = (programCompletionRates.count - 1) * 2
-        let normalizedTrend = (Double(trendScore) / Double(maxTrendValue)) * 20 - 10
-        
-        return Swift.max(-10, Swift.min(10, Int(normalizedTrend)))
+        return calculateScaledTrendScore(rawScore: trendScore, maxScore: maxTrendValue)
     }
     
     func getRestTimeTrendContribution() -> Int {
@@ -166,9 +167,7 @@ extension Array where Element == Program {
         }
         
         let maxTrendValue = (programRestTimeAverages.count - 1) * 2
-        let normalizedTrend = (Double(restTimeTrendScore) / Double(maxTrendValue)) * 20 - 10
-        
-        return Swift.max(-10, Swift.min(10, Int(normalizedTrend)))
+        return calculateScaledTrendScore(rawScore: restTimeTrendScore, maxScore: maxTrendValue)
     }
 }
 

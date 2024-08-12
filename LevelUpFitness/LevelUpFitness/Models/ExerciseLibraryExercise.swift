@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ExerciseLibraryExercise: Codable {
+struct ExerciseLibraryExercise: Codable, Hashable {
     var id: String
     var cdnURL: String
     var name: String

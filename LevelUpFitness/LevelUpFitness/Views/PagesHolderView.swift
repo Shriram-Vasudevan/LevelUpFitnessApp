@@ -13,7 +13,7 @@ struct PagesHolderView: View {
     @StateObject var healthManager = HealthManager()
     @StateObject var badgeManager = BadgeManager()
     @StateObject var xpManager = XPManager()
-    @StateObject var levelChangeManager = LevelChangeManager()
+    @StateObject var exerciseManager = ExerciseManager()
     
     @State var pageType: PageType
     
@@ -22,13 +22,13 @@ struct PagesHolderView: View {
             VStack {
                 switch pageType {
                 case .home:
-                    HomeView(programManager: programManager, databaseManager: databaseManager, healthManager: healthManager, xpManager: xpManager, levelChangeManager: levelChangeManager, pageType: $pageType)
+                    HomeView(programManager: programManager, databaseManager: databaseManager, healthManager: healthManager, xpManager: xpManager, exerciseManager: exerciseManager, pageType: $pageType)
                         .preferredColorScheme(.light)
                 case .program:
                     ProgramView(programManager: programManager, badgeManager: badgeManager, xpManager: xpManager)
                         .preferredColorScheme(.light)
                 case .library:
-                    LibraryView(programManager: programManager, xpManager: xpManager)
+                    LibraryView(programManager: programManager, xpManager: xpManager, exerciseManager: exerciseManager)
                         .preferredColorScheme(.light)
                 }
                 
@@ -122,9 +122,8 @@ struct PagesHolderView: View {
                 }
                     
                 async let userProgram: ()? = programManager.program == nil ? programManager.getUserProgram(badgeManager: badgeManager) : nil
-                async let exercises: ()? = programManager.downloadExercises()
                 
-                _ = await (userProgram, exercises)
+                _ = await (userProgram)
             }
         }
         .ignoresSafeArea(edges: .bottom)

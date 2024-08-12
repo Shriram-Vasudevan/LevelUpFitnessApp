@@ -9,10 +9,12 @@ import SwiftUI
 import AVKit
 
 struct IndividualExerciseView: View {
-    var exercise: ExerciseLibraryExerciseDownloaded
+    var exercise: ExerciseLibraryExercise
+    
     @State private var avPlayer = AVPlayer()
     @Environment(\.dismiss) var dismiss
 
+    @State var videoURL: URL?
     var body: some View {
         ZStack {
             Color(red: 240 / 255.0, green: 244 / 255.0, blue: 252 / 255.0)
@@ -40,12 +42,16 @@ struct IndividualExerciseView: View {
                 }
                 .padding(.bottom)
                 
-                VideoPlayer(player: avPlayer)
-                    .aspectRatio(16/9, contentMode: .fit)
-                    .onAppear {
-                        avPlayer = AVPlayer(url: exercise.videoURL)
-                        avPlayer.play()
-                    }
+                if let videoURL = self.videoURL {
+                    VideoPlayer(player: avPlayer)
+                        .aspectRatio(16/9, contentMode: .fit)
+                        .onAppear {
+                            avPlayer = AVPlayer(url: videoURL)
+                            avPlayer.play()
+                        }
+                } else {
+                    Text("Retrieving Video")
+                }
                 
                 ScrollView(.vertical) {
                     HStack {
@@ -67,14 +73,24 @@ struct IndividualExerciseView: View {
             }
         }
         .navigationBarBackButtonHidden()
+        .onAppear {
+            guard let cdnURL = URL(string: exercise.cdnURL) else { return }
+            LocalStorageUtility.downloadVideoAndSaveToTempFile(url: cdnURL, completion: { result in
+                switch result {
+                    case .success(let localURL):
+                        self.videoURL = localURL
+                    case .failure(let error):
+                        print(error.localizedDescription)
+                }
+            })
+        }
     }
 }
 
 #Preview {
-    IndividualExerciseView(exercise: ExerciseLibraryExerciseDownloaded(
-        id: "",
+    IndividualExerciseView(exercise: ExerciseLibraryExercise(
+        id: "", cdnURL: "",
         name: "Bicep Curl",
-        videoURL: URL(string: "https://example.com/video.mp4")!,
         description: "Perform a classic bicep curl with proper form. Stand with feet shoulder-width apart, holding dumbbells at your sides with palms facing forward. Keeping your upper arms stationary, curl the weights up to shoulder level while contracting your biceps.",
         bodyArea: "Arms", level: 1
     ))

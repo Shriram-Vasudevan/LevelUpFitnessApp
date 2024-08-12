@@ -8,7 +8,7 @@ struct HomeView: View {
     @ObservedObject var databaseManager: DatabaseManager
     @ObservedObject var healthManager: HealthManager
     @ObservedObject var xpManager: XPManager
-    @ObservedObject var levelChangeManager: LevelChangeManager
+    @ObservedObject var exerciseManager: ExerciseManager
     
     @State var avPlayer = AVPlayer()
     
@@ -20,6 +20,8 @@ struct HomeView: View {
     
     @State private var showFullLevelBreakdownView: Bool = false
     @State private var showLevelUpInformationView: Bool = false
+    
+    @State var selectedExercise: ExerciseLibraryExercise?
     
     var body: some View {
         NavigationStack {
@@ -64,7 +66,7 @@ struct HomeView: View {
                         
                         VStack (spacing: 20) {
                             if let userXPData = xpManager.userXPData {
-                                LevelWidget(userXPData: userXPData, levelChanges: levelChangeManager.levelChanges, openFullBreakdownView: {
+                                LevelWidget(userXPData: userXPData, levelChanges: xpManager.levelChanges, openFullBreakdownView: {
                                     showFullLevelBreakdownView = true
                                 }, openLevelUpInfoView: {
                                     showLevelUpInformationView = true
@@ -172,8 +174,12 @@ struct HomeView: View {
                         .scrollIndicators(.hidden)
                         .padding([.top, .horizontal])
                          
-                        RecommendedExerciseWidget(exercise: Exercise(name: "Pull-ups", sets: 5, reps: 5, rpe: "", rest: 5, area: "Back", completed: false, data: ExerciseData(sets: [ExerciseDataSet(weight: 5, reps: 5, time: 5.0, rest: 5.0)])))
-                            .padding([.top, .horizontal])
+                        if let recommendedExercise = exerciseManager.recommendedExercise {
+                            RecommendedExerciseWidget(exercise: recommendedExercise, exerciseSelected: {
+                                self.selectedExercise = recommendedExercise
+                            })
+                            .padding()
+                        }
                         
                         if let program = programManager.program {
                             TimeSpentWidget(program: program)
@@ -271,6 +277,9 @@ struct HomeView: View {
             .fullScreenCover(isPresented: $showLevelUpInformationView, content: {
                 LevelInfoView()
             })
+            .navigationDestination(item: $selectedExercise) { exercise in
+                IndividualExerciseView(exercise: exercise)
+            }
         }
     }
     
@@ -290,5 +299,5 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeView(programManager: ProgramManager(), databaseManager: DatabaseManager(), healthManager: HealthManager(), xpManager: XPManager(), levelChangeManager: LevelChangeManager(), pageType: .constant(.home))
+    HomeView(programManager: ProgramManager(), databaseManager: DatabaseManager(), healthManager: HealthManager(), xpManager: XPManager(), exerciseManager: ExerciseManager(), pageType: .constant(.home))
 }

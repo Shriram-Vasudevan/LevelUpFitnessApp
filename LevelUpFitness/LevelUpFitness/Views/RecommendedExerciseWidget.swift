@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct RecommendedExerciseWidget: View {
-    var exercise: Exercise
+    var exercise: ExerciseLibraryExercise
     
+    var exerciseSelected: () -> Void
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
@@ -18,7 +19,7 @@ struct RecommendedExerciseWidget: View {
                         .font(.system(size: 22, weight: .bold, design: .rounded))
                         .foregroundColor(.white)
                     
-                    Text(exercise.area)
+                    Text(exercise.bodyArea)
                         .font(.system(size: 16, weight: .medium, design: .rounded))
                         .foregroundColor(.white.opacity(0.8))
                 }
@@ -31,7 +32,7 @@ struct RecommendedExerciseWidget: View {
             }
             
             Button(action: {
-                // Action to view exercise details
+                exerciseSelected()
             }) {
                 Text("Let's Go")
                     .font(.system(size: 14, weight: .semibold, design: .rounded))
@@ -52,7 +53,6 @@ struct RecommendedExerciseWidget: View {
             .padding(.top, -20)
         }
         .padding([.horizontal, .top], 20)
-        .padding(.bottom, 5)
         .background(
             LinearGradient(gradient: Gradient(colors: [
                 Color(red: 0.4, green: 0.2, blue: 0.7),
@@ -66,5 +66,5 @@ struct RecommendedExerciseWidget: View {
 }
 
 #Preview {
-    RecommendedExerciseWidget(exercise: Exercise(name: "Pull-ups", sets: 5, reps: 5, rpe: "", rest: 5, area: "Back", completed: false, data: ExerciseData(sets: [ExerciseDataSet(weight: 5, reps: 5, time: 5.0, rest: 5.0)])))
+    RecommendedExerciseWidget(exercise: ExerciseLibraryExercise(id: "", cdnURL: "", name: "", description: "", bodyArea: "", level: 2), exerciseSelected: {})
 }

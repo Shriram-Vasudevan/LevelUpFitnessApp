@@ -1,0 +1,14 @@
+{
+  "resourceName": "LevelUpFitnessUserChallengesDB",
+  "tableName": "user-challenges-db",
+  "partitionKey": {
+    "fieldName": "ID",
+    "fieldType": "string"
+  },
+  "sortKey": {
+    "fieldName": "UserID",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}

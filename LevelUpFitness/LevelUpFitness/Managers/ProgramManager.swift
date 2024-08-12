@@ -16,7 +16,7 @@ class ProgramManager: ObservableObject {
     @Published var standardProgramNames: [String]?
     @Published var userProgramNames: [String]?
     
-    @Published var exercises: [ExerciseLibraryExerciseDownloaded] = []
+    @Published var exercises: [ExerciseLibraryExercise] = []
 
     func joinStandardProgram(programName: String, badgeManager: BadgeManager) async {
         await ProgramS3Utility.joinStandardProgram(programName: programName, badgeManager: badgeManager, completion: { result in
@@ -55,48 +55,6 @@ class ProgramManager: ObservableObject {
         await ProgramDynamoDBUtility.leaveProgram(programName: programName)
         
         self.program = nil
-    }
-    
-    
-    func downloadExercises() async {
-        do  {
-            print("here")
-            let exercises = try await ProgramDynamoDBUtility.getExercises()
-            
-            for exercise in exercises {
-                let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-                let exerciseDirectory = documentsDirectory.appendingPathComponent("Exercises", isDirectory: true)
-                let fileURL = exerciseDirectory.appendingPathComponent("\(exercise.name)-\(exercise.id).mp4")
-                
-                if !FileManager.default.fileExists(atPath: fileURL.path) {
-                    guard let cdnURL = URL(string: exercise.cdnURL) else { return }
-                    
-                    print("the cdn url \(cdnURL)")
-                    LocalStorageUtility.saveExerciseToFile(exercise: exercise, cdnURL: cdnURL, completion: { result in
-                        switch result {
-                            case .success(let exerciseDownloaded):
-                                self.exercises.append(exerciseDownloaded)
-                                print("Appending")
-                                print("Number of exercises: \(self.exercises.count)")
-                                print("Exercises: \(self.exercises)")
-                            
-                            case .failure(let error):
-                                print(error.localizedDescription)
-                        }
-                    })
-                }
-                else {
-                    DispatchQueue.main.async {
-                        self.exercises.append(ExerciseLibraryExerciseDownloaded(id: exercise.id, name: exercise.name, videoURL: fileURL, description: exercise.description, bodyArea: exercise.bodyArea, level: exercise.level))
-                        print("Appending")
-                        print("Number of exercises: \(self.exercises.count)")
-                        print("Exercises: \(self.exercises)")
-                    }
-                }
-            }
-        } catch {
-            print(error.localizedDescription)
-        }
     }
     
     func getUserProgram(badgeManager: BadgeManager) async {

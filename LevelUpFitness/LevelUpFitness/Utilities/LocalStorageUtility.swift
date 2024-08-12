@@ -218,18 +218,13 @@ class LocalStorageUtility {
         }
     }
     
-    static func saveExerciseToFile(exercise: ExerciseLibraryExercise, cdnURL: URL, completion: @escaping (Result<ExerciseLibraryExerciseDownloaded, Error>) -> Void)
+    static func downloadVideoAndSaveToTempFile(url: URL, completion: @escaping (Result<URL, Error>) -> Void)
     {
         do {
-            let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-            let exerciseDirectory = documentsDirectory.appendingPathComponent("Exercises", isDirectory: true)
-            let fileURL = exerciseDirectory.appendingPathComponent("\(exercise.name)-\(exercise.id).mp4")
-            
-            if !FileManager.default.fileExists(atPath: exerciseDirectory.path) {
-                try FileManager.default.createDirectory(at: exerciseDirectory, withIntermediateDirectories: true)
-            }
-            
-            let task = URLSession.shared.downloadTask(with: cdnURL) { (location, response, error) in
+            let tempDirectory = FileManager.default.temporaryDirectory
+            let fileURL = tempDirectory.appendingPathComponent("\(UUID()).mp4")
+
+            let task = URLSession.shared.downloadTask(with: url) { (location, response, error) in
                 guard let location = location, error == nil else {
                     print("Failed to download video: \(error?.localizedDescription ?? "Unknown error")")
                     completion(.failure(error ?? FileError.failed))
@@ -240,15 +235,7 @@ class LocalStorageUtility {
                 
                 do {
                     try FileManager.default.moveItem(at: location, to: fileURL)
-                    let downloadedExercise = ExerciseLibraryExerciseDownloaded(
-                        id: exercise.id,
-                        name: exercise.name,
-                        videoURL: fileURL,
-                        description: exercise.description,
-                        bodyArea: exercise.bodyArea,
-                        level: exercise.level
-                    )
-                    completion(.success(downloadedExercise))
+                    completion(.success(fileURL))
                 } catch {
                     print("File move error: \(error.localizedDescription)")
                     completion(.failure(error))

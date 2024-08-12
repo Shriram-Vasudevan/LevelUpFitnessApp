@@ -413,7 +413,7 @@ exports.handler = async (event) => {
                 body: JSON.stringify(error)
             };
         }
-    } else if (event.path === "/leaveProgram" && event.httpMethod === "DELETE") {
+    } else if (event.path == "/leaveProgram" && event.httpMethod == "DELETE") {
         const UserID = event.queryStringParameters.UserID;
         const ProgramName = event.queryStringParameters.ProgramName;
 
@@ -448,7 +448,9 @@ exports.handler = async (event) => {
                 body: JSON.stringify(error)
             };
         }
-    } 
+    } else if (event.path == "/startChallenge" && event.httpMethod == "PUT") {
+
+    }
 
     return {
         statusCode: 200,
