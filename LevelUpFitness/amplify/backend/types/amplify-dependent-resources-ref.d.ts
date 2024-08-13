@@ -61,7 +61,7 @@ export type AmplifyDependentResourcesAttributes = {
       "SortKeyType": "string",
       "StreamArn": "string"
     },
-    "LevelUpFitnessChallengesDB": {
+    "LevelUpFitnessChallengeTemplatesDB": {
       "Arn": "string",
       "Name": "string",
       "PartitionKeyName": "string",
@@ -105,8 +105,6 @@ export type AmplifyDependentResourcesAttributes = {
       "PartitionKeyName": "string",
       "PartitionKeyType": "string",
       "Region": "string",
-      "SortKeyName": "string",
-      "SortKeyType": "string",
       "StreamArn": "string"
     },
     "LevelUpFitnessUserProgramsDB": {

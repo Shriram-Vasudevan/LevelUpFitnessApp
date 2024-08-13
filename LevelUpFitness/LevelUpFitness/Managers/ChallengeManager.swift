@@ -6,3 +6,9 @@
 //
 
 import Foundation
+import Amplify
+
+class ChallengeManager: ObservableObject {
+    
+    
+}

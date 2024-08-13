@@ -11,7 +11,7 @@ import SwiftUI
 extension Array where Element == Program {
     
     private func calculateScaledTrendScore(rawScore: Int, maxScore: Int) -> Int {
-        guard maxScore != 0 else { return 0 } 
+        guard maxScore != 0 else { return 0 }
         let scaleFactor = Double(10) / Double(maxScore)
         let scaledScore = Double(rawScore) * scaleFactor
         return Swift.max(-10, Swift.min(10, Int(scaledScore)))
@@ -46,9 +46,9 @@ extension Array where Element == Program {
             
             for currentAverage in averages.dropFirst() {
                 if currentAverage > previousAverage {
-                    exerciseTrend += 1
+                    exerciseTrend += 2 
                 } else if currentAverage < previousAverage {
-                    exerciseTrend -= 1
+                    exerciseTrend -= 2
                 }
                 previousAverage = currentAverage
             }
@@ -120,9 +120,9 @@ extension Array where Element == Program {
         
         for currentRate in programCompletionRates.dropFirst() {
             if currentRate > previousRate {
-                trendScore += 1
+                trendScore += 2
             } else if currentRate < previousRate {
-                trendScore -= 1
+                trendScore -= 2
             }
             previousRate = currentRate
         }
@@ -159,9 +159,9 @@ extension Array where Element == Program {
         
         for currentAverage in programRestTimeAverages.dropFirst() {
             if currentAverage < previousAverage {
-                restTimeTrendScore += 1
+                restTimeTrendScore += 2
             } else if currentAverage > previousAverage {
-                restTimeTrendScore -= 1
+                restTimeTrendScore -= 2
             }
             previousAverage = currentAverage
         }
@@ -170,6 +170,7 @@ extension Array where Element == Program {
         return calculateScaledTrendScore(rawScore: restTimeTrendScore, maxScore: maxTrendValue)
     }
 }
+
 
 
 extension Program {

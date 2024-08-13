@@ -1,6 +1,7 @@
 const AWS = require('aws-sdk');
 const { DocumentClient } = require('aws-sdk/clients/dynamodb');
 const { json } = require('stream/consumers');
+const { v4: uuidv4 } = require('uuid');
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
@@ -448,8 +449,161 @@ exports.handler = async (event) => {
                 body: JSON.stringify(error)
             };
         }
-    } else if (event.path == "/startChallenge" && event.httpMethod == "PUT") {
+    } else if (event.path === "/getChallengeTemplates" && event.httpMethod === "GET") {
+        const params = {
+            TableName: "challenges-templates-db-dev"
+        }
 
+        try {
+            const challengeTemplates = await dynamoDb.scan(params).promise()
+
+            if (challengeTemplates.Items.length > 0) {
+                return {
+                    statusCode: 200,
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
+                        "Access-Control-Allow-Headers": "*"
+                    },
+                    body: JSON.stringify(`${challengeTemplates.Items}`)
+                };
+            } else {
+                return {
+                    statusCode: 404,
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
+                        "Access-Control-Allow-Headers": "*"
+                    },
+                    body: JSON.stringify("No Challenge Templates Found")
+                };
+            }
+        } catch (error) {
+            console.log(error)
+            return {
+                statusCode: 500,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "*"
+                },
+                body: JSON.stringify(`${error}`)
+            };
+        }
+    } else if (event.path == "/getActiveUserChallenges" && event.httpMethod == "GET") {
+        const UserID = event.queryStringParameters.UserID
+
+        const params = {
+            TableName: "user-challenges-db-dev",
+            KeyConditionExpression: "#userID = :userID",
+            FilterExpression: "#isActive = :isActive",
+            ExpressionAttributeValues: {
+                ":userID": UserID,
+                ":isActive": true
+            },
+            ExpressionAttributeNames: {
+                "#userID": "UserID",
+                "#isActive": "isActive"
+            }
+        };
+
+        try {
+            const userChallenges = await dynamoDb.query(params).promise()
+
+            if (userChallenges.Items.length > 0) {
+                return {
+                    statusCode: 200,
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
+                        "Access-Control-Allow-Headers": "*"
+                    },
+                    body: JSON.stringify(`${userChallenges.Items}`)
+                };
+            } else {
+                return {
+                    statusCode: 404,
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
+                        "Access-Control-Allow-Headers": "*"
+                    },
+                    body: JSON.stringify("No Challenge Templates Found")
+                };
+            }
+        } catch (error) {
+            console.log(error)
+            return {
+                statusCode: 500,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "*"
+                },
+                body: JSON.stringify(`${error}`)
+            };
+        }
+    }
+    else if (event.path == "/startChallenge" && event.httpMethod == "PUT") {
+        const body = JSON.parse(event.body)
+        const UserID = body.UserID
+        const ChallengeTemplateID =  body.ChallengeTemplateID
+        const StartDate = body.StartDate
+        const EndDate = body.EndDate
+        const StartValue = body.StartValue
+        const TargetValue = body.TargetValue
+        const Field = body.Field
+
+        const ID = uuidv4();
+
+        const params = {
+            TableName: "user-challenges-db-dev",
+            Key: {
+                UserID: UserID
+            },
+            UpdateExpression: "set #id = :id, #challengeTemplateID = :challengeTemplateID, #startDate = :startDate, #endDate = :endDate, #startValue = :startValue, #targetValue = :targetValue, #field = :field, #isFailed = :isFailed, #isActive = :isActive",
+            ExpressionAttributeNames: {
+                "#id": "ID",
+                "#challengeTemplateID": "ChallengeTemplateID",
+                "#startDate": "StartDate",
+                "#endDate": "EndDate",
+                "#startValue": "StartValue",
+                "#targetValue": "TargetValue",
+                "#field": "Field",
+                "#isFailed": "IsFailed",
+                "#isActive": "IsActive"
+            },
+            ExpressionAttributeValues: {
+                ":id": "ID",
+                ":challengeTemplateID": ChallengeTemplateID,
+                ":startDate": StartDate,
+                ":endDate": EndDate,
+                ":startValue": StartValue,
+                ":targetValue": TargetValue,
+                ":field": Field,
+                ":isFailed": false,
+                ":isActive": true
+            }
+        }
+
+        try {
+            await dynamoDb.update(params).promise()
+
+            return {
+                statusCode: 200,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "*"
+                },
+                body: JSON.stringify("Successfully started Challenge")
+            };
+        } catch (error) {
+            console.log(error)
+            return {
+                statusCode: 500,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "*"
+                },
+                body: JSON.stringify(`${error}`)
+            };
+        }
+    } else if (event.path == "/checkChallengeStatus" && event.httpMethod == "GET") {
+        
     }
 
     return {

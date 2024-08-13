@@ -199,13 +199,7 @@ class XPManager: ObservableObject {
             
             let levelChangeInfo = LevelChangeInfo(keyword: "Weight", description: "This is a measure of how much weight you've been lifting over the past few weeks", change: contribution, timestamp: Date().ISO8601Format())
             
-            let jsonEncoder = JSONEncoder()
-            let jsonData = try jsonEncoder.encode(levelChangeInfo)
-            
-            LocalStorageUtility.appendDataToDocumentsDirectoryFile(at: "\(userID)-LevelChangeInfo.json", data: jsonData)
-            levelChanges.append(levelChangeInfo)
-            
-            addXP(increment: contribution, type: .total)
+            appendLevelChangeToFile(levelChangeInfo: levelChangeInfo, contribution: contribution, userID: userID)
         } catch {
             print(error)
         }
@@ -213,19 +207,13 @@ class XPManager: ObservableObject {
     
     func addProgramRestDifferentialTrendContribution(programs: [Program]) async {
         do {
-            guard let userID = try? await Amplify.Auth.getCurrentUser().userId else { return }
+            let userID = try await Amplify.Auth.getCurrentUser().userId
             
             let contribution = programs.getRestDifferentialTrendContribution()
             
             let levelChangeInfo = LevelChangeInfo(keyword: "Rest", description: "This is a measure of how your rest differential has been changing over the last few weeks", change: contribution, timestamp: Date().ISO8601Format())
             
-            let jsonEncoder = JSONEncoder()
-            let jsonData = try jsonEncoder.encode(levelChangeInfo)
-            
-            LocalStorageUtility.appendDataToDocumentsDirectoryFile(at: "\(userID)-LevelChangeInfo.json", data: jsonData)
-            levelChanges.append(levelChangeInfo)
-            
-            addXP(increment: contribution, type: .total)
+            appendLevelChangeToFile(levelChangeInfo: levelChangeInfo, contribution: contribution, userID: userID)
         } catch {
             print(error)
         }
@@ -233,7 +221,7 @@ class XPManager: ObservableObject {
     
     func addProgramConsistencyTrendContribution(programs: [Program]) async {
         do {
-            guard let userID = try? await Amplify.Auth.getCurrentUser().userId else { return }
+            let userID = try await Amplify.Auth.getCurrentUser().userId
             
             let contribution = programs.getConsistencyTrendContribution()
             
@@ -242,10 +230,7 @@ class XPManager: ObservableObject {
             let jsonEncoder = JSONEncoder()
             let jsonData = try jsonEncoder.encode(levelChangeInfo)
             
-            LocalStorageUtility.appendDataToDocumentsDirectoryFile(at: "\(userID)-LevelChangeInfo.json", data: jsonData)
-            levelChanges.append(levelChangeInfo)
-            
-            addXP(increment: contribution, type: .total)
+            appendLevelChangeToFile(levelChangeInfo: levelChangeInfo, contribution: contribution, userID: userID)
         } catch {
             print(error)
         }
@@ -253,12 +238,20 @@ class XPManager: ObservableObject {
     
     func addProgramRestTimeTrendContribution(programs: [Program]) async {
         do {
-            guard let userID = try? await Amplify.Auth.getCurrentUser().userId else { return }
+            let userID = try await Amplify.Auth.getCurrentUser().userId 
             
             let contribution = programs.getRestTimeTrendContribution()
             
             let levelChangeInfo = LevelChangeInfo(keyword: "Endurance", description: "This is a measure of how your endurance has been changing over the last few weeks", change: contribution, timestamp: Date().ISO8601Format())
             
+            appendLevelChangeToFile(levelChangeInfo: levelChangeInfo, contribution: contribution, userID: userID)
+        } catch {
+            print(error)
+        }
+    }
+    
+    func appendLevelChangeToFile(levelChangeInfo: LevelChangeInfo, contribution: Int, userID: String) {
+        do {
             let jsonEncoder = JSONEncoder()
             let jsonData = try jsonEncoder.encode(levelChangeInfo)
             
@@ -270,7 +263,6 @@ class XPManager: ObservableObject {
             print(error)
         }
     }
-    
     func selectedPropterties() -> [String] {
         let availableProperties = allProperties.filter({!currentProperties.contains($0)})
         return Array(availableProperties.shuffled().prefix(4))

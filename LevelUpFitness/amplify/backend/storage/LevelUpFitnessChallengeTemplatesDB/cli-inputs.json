@@ -1,6 +1,6 @@
 {
-  "resourceName": "LevelUpFitnessChallengesDB",
-  "tableName": "challenges-db",
+  "resourceName": "LevelUpFitnessChallengeTemplatesDB",
+  "tableName": "challenge-templates-db",
   "partitionKey": {
     "fieldName": "ID",
     "fieldType": "string"

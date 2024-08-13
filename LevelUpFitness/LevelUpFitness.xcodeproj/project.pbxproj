@@ -33,6 +33,8 @@
 		991FB4712C68223E006B4ACE /* LevelChangeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991FB4702C68223E006B4ACE /* LevelChangeManager.swift */; };
 		991FB4752C69394D006B4ACE /* LevelChangeWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991FB4742C69394D006B4ACE /* LevelChangeWidget.swift */; };
 		991FB4772C6A9756006B4ACE /* ExerciseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991FB4762C6A9756006B4ACE /* ExerciseManager.swift */; };
+		991FB4792C6BCD46006B4ACE /* UserChallenge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991FB4782C6BCD46006B4ACE /* UserChallenge.swift */; };
+		991FB47B2C6BCD81006B4ACE /* ChallengeTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991FB47A2C6BCD80006B4ACE /* ChallengeTemplate.swift */; };
 		992F26A32C60079200F25400 /* ProgramSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992F26A22C60079200F25400 /* ProgramSummaryView.swift */; };
 		992F26A52C6032A100F25400 /* FullLevelBreakdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992F26A42C6032A100F25400 /* FullLevelBreakdownView.swift */; };
 		992F26A72C61225300F25400 /* LevelInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992F26A62C61225300F25400 /* LevelInfoView.swift */; };
@@ -151,6 +153,8 @@
 		991FB4702C68223E006B4ACE /* LevelChangeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelChangeManager.swift; sourceTree = "<group>"; };
 		991FB4742C69394D006B4ACE /* LevelChangeWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelChangeWidget.swift; sourceTree = "<group>"; };
 		991FB4762C6A9756006B4ACE /* ExerciseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseManager.swift; sourceTree = "<group>"; };
+		991FB4782C6BCD46006B4ACE /* UserChallenge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserChallenge.swift; sourceTree = "<group>"; };
+		991FB47A2C6BCD80006B4ACE /* ChallengeTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeTemplate.swift; sourceTree = "<group>"; };
 		992F26A22C60079200F25400 /* ProgramSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramSummaryView.swift; sourceTree = "<group>"; };
 		992F26A42C6032A100F25400 /* FullLevelBreakdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullLevelBreakdownView.swift; sourceTree = "<group>"; };
 		992F26A62C61225300F25400 /* LevelInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelInfoView.swift; sourceTree = "<group>"; };
@@ -403,6 +407,8 @@
 				992F26A82C61808000F25400 /* MuscleGroupStat.swift */,
 				991FB4512C66657C006B4ACE /* LevelChangeInfo.swift */,
 				991FB45E2C668DF8006B4ACE /* Errors.swift */,
+				991FB4782C6BCD46006B4ACE /* UserChallenge.swift */,
+				991FB47A2C6BCD80006B4ACE /* ChallengeTemplate.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -577,6 +583,7 @@
 				99A67EEA2BF451F0002DC3DC /* HomeView.swift in Sources */,
 				992F26A92C61808000F25400 /* MuscleGroupStat.swift in Sources */,
 				991F8FEC2C17844400A134A5 /* Badge.swift in Sources */,
+				991FB47B2C6BCD81006B4ACE /* ChallengeTemplate.swift in Sources */,
 				99A67F062BF456A7002DC3DC /* PagesHolderView.swift in Sources */,
 				995B94BD2C5986F3007AECF0 /* PastProgramsView.swift in Sources */,
 				994E7DBB2C026BFE00BAD9E0 /* SplashScreenView.swift in Sources */,
@@ -607,6 +614,7 @@
 				991FB4652C668FFB006B4ACE /* ProgramS3Utility.swift in Sources */,
 				994E7DC12C02950000BAD9E0 /* WorkoutCard.swift in Sources */,
 				995B94B92C596EEF007AECF0 /* TimeSpentWidget.swift in Sources */,
+				991FB4792C6BCD46006B4ACE /* UserChallenge.swift in Sources */,
 				991FB4712C68223E006B4ACE /* LevelChangeManager.swift in Sources */,
 				991FB46B2C66B5ED006B4ACE /* ProgramManager.swift in Sources */,
 				997328EB2C57EDA6007708A9 /* ProgramPageTypes.swift in Sources */,

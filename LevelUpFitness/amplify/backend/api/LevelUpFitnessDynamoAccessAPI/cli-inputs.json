@@ -105,6 +105,36 @@
           "update"
         ]
       }
+    },
+    "/checkChallengeStatus": {
+      "name": "/checkChallengeStatus",
+      "lambdaFunction": "LevelUpFitnessDynamoAccessLambda",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "read"
+        ]
+      }
+    },
+    "/getChallengeTemplates": {
+      "name": "/getChallengeTemplates",
+      "lambdaFunction": "LevelUpFitnessDynamoAccessLambda",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "read"
+        ]
+      }
+    },
+    "/getActiveUserChallenges": {
+      "name": "/getActiveUserChallenges",
+      "lambdaFunction": "LevelUpFitnessDynamoAccessLambda",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "read"
+        ]
+      }
     }
   }
 }
