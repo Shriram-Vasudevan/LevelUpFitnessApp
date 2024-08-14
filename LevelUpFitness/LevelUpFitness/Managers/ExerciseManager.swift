@@ -11,6 +11,7 @@ import Amplify
 @MainActor
 class ExerciseManager: ObservableObject {
     @Published var exercises: [ExerciseLibraryExercise] = []
+    
     @Published var recommendedExercise: ExerciseLibraryExercise?
     init() {
         Task {

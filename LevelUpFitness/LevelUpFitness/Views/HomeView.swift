@@ -9,6 +9,7 @@ struct HomeView: View {
     @ObservedObject var healthManager: HealthManager
     @ObservedObject var xpManager: XPManager
     @ObservedObject var exerciseManager: ExerciseManager
+    @ObservedObject var challengeManager: ChallengeManager
     
     @State var avPlayer = AVPlayer()
     

@@ -14,6 +14,7 @@ struct PagesHolderView: View {
     @StateObject var badgeManager = BadgeManager()
     @StateObject var xpManager = XPManager()
     @StateObject var exerciseManager = ExerciseManager()
+    @StateObject var challengeManager = ChallengeManager()
     
     @State var pageType: PageType
     
@@ -22,7 +23,7 @@ struct PagesHolderView: View {
             VStack {
                 switch pageType {
                 case .home:
-                    HomeView(programManager: programManager, databaseManager: databaseManager, healthManager: healthManager, xpManager: xpManager, exerciseManager: exerciseManager, pageType: $pageType)
+                    HomeView(programManager: programManager, databaseManager: databaseManager, healthManager: healthManager, xpManager: xpManager, exerciseManager: exerciseManager, challengeManager: challengeManager, pageType: $pageType)
                         .preferredColorScheme(.light)
                 case .program:
                     ProgramView(programManager: programManager, badgeManager: badgeManager, xpManager: xpManager)

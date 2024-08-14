@@ -8,6 +8,13 @@
 import Foundation
 
 class DateUtility {
+    static func createDateDurationISO(duration: Int) -> (String, String)? {
+        let currentDate = Date()
+        
+        guard let modifiedDate = Calendar.current.date(byAdding: .day, value: duration, to: currentDate) else { return nil }
+        
+        return (currentDate.ISO8601Format(), modifiedDate.ISO8601Format())
+    }
     
     static func getPreviousMondayDate() -> String? {
         let calendar = Calendar.current
