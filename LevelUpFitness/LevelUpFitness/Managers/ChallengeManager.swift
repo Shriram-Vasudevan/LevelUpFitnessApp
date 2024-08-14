@@ -56,15 +56,30 @@ class ChallengeManager: ObservableObject {
         
     }
     
-    func startChallenge(challengeTemplateID: String, startDate: String, endDate: String, startValue: Int, targetValue: Int, field: String) async {
+    func createChallenge(challengeName: String, challengeTemplateID: String, userXPData: XPData) async {
+        switch challengeName {
+            case "30 Day LevelUp Challenge":
+                let levelsRequired = levelsRequired(currentLevel: userXPData.level)
+                guard let dateRange = DateUtility.createDateDurationISO(duration: 30) else { return }
+            
+            await startChallenge(challengeTemplateID: challengeTemplateID, challengeName: challengeName, startDate: dateRange.0, endDate: dateRange.1, startValue: userXPData.level, targetValue: userXPData.level + levelsRequired, field: "Level")
+            default:
+                break
+        }
+    }
+    
+    func startChallenge(challengeTemplateID: String, challengeName: String, startDate: String, endDate: String, startValue: Int, targetValue: Int, field: String) async {
         do {
             let userID = try await Amplify.Auth.getCurrentUser().userId
             
-            let userChallenge = UserChallenge(userID: userID, id: UUID().uuidString, challengeTemplateID: challengeTemplateID, startDate: startDate, endDate: endDate, startValue: startValue, targetValue: targetValue, field: field, isFailed: false, isActive: true)
+            print("challenge template id \(challengeTemplateID)")
+            let userChallenge = UserChallenge(userID: userID, id: UUID().uuidString, challengeTemplateID: challengeTemplateID, name: challengeName, startDate: startDate, endDate: endDate, startValue: startValue, targetValue: targetValue, field: field, isFailed: false, isActive: true)
             
-            let jsonData = try JSONSerialization.data(withJSONObject: userChallenge, options: .prettyPrinted)
+            let jsonEncoder = JSONEncoder()
+            jsonEncoder.outputFormatting = .prettyPrinted
+            let jsonData = try jsonEncoder.encode(userChallenge)
             
-            var request = RESTRequest(apiName: "LevelUpFitnessDynamoAccessAPI", path: "/updateChallenge", body: jsonData)
+            let request = RESTRequest(apiName: "LevelUpFitnessDynamoAccessAPI", path: "/updateChallenge", body: jsonData)
             
             let response = try await Amplify.API.put(request: request)
             
@@ -76,4 +91,9 @@ class ChallengeManager: ObservableObject {
         }
     }
     
+    func levelsRequired(currentLevel: Int, k: Double = 5.0) -> Int {
+        let requiredLevels = Int(ceil(k / sqrt(Double(currentLevel))))
+        
+        return max(requiredLevels, 1)
+    }
 }

@@ -171,6 +171,22 @@ extension Array where Element == Program {
     }
 }
 
+extension UserChallenge {
+    func toDictionary() -> [String: Any] {
+        return [
+            "userID": userID,
+            "id": id,
+            "challengeTemplateID": challengeTemplateID,
+            "startDate": startDate,
+            "endDate": endDate,
+            "startValue": startValue,
+            "targetValue": targetValue,
+            "field": field,
+            "isFailed": isFailed,
+            "isActive": isActive
+        ]
+    }
+}
 
 
 extension Program {

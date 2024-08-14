@@ -36,6 +36,7 @@
 		991FB4792C6BCD46006B4ACE /* UserChallenge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991FB4782C6BCD46006B4ACE /* UserChallenge.swift */; };
 		991FB47B2C6BCD81006B4ACE /* ChallengeTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991FB47A2C6BCD80006B4ACE /* ChallengeTemplate.swift */; };
 		991FB47D2C6C3BCF006B4ACE /* ChallengeTemplateWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991FB47C2C6C3BCE006B4ACE /* ChallengeTemplateWidget.swift */; };
+		991FB47F2C6D561F006B4ACE /* ActiveUserChallengeWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991FB47E2C6D561F006B4ACE /* ActiveUserChallengeWidget.swift */; };
 		992F26A32C60079200F25400 /* ProgramSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992F26A22C60079200F25400 /* ProgramSummaryView.swift */; };
 		992F26A52C6032A100F25400 /* FullLevelBreakdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992F26A42C6032A100F25400 /* FullLevelBreakdownView.swift */; };
 		992F26A72C61225300F25400 /* LevelInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992F26A62C61225300F25400 /* LevelInfoView.swift */; };
@@ -157,6 +158,7 @@
 		991FB4782C6BCD46006B4ACE /* UserChallenge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserChallenge.swift; sourceTree = "<group>"; };
 		991FB47A2C6BCD80006B4ACE /* ChallengeTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeTemplate.swift; sourceTree = "<group>"; };
 		991FB47C2C6C3BCE006B4ACE /* ChallengeTemplateWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeTemplateWidget.swift; sourceTree = "<group>"; };
+		991FB47E2C6D561F006B4ACE /* ActiveUserChallengeWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveUserChallengeWidget.swift; sourceTree = "<group>"; };
 		992F26A22C60079200F25400 /* ProgramSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramSummaryView.swift; sourceTree = "<group>"; };
 		992F26A42C6032A100F25400 /* FullLevelBreakdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullLevelBreakdownView.swift; sourceTree = "<group>"; };
 		992F26A62C61225300F25400 /* LevelInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelInfoView.swift; sourceTree = "<group>"; };
@@ -357,6 +359,7 @@
 				991FB44B2C654A69006B4ACE /* VerticalLevelBanner.swift */,
 				991FB4742C69394D006B4ACE /* LevelChangeWidget.swift */,
 				991FB47C2C6C3BCE006B4ACE /* ChallengeTemplateWidget.swift */,
+				991FB47E2C6D561F006B4ACE /* ActiveUserChallengeWidget.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -653,6 +656,7 @@
 				998DA0172C1A34840078E882 /* ChatView.swift in Sources */,
 				99FC9E462C5EC1F900DAFFAC /* AnalyticsView.swift in Sources */,
 				994E7DC52C03AC3E00BAD9E0 /* DatabaseManager.swift in Sources */,
+				991FB47F2C6D561F006B4ACE /* ActiveUserChallengeWidget.swift in Sources */,
 				991FB4692C6695EB006B4ACE /* ProgramDynamoDBUtility.swift in Sources */,
 				9945E0BA2C39A15F00EA19D2 /* XPManager.swift in Sources */,
 				99DD3D522C1D0839006C07B3 /* ExerciseLibraryExerciseWidget.swift in Sources */,

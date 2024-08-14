@@ -1,16 +1,15 @@
 //
-//  ChallengeTemplateWidget.swift
+//  ActiveUserChallengeWidget.swift
 //  LevelUpFitness
 //
-//  Created by Shriram Vasudevan on 8/13/24.
+//  Created by Shriram Vasudevan on 8/14/24.
 //
 
 import SwiftUI
 
-struct ChallengeTemplateWidget: View {
-    var challenge: ChallengeTemplate
-    
-    var challengeSelected: () -> Void
+struct ActiveUserChallengeWidget: View {
+    var challenge: UserChallenge
+    var currentProgress: Int
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -20,9 +19,9 @@ struct ChallengeTemplateWidget: View {
                         .font(.system(size: 22, weight: .bold, design: .rounded))
                         .foregroundColor(.white)
                     
-                    Text(challenge.description)
-                        .font(.system(size: 12, weight: .medium, design: .rounded))
-                        .foregroundColor(.white.opacity(0.8))
+//                    Text(challenge.description)
+//                        .font(.system(size: 12, weight: .medium, design: .rounded))
+//                        .foregroundColor(.white.opacity(0.8))
                 }
                 
                 Spacer()
@@ -30,18 +29,6 @@ struct ChallengeTemplateWidget: View {
                 Image(systemName: "flame.fill")
                     .font(.system(size: 24))
                     .foregroundColor(.white.opacity(0.7))
-            }
-            
-            Button(action: {
-                challengeSelected()
-            }) {
-                Text("Start")
-                    .font(.system(size: 14, weight: .semibold, design: .rounded))
-                    .foregroundColor(.blue)
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 8)
-                    .background(Color.white)
-                    .cornerRadius(20)
             }
 
         }
@@ -58,5 +45,5 @@ struct ChallengeTemplateWidget: View {
 }
 
 #Preview {
-    ChallengeTemplateWidget(challenge: ChallengeTemplate(id: "", name: "", description: "", duration: 5, targetField: ""), challengeSelected: {})
+    ActiveUserChallengeWidget(challenge: UserChallenge(userID: "", id: "", challengeTemplateID: "", name: "", startDate: "", endDate: "", startValue: 1, targetValue: 1, field: "", isFailed: false, isActive: false), currentProgress: 3)
 }

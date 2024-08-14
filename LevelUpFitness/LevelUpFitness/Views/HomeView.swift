@@ -201,24 +201,33 @@ struct HomeView: View {
                             HealthStatsWidget(stat1: steps, text1: "Steps", imageName1: "figure.walk", stat2: calories, text2: "Calories", imageName2: "flame.fill", stat3: distance, text3: "Distance", imageName3: "app.connected.to.app.below.fill")
                         }
                         
-                        HStack {
-                            Text("Available Challenges")
-                                .font(.custom("EtruscoNow Medium", size: 23))
-                                .bold()
-                            
-                            Spacer()
-                        }
-                        .padding(.horizontal)
-                        
-                        ForEach(challengeManager.challengeTemplates.filter { challengeTemplate in
+                        if let userXPData = xpManager.userXPData, challengeManager.challengeTemplates.filter({ challengeTemplate in
                             !challengeManager.userChallenges.contains { userChallenge in
                                 userChallenge.challengeTemplateID == challengeTemplate.id
                             }
-                        }, id: \.id) { challengeTemplate in
-                            ChallengeTemplateWidget(challenge: challengeTemplate) {
+                        }).count > 0 {
+                            HStack {
+                                Text("Available Challenges")
+                                    .font(.custom("EtruscoNow Medium", size: 23))
+                                    .bold()
                                 
+                                Spacer()
                             }
-                            .padding()
+                            .padding(.horizontal)
+                            .padding(.top)
+                            
+                            ForEach(challengeManager.challengeTemplates.filter { challengeTemplate in
+                                !challengeManager.userChallenges.contains { userChallenge in
+                                    userChallenge.challengeTemplateID == challengeTemplate.id
+                                }
+                            }, id: \.id) { challengeTemplate in
+                                ChallengeTemplateWidget(challenge: challengeTemplate) {
+                                    Task {
+                                        await challengeManager.createChallenge(challengeName: challengeTemplate.name, challengeTemplateID: challengeTemplate.id, userXPData: userXPData)
+                                    }
+                                }
+                                .padding()
+                            }
                         }
 
 

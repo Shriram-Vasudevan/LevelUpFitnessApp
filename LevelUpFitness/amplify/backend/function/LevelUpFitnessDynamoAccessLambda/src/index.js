@@ -451,7 +451,7 @@ exports.handler = async (event) => {
         }
     } else if (event.path === "/getChallengeTemplates" && event.httpMethod === "GET") {
         const params = {
-            TableName: "challenges-templates-db-dev"
+            TableName: "challenge-templates-db-dev"
         }
 
         try {
@@ -500,7 +500,7 @@ exports.handler = async (event) => {
             },
             ExpressionAttributeNames: {
                 "#userID": "UserID",
-                "#isActive": "isActive"
+                "#isActive": "IsActive"
             }
         };
 
@@ -541,26 +541,27 @@ exports.handler = async (event) => {
     else if (event.path == "/updateChallenge" && event.httpMethod == "PUT") {
         const body = JSON.parse(event.body)
         const UserID = body.UserID
+        const ID = body.ID
+        const Name = body.Name
         const ChallengeTemplateID =  body.ChallengeTemplateID
         const StartDate = body.StartDate
         const EndDate = body.EndDate
         const StartValue = body.StartValue
         const TargetValue = body.TargetValue
         const Field = body.Field
-        const isFailed = body.isFailed
-        const isActive = body.isActive
-
-        const ID = uuidv4();
+        const IsFailed = body.IsFailed
+        const IsActive = body.IsActive
 
         const params = {
             TableName: "user-challenges-db-dev",
             Key: {
                 UserID: UserID
             },
-            UpdateExpression: "set #id = :id, #challengeTemplateID = :challengeTemplateID, #startDate = :startDate, #endDate = :endDate, #startValue = :startValue, #targetValue = :targetValue, #field = :field, #isFailed = :isFailed, #isActive = :isActive",
+            UpdateExpression: "set #id = :id, #challengeTemplateID = :challengeTemplateID, #name = :name, #startDate = :startDate, #endDate = :endDate, #startValue = :startValue, #targetValue = :targetValue, #field = :field, #isFailed = :isFailed, #isActive = :isActive",
             ExpressionAttributeNames: {
                 "#id": "ID",
                 "#challengeTemplateID": "ChallengeTemplateID",
+                "#name": "Name",
                 "#startDate": "StartDate",
                 "#endDate": "EndDate",
                 "#startValue": "StartValue",
@@ -570,15 +571,16 @@ exports.handler = async (event) => {
                 "#isActive": "IsActive"
             },
             ExpressionAttributeValues: {
-                ":id": "ID",
+                ":id": ID,
                 ":challengeTemplateID": ChallengeTemplateID,
+                ":name": Name,
                 ":startDate": StartDate,
                 ":endDate": EndDate,
                 ":startValue": StartValue,
                 ":targetValue": TargetValue,
                 ":field": Field,
-                ":isFailed": isFailed,
-                ":isActive": isActive
+                ":isFailed": IsFailed,
+                ":isActive": IsActive
             }
         }
 

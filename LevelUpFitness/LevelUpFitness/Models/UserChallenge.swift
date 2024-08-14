@@ -11,6 +11,7 @@ struct UserChallenge: Codable {
     var userID: String
     var id: String
     var challengeTemplateID: String
+    var name: String
     var startDate: String
     var endDate: String
     var startValue: Int
@@ -23,6 +24,7 @@ struct UserChallenge: Codable {
         case userID = "UserID"
         case id = "ID"
         case challengeTemplateID = "ChallengeTemplateID"
+        case name = "Name"
         case startDate = "StartDate"
         case endDate = "EndDate"
         case startValue = "StartValue"
