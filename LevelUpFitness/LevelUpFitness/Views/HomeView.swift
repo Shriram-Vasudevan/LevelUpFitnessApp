@@ -200,8 +200,28 @@ struct HomeView: View {
                             
                             HealthStatsWidget(stat1: steps, text1: "Steps", imageName1: "figure.walk", stat2: calories, text2: "Calories", imageName2: "flame.fill", stat3: distance, text3: "Distance", imageName3: "app.connected.to.app.below.fill")
                         }
-
                         
+                        HStack {
+                            Text("Available Challenges")
+                                .font(.custom("EtruscoNow Medium", size: 23))
+                                .bold()
+                            
+                            Spacer()
+                        }
+                        .padding(.horizontal)
+                        
+                        ForEach(challengeManager.challengeTemplates.filter { challengeTemplate in
+                            !challengeManager.userChallenges.contains { userChallenge in
+                                userChallenge.challengeTemplateID == challengeTemplate.id
+                            }
+                        }, id: \.id) { challengeTemplate in
+                            ChallengeTemplateWidget(challenge: challengeTemplate) {
+                                
+                            }
+                            .padding()
+                        }
+
+
                         VStack (spacing: 10) {
                             HStack {
                                 
@@ -243,28 +263,7 @@ struct HomeView: View {
                             .frame(height: (UIScreen.main.bounds.width - 10) / 2)
                             .padding(.horizontal)
                         }
-                        
-        //                VStack() {
-        //                    if !days.isEmpty {
-        //                        HStack() {
-        //                            Chart {
-        //                                ForEach(days.keys.sorted(), id: \.self) { date in
-        //                                    let randomUsageTime = Int.random(in: 5..<30)
-        //
-        //                                    BarMark(
-        //                                       x: .value("Date", date),
-        //                                       y: .value("Time", randomUsageTime)
-        //                                   )
-        //                                }
-        //                            }
-        //                            .chartYAxis {
-        //                                AxisMarks(position: .leading)
-        //                            }
-        //                        }
-        //                    }
-        //                }
-        //                .padding([.horizontal, .bottom])
-        //
+
                         Spacer()
                     }
                 }
@@ -284,19 +283,6 @@ struct HomeView: View {
         }
     }
     
-    func setDateString(date: String) -> [String] {
-        return date.components(separatedBy: " ")
-    }
-    
-    func getCurrentWeekday() -> String {
-        let date = Date()
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "EEEE"
-        let weekday = dateFormatter.string(from: date)
-        
-        return weekday
-    }
 }
 
 #Preview {

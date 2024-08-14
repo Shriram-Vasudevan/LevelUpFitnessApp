@@ -94,18 +94,6 @@
         ]
       }
     },
-    "/startChallenge": {
-      "name": "/startChallenge",
-      "lambdaFunction": "LevelUpFitnessDynamoAccessLambda",
-      "permissions": {
-        "setting": "private",
-        "auth": [
-          "create",
-          "read",
-          "update"
-        ]
-      }
-    },
     "/checkChallengeStatus": {
       "name": "/checkChallengeStatus",
       "lambdaFunction": "LevelUpFitnessDynamoAccessLambda",
@@ -133,6 +121,17 @@
         "setting": "private",
         "auth": [
           "read"
+        ]
+      }
+    },
+    "/updateChallenge": {
+      "name": "/updateChallenge",
+      "lambdaFunction": "LevelUpFitnessDynamoAccessLambda",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "update"
         ]
       }
     }

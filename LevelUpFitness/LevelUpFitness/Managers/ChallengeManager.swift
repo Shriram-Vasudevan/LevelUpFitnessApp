@@ -64,7 +64,7 @@ class ChallengeManager: ObservableObject {
             
             let jsonData = try JSONSerialization.data(withJSONObject: userChallenge, options: .prettyPrinted)
             
-            var request = RESTRequest(apiName: "LevelUpFitnessDynamoAccessAPI", path: "/startChallenge", body: jsonData)
+            var request = RESTRequest(apiName: "LevelUpFitnessDynamoAccessAPI", path: "/updateChallenge", body: jsonData)
             
             let response = try await Amplify.API.put(request: request)
             

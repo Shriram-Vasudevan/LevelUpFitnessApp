@@ -970,246 +970,6 @@
                           }
                         ]
                       },
-                      "/POST/startChallenge/*"
-                    ]
-                  ]
-                },
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:execute-api:",
-                      {
-                        "Ref": "AWS::Region"
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId"
-                      },
-                      ":",
-                      {
-                        "Ref": "LevelUpFitnessDynamoAccessAPI"
-                      },
-                      "/",
-                      {
-                        "Fn::If": [
-                          "ShouldNotCreateEnvResources",
-                          "Prod",
-                          {
-                            "Ref": "env"
-                          }
-                        ]
-                      },
-                      "/POST/startChallenge"
-                    ]
-                  ]
-                },
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:execute-api:",
-                      {
-                        "Ref": "AWS::Region"
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId"
-                      },
-                      ":",
-                      {
-                        "Ref": "LevelUpFitnessDynamoAccessAPI"
-                      },
-                      "/",
-                      {
-                        "Fn::If": [
-                          "ShouldNotCreateEnvResources",
-                          "Prod",
-                          {
-                            "Ref": "env"
-                          }
-                        ]
-                      },
-                      "/GET/startChallenge/*"
-                    ]
-                  ]
-                },
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:execute-api:",
-                      {
-                        "Ref": "AWS::Region"
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId"
-                      },
-                      ":",
-                      {
-                        "Ref": "LevelUpFitnessDynamoAccessAPI"
-                      },
-                      "/",
-                      {
-                        "Fn::If": [
-                          "ShouldNotCreateEnvResources",
-                          "Prod",
-                          {
-                            "Ref": "env"
-                          }
-                        ]
-                      },
-                      "/GET/startChallenge"
-                    ]
-                  ]
-                },
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:execute-api:",
-                      {
-                        "Ref": "AWS::Region"
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId"
-                      },
-                      ":",
-                      {
-                        "Ref": "LevelUpFitnessDynamoAccessAPI"
-                      },
-                      "/",
-                      {
-                        "Fn::If": [
-                          "ShouldNotCreateEnvResources",
-                          "Prod",
-                          {
-                            "Ref": "env"
-                          }
-                        ]
-                      },
-                      "/PUT/startChallenge/*"
-                    ]
-                  ]
-                },
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:execute-api:",
-                      {
-                        "Ref": "AWS::Region"
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId"
-                      },
-                      ":",
-                      {
-                        "Ref": "LevelUpFitnessDynamoAccessAPI"
-                      },
-                      "/",
-                      {
-                        "Fn::If": [
-                          "ShouldNotCreateEnvResources",
-                          "Prod",
-                          {
-                            "Ref": "env"
-                          }
-                        ]
-                      },
-                      "/PUT/startChallenge"
-                    ]
-                  ]
-                },
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:execute-api:",
-                      {
-                        "Ref": "AWS::Region"
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId"
-                      },
-                      ":",
-                      {
-                        "Ref": "LevelUpFitnessDynamoAccessAPI"
-                      },
-                      "/",
-                      {
-                        "Fn::If": [
-                          "ShouldNotCreateEnvResources",
-                          "Prod",
-                          {
-                            "Ref": "env"
-                          }
-                        ]
-                      },
-                      "/PATCH/startChallenge/*"
-                    ]
-                  ]
-                },
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:execute-api:",
-                      {
-                        "Ref": "AWS::Region"
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId"
-                      },
-                      ":",
-                      {
-                        "Ref": "LevelUpFitnessDynamoAccessAPI"
-                      },
-                      "/",
-                      {
-                        "Fn::If": [
-                          "ShouldNotCreateEnvResources",
-                          "Prod",
-                          {
-                            "Ref": "env"
-                          }
-                        ]
-                      },
-                      "/PATCH/startChallenge"
-                    ]
-                  ]
-                },
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:execute-api:",
-                      {
-                        "Ref": "AWS::Region"
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId"
-                      },
-                      ":",
-                      {
-                        "Ref": "LevelUpFitnessDynamoAccessAPI"
-                      },
-                      "/",
-                      {
-                        "Fn::If": [
-                          "ShouldNotCreateEnvResources",
-                          "Prod",
-                          {
-                            "Ref": "env"
-                          }
-                        ]
-                      },
                       "/GET/checkChallengeStatus/*"
                     ]
                   ]
@@ -1361,6 +1121,186 @@
                         ]
                       },
                       "/GET/getActiveUserChallenges"
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:execute-api:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      {
+                        "Ref": "LevelUpFitnessDynamoAccessAPI"
+                      },
+                      "/",
+                      {
+                        "Fn::If": [
+                          "ShouldNotCreateEnvResources",
+                          "Prod",
+                          {
+                            "Ref": "env"
+                          }
+                        ]
+                      },
+                      "/POST/updateChallenge/*"
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:execute-api:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      {
+                        "Ref": "LevelUpFitnessDynamoAccessAPI"
+                      },
+                      "/",
+                      {
+                        "Fn::If": [
+                          "ShouldNotCreateEnvResources",
+                          "Prod",
+                          {
+                            "Ref": "env"
+                          }
+                        ]
+                      },
+                      "/POST/updateChallenge"
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:execute-api:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      {
+                        "Ref": "LevelUpFitnessDynamoAccessAPI"
+                      },
+                      "/",
+                      {
+                        "Fn::If": [
+                          "ShouldNotCreateEnvResources",
+                          "Prod",
+                          {
+                            "Ref": "env"
+                          }
+                        ]
+                      },
+                      "/PUT/updateChallenge/*"
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:execute-api:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      {
+                        "Ref": "LevelUpFitnessDynamoAccessAPI"
+                      },
+                      "/",
+                      {
+                        "Fn::If": [
+                          "ShouldNotCreateEnvResources",
+                          "Prod",
+                          {
+                            "Ref": "env"
+                          }
+                        ]
+                      },
+                      "/PUT/updateChallenge"
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:execute-api:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      {
+                        "Ref": "LevelUpFitnessDynamoAccessAPI"
+                      },
+                      "/",
+                      {
+                        "Fn::If": [
+                          "ShouldNotCreateEnvResources",
+                          "Prod",
+                          {
+                            "Ref": "env"
+                          }
+                        ]
+                      },
+                      "/PATCH/updateChallenge/*"
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:execute-api:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      {
+                        "Ref": "LevelUpFitnessDynamoAccessAPI"
+                      },
+                      "/",
+                      {
+                        "Fn::If": [
+                          "ShouldNotCreateEnvResources",
+                          "Prod",
+                          {
+                            "Ref": "env"
+                          }
+                        ]
+                      },
+                      "/PATCH/updateChallenge"
                     ]
                   ]
                 },

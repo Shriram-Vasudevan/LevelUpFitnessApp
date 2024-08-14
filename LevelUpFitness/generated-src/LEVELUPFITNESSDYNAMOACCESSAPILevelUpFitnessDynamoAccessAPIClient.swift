@@ -644,7 +644,7 @@ public class LEVELUPFITNESSDYNAMOACCESSAPILevelUpFitnessDynamoAccessAPIClient: A
      
      return type: 
      */
-    public func startChallengeOptions() -> AWSTask<AnyObject> {
+    public func updateChallengeOptions() -> AWSTask<AnyObject> {
 	    let headerParameters = [
                    "Content-Type": "application/json",
                    "Accept": "application/json",
@@ -655,7 +655,7 @@ public class LEVELUPFITNESSDYNAMOACCESSAPILevelUpFitnessDynamoAccessAPIClient: A
 	    
 	    let pathParameters:[String:Any] = [:]
 	    
-	    return self.invokeHTTPRequest("OPTIONS", urlString: "/startChallenge", pathParameters: pathParameters, queryParameters: queryParameters, headerParameters: headerParameters, body: nil, responseClass: nil)
+	    return self.invokeHTTPRequest("OPTIONS", urlString: "/updateChallenge", pathParameters: pathParameters, queryParameters: queryParameters, headerParameters: headerParameters, body: nil, responseClass: nil)
 	}
 
 	
@@ -666,7 +666,7 @@ public class LEVELUPFITNESSDYNAMOACCESSAPILevelUpFitnessDynamoAccessAPIClient: A
      
      return type: 
      */
-    public func startChallengeProxyOptions(proxy: String) -> AWSTask<AnyObject> {
+    public func updateChallengeProxyOptions(proxy: String) -> AWSTask<AnyObject> {
 	    let headerParameters = [
                    "Content-Type": "application/json",
                    "Accept": "application/json",
@@ -678,7 +678,7 @@ public class LEVELUPFITNESSDYNAMOACCESSAPILevelUpFitnessDynamoAccessAPIClient: A
 	    var pathParameters:[String:Any] = [:]
 	    pathParameters["proxy"] = proxy
 	    
-	    return self.invokeHTTPRequest("OPTIONS", urlString: "/startChallenge/{proxy+}", pathParameters: pathParameters, queryParameters: queryParameters, headerParameters: headerParameters, body: nil, responseClass: nil)
+	    return self.invokeHTTPRequest("OPTIONS", urlString: "/updateChallenge/{proxy+}", pathParameters: pathParameters, queryParameters: queryParameters, headerParameters: headerParameters, body: nil, responseClass: nil)
 	}
 
 	

@@ -464,7 +464,7 @@ exports.handler = async (event) => {
                         "Access-Control-Allow-Origin": "*",
                         "Access-Control-Allow-Headers": "*"
                     },
-                    body: JSON.stringify(`${challengeTemplates.Items}`)
+                    body: JSON.stringify(challengeTemplates.Items)
                 };
             } else {
                 return {
@@ -538,7 +538,7 @@ exports.handler = async (event) => {
             };
         }
     }
-    else if (event.path == "/startChallenge" && event.httpMethod == "PUT") {
+    else if (event.path == "/updateChallenge" && event.httpMethod == "PUT") {
         const body = JSON.parse(event.body)
         const UserID = body.UserID
         const ChallengeTemplateID =  body.ChallengeTemplateID
@@ -547,6 +547,8 @@ exports.handler = async (event) => {
         const StartValue = body.StartValue
         const TargetValue = body.TargetValue
         const Field = body.Field
+        const isFailed = body.isFailed
+        const isActive = body.isActive
 
         const ID = uuidv4();
 
@@ -575,8 +577,8 @@ exports.handler = async (event) => {
                 ":startValue": StartValue,
                 ":targetValue": TargetValue,
                 ":field": Field,
-                ":isFailed": false,
-                ":isActive": true
+                ":isFailed": isFailed,
+                ":isActive": isActive
             }
         }
 

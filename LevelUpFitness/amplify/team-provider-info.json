@@ -30,7 +30,7 @@
       "function": {
         "LevelUpFitnessDynamoAccessLambda": {
           "deploymentBucketName": "amplify-levelupfitnessapp-dev-33cf0-deployment",
-          "s3Key": "amplify-builds/LevelUpFitnessDynamoAccessLambda-61765245704243356274-build.zip"
+          "s3Key": "amplify-builds/LevelUpFitnessDynamoAccessLambda-644e6467317058734961-build.zip"
         },
         "LevelUpFitnessS3AccessLambda": {
           "deploymentBucketName": "amplify-levelupfitnessapp-dev-33cf0-deployment",
