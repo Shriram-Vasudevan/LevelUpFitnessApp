@@ -11,6 +11,8 @@ import Amplify
 import AWSCognitoAuthPlugin
 
 class DatabaseManager: ObservableObject {
+    static let shared = DatabaseManager()
+    
     @Published var workouts: [Workout] = []
     
     func getWorkouts() async {

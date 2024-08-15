@@ -12,6 +12,8 @@ import AWSCognitoAuthPlugin
 
 @MainActor
 class BadgeManager: ObservableObject {
+    static let shared = BadgeManager()
+    
     @Published var userBadgeInfo: UserBadgeInfo?
     @Published var badges: [Badge] = []
     

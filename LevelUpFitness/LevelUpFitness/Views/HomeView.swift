@@ -182,6 +182,24 @@ struct HomeView: View {
                             .padding()
                         }
                         
+                        
+                        if challengeManager.userChallenges.count > 0 {
+                            HStack {
+                                Text("Your Challenges")
+                                    .font(.custom("EtruscoNow Medium", size: 23))
+                                    .bold()
+                                
+                                Spacer()
+                            }
+                            .padding(.horizontal)
+                            .padding(.top)
+                            
+                            ForEach(challengeManager.userChallenges, id: \.id) { challenge in
+                                if let currentProgress = getCurrentChallengeProgress(challengeField: challenge.field) {
+                                    ActiveUserChallengeWidget(challenge: challenge, currentProgress: currentProgress)
+                                }
+                            }
+                        }
                         if let program = programManager.program {
                             TimeSpentWidget(program: program)
                                 .padding([.top, .horizontal])
@@ -289,6 +307,19 @@ struct HomeView: View {
             .navigationDestination(item: $selectedExercise) { exercise in
                 IndividualExerciseView(exercise: exercise)
             }
+        }
+    }
+    
+    func getCurrentChallengeProgress(challengeField: String) -> Int? {
+        switch challengeField {
+            case "Level":
+                if let userXPData = xpManager.userXPData {
+                    return userXPData.level
+                } else {
+                    return nil
+                }
+            default:
+                return nil
         }
     }
     

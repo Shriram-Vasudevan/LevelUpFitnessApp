@@ -10,6 +10,8 @@ import Amplify
 
 @MainActor
 class ChallengeManager: ObservableObject {
+    static let shared = ChallengeManager()
+    
     @Published var challengeTemplates: [ChallengeTemplate] = []
     @Published var userChallenges: [UserChallenge] = []
     
@@ -62,13 +64,13 @@ class ChallengeManager: ObservableObject {
                 let levelsRequired = levelsRequired(currentLevel: userXPData.level)
                 guard let dateRange = DateUtility.createDateDurationISO(duration: 30) else { return }
             
-            await startChallenge(challengeTemplateID: challengeTemplateID, challengeName: challengeName, startDate: dateRange.0, endDate: dateRange.1, startValue: userXPData.level, targetValue: userXPData.level + levelsRequired, field: "Level")
+            await updateChallenge(challengeTemplateID: challengeTemplateID, challengeName: challengeName, startDate: dateRange.0, endDate: dateRange.1, startValue: userXPData.level, targetValue: userXPData.level + levelsRequired, field: "Level")
             default:
                 break
         }
     }
     
-    func startChallenge(challengeTemplateID: String, challengeName: String, startDate: String, endDate: String, startValue: Int, targetValue: Int, field: String) async {
+    func updateChallenge(challengeTemplateID: String, challengeName: String, startDate: String, endDate: String, startValue: Int, targetValue: Int, field: String) async {
         do {
             let userID = try await Amplify.Auth.getCurrentUser().userId
             
@@ -83,13 +85,24 @@ class ChallengeManager: ObservableObject {
             
             let response = try await Amplify.API.put(request: request)
             
-            print("start challenge response: \(String(describing: String(data: response, encoding: .utf8)))")
+            print("updateChallenge response: \(String(describing: String(data: response, encoding: .utf8)))")
             
             userChallenges.append(userChallenge)
         } catch {
             print(error)
         }
     }
+    
+    func checkForChallengeCompletion(challengeField: String, newValue: Int) {
+        let applicableChallenges = self.userChallenges.filter({ $0.field == challengeField })
+        
+        for applicableChallenge in applicableChallenges {
+            if applicableChallenge.targetValue == newValue {
+                XPManager.shared.addXP(increment: 10, type: .total)
+            }
+        }
+    }
+    
     
     func levelsRequired(currentLevel: Int, k: Double = 5.0) -> Int {
         let requiredLevels = Int(ceil(k / sqrt(Double(currentLevel))))

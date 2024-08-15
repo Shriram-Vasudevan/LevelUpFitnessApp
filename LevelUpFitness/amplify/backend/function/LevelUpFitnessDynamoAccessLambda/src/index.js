@@ -514,7 +514,7 @@ exports.handler = async (event) => {
                         "Access-Control-Allow-Origin": "*",
                         "Access-Control-Allow-Headers": "*"
                     },
-                    body: JSON.stringify(`${userChallenges.Items}`)
+                    body: JSON.stringify(userChallenges.Items)
                 };
             } else {
                 return {

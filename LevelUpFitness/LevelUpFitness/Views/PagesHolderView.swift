@@ -8,13 +8,14 @@
 import SwiftUI
 
 struct PagesHolderView: View {
-    @StateObject var programManager = ProgramManager()
-    @StateObject var databaseManager = DatabaseManager()
-    @StateObject var healthManager = HealthManager()
-    @StateObject var badgeManager = BadgeManager()
-    @StateObject var xpManager = XPManager()
-    @StateObject var exerciseManager = ExerciseManager()
-    @StateObject var challengeManager = ChallengeManager()
+    @ObservedObject var programManager = ProgramManager.shared
+    @ObservedObject var databaseManager = DatabaseManager.shared
+    @ObservedObject var healthManager = HealthManager.shared
+    @ObservedObject var badgeManager = BadgeManager.shared
+    @ObservedObject var xpManager = XPManager.shared
+    @ObservedObject var exerciseManager = ExerciseManager.shared
+    @ObservedObject var challengeManager = ChallengeManager.shared
+
     
     @State var pageType: PageType
     
@@ -23,14 +24,30 @@ struct PagesHolderView: View {
             VStack {
                 switch pageType {
                 case .home:
-                    HomeView(programManager: programManager, databaseManager: databaseManager, healthManager: healthManager, xpManager: xpManager, exerciseManager: exerciseManager, challengeManager: challengeManager, pageType: $pageType)
-                        .preferredColorScheme(.light)
+                    HomeView(
+                        programManager: programManager,
+                        databaseManager: databaseManager,
+                        healthManager: healthManager,
+                        xpManager: xpManager,
+                        exerciseManager: exerciseManager,
+                        challengeManager: challengeManager,
+                        pageType: $pageType
+                    )
+                    .preferredColorScheme(.light)
                 case .program:
-                    ProgramView(programManager: programManager, badgeManager: badgeManager, xpManager: xpManager)
-                        .preferredColorScheme(.light)
+                    ProgramView(
+                        programManager: programManager,
+                        badgeManager: badgeManager,
+                        xpManager: xpManager
+                    )
+                    .preferredColorScheme(.light)
                 case .library:
-                    LibraryView(programManager: programManager, xpManager: xpManager, exerciseManager: exerciseManager)
-                        .preferredColorScheme(.light)
+                    LibraryView(
+                        programManager: programManager,
+                        xpManager: xpManager,
+                        exerciseManager: exerciseManager
+                    )
+                    .preferredColorScheme(.light)
                 }
                 
                 Spacer()
@@ -46,7 +63,6 @@ struct PagesHolderView: View {
                                         .resizable()
                                         .frame(width: 30, height: 30)
                                         .aspectRatio(contentMode:  .fill)
-                                        .foregroundColor(pageType == .home ? .blue : .gray)
                                     
                                     Text("Home")
                                         .font(.caption)
@@ -69,8 +85,6 @@ struct PagesHolderView: View {
                                         .resizable()
                                         .frame(width: 30, height: 30)
                                         .aspectRatio(contentMode:  .fill)
-                                        .foregroundColor(pageType == .program ? .blue : .gray)
-                                    
                                     
                                     Text("Program")
                                         .font(.caption)
@@ -94,12 +108,10 @@ struct PagesHolderView: View {
                                         .resizable()
                                         .frame(width: 30, height: 30)
                                         .aspectRatio(contentMode:  .fill)
-                                        .foregroundColor(pageType == .library ? .blue : .gray)
-                                    
                                     
                                     Text("Library")
                                         .font(.caption)
-                                        .foregroundColor(pageType == .library  ? .blue : .gray)
+                                        .foregroundColor(pageType == .library ? .blue : .gray)
                                     
                                 }
                                 .padding(.bottom)
@@ -108,9 +120,6 @@ struct PagesHolderView: View {
                         .frame(maxWidth: .infinity, alignment: .center)
                         
                     }
-                    
-                    
-                    
                 }
                 .padding(.horizontal)
                 .padding(.bottom)

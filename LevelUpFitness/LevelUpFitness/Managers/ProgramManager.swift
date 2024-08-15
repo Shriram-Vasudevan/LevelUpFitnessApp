@@ -11,6 +11,8 @@ import Amplify
 
 @MainActor
 class ProgramManager: ObservableObject {
+    static let shared = ProgramManager()
+    
     @Published var program: Program?
     @Published var retrievingProgram: Bool = false
     @Published var standardProgramNames: [String]?

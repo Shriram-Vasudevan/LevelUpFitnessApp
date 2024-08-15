@@ -3,6 +3,8 @@ import HealthKit
 
 @MainActor
 class HealthManager: ObservableObject {
+    static let shared = HealthManager()
+    
     @Published var todaysSteps: (count: Int, comparison: HealthComparison)?
     @Published var todaysCalories: (count: Int, comparison: HealthComparison)?
     @Published var todaysDistance: (count: Int, comparison: HealthComparison)?

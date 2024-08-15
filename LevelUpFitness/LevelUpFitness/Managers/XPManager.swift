@@ -11,6 +11,8 @@ import AWSAPIPlugin
 
 @MainActor
 class XPManager: ObservableObject {
+    static let shared = XPManager()
+    
     @Published var userXPData: XPData?
     @Published var levelChanges: [LevelChangeInfo] = []
     
@@ -73,6 +75,8 @@ class XPManager: ObservableObject {
                     userXPData.level += 1
                     userXPData.xpNeeded +=  userXPData.level * 30
                 }
+            
+                ChallengeManager.shared.checkForChallengeCompletion(challengeField: "Level", newValue: userXPData.level)
         }
         
         self.userXPData = userXPData

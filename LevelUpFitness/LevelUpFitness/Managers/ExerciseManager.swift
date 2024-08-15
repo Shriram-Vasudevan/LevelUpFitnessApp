@@ -10,6 +10,8 @@ import Amplify
 
 @MainActor
 class ExerciseManager: ObservableObject {
+    static let shared = ExerciseManager()
+    
     @Published var exercises: [ExerciseLibraryExercise] = []
     
     @Published var recommendedExercise: ExerciseLibraryExercise?
