@@ -1,0 +1,21 @@
+{
+    "appName": "LevelUpFitnessAPNS",
+    "roleName": "pinpointLambdaRole85337e8b",
+    "cloudformationPolicyName": "cloudformationPolicy85337e8b",
+    "cloudWatchPolicyName": "cloudWatchPolicy85337e8b",
+    "pinpointPolicyName": "pinpointPolicy85337e8b",
+    "authPolicyName": "pinpoint_amplify_85337e8b",
+    "unauthPolicyName": "pinpoint_amplify_85337e8b",
+    "authRoleName": {
+        "Ref": "AuthRoleName"
+    },
+    "unauthRoleName": {
+        "Ref": "UnauthRoleName"
+    },
+    "authRoleArn": {
+        "Fn::GetAtt": [
+            "AuthRole",
+            "Arn"
+        ]
+    }
+}

@@ -24,6 +24,10 @@ struct LevelUpFitnessApp: App {
     }
 }
 
+import UIKit
+import UserNotifications
+import AWSPinpointPushNotificationsPlugin
+
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(
         _ application: UIApplication,
@@ -33,6 +37,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             try Amplify.add(plugin: AWSCognitoAuthPlugin())
             try Amplify.add(plugin: AWSAPIPlugin())
             try Amplify.add(plugin: AWSS3StoragePlugin())
+            try Amplify.add(plugin: AWSPinpointPushNotificationsPlugin(options: [.badge, .alert, .sound]))
             try Amplify.configure()
             print("Amplify configured successfully")
             
@@ -41,10 +46,42 @@ class AppDelegate: NSObject, UIApplicationDelegate {
                     print("Documents Directory: \(documentsPath)")
                 }
             #endif
+            
+            NotificationManager.shared.askPermission()
+            
         } catch {
             print("An error occurred setting up Amplify: \(error)")
         }
         return true
+    }
+    
+    func application(
+        _ application: UIApplication,
+        didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
+    ) {
+        Task {
+            do {
+                try await Amplify.Notifications.Push.registerDevice(apnsToken: deviceToken)
+                print("Registered with Pinpoint.")
+                print("Device Token: \(deviceToken.map { String(format: "%02.2hhx", $0) }.joined())")
+            } catch {
+                print("Error registering with Pinpoint: \(error)")
+            }
+        }
+    }
+    
+    func application(
+        _ application: UIApplication,
+        didReceiveRemoteNotification userInfo: [AnyHashable: Any]
+    ) async -> UIBackgroundFetchResult {
+        
+        do {
+            try await Amplify.Notifications.Push.recordNotificationReceived(userInfo)
+        } catch {
+            print("Error recording receipt of notification: \(error)")
+        }
+        
+        return .newData
     }
 }
 

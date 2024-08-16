@@ -45,6 +45,21 @@
         "LevelUpFitnessDynamoAccessAPI": {},
         "LevelUpFitnessS3AccessAPI": {},
         "LevelUpFitnessCustomProgramRequestAPI": {}
+      },
+      "analytics": {
+        "LevelUpFitnessAPNS": {},
+        "Pinpoint": {
+          "Name": "LevelUpFitnessAPNS-dev",
+          "Id": "f711bc1ad025421f9ebcc25d39dfe943",
+          "Region": "us-east-2"
+        }
+      },
+      "notifications": {
+        "Pinpoint": {
+          "Name": "LevelUpFitnessAPNS-dev",
+          "Id": "f711bc1ad025421f9ebcc25d39dfe943",
+          "Region": "us-east-2"
+        }
       }
     }
   }

@@ -1,4 +1,10 @@
 {
+  "analytics": {
+    "LevelUpFitnessAPNS": {
+      "providerPlugin": "awscloudformation",
+      "service": "Pinpoint"
+    }
+  },
   "api": {
     "LevelUpFitnessCustomProgramRequestAPI": {
       "dependsOn": [
@@ -108,54 +114,12 @@
       "service": "Lambda"
     }
   },
-  "parameters": {
-    "AMPLIFY_function_LevelUpFitnessCustomProgramRequestLambda_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "LevelUpFitnessCustomProgramRequestLambda"
-        }
-      ]
-    },
-    "AMPLIFY_function_LevelUpFitnessCustomProgramRequestLambda_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "LevelUpFitnessCustomProgramRequestLambda"
-        }
-      ]
-    },
-    "AMPLIFY_function_LevelUpFitnessDynamoAccessLambda_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "LevelUpFitnessDynamoAccessLambda"
-        }
-      ]
-    },
-    "AMPLIFY_function_LevelUpFitnessDynamoAccessLambda_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "LevelUpFitnessDynamoAccessLambda"
-        }
-      ]
-    },
-    "AMPLIFY_function_LevelUpFitnessS3AccessLambda_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "LevelUpFitnessS3AccessLambda"
-        }
-      ]
-    },
-    "AMPLIFY_function_LevelUpFitnessS3AccessLambda_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "LevelUpFitnessS3AccessLambda"
-        }
-      ]
+  "notifications": {
+    "LevelUpFitnessAPNS": {
+      "channels": [
+        "APNS"
+      ],
+      "service": "Pinpoint"
     }
   },
   "storage": {

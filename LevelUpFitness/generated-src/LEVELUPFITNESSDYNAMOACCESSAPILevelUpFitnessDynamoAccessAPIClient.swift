@@ -204,50 +204,6 @@ public class LEVELUPFITNESSDYNAMOACCESSAPILevelUpFitnessDynamoAccessAPIClient: A
      
      return type: 
      */
-    public func checkChallengeStatusOptions() -> AWSTask<AnyObject> {
-	    let headerParameters = [
-                   "Content-Type": "application/json",
-                   "Accept": "application/json",
-                   
-	            ]
-	    
-	    let queryParameters:[String:Any] = [:]
-	    
-	    let pathParameters:[String:Any] = [:]
-	    
-	    return self.invokeHTTPRequest("OPTIONS", urlString: "/checkChallengeStatus", pathParameters: pathParameters, queryParameters: queryParameters, headerParameters: headerParameters, body: nil, responseClass: nil)
-	}
-
-	
-    /*
-     
-     
-     @param proxy 
-     
-     return type: 
-     */
-    public func checkChallengeStatusProxyOptions(proxy: String) -> AWSTask<AnyObject> {
-	    let headerParameters = [
-                   "Content-Type": "application/json",
-                   "Accept": "application/json",
-                   
-	            ]
-	    
-	    let queryParameters:[String:Any] = [:]
-	    
-	    var pathParameters:[String:Any] = [:]
-	    pathParameters["proxy"] = proxy
-	    
-	    return self.invokeHTTPRequest("OPTIONS", urlString: "/checkChallengeStatus/{proxy+}", pathParameters: pathParameters, queryParameters: queryParameters, headerParameters: headerParameters, body: nil, responseClass: nil)
-	}
-
-	
-    /*
-     
-     
-     
-     return type: 
-     */
     public func getActiveUserChallengesOptions() -> AWSTask<AnyObject> {
 	    let headerParameters = [
                    "Content-Type": "application/json",

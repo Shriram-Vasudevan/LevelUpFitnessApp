@@ -15,7 +15,10 @@ struct PagesHolderView: View {
     @ObservedObject var xpManager = XPManager.shared
     @ObservedObject var exerciseManager = ExerciseManager.shared
     @ObservedObject var challengeManager = ChallengeManager.shared
-
+    
+    var notificationManager = NotificationManager.shared
+    
+    @Environment(\.scenePhase) var scenePhase
     
     @State var pageType: PageType
     
@@ -137,6 +140,15 @@ struct PagesHolderView: View {
             }
         }
         .ignoresSafeArea(edges: .bottom)
+        .onChange(of: scenePhase) { oldPhase, newPhase in
+            if newPhase == .active {
+                NotificationManager.shared.appDidBecomeActive()
+            } else if newPhase == .inactive {
+                print("Inactive")
+            } else if newPhase == .background {
+                NotificationManager.shared.appDidEnterBackground()
+            }
+        }
     }
 }
 

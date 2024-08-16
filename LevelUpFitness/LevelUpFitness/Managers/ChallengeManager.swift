@@ -93,13 +93,26 @@ class ChallengeManager: ObservableObject {
         }
     }
     
-    func checkForChallengeCompletion(challengeField: String, newValue: Int) {
-        let applicableChallenges = self.userChallenges.filter({ $0.field == challengeField })
-        
-        for applicableChallenge in applicableChallenges {
-            if applicableChallenge.targetValue == newValue {
-                XPManager.shared.addXP(increment: 10, type: .total)
+    func checkForChallengeCompletion(challengeField: String, newValue: Int) async {
+        do {
+            let userID = try await Amplify.Auth.getCurrentUser().userId
+            let applicableChallenges = self.userChallenges.filter({ $0.field == challengeField })
+            
+            var completedChallenges: [String] = []
+            
+            for applicableChallenge in applicableChallenges {
+                if applicableChallenge.targetValue == newValue {
+                    XPManager.shared.addXP(increment: 10, type: .total)
+                    completedChallenges.append(applicableChallenge.id)
+                }
             }
+            
+//            if completedChallenges.count > 0 {
+//                let request = RESTRequest(apiName: "LevelUpFitnessDynamoAccessAPI", path: "/challengesCompleted", queryParameters: ["UserID" : userID, "CompletedChallenges": completedChallenges])
+//                let response = try await Amplify.API.put(request: request)
+//            }
+        } catch {
+            print(error)
         }
     }
     

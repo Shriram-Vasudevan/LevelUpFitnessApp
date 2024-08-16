@@ -1,4 +1,11 @@
 export type AmplifyDependentResourcesAttributes = {
+  "analytics": {
+    "LevelUpFitnessAPNS": {
+      "Id": "string",
+      "Region": "string",
+      "appName": "string"
+    }
+  },
   "api": {
     "LevelUpFitnessCustomProgramRequestAPI": {
       "ApiId": "string",

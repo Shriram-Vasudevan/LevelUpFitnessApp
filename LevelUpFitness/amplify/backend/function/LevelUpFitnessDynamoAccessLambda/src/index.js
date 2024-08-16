@@ -606,7 +606,42 @@ exports.handler = async (event) => {
                 body: JSON.stringify(`${error}`)
             };
         }
-    } else if (event.path == "/checkChallengeStatus" && event.httpMethod == "GET") {
+    } else if (event.path == "/challengesCompleted" && event.httpMethod == "DELETE") {
+        const UserID = event.queryStringParameters.UserID
+        const CompletedChallenges = event.queryStringParameters.CompletedChallenges
+
+
+        for (challenge of CompletedChallenges) {
+            const params = {
+                TableName: "user-challenges-db-dev",
+                Key: UserID,
+                ConditionExpression: "#challengeID = :challengeID AND #isActive = :isActive",
+                ExpressionAttributeNames: {
+                    "#challengeID": "ChallengeID",
+                    "#isActive": "IsActive"
+                },
+                ExpressionAttributeValues: {
+                    "challengeID": challenge,
+                    ":isActive": true
+                }
+            }
+
+            try {
+                const response = await dynamoDb.delete(params).promise();
+            } catch (error) {
+                console.log(error)
+                continue
+            }
+        }
+
+        return {
+            statusCode: 200,
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Headers": "*"
+            },
+            body: JSON.stringify("Successfully Completed Challenges")
+        };
         
     }
 

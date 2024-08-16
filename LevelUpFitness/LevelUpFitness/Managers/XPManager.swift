@@ -76,7 +76,9 @@ class XPManager: ObservableObject {
                     userXPData.xpNeeded +=  userXPData.level * 30
                 }
             
-                ChallengeManager.shared.checkForChallengeCompletion(challengeField: "Level", newValue: userXPData.level)
+            Task {
+                await ChallengeManager.shared.checkForChallengeCompletion(challengeField: "Level", newValue: userXPData.level)
+            }
         }
         
         self.userXPData = userXPData
