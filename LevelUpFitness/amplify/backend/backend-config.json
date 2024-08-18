@@ -78,6 +78,22 @@
     }
   },
   "function": {
+    "LevelUpFitnessChallengeNotificationsLambda": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn",
+            "StreamArn"
+          ],
+          "category": "storage",
+          "resourceName": "LevelUpFitnessUserChallengesDB"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "LevelUpFitnessCustomProgramRequestLambda": {
       "build": true,
       "dependsOn": [
@@ -120,6 +136,120 @@
         "APNS"
       ],
       "service": "Pinpoint"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_analytics_Pinpoint_Id": {
+      "usedBy": [
+        {
+          "category": "analytics",
+          "resourceName": "Pinpoint"
+        }
+      ]
+    },
+    "AMPLIFY_analytics_Pinpoint_Name": {
+      "usedBy": [
+        {
+          "category": "analytics",
+          "resourceName": "Pinpoint"
+        }
+      ]
+    },
+    "AMPLIFY_analytics_Pinpoint_Region": {
+      "usedBy": [
+        {
+          "category": "analytics",
+          "resourceName": "Pinpoint"
+        }
+      ]
+    },
+    "AMPLIFY_function_LevelUpFitnessChallengeNotificationsLambda_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "LevelUpFitnessChallengeNotificationsLambda"
+        }
+      ]
+    },
+    "AMPLIFY_function_LevelUpFitnessChallengeNotificationsLambda_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "LevelUpFitnessChallengeNotificationsLambda"
+        }
+      ]
+    },
+    "AMPLIFY_function_LevelUpFitnessCustomProgramRequestLambda_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "LevelUpFitnessCustomProgramRequestLambda"
+        }
+      ]
+    },
+    "AMPLIFY_function_LevelUpFitnessCustomProgramRequestLambda_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "LevelUpFitnessCustomProgramRequestLambda"
+        }
+      ]
+    },
+    "AMPLIFY_function_LevelUpFitnessDynamoAccessLambda_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "LevelUpFitnessDynamoAccessLambda"
+        }
+      ]
+    },
+    "AMPLIFY_function_LevelUpFitnessDynamoAccessLambda_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "LevelUpFitnessDynamoAccessLambda"
+        }
+      ]
+    },
+    "AMPLIFY_function_LevelUpFitnessS3AccessLambda_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "LevelUpFitnessS3AccessLambda"
+        }
+      ]
+    },
+    "AMPLIFY_function_LevelUpFitnessS3AccessLambda_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "LevelUpFitnessS3AccessLambda"
+        }
+      ]
+    },
+    "AMPLIFY_notifications_Pinpoint_Id": {
+      "usedBy": [
+        {
+          "category": "notifications",
+          "resourceName": "Pinpoint"
+        }
+      ]
+    },
+    "AMPLIFY_notifications_Pinpoint_Name": {
+      "usedBy": [
+        {
+          "category": "notifications",
+          "resourceName": "Pinpoint"
+        }
+      ]
+    },
+    "AMPLIFY_notifications_Pinpoint_Region": {
+      "usedBy": [
+        {
+          "category": "notifications",
+          "resourceName": "Pinpoint"
+        }
+      ]
     }
   },
   "storage": {
