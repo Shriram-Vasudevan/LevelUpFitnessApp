@@ -12,15 +12,14 @@ struct LibraryView: View {
     @ObservedObject var xpManager: XPManager
     @ObservedObject var exerciseManager: ExerciseManager
     
-    @State var selectedExercise: ExerciseLibraryExercise?
+    @State var selectedExercise: Progression?
     
-    let bodyAreaKeys = [
-            BodyAreas.CodingKeys.back.rawValue,
-            BodyAreas.CodingKeys.legs.rawValue,
-            BodyAreas.CodingKeys.chest.rawValue,
-            BodyAreas.CodingKeys.shoulders.rawValue,
-            BodyAreas.CodingKeys.core.rawValue
-        ]
+    let exerciseTypeKeys = [
+        Sublevels.CodingKeys.lowerBodyCompound.rawValue,
+        Sublevels.CodingKeys.lowerBodyIsolation.rawValue,
+        Sublevels.CodingKeys.upperBodyCompound.rawValue,
+        Sublevels.CodingKeys.upperBodyIsolation.rawValue
+    ]
     
     var body: some View {
         NavigationStack {
@@ -67,7 +66,7 @@ struct LibraryView: View {
                         
                         
                         if let userXPData = xpManager.userXPData {
-                            ForEach(bodyAreaKeys, id: \.self) { key in
+                            ForEach(exerciseTypeKeys, id: \.self) { key in
                                 VStack (spacing: 0) {
                                     HStack {
                                         Text(key.capitalizingFirstLetter())
@@ -75,31 +74,31 @@ struct LibraryView: View {
                                         
                                         Spacer()
                                         
-                                        if let level = userXPData.subLevels.bodyAreas.attribute(for: key)?.level {
+                                        if let level = userXPData.subLevels.attribute(for: key)?.level {
                                             Text("Level \(level)")
                                                 .font(.caption)
                                                 .foregroundColor(.gray)
                                         }
                                     }
                                     .padding(.horizontal)
-                                    
-                                    let filteredExercises = exerciseManager.exercises.filter { $0.bodyArea == key.capitalizingFirstLetter() }
-                                        if filteredExercises.isEmpty {
-                                            HStack {
-                                                Text("No exercises for \(key)")
-                                                
-                                                Spacer()
-                                            }
-                                            .padding(.horizontal)
-                                        } else {
-                                            ForEach(filteredExercises, id: \.id) { exercise in
-                                                ExerciseLibraryExerciseWidget(exerciseLibraryExercise: exercise, userXPData: userXPData, exerciseSelected: {
-                                                    self.selectedExercise = exercise
-                                                })
-                                                    
-                                                    .padding(.bottom)
-                                            }
-                                        }
+//                                    
+//                                    let filteredExercises = exerciseManager.exercises.filter { $0.exerciseType == key.capitalizingFirstLetter() }
+//                                        if filteredExercises.isEmpty {
+//                                            HStack {
+//                                                Text("No exercises for \(key)")
+//                                                
+//                                                Spacer()
+//                                            }
+//                                            .padding(.horizontal)
+//                                        } else {
+//                                            ForEach(filteredExercises, id: \.id) { exercise in
+//                                                ExerciseLibraryExerciseWidget(exerciseLibraryExercise: exercise, userXPData: userXPData, exerciseSelected: {
+//                                                    self.selectedExercise = exercise
+//                                                })
+//                                                    
+//                                                    .padding(.bottom)
+//                                            }
+//                                        }
                                 }
                             }
                         }
@@ -108,7 +107,7 @@ struct LibraryView: View {
                 }
             }
             .navigationDestination(item: $selectedExercise) { exercise in
-                IndividualExerciseView(exercise: exercise)
+                IndividualExerciseView(progression: exercise)
             }
         }
     }

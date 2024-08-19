@@ -47,5 +47,5 @@ struct ProgramListHomePreview: View {
 }
 
 #Preview {
-    ProgramListHomePreview(todaysProgram: ProgramDay(day: "Monday", workout: "", completed: false, exercises: [Exercise(name: "", sets: 2, reps: 5, rpe: "", rest: 3, area: "test", completed: false, data: ExerciseData(sets: [ExerciseDataSet(weight: 0, reps: 1, time: 0.0, rest: 0.0)]))]))
+    ProgramListHomePreview(todaysProgram: ProgramDay(day: "Monday", workout: "", completed: false, exercises: [ProgramExercise(name: "", sets: 2, reps: 5, rpe: "", rest: 3, area: "test", completed: false, data: ExerciseData(sets: [ExerciseDataSet(weight: 0, reps: 1, time: 0.0, rest: 0.0)]))]))
 }

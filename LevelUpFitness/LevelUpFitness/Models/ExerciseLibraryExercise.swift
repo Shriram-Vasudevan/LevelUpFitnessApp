@@ -7,20 +7,24 @@
 
 import Foundation
 
-struct ExerciseLibraryExercise: Codable, Hashable {
+struct ExerciseLibraryExercise: Codable, Hashable, Equatable {
     var id: String
-    var cdnURL: String
     var name: String
-    var description: String
-    var bodyArea: String
-    var level: Int
+    var exerciseType: String
+    var progression: [Progression]
     
     enum CodingKeys: String, CodingKey {
         case id = "ID"
         case name = "Name"
-        case cdnURL = "CDNURL"
-        case description = "Description"
-        case bodyArea = "BodyArea"
-        case level = "Level"
+        case exerciseType = "ExerciseType"
+        case progression = "Progression"
     }
+}
+
+struct Progression: Codable, Hashable, Equatable {
+    var name: String
+    var description: String
+    var level: Int
+    var cdnURL: String
+    var exerciseType: String
 }

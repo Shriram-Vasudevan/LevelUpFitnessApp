@@ -24,16 +24,17 @@ struct XPData: Codable {
 }
 
 struct Sublevels: Codable {
-    var mobility: XPAttribute
-    var endurance: XPAttribute
-    var strength: XPAttribute
-    var bodyAreas: BodyAreas
+    var lowerBodyCompound : XPAttribute
+    var lowerBodyIsolation : XPAttribute
+    var upperBodyCompound : XPAttribute
+    var upperBodyIsolation : XPAttribute
+
 
     enum CodingKeys: String, CodingKey {
-        case mobility = "Mobility"
-        case endurance = "Endurance"
-        case strength = "Strength"
-        case bodyAreas = "BodyAreas"
+        case lowerBodyCompound = "Lower Body Compound"
+        case lowerBodyIsolation = "Lower Body Isolation"
+        case upperBodyCompound = "Upper Body Compound"
+        case upperBodyIsolation = "Upper Body Isolation"
     }
 }
 

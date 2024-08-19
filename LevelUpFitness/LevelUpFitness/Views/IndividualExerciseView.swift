@@ -9,7 +9,7 @@ import SwiftUI
 import AVKit
 
 struct IndividualExerciseView: View {
-    var exercise: ExerciseLibraryExercise
+    var progression: Progression
     
     @State private var avPlayer = AVPlayer()
     @Environment(\.dismiss) var dismiss
@@ -56,10 +56,10 @@ struct IndividualExerciseView: View {
                 ScrollView(.vertical) {
                     HStack {
                         VStack(alignment: .leading) {
-                            Text(exercise.name)
+                            Text(progression.name)
                                 .font(.custom("Sailec Bold", size: 25))
                                 .fontWeight(.bold)
-                            Text("Body Area: \(exercise.bodyArea)")
+                            Text("Exercise Type: \(progression.exerciseType)")
                                 .font(.subheadline)
                                 .foregroundColor(.gray)
                         }
@@ -74,7 +74,7 @@ struct IndividualExerciseView: View {
         }
         .navigationBarBackButtonHidden()
         .onAppear {
-            guard let cdnURL = URL(string: exercise.cdnURL) else { return }
+            guard let cdnURL = URL(string: progression.cdnURL) else { return }
             LocalStorageUtility.downloadVideoAndSaveToTempFile(url: cdnURL, completion: { result in
                 switch result {
                     case .success(let localURL):
@@ -88,10 +88,5 @@ struct IndividualExerciseView: View {
 }
 
 #Preview {
-    IndividualExerciseView(exercise: ExerciseLibraryExercise(
-        id: "", cdnURL: "",
-        name: "Bicep Curl",
-        description: "Perform a classic bicep curl with proper form. Stand with feet shoulder-width apart, holding dumbbells at your sides with palms facing forward. Keeping your upper arms stationary, curl the weights up to shoulder level while contracting your biceps.",
-        bodyArea: "Arms", level: 1
-    ))
+    IndividualExerciseView(progression: Progression(name: "", description: "", level: 5, cdnURL: "", exerciseType: ""))
 }

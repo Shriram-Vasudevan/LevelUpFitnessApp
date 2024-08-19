@@ -8,5 +8,5 @@
 import Foundation
 
 enum XPAdditionType {
-    case total, strength, endurance, mobility, back, legs, core, shoulders, chest
+    case total, lowerBodyCompound, upperBodyCompound, lowerBodyIsolation, upperBodyIsolation
 }

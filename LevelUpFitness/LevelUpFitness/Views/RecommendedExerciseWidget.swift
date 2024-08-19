@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct RecommendedExerciseWidget: View {
-    var exercise: ExerciseLibraryExercise
+    var exercise: Progression
     
     var exerciseSelected: () -> Void
     var body: some View {
@@ -19,7 +19,7 @@ struct RecommendedExerciseWidget: View {
                         .font(.system(size: 22, weight: .bold, design: .rounded))
                         .foregroundColor(.white)
                     
-                    Text(exercise.bodyArea)
+                    Text(exercise.exerciseType)
                         .font(.system(size: 16, weight: .medium, design: .rounded))
                         .foregroundColor(.white.opacity(0.8))
                 }
@@ -66,5 +66,5 @@ struct RecommendedExerciseWidget: View {
 }
 
 #Preview {
-    RecommendedExerciseWidget(exercise: ExerciseLibraryExercise(id: "", cdnURL: "", name: "", description: "", bodyArea: "", level: 2), exerciseSelected: {})
+    RecommendedExerciseWidget(exercise: Progression(name: "", description: "", level: 1, cdnURL: "", exerciseType: ""), exerciseSelected: {})
 }

@@ -31,7 +31,7 @@ exports.handler = async (event) => {
 
         for (const item of response.Items) {
             const userId = item.UserID;
-            const challengeName = item.ChallengeName;
+            const challengeName = item.Name;
 
             const endpointResponse = await pinpoint.getUserEndpoints({
                 ApplicationId: applicationId,
@@ -39,8 +39,12 @@ exports.handler = async (event) => {
             }).promise();
 
             for (const endpoint of endpointResponse.EndpointsResponse.Item) {
+
+                console.log(`The endpoint data: ${JSON.stringify(endpoint, null, 2)}`);
+
                 const endpointId = endpoint.Id;
-                await sendPushNotification(endpointId, challengeName);
+                console.log(`the endpointID is ${endpointId}`)
+                await sendPushNotification(endpoint, challengeName);
             }
         }
     } catch (error) {
@@ -48,16 +52,19 @@ exports.handler = async (event) => {
     }
 };
 
-const sendPushNotification = async (endpointId, challengeName) => {
+const sendPushNotification = async (endpoint, challengeName) => {
+    const deviceToken = endpoint.Address;
+    console.log(`Device token: ${deviceToken}`);
+
     const params = {
         ApplicationId: applicationId,
         MessageRequest: {
             Addresses: {
-                [endpointId]: { ChannelType: 'APNS' },
+                [deviceToken]: { ChannelType: 'APNS_SANDBOX' },
             },
             MessageConfiguration: {
                 APNSMessage: {
-                    Body: `Your challenge: '${challengeName}' is ending soon!`,
+                    Body: `'${challengeName}' is ending soon!`,
                     Title: 'Challenge Ending Soon',
                     Action: 'OPEN_APP',
                 },
@@ -66,7 +73,8 @@ const sendPushNotification = async (endpointId, challengeName) => {
     };
 
     try {
-        await pinpoint.sendMessages(params).promise();
+        const result = await pinpoint.sendMessages(params).promise();
+        console.log('Push notification sent successfully:', result);
     } catch (error) {
         console.error('Error sending push notification:', error);
     }

@@ -14,12 +14,14 @@ class ExerciseManager: ObservableObject {
     
     @Published var exercises: [ExerciseLibraryExercise] = []
     
-    @Published var recommendedExercise: ExerciseLibraryExercise?
+    @Published var recommendedExercise: Progression?
+    @Published var recommendedExerciseType: String?
+    
     init() {
         Task {
             await getExercises()
             
-            if let recommendedExercise = getRecommendedExercise() {
+            if let recommendedExercise = getRecommendedProgression() {
                 self.recommendedExercise = recommendedExercise
             }
         }
@@ -34,16 +36,14 @@ class ExerciseManager: ObservableObject {
         }
     }
     
-    func getRecommendedExercise() -> ExerciseLibraryExercise? {
-        if exercises.count > 0 {
-            if let recommendedExercise = exercises.randomElement() {
-                return recommendedExercise
-            }
-        } else {
+    func getRecommendedProgression() -> Progression? {
+        let allProgressions = self.exercises.flatMap { $0.progression }
+        
+        guard allProgressions.count > 0 else {
             return nil
         }
         
-        return nil
+        return allProgressions.randomElement()
     }
     
 

@@ -53,22 +53,14 @@ class XPManager: ObservableObject {
         }
         
         switch type {
-            case .strength:
-                userXPData.subLevels.strength.incrementXP(increment: increment)
-            case .endurance:
-                userXPData.subLevels.endurance.incrementXP(increment: increment)
-            case .mobility:
-                userXPData.subLevels.mobility.incrementXP(increment: increment)
-            case .back:
-                userXPData.subLevels.bodyAreas.back.incrementXP(increment: increment)
-            case .legs:
-                userXPData.subLevels.bodyAreas.legs.incrementXP(increment: increment)
-            case .core:
-                userXPData.subLevels.bodyAreas.core.incrementXP(increment: increment)
-            case .shoulders:
-                userXPData.subLevels.bodyAreas.shoulders.incrementXP(increment: increment)
-            case .chest:
-                userXPData.subLevels.bodyAreas.chest.incrementXP(increment: increment)
+            case .lowerBodyCompound:
+                userXPData.subLevels.lowerBodyCompound.incrementXP(increment: increment)
+            case .lowerBodyIsolation:
+                userXPData.subLevels.lowerBodyIsolation.incrementXP(increment: increment)
+            case .upperBodyCompound:
+                userXPData.subLevels.upperBodyCompound.incrementXP(increment: increment)
+            case .upperBodyIsolation:
+                userXPData.subLevels.upperBodyIsolation.incrementXP(increment: increment)
             case .total:
                 userXPData.xp += increment
                 if userXPData.xp > userXPData.xpNeeded {

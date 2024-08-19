@@ -64,6 +64,8 @@ class AppDelegate: NSObject, UIApplicationDelegate {
                 try await Amplify.Notifications.Push.registerDevice(apnsToken: deviceToken)
                 print("Registered with Pinpoint.")
                 print("Device Token: \(deviceToken.map { String(format: "%02.2hhx", $0) }.joined())")
+                
+                await associateUserWithDevice()
             } catch {
                 print("Error registering with Pinpoint: \(error)")
             }
@@ -85,3 +87,21 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     }
 }
 
+func associateUserWithDevice() async {
+    do {
+        let user = try await Amplify.Auth.getCurrentUser().userId
+        let userProfile = BasicUserProfile(
+            name: "Name",
+            customProperties: [
+                "attribute": "value"
+            ]
+        )
+
+        try await Amplify.Notifications.Push.identifyUser(
+            userId: user,
+            userProfile: userProfile
+        )
+    } catch {
+        print("Error updating endpoint with user information: \(error)")
+    }
+}

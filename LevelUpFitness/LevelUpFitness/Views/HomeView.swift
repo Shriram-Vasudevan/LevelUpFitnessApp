@@ -22,7 +22,7 @@ struct HomeView: View {
     @State private var showFullLevelBreakdownView: Bool = false
     @State private var showLevelUpInformationView: Bool = false
     
-    @State var selectedExercise: ExerciseLibraryExercise?
+    @State var selectedExercise: Progression?
     
     var body: some View {
         NavigationStack {
@@ -74,7 +74,7 @@ struct HomeView: View {
                                 })
                             }
                             else {
-                                LevelWidget(userXPData: XPData(userID: "", level: 0, xp: 0, xpNeeded: 15, subLevels: Sublevels(mobility: XPAttribute(xp: 0, level: 0, xpNeeded: 0), endurance: XPAttribute(xp: 0, level: 0, xpNeeded: 0), strength: XPAttribute(xp: 0, level: 0, xpNeeded: 0), bodyAreas: BodyAreas(back: XPAttribute(xp: 0, level: 0, xpNeeded: 0), legs: XPAttribute(xp: 0, level: 0, xpNeeded: 0), chest: XPAttribute(xp: 0, level: 0, xpNeeded: 0), shoulders: XPAttribute(xp: 0, level: 0, xpNeeded: 0), core: XPAttribute(xp: 0, level: 0, xpNeeded: 0)))), levelChanges: [], openFullBreakdownView: {
+                                LevelWidget(userXPData: XPData(userID: "", level: 0, xp: 0, xpNeeded: 15, subLevels: Sublevels(lowerBodyCompound: XPAttribute(xp: 0, level: 0, xpNeeded: 0), lowerBodyIsolation: XPAttribute(xp: 0, level: 0, xpNeeded: 0), upperBodyCompound: XPAttribute(xp: 0, level: 0, xpNeeded: 0), upperBodyIsolation: XPAttribute(xp: 0, level: 0, xpNeeded: 0))), levelChanges: [], openFullBreakdownView: {
                                     showFullLevelBreakdownView = true
                                 }, openLevelUpInfoView: {
                                     showLevelUpInformationView = true
@@ -305,7 +305,7 @@ struct HomeView: View {
                 LevelInfoView()
             })
             .navigationDestination(item: $selectedExercise) { exercise in
-                IndividualExerciseView(exercise: exercise)
+                IndividualExerciseView(progression: exercise)
             }
         }
     }

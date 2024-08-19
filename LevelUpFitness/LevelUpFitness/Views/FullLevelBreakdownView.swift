@@ -13,9 +13,10 @@ struct FullLevelBreakdownView: View {
     @Environment(\.dismiss) var dismiss
     
     let sublevelKeys = [
-        Sublevels.CodingKeys.strength.rawValue,
-        Sublevels.CodingKeys.endurance.rawValue,
-        Sublevels.CodingKeys.mobility.rawValue
+        Sublevels.CodingKeys.lowerBodyCompound.rawValue,
+        Sublevels.CodingKeys.lowerBodyIsolation.rawValue,
+        Sublevels.CodingKeys.upperBodyCompound.rawValue,
+        Sublevels.CodingKeys.upperBodyIsolation.rawValue
     ]
     
     var body: some View {
@@ -98,5 +99,5 @@ struct FullLevelBreakdownView: View {
 }
 
 #Preview {
-    FullLevelBreakdownView(userXPData: XPData(userID: "", level: 2, xp: 0, xpNeeded: 50, subLevels: Sublevels(mobility: XPAttribute(xp: 0, level: 0, xpNeeded: 0), endurance: XPAttribute(xp: 0, level: 0, xpNeeded: 0), strength: XPAttribute(xp: 0, level: 0, xpNeeded: 0), bodyAreas: BodyAreas(back: XPAttribute(xp: 0, level: 0, xpNeeded: 0), legs: XPAttribute(xp: 0, level: 0, xpNeeded: 0), chest: XPAttribute(xp: 0, level: 0, xpNeeded: 0), shoulders: XPAttribute(xp: 0, level: 0, xpNeeded: 0), core: XPAttribute(xp: 0, level: 0, xpNeeded: 0)))))
+    FullLevelBreakdownView(userXPData: XPData(userID: "", level: 2, xp: 0, xpNeeded: 50, subLevels: Sublevels(lowerBodyCompound: XPAttribute(xp: 0, level: 0, xpNeeded: 0), lowerBodyIsolation: XPAttribute(xp: 0, level: 0, xpNeeded: 0), upperBodyCompound: XPAttribute(xp: 0, level: 0, xpNeeded: 0), upperBodyIsolation: XPAttribute(xp: 0, level: 0, xpNeeded: 0))))
 }

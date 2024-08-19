@@ -363,7 +363,7 @@ extension ProgramDay {
     
 }
 
-extension Exercise {
+extension ProgramExercise {
     func getAverageRestDifferential() -> Double {
         guard data.sets.count > 0 else { return 0.0 }
         
@@ -378,38 +378,18 @@ extension Exercise {
     }
 }
 
-extension Sublevels {
-    func getAverage() -> Int {
-        return Int((mobility.level + strength.level + endurance.level) / 3)
-    }
-    
-    func attribute(for key: String) -> XPAttribute? {
-        switch key.lowercased() {
-            case "strength":
-                return strength
-            case "endurance":
-                return endurance
-            case "mobility":
-                return mobility
-            default:
-                return nil
-            }
-    }
-}
 
-extension BodyAreas {
+extension Sublevels {
     func attribute(for key: String) -> XPAttribute? {
             switch key.lowercased() {
-                case "back":
-                    return back
-                case "legs":
-                    return legs
-                case "chest":
-                    return chest
-                case "shoulders":
-                    return shoulders
-                case "core":
-                    return core
+                case "lower body compound":
+                    return lowerBodyCompound
+                case "lower body isolation":
+                    return lowerBodyIsolation
+                case "upper body compound":
+                    return upperBodyCompound
+                case "upper body isolation":
+                    return upperBodyIsolation
                 default:
                     return nil
             }

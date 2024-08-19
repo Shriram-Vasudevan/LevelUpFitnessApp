@@ -9,6 +9,7 @@ import Amplify
 import AWSCognitoAuthPlugin
 import AWSAPIPlugin
 import AWSS3StoragePlugin
+import AWSPinpoint
 import SwiftUI
 
 //Handles Sign In + Login Stuff
@@ -115,6 +116,8 @@ class AuthenticationManager: ObservableObject {
             completion(false, error)
         }
     }
+    
+
     
     func forgotPassword(username: String) async {
         

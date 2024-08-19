@@ -153,52 +153,25 @@ exports.handler = async (event) => {
                 XP: 0,
                 XPNeeded: 50,
                 Sublevels: {
-                    Endurance: {
+                    "Lower Body Compound": {
                         Level: 1,
                         XP: 0,
                         XPNeeded: 25
                     },
-                    Mobility: {
+                    "Lower Body Isolation": {
                         Level: 1,
                         XP: 0,
                         XPNeeded: 25
                     },
-                    Strength: {
+                    "Upper Body Compound": {
                         Level: 1,
                         XP: 0,
                         XPNeeded: 25
                     },
-                    Areas: {
-                        Back: {
-                            Level: 1,
-                            XP: 0,
-                            XPNeeded: 25
-                        },
-                        Back: {
-                            Level: 1,
-                            XP: 0,
-                            XPNeeded: 25
-                        },
-                        Back: {
-                            Level: 1,
-                            XP: 0,
-                            XPNeeded: 25
-                        },
-                        Back: {
-                            Level: 1,
-                            XP: 0,
-                            XPNeeded: 25
-                        },
-                        Back: {
-                            Level: 1,
-                            XP: 0,
-                            XPNeeded: 25
-                        },
-                        Back: {
-                            Level: 1,
-                            XP: 0,
-                            XPNeeded: 25
-                        }      
+                    "Upper Body Isolation": {
+                        Level: 1,
+                        XP: 0,
+                        XPNeeded: 25
                     }
                 }
             }

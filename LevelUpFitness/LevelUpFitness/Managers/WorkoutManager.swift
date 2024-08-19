@@ -10,7 +10,7 @@ import SwiftUI
 
 @MainActor
 class WorkoutManager: ObservableObject {
-    @Published var currentExercises: [Exercise] = []
+    @Published var currentExercises: [ProgramExercise] = []
     @Published var currentExerciseData: ExerciseData = ExerciseData(sets: [ExerciseDataSet(weight: 0, reps: 0, time: 0.0, rest: 0.0)])
     @Published var currentExerciseIndex: Int = 0
     @Published var currentSetIndex: Int = 0
@@ -78,20 +78,20 @@ class WorkoutManager: ObservableObject {
                 
                 programManager.program?.program[programIndex] = todaysProgram
                 
-                switch todaysProgram.exercises[currentExerciseIndex].area {
-                    case "Legs":
-                        xpManager.addXP(increment: 1, type: .legs)
-                    case "Back":
-                        xpManager.addXP(increment: 1, type: .back)
-                    case "Shoulders":
-                        xpManager.addXP(increment: 1, type: .shoulders)
-                    case "Core":
-                        xpManager.addXP(increment: 1, type: .core)
-                    case "Chest":
-                        xpManager.addXP(increment: 1, type: .chest)
-                    default:
-                        break
-                }
+//                switch todaysProgram.exercises[currentExerciseIndex].area {
+//                    case "Legs":
+//                        xpManager.addXP(increment: 1, type: .legs)
+//                    case "Back":
+//                        xpManager.addXP(increment: 1, type: .back)
+//                    case "Shoulders":
+//                        xpManager.addXP(increment: 1, type: .shoulders)
+//                    case "Core":
+//                        xpManager.addXP(increment: 1, type: .core)
+//                    case "Chest":
+//                        xpManager.addXP(increment: 1, type: .chest)
+//                    default:
+//                        break
+//                }
             }
 
             currentExerciseIndex += 1

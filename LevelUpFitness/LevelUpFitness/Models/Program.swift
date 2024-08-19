@@ -21,10 +21,10 @@ struct ProgramDay: Codable, Hashable {
     var day: String
     var workout: String
     var completed: Bool
-    var exercises: [Exercise]
+    var exercises: [ProgramExercise]
 }
 
-struct Exercise: Codable, Hashable {
+struct ProgramExercise: Codable, Hashable {
     var name: String
     var sets: Int
     var reps: Int
