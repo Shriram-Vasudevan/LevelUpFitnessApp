@@ -82,7 +82,7 @@ class ProgramManager: ObservableObject {
                     
                     DispatchQueue.main.async {
                         self.program = decodedData
-                        print(self.program)
+//                        print(self.program)
                     }
 
                     try LocalStorageUtility.cacheUserProgram(userID: userID, programName: programName, date: date, program: decodedData)

@@ -79,7 +79,9 @@ class HealthManager: ObservableObject {
                             comparison = .equal
                         }
                         
-                        self.todaysSteps = (count: todaysSteps, comparison: comparison)
+                        DispatchQueue.main.sync {
+                            self.todaysSteps = (count: todaysSteps, comparison: comparison)
+                        }
                     }
                 }
             }
@@ -158,8 +160,10 @@ class HealthManager: ObservableObject {
                         } else {
                             comparison = .equal
                         }
+                        DispatchQueue.main.sync {
+                            self.todaysCalories = (count: todaysCalories, comparison: comparison)
+                        }
                         
-                        self.todaysCalories = (count: todaysCalories, comparison: comparison)
                     }
                 }
             }
@@ -239,7 +243,9 @@ class HealthManager: ObservableObject {
                             comparison = .equal
                         }
                         
-                        self.todaysDistance = (count: Int(todaysDistance), comparison: comparison)
+                        DispatchQueue.main.sync {
+                            self.todaysDistance = (count: Int(todaysDistance), comparison: comparison)
+                        }               
                     }
                 }
             }

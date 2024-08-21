@@ -29,7 +29,7 @@ class ChallengeManager: ObservableObject {
             
             let response = try await Amplify.API.get(request: request)
             
-            print("get challenge templates response: \(String(describing: String(data: response, encoding: .utf8)))")
+           // print("get challenge templates response: \(String(describing: String(data: response, encoding: .utf8)))")
             let decoder = JSONDecoder()
             let responseDecoded = try decoder.decode([ChallengeTemplate].self, from: response)
             
@@ -47,7 +47,7 @@ class ChallengeManager: ObservableObject {
             
             let response = try await Amplify.API.get(request: request)
             
-            print("get active user challenges response: \(String(describing: String(data: response, encoding: .utf8)))")
+          //  print("get active user challenges response: \(String(describing: String(data: response, encoding: .utf8)))")
             let decoder = JSONDecoder()
             let responseDecoded = try decoder.decode([UserChallenge].self, from: response)
             
@@ -74,7 +74,7 @@ class ChallengeManager: ObservableObject {
         do {
             let userID = try await Amplify.Auth.getCurrentUser().userId
             
-            print("challenge template id \(challengeTemplateID)")
+            //print("challenge template id \(challengeTemplateID)")
             let userChallenge = UserChallenge(userID: userID, id: UUID().uuidString, challengeTemplateID: challengeTemplateID, name: challengeName, startDate: startDate, endDate: endDate, startValue: startValue, targetValue: targetValue, field: field, isFailed: false, isActive: true)
             
             let jsonEncoder = JSONEncoder()
@@ -85,7 +85,7 @@ class ChallengeManager: ObservableObject {
             
             let response = try await Amplify.API.put(request: request)
             
-            print("updateChallenge response: \(String(describing: String(data: response, encoding: .utf8)))")
+          //  print("updateChallenge response: \(String(describing: String(data: response, encoding: .utf8)))")
             
             userChallenges.append(userChallenge)
         } catch {
@@ -112,7 +112,7 @@ class ChallengeManager: ObservableObject {
 //                let response = try await Amplify.API.put(request: request)
 //            }
         } catch {
-            print(error)
+            print("challenge completion error \(error)")
         }
     }
     

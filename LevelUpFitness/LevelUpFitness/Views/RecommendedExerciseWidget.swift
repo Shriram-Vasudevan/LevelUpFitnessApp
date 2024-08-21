@@ -66,5 +66,5 @@ struct RecommendedExerciseWidget: View {
 }
 
 #Preview {
-    RecommendedExerciseWidget(exercise: Progression(name: "", description: "", level: 1, cdnURL: "", exerciseType: ""), exerciseSelected: {})
+    RecommendedExerciseWidget(exercise: Progression.preview()!, exerciseSelected: {})
 }

@@ -10,20 +10,45 @@ import SwiftUI
 
 extension Array where Element == Program {
     
-    private func calculateScaledTrendScore(rawScore: Int, maxScore: Int) -> Int {
-        guard maxScore != 0 else { return 0 }
-        let scaleFactor = Double(10) / Double(maxScore)
-        let scaledScore = Double(rawScore) * scaleFactor
-        return Swift.max(-10, Swift.min(10, Int(scaledScore)))
+    private func calculateScaledTrendScore(rawScore: Int, maxScore: Int, minScore: Int) -> Int {
+        let targetMin = -5.0
+        let targetMax = 10.0
+        
+        print("the raw score \(rawScore) min score \(minScore) max score \(maxScore)")
+        
+        let scaleFactor = (targetMax - targetMin) / Double(maxScore - minScore)
+
+        let mappedValue = targetMin + (Double(rawScore) - Double(minScore)) * scaleFactor
+
+        let clampedValue = Swift.min(Swift.max(mappedValue, targetMin), targetMax)
+
+        return Int(round(clampedValue))
     }
 
+    private func filterPrograms() -> [Program] {
+        var filteredPrograms = self
+
+        filteredPrograms.removeAll { program in
+            program.getProgramCompletionPercentage() < 20
+        }
+        
+        if let mostRecentProgram = filteredPrograms.last, mostRecentProgram.getProgramCompletionPercentage() < 60 {
+            filteredPrograms.removeLast()
+        }
+        
+        return filteredPrograms.count >= 2 ? filteredPrograms : []
+    }
+    
     func getWeightTrendContribution() -> Int {
+        let programs = filterPrograms()
+        guard programs.count >= 2 else { return 0 }
+        
         var totalTrend = 0
         var totalExerciseCount = 0
 
         var exerciseAverages: [String: [Double]] = [:]
 
-        for program in self {
+        for program in programs {
             for day in program.program {
                 for exercise in day.exercises {
                     let exerciseName = exercise.name
@@ -38,17 +63,23 @@ extension Array where Element == Program {
             }
         }
 
+        var maxTrendValue = 0
+        var minTrendValue = 0
+        
         for (_, averages) in exerciseAverages {
             guard averages.count > 1 else { continue }
+            
+            maxTrendValue += 3 * averages.count
+            minTrendValue -= 3 * averages.count
             
             var previousAverage = averages.first!
             var exerciseTrend = 0
             
             for currentAverage in averages.dropFirst() {
                 if currentAverage > previousAverage {
-                    exerciseTrend += 2 
+                    exerciseTrend += 3
                 } else if currentAverage < previousAverage {
-                    exerciseTrend -= 2
+                    exerciseTrend -= 3
                 }
                 previousAverage = currentAverage
             }
@@ -58,18 +89,22 @@ extension Array where Element == Program {
         }
         
         guard totalExerciseCount > 0 else { return 0 }
-
-        let maxTrendValue = totalExerciseCount * 2
-        return calculateScaledTrendScore(rawScore: totalTrend, maxScore: maxTrendValue)
+        
+        print("weight trned \(totalTrend)")
+        print("weight contribution \(calculateScaledTrendScore(rawScore: totalTrend, maxScore: maxTrendValue, minScore: minTrendValue))")
+        return calculateScaledTrendScore(rawScore: totalTrend, maxScore: maxTrendValue, minScore: minTrendValue)
     }
     
     func getRestDifferentialTrendContribution() -> Int {
-        var totalDifferential = 0
+        let programs = filterPrograms()
+        guard programs.count >= 2 else { return 0 }
+        
+        var totalDifferential = 0.0
         var totalExerciseCount = 0
         
         var restDifferentials: [String: [Double]] = [:]
         
-        for program in self {
+        for program in programs {
             for day in program.program {
                 for exercise in day.exercises {
                     let exerciseName = exercise.name
@@ -86,55 +121,71 @@ extension Array where Element == Program {
             }
         }
         
+        var maxTrendValue = 0
+        var minTrendValue = 0
+        
         for (_, differentials) in restDifferentials {
             guard differentials.count > 0 else { continue }
             
             let averageDifferential = differentials.reduce(0.0, +) / Double(differentials.count)
-            totalDifferential += Int(averageDifferential)
+            totalDifferential += averageDifferential
             totalExerciseCount += 1
         }
         
         guard totalExerciseCount > 0 else { return 0 }
         
         let maxDifferential = totalExerciseCount * 10
-        return calculateScaledTrendScore(rawScore: -totalDifferential, maxScore: maxDifferential)
+        let minDifferential = totalExerciseCount * 10
+        
+        print("rest dif contribution \(calculateScaledTrendScore(rawScore: Int(totalDifferential), maxScore: maxDifferential, minScore: minDifferential))")
+        
+        return calculateScaledTrendScore(rawScore: Int(totalDifferential), maxScore: maxDifferential, minScore: minDifferential)
     }
     
     func getConsistencyTrendContribution() -> Int {
+        let programs = filterPrograms()
+        guard programs.count >= 2 else { return 0 }
+        
         var programCompletionRates: [Double] = []
         
-        for program in self {
-            let totalDays = program.program.count
-            let completedDays = program.program.filter { $0.completed }.count
-            
-            guard totalDays > 0 else { continue }
-            
-            let completionRate = Double(completedDays) / Double(totalDays)
+        for program in programs {
+            let completionRate = program.getProgramCompletionPercentage()
             programCompletionRates.append(completionRate)
         }
         
         guard programCompletionRates.count > 1 else { return 0 }
         
+        var maxTrendValue = 0
+        var minTrendValue = 0
+        
+        maxTrendValue += 4 * programCompletionRates.count
+        minTrendValue -= 3 * programCompletionRates.count
+        
         var previousRate = programCompletionRates.first!
         var trendScore = 0
-        
+    
+        print("the program completion rates \(programCompletionRates)")
         for currentRate in programCompletionRates.dropFirst() {
             if currentRate > previousRate {
-                trendScore += 2
+                trendScore += 4
             } else if currentRate < previousRate {
-                trendScore -= 2
+                trendScore -= 3
             }
             previousRate = currentRate
         }
         
-        let maxTrendValue = (programCompletionRates.count - 1) * 2
-        return calculateScaledTrendScore(rawScore: trendScore, maxScore: maxTrendValue)
+        print("consistency trend score \(trendScore)")
+        print("consistency contribution \(calculateScaledTrendScore(rawScore: trendScore, maxScore: maxTrendValue, minScore: minTrendValue))")
+        return calculateScaledTrendScore(rawScore: trendScore, maxScore: maxTrendValue, minScore: minTrendValue)
     }
     
     func getRestTimeTrendContribution() -> Int {
+        let programs = filterPrograms()
+        guard programs.count >= 2 else { return 0 }
+        
         var programRestTimeAverages: [Double] = []
         
-        for program in self {
+        for program in programs {
             var totalRestTime = 0.0
             var totalSets = 0
             
@@ -154,22 +205,30 @@ extension Array where Element == Program {
         
         guard programRestTimeAverages.count > 1 else { return 0 }
         
+        var maxTrendValue = 0
+        var minTrendValue = 0
+        
+        maxTrendValue += 3 * programRestTimeAverages.count
+        minTrendValue -= 2 * programRestTimeAverages.count
+        
         var previousAverage = programRestTimeAverages.first!
         var restTimeTrendScore = 0
         
         for currentAverage in programRestTimeAverages.dropFirst() {
             if currentAverage < previousAverage {
-                restTimeTrendScore += 2
+                restTimeTrendScore += 3
             } else if currentAverage > previousAverage {
                 restTimeTrendScore -= 2
             }
             previousAverage = currentAverage
         }
         
-        let maxTrendValue = (programRestTimeAverages.count - 1) * 2
-        return calculateScaledTrendScore(rawScore: restTimeTrendScore, maxScore: maxTrendValue)
+        print("rest time contribution \(calculateScaledTrendScore(rawScore: restTimeTrendScore, maxScore: maxTrendValue, minScore: minTrendValue))")
+        return calculateScaledTrendScore(rawScore: restTimeTrendScore, maxScore: maxTrendValue, minScore: minTrendValue)
     }
 }
+
+
 
 extension UserChallenge {
     func toDictionary() -> [String: Any] {

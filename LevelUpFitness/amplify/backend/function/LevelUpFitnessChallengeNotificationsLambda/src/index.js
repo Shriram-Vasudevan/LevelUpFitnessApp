@@ -64,8 +64,8 @@ const sendPushNotification = async (endpoint, challengeName) => {
             },
             MessageConfiguration: {
                 APNSMessage: {
-                    Body: `'${challengeName}' is ending soon!`,
-                    Title: 'Challenge Ending Soon',
+                    Body: `The ${challengeName} is ending soon!`,
+                    Title: 'Come Back!',
                     Action: 'OPEN_APP',
                 },
             },
@@ -74,7 +74,13 @@ const sendPushNotification = async (endpoint, challengeName) => {
 
     try {
         const result = await pinpoint.sendMessages(params).promise();
-        console.log('Push notification sent successfully:', result);
+
+        console.log('Push notification response:', JSON.stringify(result, null, 2));
+        
+        const messageResponse = result.MessageResponse;
+        const requestResult = messageResponse?.Result?.[deviceToken];
+        console.log('Detailed response for the device token:', JSON.stringify(requestResult, null, 2));
+
     } catch (error) {
         console.error('Error sending push notification:', error);
     }

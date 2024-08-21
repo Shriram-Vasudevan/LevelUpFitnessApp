@@ -81,24 +81,24 @@ struct LibraryView: View {
                                         }
                                     }
                                     .padding(.horizontal)
-//                                    
-//                                    let filteredExercises = exerciseManager.exercises.filter { $0.exerciseType == key.capitalizingFirstLetter() }
-//                                        if filteredExercises.isEmpty {
-//                                            HStack {
-//                                                Text("No exercises for \(key)")
-//                                                
-//                                                Spacer()
-//                                            }
-//                                            .padding(.horizontal)
-//                                        } else {
-//                                            ForEach(filteredExercises, id: \.id) { exercise in
-//                                                ExerciseLibraryExerciseWidget(exerciseLibraryExercise: exercise, userXPData: userXPData, exerciseSelected: {
-//                                                    self.selectedExercise = exercise
-//                                                })
-//                                                    
-//                                                    .padding(.bottom)
-//                                            }
-//                                        }
+                                    
+                                    let filteredExercises = exerciseManager.exercises.filter { $0.exerciseType == key.capitalizingFirstLetter() }
+                                        if filteredExercises.isEmpty {
+                                            HStack {
+                                                Text("No exercises for \(key)")
+                                                
+                                                Spacer()
+                                            }
+                                            .padding(.horizontal)
+                                        } else {
+                                            ForEach(filteredExercises, id: \.id) { exercise in
+                                                ExerciseLibraryExerciseWidget(exercise: exercise, userXPData: userXPData, exerciseSelected: { progression in
+                                                    self.selectedExercise = progression
+                                                })
+                                                    
+                                                    .padding(.bottom)
+                                            }
+                                        }
                                 }
                             }
                         }

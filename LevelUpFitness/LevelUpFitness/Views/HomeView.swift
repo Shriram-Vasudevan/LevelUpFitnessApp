@@ -10,7 +10,8 @@ struct HomeView: View {
     @ObservedObject var xpManager: XPManager
     @ObservedObject var exerciseManager: ExerciseManager
     @ObservedObject var challengeManager: ChallengeManager
-    
+    @ObservedObject var levelChangeManager: LevelChangeManager
+
     @State var avPlayer = AVPlayer()
     
     @State var days: [String: String] = ["5/20" : "Happy", "5/21" : "Happy", "5/22" : "Happy", "5/23" : "Happy", "5/24" : "Happy", "5/25" : "Happy", "5/26" : "Happy"]
@@ -67,7 +68,7 @@ struct HomeView: View {
                         
                         VStack (spacing: 20) {
                             if let userXPData = xpManager.userXPData {
-                                LevelWidget(userXPData: userXPData, levelChanges: xpManager.levelChanges, openFullBreakdownView: {
+                                LevelWidget(userXPData: userXPData, levelChanges: levelChangeManager.levelChanges, openFullBreakdownView: {
                                     showFullLevelBreakdownView = true
                                 }, openLevelUpInfoView: {
                                     showLevelUpInformationView = true
@@ -326,5 +327,5 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeView(programManager: ProgramManager(), databaseManager: DatabaseManager(), healthManager: HealthManager(), xpManager: XPManager(), exerciseManager: ExerciseManager(), challengeManager: ChallengeManager(), pageType: .constant(.home))
+    HomeView(programManager: ProgramManager(), databaseManager: DatabaseManager(), healthManager: HealthManager(), xpManager: XPManager(), exerciseManager: ExerciseManager(), challengeManager: ChallengeManager(), levelChangeManager: LevelChangeManager(), pageType: .constant(.home))
 }

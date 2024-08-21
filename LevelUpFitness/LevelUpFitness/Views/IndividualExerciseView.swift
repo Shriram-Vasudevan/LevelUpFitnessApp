@@ -88,5 +88,5 @@ struct IndividualExerciseView: View {
 }
 
 #Preview {
-    IndividualExerciseView(progression: Progression(name: "", description: "", level: 5, cdnURL: "", exerciseType: ""))
+    IndividualExerciseView(progression: Progression.preview()!)
 }

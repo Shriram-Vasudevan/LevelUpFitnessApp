@@ -17,7 +17,7 @@ class ProgramDynamoDBUtility {
             let response = try await Amplify.API.get(request: request)
             
             let jsonString = String(data: response, encoding: .utf8)
-            print("program db representation \(jsonString)")
+          //  print("program db representation \(jsonString)")
             
             let jsonDecoder = JSONDecoder()
             let programDBRepresentation = try jsonDecoder.decode(ProgramDBRepresentation.self, from: response)
@@ -46,7 +46,7 @@ class ProgramDynamoDBUtility {
             let request = RESTRequest(apiName: "LevelUpFitnessDynamoAccessAPI", path: "/getExercises")
             let response = try await Amplify.API.get(request: request)
             
-            print("getExercises: \(String(data: response, encoding: .utf8))")
+            //print("getExercises: \(String(data: response, encoding: .utf8))")
             let decoder = JSONDecoder()
             
             let exercises = try decoder.decode([ExerciseLibraryExercise].self, from: response)

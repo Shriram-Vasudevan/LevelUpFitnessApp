@@ -26,8 +26,8 @@ class LocalStorageUtility {
                     }
                 }
                 
-                let programsSorted = programs.sorted { $0.1 > $1.1 }
-                
+                let programsSorted = programs.sorted { $0.1 < $1.1 }
+                print("programs sorter \(programsSorted)")
                 let jsonDecoder = JSONDecoder()
                 var programObjects: [Program] = []
                 
@@ -43,7 +43,7 @@ class LocalStorageUtility {
                     programObjects.append(decodedData)
                 }
                 
-                print("the program objects \(programObjects)")
+                //print("the program objects \(programObjects)")
                 return programObjects
             } else {
                 return nil
@@ -75,7 +75,8 @@ class LocalStorageUtility {
                 let currentDate = Date()
                 let timeSinceModification = currentDate.timeIntervalSince(modificationDate)
                 
-                if timeSinceModification <= 86400 {
+                print("time since mod \(timeSinceModification)")
+                if timeSinceModification <= 30 {
                     return true
                 }
             }

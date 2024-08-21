@@ -25,7 +25,7 @@ class DatabaseManager: ObservableObject {
             let response = try await Amplify.API.get(request: request)
             
             let stringResponse = String(data: response, encoding: .utf8)
-            print("got user workouts: \(String(describing: stringResponse))")
+          //  print("got user workouts: \(String(describing: stringResponse))")
             
             let jsonDecoder = JSONDecoder()
             jsonDecoder.keyDecodingStrategy = .custom { keys in
