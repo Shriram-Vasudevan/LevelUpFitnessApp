@@ -14,6 +14,8 @@ class XPManager: ObservableObject {
     static let shared = XPManager()
     
     @Published var userXPData: XPData?
+    @Published var levelChanges: [LevelChangeInfo] = []
+
     
     let allProperties = ["Weight", "Rest", "Endurance", "Consistency",]
     var currentProperties: [String] = []
@@ -21,6 +23,8 @@ class XPManager: ObservableObject {
     init() {
         Task {
             await getUserXPData()
+            await getLevelChanges()
+            await addNewProgramLevelChanges()
         }
     }
     
@@ -39,8 +43,6 @@ class XPManager: ObservableObject {
                 self.userXPData = responseDecoded.item
             }
             
-            await LevelChangeManager.shared.getLevelChanges()
-            await LevelChangeManager.shared.addNewProgramLevelChanges()
             
         } catch {
             print("xp error \(error)")
@@ -112,18 +114,221 @@ class XPManager: ObservableObject {
 
         var level = 1
         var accumulatedXP = 50
-        var nextLevelXP = 30
 
-        while xp >= accumulatedXP + nextLevelXP {
-            accumulatedXP += nextLevelXP
+        while xp >= accumulatedXP {
             level += 1
-            nextLevelXP = level * 30
+            accumulatedXP += level * 30
         }
 
         return level
     }
 
     func calculateXPForLevel(_ level: Int) -> Int {
-        return level == 1 ? 50 : 50 + (level - 1) * (level + 1) * 15
+        if level <= 1 {
+            return 50
+        }
+        
+        var totalXP = 50
+        for currentLevel in 2...level {
+            totalXP += currentLevel * 30
+        }
+        return totalXP
     }
+
+    
+    func addNewProgramLevelChanges() async {
+        do {
+            let userID = try await Amplify.Auth.getCurrentUser().userId
+            
+            if let programName = await ProgramDynamoDBUtility.getUserProgramDBRepresentation() {
+                print("program name \(programName)")
+                if !LocalStorageUtility.fileModifiedInLast24Hours(at: "\(userID)-LevelChangeInfo.json") {
+                    print("current properties \(currentProperties)")
+                    let selectedPropterties = selectedProperties()
+                    print("selected properties \(selectedPropterties)")
+                    
+                    if let programs = LocalStorageUtility.getCachedUserPrograms(at: "Programs/\(userID)/\(programName)") {
+                        print("got programs")
+                        let tasks = selectedPropterties.map { selectedProperty in
+                                Task {
+                                    await performProgramLevelChange(selectedProperty: selectedProperty, programs: programs)
+                                }
+                            }
+      
+                            for task in tasks {
+                                _ = await task.value
+                            }
+                    }
+                    
+                    
+                    await addXPToDB()
+                    await getLevelChanges()
+                    
+                    print("level chagnes \(self.levelChanges)")
+                }
+            }
+        } catch {
+            print(error)
+        }
+    }
+    
+    func getLevelChanges() async {
+        do {
+            let userID = try await Amplify.Auth.getCurrentUser().userId
+            let filePath = "\(userID)-LevelChangeInfo.json"
+            guard let documentsDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+            let fileURL = documentsDirectoryURL.appendingPathComponent(filePath)
+            
+            if !FileManager.default.fileExists(atPath: fileURL.path) {
+                try "".write(to: fileURL, atomically: true, encoding: .utf8)
+                self.levelChanges = []
+                self.currentProperties = []
+                return
+            }
+            
+            guard let fileContent = LocalStorageUtility.readDocumentsDirectoryJSONStringFile(at: filePath) else { return }
+
+            let levelChangeStrings = fileContent.components(separatedBy: .newlines).filter { !$0.isEmpty }
+            var levelChanges: [LevelChangeInfo] = []
+            
+            let jsonDecoder = JSONDecoder()
+            var loadedProperties: [String] = []
+            
+            for levelChangeString in levelChangeStrings {
+                if let levelChangeData = levelChangeString.data(using: .utf8) {
+                    do {
+                        let levelChange = try jsonDecoder.decode(LevelChangeInfo.self, from: levelChangeData)
+                        levelChanges.append(levelChange)
+                        loadedProperties.append(levelChange.keyword)
+                    } catch {
+                        print("Failed to decode line: \(levelChangeString), error: \(error)")
+                        continue
+                    }
+                }
+            }
+        
+            if levelChanges.count > 4 {
+                self.levelChanges = Array(levelChanges.suffix(4))
+                self.currentProperties = Array(loadedProperties.suffix(4))
+            } else {
+                self.levelChanges = levelChanges
+                self.currentProperties = loadedProperties
+            }
+
+            print("The last 4 level changes: \(self.levelChanges)")
+        } catch {
+            print("getLevelChanges \(error)")
+        }
+    }
+
+
+    
+    func performProgramLevelChange(selectedProperty: String, programs: [Program]) async {
+        print("performProgramLevelChange")
+        switch selectedProperty {
+            case "Weight":
+                print("Weight")
+                await addProgramWeightTrendContribution(programs: programs)
+            case "Rest":
+            print("Rest")
+                await addProgramRestDifferentialTrendContribution(programs: programs)
+            case "Endurance":
+            print("Endurance")
+                await addProgramRestTimeTrendContribution(programs: programs)
+            case "Consistency":
+            print("Consistency")
+                await addProgramConsistencyTrendContribution(programs: programs)
+            default:
+                break
+        }
+    }
+    
+    func addProgramWeightTrendContribution(programs: [Program]) async {
+        do {
+            let userID = try await Amplify.Auth.getCurrentUser().userId
+            
+            let contribution = programs.getWeightTrendContribution()
+            
+            let levelChangeInfo = LevelChangeInfo(keyword: "Weight", description: "This is a measure of how much weight you've been lifting over the past few weeks", change: contribution, timestamp: Date().ISO8601Format())
+            
+            appendLevelChangeToFile(levelChangeInfo: levelChangeInfo, contribution: contribution, userID: userID)
+        } catch {
+            print(error)
+        }
+    }
+    
+    func addProgramRestDifferentialTrendContribution(programs: [Program]) async {
+        do {
+            let userID = try await Amplify.Auth.getCurrentUser().userId
+            
+            let contribution = programs.getRestDifferentialTrendContribution()
+            
+            let levelChangeInfo = LevelChangeInfo(keyword: "Rest", description: "This is a measure of how your rest differential has been changing over the last few weeks", change: contribution, timestamp: Date().ISO8601Format())
+            
+            appendLevelChangeToFile(levelChangeInfo: levelChangeInfo, contribution: contribution, userID: userID)
+        } catch {
+            print(error)
+        }
+    }
+    
+    func addProgramConsistencyTrendContribution(programs: [Program]) async {
+        do {
+            let userID = try await Amplify.Auth.getCurrentUser().userId
+            
+            let contribution = programs.getConsistencyTrendContribution()
+            
+            let levelChangeInfo = LevelChangeInfo(keyword: "Consistency", description: "This is a measure of how your consistency has been changing over the last few weeks", change: contribution, timestamp: Date().ISO8601Format())
+            
+            let jsonEncoder = JSONEncoder()
+            let jsonData = try jsonEncoder.encode(levelChangeInfo)
+            
+            appendLevelChangeToFile(levelChangeInfo: levelChangeInfo, contribution: contribution, userID: userID)
+        } catch {
+            print(error)
+        }
+    }
+    
+    func addProgramRestTimeTrendContribution(programs: [Program]) async {
+        do {
+            let userID = try await Amplify.Auth.getCurrentUser().userId
+            
+            let contribution = programs.getRestTimeTrendContribution()
+            
+            let levelChangeInfo = LevelChangeInfo(keyword: "Endurance", description: "This is a measure of how your endurance has been changing over the last few weeks", change: contribution, timestamp: Date().ISO8601Format())
+            
+            appendLevelChangeToFile(levelChangeInfo: levelChangeInfo, contribution: contribution, userID: userID)
+        } catch {
+            print(error)
+        }
+    }
+    
+    func appendLevelChangeToFile(levelChangeInfo: LevelChangeInfo, contribution: Int, userID: String) {
+        do {
+            let jsonEncoder = JSONEncoder()
+            let jsonData = try jsonEncoder.encode(levelChangeInfo)
+            
+            print("appending level change for \(levelChangeInfo.keyword)")
+            LocalStorageUtility.appendDataToDocumentsDirectoryFile(at: "\(userID)-LevelChangeInfo.json", data: jsonData)
+//            levelChanges.append(levelChangeInfo)
+            
+            print("adding xp")
+            XPManager.shared.addXP(increment: contribution, type: .total)
+        } catch {
+            print(error)
+        }
+    }
+    
+    func selectedProperties() -> [String] {
+        let availableProperties = allProperties.filter { !currentProperties.contains($0) }
+        
+        var selectedProperties = Array(availableProperties.shuffled().prefix(4))
+
+        if selectedProperties.count < 4 {
+            let additionalProperties = Array(currentProperties.shuffled().prefix(4 - selectedProperties.count))
+            selectedProperties.append(contentsOf: additionalProperties)
+        }
+        
+        return selectedProperties
+    }
+    
 }

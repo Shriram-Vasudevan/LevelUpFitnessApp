@@ -76,7 +76,7 @@ class LocalStorageUtility {
                 let timeSinceModification = currentDate.timeIntervalSince(modificationDate)
                 
                 print("time since mod \(timeSinceModification)")
-                if timeSinceModification <= 30 {
+                if timeSinceModification <= 86400 {
                     return true
                 }
             }

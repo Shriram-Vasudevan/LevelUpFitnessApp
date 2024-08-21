@@ -68,7 +68,7 @@ struct HomeView: View {
                         
                         VStack (spacing: 20) {
                             if let userXPData = xpManager.userXPData {
-                                LevelWidget(userXPData: userXPData, levelChanges: levelChangeManager.levelChanges, openFullBreakdownView: {
+                                LevelWidget(userXPData: userXPData, levelChanges: xpManager.levelChanges, openFullBreakdownView: {
                                     showFullLevelBreakdownView = true
                                 }, openLevelUpInfoView: {
                                     showLevelUpInformationView = true

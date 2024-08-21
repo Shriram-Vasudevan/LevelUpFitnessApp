@@ -17,12 +17,12 @@ class LevelChangeManager: ObservableObject {
     let allProperties = ["Weight", "Rest", "Endurance", "Consistency"]
     var currentProperties: [String] = []
     
-    init() {
-        Task {
-            await getLevelChanges()
-            await addNewProgramLevelChanges()
-        }
-    }
+//    init() {
+//        Task {
+//            await getLevelChanges()
+//            await addNewProgramLevelChanges()
+//        }
+//    }
     
     func addNewProgramLevelChanges() async {
         do {
