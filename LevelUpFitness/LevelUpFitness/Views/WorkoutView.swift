@@ -88,6 +88,7 @@ struct WorkoutContent: View {
                     Task {
                         if let todaysProgram = programManager.program?.program.first(where: { $0.day == getCurrentWeekday() }) {
                             
+                            print("uploading new status")
                             await programManager.uploadNewProgramStatus(completion: { success in
                                     if success {
                                         dismiss()
@@ -110,7 +111,7 @@ struct WorkoutContent: View {
     
     func getCurrentWeekday() -> String {
         let date = Date()
-        var dateFormatter = DateFormatter()
+        let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "EEEE"
         
         return dateFormatter.string(from: date)

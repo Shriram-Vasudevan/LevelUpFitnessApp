@@ -173,25 +173,30 @@ class LocalStorageUtility {
     
     
     
-    static func getUserProgramFileURL(userID: String, programName: String, date: String) -> URL? {
+    static func getUserProgramFileURL(userID: String, programName: String, date: String, startDate: String) -> URL? {
+        let endDate = DateUtility.getDateNWeeksAfterDate(dateString: startDate, weeks: 4)
+        
         guard let documentsDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return nil }
-        return documentsDirectoryURL.appendingPathComponent("Programs/\(userID)/\(programName)/\(date).json")
+        return documentsDirectoryURL.appendingPathComponent("Programs/\(userID)/\(programName) (\(startDate)|\(endDate)/\(date).json")
     }
 
-    static func userProgramSaved(userID: String, programName: String, date: String) -> Bool {
+    static func userProgramSaved(userID: String, programName: String, date: String, startDate: String) -> Bool {
         print("checking save")
-        guard let fileURL = getUserProgramFileURL(userID: userID, programName: programName, date: date) else { return false }
+        guard let fileURL = getUserProgramFileURL(userID: userID, programName: programName, date: date, startDate: startDate) else { return false }
         
         print("save \(FileManager.default.fileExists(atPath: fileURL.path))")
         return FileManager.default.fileExists(atPath: fileURL.path)
     }
 
     static func cacheUserProgram(userID: String, programName: String, date: String, program: Program) throws {
+        print("caching")
+        let endDate = DateUtility.getDateNWeeksAfterDate(dateString: program.startDate, weeks: 4)
+        
         print("Attempting to cache")
         guard let documentsDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
         let programsDirectoryURL = documentsDirectoryURL.appendingPathComponent("Programs")
         let userProgramsDirectoryURL = programsDirectoryURL.appendingPathComponent(userID)
-        let specificUserProgramDirectory = userProgramsDirectoryURL.appendingPathComponent(programName)
+        let specificUserProgramDirectory = userProgramsDirectoryURL.appendingPathComponent("\(programName) (\(program.startDate)|\(endDate)")
         let fileURL = specificUserProgramDirectory.appendingPathComponent("\(date).json")
         
         print("the path " + fileURL.path)

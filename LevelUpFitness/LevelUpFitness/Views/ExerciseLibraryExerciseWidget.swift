@@ -73,7 +73,7 @@ struct ExerciseLibraryExerciseWidget: View {
                         .frame(width: 80)
                         .opacity(isLocked(progression: progression) ? 0.7 : 1.0)
                         .onTapGesture {
-                            if isLocked(progression: progression) {
+                            if !isLocked(progression: progression) {
                                 exerciseSelected(progression)
                             }
                         }

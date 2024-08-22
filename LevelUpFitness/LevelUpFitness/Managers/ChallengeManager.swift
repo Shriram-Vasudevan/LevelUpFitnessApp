@@ -25,7 +25,7 @@ class ChallengeManager: ObservableObject {
     }
     func getChallengeTemplates() async {
         do {
-            var request = RESTRequest(apiName: "LevelUpFitnessDynamoAccessAPI", path: "/getChallengeTemplates")
+            let request = RESTRequest(apiName: "LevelUpFitnessDynamoAccessAPI", path: "/getChallengeTemplates")
             
             let response = try await Amplify.API.get(request: request)
             

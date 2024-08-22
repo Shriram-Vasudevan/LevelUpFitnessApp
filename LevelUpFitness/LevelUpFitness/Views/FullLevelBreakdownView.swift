@@ -9,8 +9,7 @@ import SwiftUI
 
 struct FullLevelBreakdownView: View {
     @State var userXPData: XPData
-    
-    @Environment(\.dismiss) var dismiss
+
     
     let sublevelKeys = [
         Sublevels.CodingKeys.lowerBodyCompound.rawValue,
@@ -23,24 +22,6 @@ struct FullLevelBreakdownView: View {
         ZStack {
             ScrollView(.vertical) {
                 VStack {
-                    ZStack {
-                        HStack {
-                            Button {
-                                dismiss()
-                            } label: {
-                                Image(systemName: "chevron.left")
-                                    .foregroundColor(.black)
-                            }
-
-                            
-                            Spacer()
-                        }
-                        
-                        Text("Full Breakdown")
-                            .bold()
-                            .foregroundColor(.black)
-                    }
-                    .padding(.horizontal)
                     
                     HStack {
                         Text("Level \(userXPData.level)")

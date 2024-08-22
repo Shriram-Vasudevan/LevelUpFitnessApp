@@ -10,9 +10,11 @@ import Foundation
 struct ProgramDBRepresentation: Codable {
     var userID: String
     var program: String
+    var startDate: String
     
     enum CodingKeys: String, CodingKey {
         case userID = "UserID"
         case program = "Program"
+        case startDate = "StartDate"
     }
 }

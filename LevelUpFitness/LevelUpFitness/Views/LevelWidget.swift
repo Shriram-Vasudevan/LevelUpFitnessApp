@@ -11,7 +11,6 @@ struct LevelWidget: View {
     @State var userXPData: XPData
     var levelChanges: [LevelChangeInfo]
     
-    var openFullBreakdownView: () -> Void
     var openLevelUpInfoView: () -> Void
 
     
@@ -27,17 +26,6 @@ struct LevelWidget: View {
                         .foregroundColor(.black)
                 }
                 
-                Button {
-                    openFullBreakdownView()
-                } label: {
-                    Image(systemName: "arrow.right")
-                        .foregroundColor(.black)
-                        .padding(7)
-                        .background(
-                            RoundedRectangle(cornerRadius: 15)
-                                .fill(.gray.opacity(0.1))
-                        )
-                }
 
             }
             .padding(.horizontal)
@@ -109,7 +97,6 @@ struct LevelWidget: View {
             LevelChangeInfo(keyword: "Weight", description: "Weight trend", change: -1, timestamp: ""),
             LevelChangeInfo(keyword: "Weight", description: "Weight trend", change: 0, timestamp: "")
         ],
-        openFullBreakdownView: {},
         openLevelUpInfoView: {}
     )
 }

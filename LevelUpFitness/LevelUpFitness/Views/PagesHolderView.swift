@@ -38,6 +38,8 @@ struct PagesHolderView: View {
                         pageType: $pageType
                     )
                     .preferredColorScheme(.light)
+                case .levelBreakdown:
+                    FullLevelBreakdownView(userXPData: XPManager.shared.userXPData ?? XPData(userID: "", level: 0, xp: 0, xpNeeded: 0, subLevels: Sublevels(lowerBodyCompound: XPAttribute(xp: 0, level: 0, xpNeeded: 0), lowerBodyIsolation: XPAttribute(xp: 0, level: 0, xpNeeded: 0), upperBodyCompound: XPAttribute(xp: 0, level: 0, xpNeeded: 0), upperBodyIsolation: XPAttribute(xp: 0, level: 0, xpNeeded: 0))))
                 case .program:
                     ProgramView(
                         programManager: programManager,
@@ -71,6 +73,28 @@ struct PagesHolderView: View {
                                     Text("Home")
                                         .font(.caption)
                                         .foregroundColor(pageType == .home ? .blue : .gray)
+                                }
+                                .padding(.bottom)
+                            })
+                        }
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        
+                    }
+                    
+                    ZStack {
+                        VStack {
+                            Button(action: {
+                                pageType = .levelBreakdown
+                            }, label: {
+                                VStack {
+                                    Image(pageType == .levelBreakdown ? "HomeBlue" : "HomeGrey")
+                                        .resizable()
+                                        .frame(width: 30, height: 30)
+                                        .aspectRatio(contentMode:  .fill)
+                                    
+                                    Text("Level")
+                                        .font(.caption)
+                                        .foregroundColor(pageType == .levelBreakdown ? .blue : .gray)
                                 }
                                 .padding(.bottom)
                             })

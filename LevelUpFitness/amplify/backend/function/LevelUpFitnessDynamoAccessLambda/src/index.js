@@ -51,12 +51,14 @@ exports.handler = async (event) => {
         try {
             const UserID = event.queryStringParameters.UserID;
             const Program = event.queryStringParameters.Program;
+            const StartDate = event.queryStringParameters.StartDate;
 
             const params = {
                 TableName: "user-programs-db-dev",
                 Item: {
                     UserID: UserID,
-                    Program: Program
+                    Program: Program,
+                    StartDate: StartDate
                 }
             };
 

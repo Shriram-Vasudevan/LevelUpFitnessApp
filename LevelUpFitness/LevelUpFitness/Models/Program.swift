@@ -10,10 +10,16 @@ import Foundation
 struct Program: Codable {
     var program: [ProgramDay]
     var programName: String
+    var programDuration: Int
+    var startDate: String
+    var startWeekday: String
     
     enum CodingKeys: String, CodingKey {
         case program = "workout_schedule"
         case programName = "program_name"
+        case programDuration = "program_duration"
+        case startDate = "start_date"
+        case startWeekday = "start_week_day"
         
     }
 }

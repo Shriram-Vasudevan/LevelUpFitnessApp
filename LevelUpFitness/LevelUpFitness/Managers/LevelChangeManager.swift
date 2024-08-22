@@ -28,14 +28,16 @@ class LevelChangeManager: ObservableObject {
         do {
             let userID = try await Amplify.Auth.getCurrentUser().userId
             
-            if let programName = await ProgramDynamoDBUtility.getUserProgramDBRepresentation() {
+            if let (programName, startDate) = await ProgramDynamoDBUtility.getUserProgramDBRepresentation() {
+                let endDate = DateUtility.getDateNWeeksAfterDate(dateString: startDate, weeks: 4)
+                
                 print("program name \(programName)")
                 if !LocalStorageUtility.fileModifiedInLast24Hours(at: "\(userID)-LevelChangeInfo.json") {
                     print("current properties \(currentProperties)")
                     let selectedPropterties = selectedProperties()
                     print("selected properties \(selectedPropterties)")
                     
-                    if let programs = LocalStorageUtility.getCachedUserPrograms(at: "Programs/\(userID)/\(programName)") {
+                    if let programs = LocalStorageUtility.getCachedUserPrograms(at: "Programs/\(userID)/\(programName) (\(startDate)|\(endDate))") {
                         print("got programs")
                         let tasks = selectedPropterties.map { selectedProperty in
                                 Task {

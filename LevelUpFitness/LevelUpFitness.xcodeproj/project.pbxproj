@@ -130,6 +130,7 @@
 		99CFAAED2BEB075700EFF67E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 99CFAAEC2BEB075700EFF67E /* Preview Assets.xcassets */; };
 		99DD3D522C1D0839006C07B3 /* ExerciseLibraryExerciseWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DD3D512C1D0839006C07B3 /* ExerciseLibraryExerciseWidget.swift */; };
 		99DD3D542C1D0871006C07B3 /* FullPageVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DD3D532C1D0871006C07B3 /* FullPageVideoView.swift */; };
+		99ECAD262C76C6610012F8E7 /* ProgramCompletedCover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99ECAD252C76C6610012F8E7 /* ProgramCompletedCover.swift */; };
 		99EEC6132C3201780044F906 /* LevelUpBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EEC6122C3201780044F906 /* LevelUpBar.swift */; };
 		99EEC6152C320FC30044F906 /* FitnessOptionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EEC6142C320FC30044F906 /* FitnessOptionType.swift */; };
 		99EEC6182C32F37A0044F906 /* SizePreferanceKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EEC6172C32F37A0044F906 /* SizePreferanceKey.swift */; };
@@ -244,6 +245,7 @@
 		99CFAAEC2BEB075700EFF67E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		99DD3D512C1D0839006C07B3 /* ExerciseLibraryExerciseWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseLibraryExerciseWidget.swift; sourceTree = "<group>"; };
 		99DD3D532C1D0871006C07B3 /* FullPageVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullPageVideoView.swift; sourceTree = "<group>"; };
+		99ECAD252C76C6610012F8E7 /* ProgramCompletedCover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramCompletedCover.swift; sourceTree = "<group>"; };
 		99EEC6122C3201780044F906 /* LevelUpBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelUpBar.swift; sourceTree = "<group>"; };
 		99EEC6142C320FC30044F906 /* FitnessOptionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessOptionType.swift; sourceTree = "<group>"; };
 		99EEC6172C32F37A0044F906 /* SizePreferanceKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizePreferanceKey.swift; sourceTree = "<group>"; };
@@ -388,6 +390,7 @@
 				991FB4742C69394D006B4ACE /* LevelChangeWidget.swift */,
 				991FB47C2C6C3BCE006B4ACE /* ChallengeTemplateWidget.swift */,
 				991FB47E2C6D561F006B4ACE /* ActiveUserChallengeWidget.swift */,
+				99ECAD252C76C6610012F8E7 /* ProgramCompletedCover.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -647,6 +650,7 @@
 				991FB4772C6A9756006B4ACE /* ExerciseManager.swift in Sources */,
 				994E7DC92C03DF5C00BAD9E0 /* ProgramView.swift in Sources */,
 				991FB4402C628084006B4ACE /* HealthStatsWidget.swift in Sources */,
+				99ECAD262C76C6610012F8E7 /* ProgramCompletedCover.swift in Sources */,
 				999F706E2C0EB08600B35A78 /* MetricsView.swift in Sources */,
 				999F70652C06C80300B35A78 /* WorkoutView.swift in Sources */,
 				99EEC6132C3201780044F906 /* LevelUpBar.swift in Sources */,

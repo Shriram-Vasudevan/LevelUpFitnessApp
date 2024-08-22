@@ -9,7 +9,7 @@ import Foundation
 import Amplify
 
 class ProgramDynamoDBUtility {
-    static func getUserProgramDBRepresentation() async -> String? {
+    static func getUserProgramDBRepresentation() async -> (String, String)? {
         do {
             let userID = try await Amplify.Auth.getCurrentUser().userId
             
@@ -22,18 +22,18 @@ class ProgramDynamoDBUtility {
             let jsonDecoder = JSONDecoder()
             let programDBRepresentation = try jsonDecoder.decode(ProgramDBRepresentation.self, from: response)
             
-            return programDBRepresentation.program
+            return (programDBRepresentation.program, programDBRepresentation.startDate)
         } catch {
             print("The db program error \(error)")
             return nil
         }
     }
     
-    static func addProgramToDB(programName: String) async throws {
+    static func addProgramToDB(programName: String, startDate: String) async throws {
         do {
             let userID = try await Amplify.Auth.getCurrentUser().userId
             
-            let request = RESTRequest(apiName: "LevelUpFitnessDynamoAccessAPI", path: "/addUserProgram", queryParameters: ["UserID" : userID, "Program" : programName])
+            let request = RESTRequest(apiName: "LevelUpFitnessDynamoAccessAPI", path: "/addUserProgram", queryParameters: ["UserID" : userID, "Program" : programName, "StartDate": startDate])
             let response = try await Amplify.API.put(request: request)
         } catch {
             print(error)

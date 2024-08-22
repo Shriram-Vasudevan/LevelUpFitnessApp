@@ -68,16 +68,12 @@ struct HomeView: View {
                         
                         VStack (spacing: 20) {
                             if let userXPData = xpManager.userXPData {
-                                LevelWidget(userXPData: userXPData, levelChanges: xpManager.levelChanges, openFullBreakdownView: {
-                                    showFullLevelBreakdownView = true
-                                }, openLevelUpInfoView: {
+                                LevelWidget(userXPData: userXPData, levelChanges: levelChangeManager.levelChanges, openLevelUpInfoView: {
                                     showLevelUpInformationView = true
                                 })
                             }
                             else {
-                                LevelWidget(userXPData: XPData(userID: "", level: 0, xp: 0, xpNeeded: 15, subLevels: Sublevels(lowerBodyCompound: XPAttribute(xp: 0, level: 0, xpNeeded: 0), lowerBodyIsolation: XPAttribute(xp: 0, level: 0, xpNeeded: 0), upperBodyCompound: XPAttribute(xp: 0, level: 0, xpNeeded: 0), upperBodyIsolation: XPAttribute(xp: 0, level: 0, xpNeeded: 0))), levelChanges: [], openFullBreakdownView: {
-                                    showFullLevelBreakdownView = true
-                                }, openLevelUpInfoView: {
+                                LevelWidget(userXPData: XPData(userID: "", level: 0, xp: 0, xpNeeded: 15, subLevels: Sublevels(lowerBodyCompound: XPAttribute(xp: 0, level: 0, xpNeeded: 0), lowerBodyIsolation: XPAttribute(xp: 0, level: 0, xpNeeded: 0), upperBodyCompound: XPAttribute(xp: 0, level: 0, xpNeeded: 0), upperBodyIsolation: XPAttribute(xp: 0, level: 0, xpNeeded: 0))), levelChanges: [], openLevelUpInfoView: {
                                     showLevelUpInformationView = true
                                 })
                             }

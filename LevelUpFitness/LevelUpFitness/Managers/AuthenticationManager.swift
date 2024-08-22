@@ -178,7 +178,7 @@ class AuthenticationManager: ObservableObject {
             let userAttributes = try await Amplify.Auth.fetchUserAttributes()
             print("User attributes - \(userAttributes)")
             
-            var usernameAttribute = userAttributes.first(where: { $0.key == .custom("username") })
+            let usernameAttribute = userAttributes.first(where: { $0.key == .custom("username") })
             
             AuthenticationManager.username = usernameAttribute?.value ?? ""
             print("the username: " + AuthenticationManager.username)

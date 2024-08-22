@@ -103,7 +103,7 @@ struct ProgramView: View {
                                             }
                                     }
                                     
-                                    RequestCustomProgramWidget()
+//                                    RequestCustomProgramWidget()
                                 }
                             }
                             else if programPageType == .pastPrograms {

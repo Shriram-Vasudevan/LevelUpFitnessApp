@@ -24,7 +24,9 @@ class ProgramManager: ObservableObject {
         await ProgramS3Utility.joinStandardProgram(programName: programName, badgeManager: badgeManager, completion: { result in
             switch result {
                 case .success(let program):
-                    self.program = program
+                    DispatchQueue.main.sync {
+                        self.program = program
+                    }
                 case .failure(let error):
                     print(error.localizedDescription)
             }
@@ -60,52 +62,60 @@ class ProgramManager: ObservableObject {
     }
     
     func getUserProgram(badgeManager: BadgeManager) async {
-        if let programName = await ProgramDynamoDBUtility.getUserProgramDBRepresentation() {
+        if let (programName, startDate) = await ProgramDynamoDBUtility.getUserProgramDBRepresentation()  {
+            let endDate = DateUtility.getDateNWeeksAfterDate(dateString: startDate, weeks: 4)
             do {
                 DispatchQueue.main.async {
                     self.retrievingProgram = true
                 }
                 
                 let userID = try await Amplify.Auth.getCurrentUser().userId
-                guard let date = DateUtility.getPreviousMondayDate() else {
-                    self.retrievingProgram = false
-                    return
-                }
                 
-                if !LocalStorageUtility.userProgramSaved(userID: userID, programName: programName, date: date) {
-                    let downloadTask = Amplify.Storage.downloadData(key: "UserPrograms/\(userID)/\(programName)/(\(date)).json")
-                    
-                    let data = try await downloadTask.value
-                    
-                    let decoder = JSONDecoder()
-                    let decodedData = try decoder.decode(Program.self, from: data)
-                    
-                    DispatchQueue.main.async {
-                        self.program = decodedData
-//                        print(self.program)
-                    }
-
-                    try LocalStorageUtility.cacheUserProgram(userID: userID, programName: programName, date: date, program: decodedData)
-                    
-                    DispatchQueue.main.async {
+                if !DateUtility.weekDurationExceeded(startDate: startDate, weeks: 4) {
+                    guard let weekday = DateUtility.getWeekdayFromDate(date: startDate), let date = DateUtility.getLastDateForWeekday(weekday: weekday) else {
                         self.retrievingProgram = false
+                        return
                     }
-                } else {
-                    if let fileURL = LocalStorageUtility.getUserProgramFileURL(userID: userID, programName: programName, date: date) {
-                        let data = try Data(contentsOf: fileURL)
+                    
+                    if !LocalStorageUtility.userProgramSaved(userID: userID, programName: programName, date: date, startDate: startDate) {
+                        let downloadTask = Amplify.Storage.downloadData(key: "UserPrograms/\(userID)/\(programName) (\(startDate)|\(endDate ?? ""))/\(date).json")
+                        
+                        let data = try await downloadTask.value
+                        
                         let decoder = JSONDecoder()
                         let decodedData = try decoder.decode(Program.self, from: data)
                         
                         DispatchQueue.main.async {
                             self.program = decodedData
-                            self.retrievingProgram = false
                         }
-                    } else {
+
+                        print("caching the local storage")
+                        try LocalStorageUtility.cacheUserProgram(userID: userID, programName: programName, date: date, program: decodedData)
+                        
                         DispatchQueue.main.async {
                             self.retrievingProgram = false
                         }
+                    } else {
+                        if let fileURL = LocalStorageUtility.getUserProgramFileURL(userID: userID, programName: programName, date: date, startDate: startDate) {
+                            let data = try Data(contentsOf: fileURL)
+                            let decoder = JSONDecoder()
+                            let decodedData = try decoder.decode(Program.self, from: data)
+                            
+                            DispatchQueue.main.async {
+                                self.program = decodedData
+                                self.retrievingProgram = false
+                            }
+                        } else {
+                            DispatchQueue.main.async {
+                                self.retrievingProgram = false
+                            }
+                        }
+                        print("Program loaded from local cache")
                     }
-                    print("Program loaded from local cache")
+                }
+                else {
+                    await leaveProgram()
+                    //show cover
                 }
             } catch {
                 print("User program retrieval error: \(error)")
