@@ -1,13 +1,13 @@
 //
-//  ProgramCompletedCover.swift
+//  ChallengeCompletedView.swift
 //  LevelUpFitness
 //
-//  Created by Shriram Vasudevan on 8/21/24.
+//  Created by Shriram Vasudevan on 8/22/24.
 //
 
 import SwiftUI
 
-struct ProgramCompletedCover: View {
+struct ChallengeCompletedView: View {
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
@@ -23,11 +23,11 @@ struct ProgramCompletedCover: View {
                     .shadow(color: .yellow.opacity(0.3), radius: 5, x: 0, y: 2)
                     .padding(.bottom)
                 
-                Text("Program Completed!")
+                Text("Challenge Completed!")
                     .font(.system(size: 32, weight: .bold, design: .rounded))
                     .foregroundColor(.black)
                 
-                Text("Congratulations on finishing your fitness program!")
+                Text("Congratulations on finishing your Challenge!")
                     .font(.headline)
                     .foregroundColor(.gray)
                     .multilineTextAlignment(.center)
@@ -37,7 +37,7 @@ struct ProgramCompletedCover: View {
                 Spacer()
                 
                 VStack(spacing: 15) {
-                    Text("+15 XP")
+                    Text("+10 XP")
                         .font(.system(size: 24, weight: .bold, design: .rounded))
                         .foregroundColor(.green)
                     
@@ -51,10 +51,10 @@ struct ProgramCompletedCover: View {
                 .padding(.bottom)
                 
                 Button(action: {
-                    Task {
-                        XPManager.shared.addXP(increment: 15, type: .total)
-                        await XPManager.shared.addXPToDB()
-                    }
+//                    Task {
+////                        XPManager.shared.addXP(increment: 10, type: .total)
+////                        await XPManager.shared.addXPToDB()
+//                    }
                     dismiss()
                 }) {
                     Text("Continue")
@@ -74,5 +74,5 @@ struct ProgramCompletedCover: View {
 }
 
 #Preview {
-    ProgramCompletedCover()
+    ChallengeCompletedView()
 }

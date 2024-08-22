@@ -134,7 +134,7 @@ class ProgramS3Utility {
             try LocalStorageUtility.cacheUserProgram(userID: userID, programName: program.programName, date: startDate, program: program)
             
             if let url = LocalStorageUtility.getUserProgramFileURL(userID: userID, programName: program.programName, date: startDate, startDate: program.startDate) {
-                let storageOperation = Amplify.Storage.uploadFile(key: "UserPrograms/\(userID)/\(program.programName)(\(program.startDate)|\(endDate ?? "NoEndDate"))/\(String(describing: DateUtility.getLastDateForWeekday(weekday: startWeekday))).json", local: url)
+                let storageOperation = Amplify.Storage.uploadFile(key: "UserPrograms/\(userID)/\(program.programName) (\(program.startDate)|\(endDate ?? "NoEndDate"))/\(DateUtility.getLastDateForWeekday(weekday: startWeekday) ?? "NoDate").json", local: url)
                         
                 _ = try await storageOperation.value
                 completionHandler()

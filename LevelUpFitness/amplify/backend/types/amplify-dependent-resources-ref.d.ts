@@ -35,6 +35,14 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "function": {
+    "LevelUpFitnessChallengeExpirationCheckLambda": {
+      "Arn": "string",
+      "CloudWatchEventRule": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
     "LevelUpFitnessChallengeNotificationsLambda": {
       "Arn": "string",
       "CloudWatchEventRule": "string",

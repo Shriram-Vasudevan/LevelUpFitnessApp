@@ -78,6 +78,11 @@
     }
   },
   "function": {
+    "LevelUpFitnessChallengeExpirationCheckLambda": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "LevelUpFitnessChallengeNotificationsLambda": {
       "build": true,
       "dependsOn": [
@@ -160,6 +165,22 @@
         {
           "category": "analytics",
           "resourceName": "Pinpoint"
+        }
+      ]
+    },
+    "AMPLIFY_function_LevelUpFitnessChallengeExpirationCheckLambda_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "LevelUpFitnessChallengeExpirationCheckLambda"
+        }
+      ]
+    },
+    "AMPLIFY_function_LevelUpFitnessChallengeExpirationCheckLambda_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "LevelUpFitnessChallengeExpirationCheckLambda"
         }
       ]
     },

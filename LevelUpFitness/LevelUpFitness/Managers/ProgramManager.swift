@@ -115,7 +115,7 @@ class ProgramManager: ObservableObject {
                 }
                 else {
                     await leaveProgram()
-                    //show cover
+                    GlobalCoverManager.shared.showProgramCompletion()
                 }
             } catch {
                 print("User program retrieval error: \(error)")

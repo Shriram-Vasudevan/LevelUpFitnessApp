@@ -78,26 +78,30 @@ class WorkoutManager: ObservableObject {
                 
                 programManager.program?.program[programIndex] = todaysProgram
                 
-//                switch todaysProgram.exercises[currentExerciseIndex].area {
-//                    case "Legs":
-//                        xpManager.addXP(increment: 1, type: .legs)
-//                    case "Back":
-//                        xpManager.addXP(increment: 1, type: .back)
-//                    case "Shoulders":
-//                        xpManager.addXP(increment: 1, type: .shoulders)
-//                    case "Core":
-//                        xpManager.addXP(increment: 1, type: .core)
-//                    case "Chest":
-//                        xpManager.addXP(increment: 1, type: .chest)
-//                    default:
-//                        break
-//                }
+                print(programManager.program?.program)
             }
 
             currentExerciseIndex += 1
             initializeExerciseData()
             objectWillChange.send()
         } else {
+            if let programArray = programManager.program?.program,
+               let programIndex = programArray.firstIndex(where: { $0.day == getCurrentWeekday() }) {
+                var todaysProgram = programArray[programIndex]
+                todaysProgram.exercises[currentExerciseIndex].completed = true
+                todaysProgram.exercises[currentExerciseIndex].data = currentExerciseData
+                
+                print(todaysProgram.exercises[currentExerciseIndex].name)
+                print(todaysProgram.exercises[currentExerciseIndex].completed)
+                
+                todaysProgram.completed = true
+                
+                programManager.program?.program[programIndex] = todaysProgram
+                
+                print(programManager.program?.program)
+            }
+            objectWillChange.send()
+            
             print("Workout completed")
         }
     }

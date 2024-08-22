@@ -177,7 +177,7 @@ class LocalStorageUtility {
         let endDate = DateUtility.getDateNWeeksAfterDate(dateString: startDate, weeks: 4)
         
         guard let documentsDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return nil }
-        return documentsDirectoryURL.appendingPathComponent("Programs/\(userID)/\(programName) (\(startDate)|\(endDate)/\(date).json")
+        return documentsDirectoryURL.appendingPathComponent("Programs/\(userID)/\(programName) (\(startDate)|\(endDate ?? "NoDate")/\(date).json")
     }
 
     static func userProgramSaved(userID: String, programName: String, date: String, startDate: String) -> Bool {
@@ -196,7 +196,7 @@ class LocalStorageUtility {
         guard let documentsDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
         let programsDirectoryURL = documentsDirectoryURL.appendingPathComponent("Programs")
         let userProgramsDirectoryURL = programsDirectoryURL.appendingPathComponent(userID)
-        let specificUserProgramDirectory = userProgramsDirectoryURL.appendingPathComponent("\(programName) (\(program.startDate)|\(endDate)")
+        let specificUserProgramDirectory = userProgramsDirectoryURL.appendingPathComponent("\(programName) (\(program.startDate)|\(endDate ?? "NoDate")")
         let fileURL = specificUserProgramDirectory.appendingPathComponent("\(date).json")
         
         print("the path " + fileURL.path)

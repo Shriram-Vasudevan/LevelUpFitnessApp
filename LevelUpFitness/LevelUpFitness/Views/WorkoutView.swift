@@ -86,8 +86,7 @@ struct WorkoutContent: View {
                 lastSetCompleted: $lastSetCompleted,
                 exerciseName: workoutManager.currentExercises[workoutManager.currentExerciseIndex].name, exerciseReps: workoutManager.currentExercises[workoutManager.currentExerciseIndex].reps, numberOfSets: workoutManager.currentExerciseData.sets.count, exitWorkout: {
                     Task {
-                        if let todaysProgram = programManager.program?.program.first(where: { $0.day == getCurrentWeekday() }) {
-                            
+                        if let todaysProgram = programManager.program?.program.first(where: { $0.day == getCurrentWeekday() }) {   
                             print("uploading new status")
                             await programManager.uploadNewProgramStatus(completion: { success in
                                     if success {

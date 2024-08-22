@@ -131,6 +131,8 @@
 		99DD3D522C1D0839006C07B3 /* ExerciseLibraryExerciseWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DD3D512C1D0839006C07B3 /* ExerciseLibraryExerciseWidget.swift */; };
 		99DD3D542C1D0871006C07B3 /* FullPageVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DD3D532C1D0871006C07B3 /* FullPageVideoView.swift */; };
 		99ECAD262C76C6610012F8E7 /* ProgramCompletedCover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99ECAD252C76C6610012F8E7 /* ProgramCompletedCover.swift */; };
+		99ECAD282C76E35C0012F8E7 /* GlobalCoverManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99ECAD272C76E35C0012F8E7 /* GlobalCoverManager.swift */; };
+		99ECAD2A2C76F0B30012F8E7 /* ChallengeCompletedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99ECAD292C76F0B30012F8E7 /* ChallengeCompletedView.swift */; };
 		99EEC6132C3201780044F906 /* LevelUpBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EEC6122C3201780044F906 /* LevelUpBar.swift */; };
 		99EEC6152C320FC30044F906 /* FitnessOptionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EEC6142C320FC30044F906 /* FitnessOptionType.swift */; };
 		99EEC6182C32F37A0044F906 /* SizePreferanceKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EEC6172C32F37A0044F906 /* SizePreferanceKey.swift */; };
@@ -246,6 +248,8 @@
 		99DD3D512C1D0839006C07B3 /* ExerciseLibraryExerciseWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseLibraryExerciseWidget.swift; sourceTree = "<group>"; };
 		99DD3D532C1D0871006C07B3 /* FullPageVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullPageVideoView.swift; sourceTree = "<group>"; };
 		99ECAD252C76C6610012F8E7 /* ProgramCompletedCover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramCompletedCover.swift; sourceTree = "<group>"; };
+		99ECAD272C76E35C0012F8E7 /* GlobalCoverManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalCoverManager.swift; sourceTree = "<group>"; };
+		99ECAD292C76F0B30012F8E7 /* ChallengeCompletedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeCompletedView.swift; sourceTree = "<group>"; };
 		99EEC6122C3201780044F906 /* LevelUpBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelUpBar.swift; sourceTree = "<group>"; };
 		99EEC6142C320FC30044F906 /* FitnessOptionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessOptionType.swift; sourceTree = "<group>"; };
 		99EEC6172C32F37A0044F906 /* SizePreferanceKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizePreferanceKey.swift; sourceTree = "<group>"; };
@@ -334,6 +338,7 @@
 				991FB46E2C682055006B4ACE /* ChallengeManager.swift */,
 				991FB4762C6A9756006B4ACE /* ExerciseManager.swift */,
 				9942D3942C6EBD2A0022C219 /* NotificationManager.swift */,
+				99ECAD272C76E35C0012F8E7 /* GlobalCoverManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -391,6 +396,7 @@
 				991FB47C2C6C3BCE006B4ACE /* ChallengeTemplateWidget.swift */,
 				991FB47E2C6D561F006B4ACE /* ActiveUserChallengeWidget.swift */,
 				99ECAD252C76C6610012F8E7 /* ProgramCompletedCover.swift */,
+				99ECAD292C76F0B30012F8E7 /* ChallengeCompletedView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -644,6 +650,7 @@
 				994E7DBD2C028F5B00BAD9E0 /* ConfirmationCodeView.swift in Sources */,
 				99569FC52C34CD06001DFCB8 /* JoinProgramWidget.swift in Sources */,
 				99EEC61C2C33905B0044F906 /* ProgramListHomePreview.swift in Sources */,
+				99ECAD2A2C76F0B30012F8E7 /* ChallengeCompletedView.swift in Sources */,
 				999F70782C0FA57500B35A78 /* CommunityView.swift in Sources */,
 				994E7DB32C02665300BAD9E0 /* KeyboardResponder.swift in Sources */,
 				991FB4812C6D8B10006B4ACE /* ChallengesUtility.swift in Sources */,
@@ -655,6 +662,7 @@
 				999F70652C06C80300B35A78 /* WorkoutView.swift in Sources */,
 				99EEC6132C3201780044F906 /* LevelUpBar.swift in Sources */,
 				991FB4572C6687EE006B4ACE /* DateUtility.swift in Sources */,
+				99ECAD282C76E35C0012F8E7 /* GlobalCoverManager.swift in Sources */,
 				993DF23F2C38AFEF00BBC1BF /* SetStatWidget.swift in Sources */,
 				991F8FE62C154F5200A134A5 /* DayCompletion.swift in Sources */,
 				99B6274A2C38871600482E3B /* ExerciseDataRepWidgetModel.swift in Sources */,

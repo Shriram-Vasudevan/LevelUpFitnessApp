@@ -583,8 +583,7 @@ exports.handler = async (event) => {
         }
     } else if (event.path == "/challengesCompleted" && event.httpMethod == "DELETE") {
         const UserID = event.queryStringParameters.UserID
-        const CompletedChallenges = event.queryStringParameters.CompletedChallenges
-
+        const CompletedChallenges = JSON.parse(event.queryStringParameters.CompletedChallenges)
 
         for (challenge of CompletedChallenges) {
             const params = {

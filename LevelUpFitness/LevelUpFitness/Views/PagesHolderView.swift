@@ -16,6 +16,8 @@ struct PagesHolderView: View {
     @ObservedObject var exerciseManager = ExerciseManager.shared
     @ObservedObject var challengeManager = ChallengeManager.shared
     @ObservedObject var levelChangeManager = LevelChangeManager.shared
+    @ObservedObject var globalCoverManager = GlobalCoverManager.shared
+    
     
     var notificationManager = NotificationManager.shared
     
@@ -173,6 +175,12 @@ struct PagesHolderView: View {
             } else if newPhase == .background {
                 NotificationManager.shared.appDidEnterBackground()
             }
+        }
+        .fullScreenCover(isPresented: $globalCoverManager.showProgramCompletionCover) {
+            ProgramCompletedCover()
+        }
+        .fullScreenCover(isPresented: $globalCoverManager.showChallengeCompletionCover) {
+            ChallengeCompletedView()
         }
     }
 }

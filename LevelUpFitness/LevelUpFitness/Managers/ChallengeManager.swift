@@ -102,15 +102,23 @@ class ChallengeManager: ObservableObject {
             
             for applicableChallenge in applicableChallenges {
                 if applicableChallenge.targetValue == newValue {
-                    XPManager.shared.addXP(increment: 10, type: .total)
                     completedChallenges.append(applicableChallenge.id)
                 }
             }
             
-//            if completedChallenges.count > 0 {
-//                let request = RESTRequest(apiName: "LevelUpFitnessDynamoAccessAPI", path: "/challengesCompleted", queryParameters: ["UserID" : userID, "CompletedChallenges": completedChallenges])
-//                let response = try await Amplify.API.put(request: request)
-//            }
+            if completedChallenges.count > 0 {
+                let jsonData = try JSONEncoder().encode(completedChallenges)
+                guard let jsonString = String(data: jsonData, encoding: .utf8) else { return }
+                
+                let request = RESTRequest(apiName: "LevelUpFitnessDynamoAccessAPI", path: "/challengesCompleted", queryParameters: ["UserID" : userID, "CompletedChallenges": jsonString])
+                let response = try await Amplify.API.put(request: request)
+                
+                await LevelChangeManager.shared.addNewLevelChange(property: "Challenge", contribution: completedChallenges.count * 10)
+                
+                await XPManager.shared.addXPToDB()
+                
+                GlobalCoverManager.shared.showChallengeCompletion()
+            }
         } catch {
             print("challenge completion error \(error)")
         }

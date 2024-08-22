@@ -14,16 +14,10 @@ class LevelChangeManager: ObservableObject {
     
     @Published var levelChanges: [LevelChangeInfo] = []
     
-    let allProperties = ["Weight", "Rest", "Endurance", "Consistency"]
+    let programProperties = ["Weight", "Rest", "Endurance", "Consistency"]
     var currentProperties: [String] = []
     
-//    init() {
-//        Task {
-//            await getLevelChanges()
-//            await addNewProgramLevelChanges()
-//        }
-//    }
-    
+
     func addNewProgramLevelChanges() async {
         do {
             let userID = try await Amplify.Auth.getCurrentUser().userId
@@ -111,7 +105,14 @@ class LevelChangeManager: ObservableObject {
         }
     }
 
-
+    func addNewLevelChange(property: String, contribution: Int) async {
+        switch property {
+            case "Challenge":
+                await addChallengeContribution(contribution: contribution)
+            default:
+                break
+        }
+    }
     
     func performProgramLevelChange(selectedProperty: String, programs: [Program]) async {
         print("performProgramLevelChange")
@@ -120,13 +121,13 @@ class LevelChangeManager: ObservableObject {
                 print("Weight")
                 await addProgramWeightTrendContribution(programs: programs)
             case "Rest":
-            print("Rest")
+                print("Rest")
                 await addProgramRestDifferentialTrendContribution(programs: programs)
             case "Endurance":
-            print("Endurance")
+                print("Endurance")
                 await addProgramRestTimeTrendContribution(programs: programs)
             case "Consistency":
-            print("Consistency")
+                print("Consistency")
                 await addProgramConsistencyTrendContribution(programs: programs)
             default:
                 break
@@ -192,6 +193,17 @@ class LevelChangeManager: ObservableObject {
         }
     }
     
+    func addChallengeContribution(contribution: Int) async {
+        do {
+            let userID = try await Amplify.Auth.getCurrentUser().userId
+            
+            let levelChangeInfo = LevelChangeInfo(keyword: "Challenge", description: "You completed your challenge!", change: contribution, timestamp: Date().ISO8601Format())
+            appendLevelChangeToFile(levelChangeInfo: levelChangeInfo, contribution: contribution, userID: userID)
+        } catch {
+            print(error)
+        }
+    }
+    
     func appendLevelChangeToFile(levelChangeInfo: LevelChangeInfo, contribution: Int, userID: String) {
         do {
             let jsonEncoder = JSONEncoder()
@@ -209,7 +221,7 @@ class LevelChangeManager: ObservableObject {
     }
     
     func selectedProperties() -> [String] {
-        let availableProperties = allProperties.filter { !currentProperties.contains($0) }
+        let availableProperties = programProperties.filter { !currentProperties.contains($0) }
         
         var selectedProperties = Array(availableProperties.shuffled().prefix(4))
 
