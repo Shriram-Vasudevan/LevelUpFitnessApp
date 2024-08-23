@@ -16,6 +16,8 @@ class WorkoutManager: ObservableObject {
     @Published var currentSetIndex: Int = 0
     @Published var onLastSet: Bool = false
 
+    @Published var programCompletedForDay: Bool = false
+    
     var programManager: ProgramManager
     var xpManager: XPManager
     
@@ -103,6 +105,13 @@ class WorkoutManager: ObservableObject {
             objectWillChange.send()
             
             print("Workout completed")
+            
+            Task {
+                await LevelChangeManager.shared.addNewLevelChange(property: "Program", contribution: 5) 
+                await XPManager.shared.addXPToDB()
+            }
+            
+            programCompletedForDay = true
         }
     }
   

@@ -100,6 +100,13 @@ struct WorkoutContent: View {
                 }
             )
             .id("\(workoutManager.currentExerciseIndex)-\(workoutManager.currentSetIndex)")
+            .onChange(of: workoutManager.programCompletedForDay, { oldValue, newValue in
+                if newValue {
+                    dismiss()
+                    
+                    GlobalCoverManager.shared.showProgramDayCompletion()
+                }
+            })
             .background(
                 RoundedRectangle(cornerRadius: 10, style: .continuous)
                     .fill(.white)

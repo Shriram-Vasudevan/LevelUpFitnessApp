@@ -28,6 +28,13 @@ struct JoinProgramWidget: View {
                 .padding()
                 
             )
+            .onAppear {
+                if ProgramManager.shared.standardProgramNames == nil {
+                    Task {
+                        ProgramManager.shared.standardProgramNames = await ProgramS3Utility.getStandardProgramNames()
+                    }
+                }
+            }
     }
 }
 

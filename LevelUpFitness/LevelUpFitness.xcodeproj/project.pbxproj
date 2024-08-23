@@ -133,6 +133,12 @@
 		99ECAD262C76C6610012F8E7 /* ProgramCompletedCover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99ECAD252C76C6610012F8E7 /* ProgramCompletedCover.swift */; };
 		99ECAD282C76E35C0012F8E7 /* GlobalCoverManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99ECAD272C76E35C0012F8E7 /* GlobalCoverManager.swift */; };
 		99ECAD2A2C76F0B30012F8E7 /* ChallengeCompletedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99ECAD292C76F0B30012F8E7 /* ChallengeCompletedView.swift */; };
+		99ECAD2C2C78208F0012F8E7 /* ProgramCompletedForTheDayCover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99ECAD2B2C78208F0012F8E7 /* ProgramCompletedForTheDayCover.swift */; };
+		99ECAD2E2C783C2F0012F8E7 /* ToDoListManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99ECAD2D2C783C2F0012F8E7 /* ToDoListManager.swift */; };
+		99ECAD302C7841BA0012F8E7 /* StringUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99ECAD2F2C7841BA0012F8E7 /* StringUtility.swift */; };
+		99ECAD322C7844080012F8E7 /* PastProgramWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99ECAD312C7844080012F8E7 /* PastProgramWidget.swift */; };
+		99ECAD342C784ED40012F8E7 /* S3Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99ECAD332C784ED40012F8E7 /* S3Utility.swift */; };
+		99ECAD362C7850F40012F8E7 /* PastProgramInsightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99ECAD352C7850F40012F8E7 /* PastProgramInsightView.swift */; };
 		99EEC6132C3201780044F906 /* LevelUpBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EEC6122C3201780044F906 /* LevelUpBar.swift */; };
 		99EEC6152C320FC30044F906 /* FitnessOptionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EEC6142C320FC30044F906 /* FitnessOptionType.swift */; };
 		99EEC6182C32F37A0044F906 /* SizePreferanceKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EEC6172C32F37A0044F906 /* SizePreferanceKey.swift */; };
@@ -250,6 +256,12 @@
 		99ECAD252C76C6610012F8E7 /* ProgramCompletedCover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramCompletedCover.swift; sourceTree = "<group>"; };
 		99ECAD272C76E35C0012F8E7 /* GlobalCoverManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalCoverManager.swift; sourceTree = "<group>"; };
 		99ECAD292C76F0B30012F8E7 /* ChallengeCompletedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeCompletedView.swift; sourceTree = "<group>"; };
+		99ECAD2B2C78208F0012F8E7 /* ProgramCompletedForTheDayCover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramCompletedForTheDayCover.swift; sourceTree = "<group>"; };
+		99ECAD2D2C783C2F0012F8E7 /* ToDoListManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoListManager.swift; sourceTree = "<group>"; };
+		99ECAD2F2C7841BA0012F8E7 /* StringUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringUtility.swift; sourceTree = "<group>"; };
+		99ECAD312C7844080012F8E7 /* PastProgramWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastProgramWidget.swift; sourceTree = "<group>"; };
+		99ECAD332C784ED40012F8E7 /* S3Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = S3Utility.swift; sourceTree = "<group>"; };
+		99ECAD352C7850F40012F8E7 /* PastProgramInsightView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastProgramInsightView.swift; sourceTree = "<group>"; };
 		99EEC6122C3201780044F906 /* LevelUpBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelUpBar.swift; sourceTree = "<group>"; };
 		99EEC6142C320FC30044F906 /* FitnessOptionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessOptionType.swift; sourceTree = "<group>"; };
 		99EEC6172C32F37A0044F906 /* SizePreferanceKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizePreferanceKey.swift; sourceTree = "<group>"; };
@@ -304,6 +316,8 @@
 				991FB4642C668FFB006B4ACE /* ProgramS3Utility.swift */,
 				991FB4682C6695EB006B4ACE /* ProgramDynamoDBUtility.swift */,
 				991FB4802C6D8B10006B4ACE /* ChallengesUtility.swift */,
+				99ECAD2F2C7841BA0012F8E7 /* StringUtility.swift */,
+				99ECAD332C784ED40012F8E7 /* S3Utility.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -339,6 +353,7 @@
 				991FB4762C6A9756006B4ACE /* ExerciseManager.swift */,
 				9942D3942C6EBD2A0022C219 /* NotificationManager.swift */,
 				99ECAD272C76E35C0012F8E7 /* GlobalCoverManager.swift */,
+				99ECAD2D2C783C2F0012F8E7 /* ToDoListManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -397,6 +412,9 @@
 				991FB47E2C6D561F006B4ACE /* ActiveUserChallengeWidget.swift */,
 				99ECAD252C76C6610012F8E7 /* ProgramCompletedCover.swift */,
 				99ECAD292C76F0B30012F8E7 /* ChallengeCompletedView.swift */,
+				99ECAD2B2C78208F0012F8E7 /* ProgramCompletedForTheDayCover.swift */,
+				99ECAD312C7844080012F8E7 /* PastProgramWidget.swift */,
+				99ECAD352C7850F40012F8E7 /* PastProgramInsightView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -695,12 +713,17 @@
 				991F8FE22C15278500A134A5 /* Extensions.swift in Sources */,
 				99F71F9F2C023A3D00E27B60 /* UsageTimeView.swift in Sources */,
 				99DD3D542C1D0871006C07B3 /* FullPageVideoView.swift in Sources */,
+				99ECAD2E2C783C2F0012F8E7 /* ToDoListManager.swift in Sources */,
 				994E7DCF2C0551FE00BAD9E0 /* ProgramListWidget.swift in Sources */,
 				99FC9E482C5EC56B00DAFFAC /* RequestCustomProgramWidget.swift in Sources */,
 				991F8FEA2C17841300A134A5 /* BadgeManager.swift in Sources */,
+				99ECAD342C784ED40012F8E7 /* S3Utility.swift in Sources */,
 				991F8FF22C18D0A100A134A5 /* LibraryView.swift in Sources */,
 				99CFAAE62BEB075500EFF67E /* LevelUpFitnessApp.swift in Sources */,
+				99ECAD2C2C78208F0012F8E7 /* ProgramCompletedForTheDayCover.swift in Sources */,
+				99ECAD322C7844080012F8E7 /* PastProgramWidget.swift in Sources */,
 				993871AA2C3A25D600FFAF8A /* SubLevelCircularWidget.swift in Sources */,
+				99ECAD302C7841BA0012F8E7 /* StringUtility.swift in Sources */,
 				99B627482C38561D00482E3B /* WorkoutManager.swift in Sources */,
 				99EEC6152C320FC30044F906 /* FitnessOptionType.swift in Sources */,
 				991FB4752C69394D006B4ACE /* LevelChangeWidget.swift in Sources */,
@@ -717,6 +740,7 @@
 				992F26A52C6032A100F25400 /* FullLevelBreakdownView.swift in Sources */,
 				993871A62C3A1CBF00FFAF8A /* LevelWidget.swift in Sources */,
 				998DA0152C1A18940078E882 /* ViewModifiers.swift in Sources */,
+				99ECAD362C7850F40012F8E7 /* PastProgramInsightView.swift in Sources */,
 				994E7DB12C02643D00BAD9E0 /* LoginView.swift in Sources */,
 				998ADA6A2C56FA28008C2795 /* ConfirmLeaveProgramWidget.swift in Sources */,
 				991FB4482C62C085006B4ACE /* RecommendedExerciseWidget.swift in Sources */,

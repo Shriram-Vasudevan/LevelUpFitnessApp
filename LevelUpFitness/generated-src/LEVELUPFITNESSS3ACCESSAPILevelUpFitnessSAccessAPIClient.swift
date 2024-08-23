@@ -248,6 +248,50 @@ public class LEVELUPFITNESSS3ACCESSAPILevelUpFitnessSAccessAPIClient: AWSAPIGate
      
      return type: 
      */
+    public func getUserProgramFilesOptions() -> AWSTask<AnyObject> {
+	    let headerParameters = [
+                   "Content-Type": "application/json",
+                   "Accept": "application/json",
+                   
+	            ]
+	    
+	    let queryParameters:[String:Any] = [:]
+	    
+	    let pathParameters:[String:Any] = [:]
+	    
+	    return self.invokeHTTPRequest("OPTIONS", urlString: "/getUserProgramFiles", pathParameters: pathParameters, queryParameters: queryParameters, headerParameters: headerParameters, body: nil, responseClass: nil)
+	}
+
+	
+    /*
+     
+     
+     @param proxy 
+     
+     return type: 
+     */
+    public func getUserProgramFilesProxyOptions(proxy: String) -> AWSTask<AnyObject> {
+	    let headerParameters = [
+                   "Content-Type": "application/json",
+                   "Accept": "application/json",
+                   
+	            ]
+	    
+	    let queryParameters:[String:Any] = [:]
+	    
+	    var pathParameters:[String:Any] = [:]
+	    pathParameters["proxy"] = proxy
+	    
+	    return self.invokeHTTPRequest("OPTIONS", urlString: "/getUserProgramFiles/{proxy+}", pathParameters: pathParameters, queryParameters: queryParameters, headerParameters: headerParameters, body: nil, responseClass: nil)
+	}
+
+	
+    /*
+     
+     
+     
+     return type: 
+     */
     public func getUserProgramNamesOptions() -> AWSTask<AnyObject> {
 	    let headerParameters = [
                    "Content-Type": "application/json",

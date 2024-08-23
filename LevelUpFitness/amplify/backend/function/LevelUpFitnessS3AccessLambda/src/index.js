@@ -115,33 +115,34 @@ exports.handler = async (event) => {
         }
     }
     else if (event.path == "/getUserProgramNames" && event.httpMethod == "GET") {
-        const UserID = event.queryStringParameters.UserID
-
+        const UserID = event.queryStringParameters.UserID;
+    
         const params = {
             Bucket: "level-up-fitness-storage-bucket33cf0-dev",
-            Key: `public/UserPrograms/${UserID}`
-        }
-
+            Prefix: `public/UserPrograms/${UserID}/`,
+            Delimiter: "/"
+        };
+    
         try {
-            const response = await s3.listObjectsV2(params).promise()
+            const response = await s3.listObjectsV2(params).promise();
+    
+            console.log(response);
 
-            const objectsList = response.Contents ? response.Contents.map(item => item.Key.split('/').pop()) : [];
-
-            if (objectsList.length > 0) {
-                objectsList.shift();
-            }
-
+            const folderNames = response.CommonPrefixes ? response.CommonPrefixes.map(item => item.Prefix.split('/').filter(Boolean).pop()) : [];
+    
+            console.log(folderNames);
+    
             return {
                 statusCode: 200,
                 headers: {
                     "Access-Control-Allow-Origin": "*",
                     "Access-Control-Allow-Headers": "*"
                 },
-                body: JSON.stringify(objectsList)
-            }
+                body: JSON.stringify(folderNames)
+            };
         } catch (error) {
-            console.log(error)
-
+            console.log(error);
+    
             return {
                 statusCode: 500,
                 headers: {
@@ -149,9 +150,49 @@ exports.handler = async (event) => {
                     "Access-Control-Allow-Headers": "*"
                 },
                 body: JSON.stringify(error)
-            }
+            };
+        }
+    }    
+    else if (event.path == "/getUserProgramFiles" && event.httpMethod == "GET") {
+        const UserID = event.queryStringParameters.UserID;
+        const FolderName = event.queryStringParameters.FolderName;
+    
+        const params = {
+            Bucket: "level-up-fitness-storage-bucket33cf0-dev",
+            Prefix: `public/UserPrograms/${UserID}/${FolderName}/`
+        };
+    
+        try {
+            const response = await s3.listObjectsV2(params).promise();
+    
+            console.log(response);
+            
+            const fileNames = response.Contents ? response.Contents.map(item => item.Key.split('/').pop()) : [];
+    
+            console.log(fileNames);
+    
+            return {
+                statusCode: 200,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "*"
+                },
+                body: JSON.stringify(fileNames)
+            };
+        } catch (error) {
+            console.log(error);
+    
+            return {
+                statusCode: 500,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "*"
+                },
+                body: JSON.stringify(error)
+            };
         }
     }
+    
     return {
         statusCode: 200,
         headers: {

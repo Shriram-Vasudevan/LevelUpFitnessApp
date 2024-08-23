@@ -41,6 +41,16 @@
           "read"
         ]
       }
+    },
+    "/getUserProgramFiles": {
+      "name": "/getUserProgramFiles",
+      "lambdaFunction": "LevelUpFitnessS3AccessLambda",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "read"
+        ]
+      }
     }
   }
 }

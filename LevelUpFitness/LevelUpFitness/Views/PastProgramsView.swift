@@ -15,7 +15,9 @@ struct PastProgramsView: View {
             VStack {
                 if let userProgramNames = programManager.userProgramNames {
                     ForEach(userProgramNames, id: \.self) { name in
-                        
+                        let cleanedInput = name.trimmingCharacters(in: CharacterSet(charactersIn: "[]\""))
+                        let programFormatted = StringUtility.formatS3ProgramRepresentation(cleanedInput)
+                        PastProgramWidget(programFormatted: cleanedInput)
                     }
                 }
             }

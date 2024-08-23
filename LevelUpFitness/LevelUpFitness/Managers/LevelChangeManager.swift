@@ -109,6 +109,8 @@ class LevelChangeManager: ObservableObject {
         switch property {
             case "Challenge":
                 await addChallengeContribution(contribution: contribution)
+        case "Program":
+                await addProgramContribution(contribution: contribution)
             default:
                 break
         }
@@ -198,6 +200,17 @@ class LevelChangeManager: ObservableObject {
             let userID = try await Amplify.Auth.getCurrentUser().userId
             
             let levelChangeInfo = LevelChangeInfo(keyword: "Challenge", description: "You completed your challenge!", change: contribution, timestamp: Date().ISO8601Format())
+            appendLevelChangeToFile(levelChangeInfo: levelChangeInfo, contribution: contribution, userID: userID)
+        } catch {
+            print(error)
+        }
+    }
+    
+    func addProgramContribution(contribution: Int) async {
+        do {
+            let userID = try await Amplify.Auth.getCurrentUser().userId
+            
+            let levelChangeInfo = LevelChangeInfo(keyword: "Program", description: "You completed your program for the day!", change: contribution, timestamp: Date().ISO8601Format())
             appendLevelChangeToFile(levelChangeInfo: levelChangeInfo, contribution: contribution, userID: userID)
         } catch {
             print(error)

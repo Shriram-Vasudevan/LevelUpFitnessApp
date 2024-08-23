@@ -11,6 +11,7 @@ class GlobalCoverManager: ObservableObject {
     static let shared = GlobalCoverManager()
     
     @Published var showProgramCompletionCover = false
+    @Published var showProgramDayCompletionCover = false
     @Published var showChallengeCompletionCover = false
     
     func showChallengeCompletion() {
@@ -19,6 +20,10 @@ class GlobalCoverManager: ObservableObject {
     
     func showProgramCompletion() {
         self.showProgramCompletionCover = true
+    }
+    
+    func showProgramDayCompletion() {
+        self.showProgramDayCompletionCover = true
     }
 }
 

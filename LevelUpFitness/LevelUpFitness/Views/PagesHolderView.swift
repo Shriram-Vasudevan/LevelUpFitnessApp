@@ -89,7 +89,7 @@ struct PagesHolderView: View {
                                 pageType = .levelBreakdown
                             }, label: {
                                 VStack {
-                                    Image(pageType == .levelBreakdown ? "HomeBlue" : "HomeGrey")
+                                    Image(pageType == .levelBreakdown ? "LevelBlue" : "LevelGray")
                                         .resizable()
                                         .frame(width: 30, height: 30)
                                         .aspectRatio(contentMode:  .fill)
@@ -166,6 +166,15 @@ struct PagesHolderView: View {
                 _ = await (userProgram)
             }
         }
+        .fullScreenCover(isPresented: $globalCoverManager.showProgramDayCompletionCover) {
+            ProgramCompletedForTheDayCover()
+        }
+        .fullScreenCover(isPresented: $globalCoverManager.showProgramCompletionCover) {
+            ProgramCompletedCover()
+        }
+        .fullScreenCover(isPresented: $globalCoverManager.showChallengeCompletionCover) {
+            ChallengeCompletedView()
+        }
         .ignoresSafeArea(edges: .bottom)
         .onChange(of: scenePhase) { oldPhase, newPhase in
             if newPhase == .active {
@@ -175,12 +184,6 @@ struct PagesHolderView: View {
             } else if newPhase == .background {
                 NotificationManager.shared.appDidEnterBackground()
             }
-        }
-        .fullScreenCover(isPresented: $globalCoverManager.showProgramCompletionCover) {
-            ProgramCompletedCover()
-        }
-        .fullScreenCover(isPresented: $globalCoverManager.showChallengeCompletionCover) {
-            ChallengeCompletedView()
         }
     }
 }

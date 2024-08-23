@@ -31,7 +31,8 @@ class ProgramS3Utility {
     
     static func getUserProgramNames() async -> [String]? {
         do {
-            let restRequest = RESTRequest(apiName: "LevelUpFitnessS3AccessAPI", path: "/getUserProgramNames")
+            let userID = try await Amplify.Auth.getCurrentUser().userId
+            let restRequest = RESTRequest(apiName: "LevelUpFitnessS3AccessAPI", path: "/getUserProgramNames", queryParameters: ["UserID" : userID])
             let response = try await Amplify.API.get(request: restRequest)
             
             let jsonString = String(data: response, encoding: .utf8)

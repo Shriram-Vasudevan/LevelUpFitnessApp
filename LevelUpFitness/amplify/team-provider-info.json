@@ -30,11 +30,11 @@
       "function": {
         "LevelUpFitnessDynamoAccessLambda": {
           "deploymentBucketName": "amplify-levelupfitnessapp-dev-33cf0-deployment",
-          "s3Key": "amplify-builds/LevelUpFitnessDynamoAccessLambda-33646870417a58765439-build.zip"
+          "s3Key": "amplify-builds/LevelUpFitnessDynamoAccessLambda-712b4451765a412b3542-build.zip"
         },
         "LevelUpFitnessS3AccessLambda": {
           "deploymentBucketName": "amplify-levelupfitnessapp-dev-33cf0-deployment",
-          "s3Key": "amplify-builds/LevelUpFitnessS3AccessLambda-77543549546167394d38-build.zip"
+          "s3Key": "amplify-builds/LevelUpFitnessS3AccessLambda-4f76435872596e615162-build.zip"
         },
         "LevelUpFitnessCustomProgramRequestLambda": {
           "deploymentBucketName": "amplify-levelupfitnessapp-dev-33cf0-deployment",

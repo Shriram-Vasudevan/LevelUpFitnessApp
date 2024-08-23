@@ -113,7 +113,7 @@ class ChallengeManager: ObservableObject {
                 let request = RESTRequest(apiName: "LevelUpFitnessDynamoAccessAPI", path: "/challengesCompleted", queryParameters: ["UserID" : userID, "CompletedChallenges": jsonString])
                 let response = try await Amplify.API.put(request: request)
                 
-                await LevelChangeManager.shared.addNewLevelChange(property: "Challenge", contribution: completedChallenges.count * 10)
+                await LevelChangeManager.shared.addNewLevelChange(property: "Challenge", contribution: completedChallenges.count * 10) 
                 
                 await XPManager.shared.addXPToDB()
                 
