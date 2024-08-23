@@ -525,5 +525,20 @@ extension String {
     func capitalizingFirstLetter() -> String {
         return prefix(1).capitalized + dropFirst()
     }
+    
+    func cleanS3ProgramRepresentation() -> String {
+        var cleanedInput = self
+                .replacingOccurrences(of: "Optional(", with: "")
+                .replacingOccurrences(of: "[", with: "")
+                .replacingOccurrences(of: "]", with: "")
+                .replacingOccurrences(of: "\"", with: "")
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+            
+        if !cleanedInput.contains(")") && cleanedInput.contains("(") {
+            cleanedInput.append(")")
+        }
+        
+        return cleanedInput
+    }
 }
 

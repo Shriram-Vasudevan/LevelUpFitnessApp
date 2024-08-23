@@ -8,7 +8,10 @@
 import SwiftUI
 
 struct PastProgramWidget: View {
+    var programUnformatted: String
     var programFormatted: String
+    
+    var viewPastProgram: (String) -> Void
     
     var body: some View {
         VStack {
@@ -24,7 +27,7 @@ struct PastProgramWidget: View {
                 Spacer()
                 
                 Button {
-                    
+                    viewPastProgram(programUnformatted)
                 } label: {
                     Text("See More")
                         .font(.system(size: 14, weight: .semibold, design: .rounded))
@@ -48,5 +51,5 @@ struct PastProgramWidget: View {
 }
 
 #Preview {
-    PastProgramWidget(programFormatted: "Program: August 22 - September 19")
+    PastProgramWidget(programUnformatted: "Original", programFormatted: "Program: August 22 - September 19", viewPastProgram: {_ in })
 }

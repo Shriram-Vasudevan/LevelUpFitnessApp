@@ -29,7 +29,7 @@ class ProgramS3Utility {
         }
     }
     
-    static func getUserProgramNames() async -> [String]? {
+    static func getUserProgramNames() async -> Data? {
         do {
             let userID = try await Amplify.Auth.getCurrentUser().userId
             let restRequest = RESTRequest(apiName: "LevelUpFitnessS3AccessAPI", path: "/getUserProgramNames", queryParameters: ["UserID" : userID])
@@ -39,12 +39,7 @@ class ProgramS3Utility {
             
             print(jsonString as Any)
             
-            if let array = try JSONSerialization.jsonObject(with: response) as? [String] {
-                return array.map({ String($0.dropLast(5))})
-            } else {
-                print("Error getting names")
-                return nil
-            }
+            return response
         } catch {
             print(error)
             return nil

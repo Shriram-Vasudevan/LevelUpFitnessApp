@@ -13,11 +13,13 @@ class S3Utility {
         do {
             let userID = try await Amplify.Auth.getCurrentUser().userId
             
-            let request = RESTRequest(apiName: "LevelUpFitnessS3AccessAPI", path: "/getUserProgramFiles", queryParameters: ["UserID" : userID, "FolderName" : programS3Representation])
+            let request = RESTRequest(apiName: "LevelUpFitnessS3AccessAPI", path: "/getUserProgramFiles", queryParameters: ["UserID" : userID, "FolderName": programS3Representation])
             
             let response = try await Amplify.API.get(request: request)
+            let responseString = String(data: response, encoding: .utf8)
+            
+            print("the response \(responseString)")
             let responseArray = try JSONDecoder().decode([String].self, from: response)
-//            let responseString = String(data: response, encoding: .utf8)
             
             let responseValuesCleaned = responseArray.map({$0.trimmingCharacters(in: CharacterSet(charactersIn: "[]\""))})
             

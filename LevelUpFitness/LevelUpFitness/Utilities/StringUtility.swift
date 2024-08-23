@@ -9,6 +9,8 @@ import Foundation
 
 class StringUtility {
     static func formatS3ProgramRepresentation(_ input: String) -> String? {
+        
+        print("the cleaned input \(input)")
         guard let openParenIndex = input.firstIndex(of: "("),
               let closeParenIndex = input.firstIndex(of: ")") else {
             return nil
@@ -36,6 +38,7 @@ class StringUtility {
         let formattedStartDate = outputDateFormatter.string(from: startDate)
         let formattedEndDate = outputDateFormatter.string(from: endDate)
         
+        print("\(programName): \(formattedStartDate) - \(formattedEndDate)")
         return "\(programName): \(formattedStartDate) - \(formattedEndDate)"
     }
 }

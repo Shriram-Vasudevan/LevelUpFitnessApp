@@ -23,6 +23,9 @@ struct ProgramView: View {
 
     @State var programPageType: ProgramPageTypes = .newProgram
     
+    @State var navigateToProgramInsightsView: Bool = false
+    @State var programS3Representation: String = ""
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -107,7 +110,10 @@ struct ProgramView: View {
                                 }
                             }
                             else if programPageType == .pastPrograms {
-                                PastProgramsView(programManager: self.programManager)
+                                PastProgramsView(programManager: self.programManager, viewPastProgram: { programUnformatted in
+                                    programS3Representation = programUnformatted
+                                    navigateToProgramInsightsView = true
+                                })
                             }
                             
                             Spacer()
@@ -121,6 +127,7 @@ struct ProgramView: View {
                         VStack {
                             ScrollView(.vertical) {
                                 VStack (spacing: 0) {
+                                    Text("\(DateUtility.determineWeekNumber(startDateString: ProgramManager.shared.program?.startDate ?? "Getting Week Number") ?? 0)")
                                     ProgramListWidget(programManager: programManager, navigateToWorkoutView: $navigateToWorkoutView)
                                         .padding(.top)
                                        
@@ -263,6 +270,9 @@ struct ProgramView: View {
                     ProgramStatisticsView(program: program)
                         .preferredColorScheme(.light)
                 }
+            })
+            .navigationDestination(isPresented: $navigateToProgramInsightsView, destination: {
+                PastProgramInsightView(programS3Representation: programS3Representation)
             })
             .navigationBarBackButtonHidden()
         }

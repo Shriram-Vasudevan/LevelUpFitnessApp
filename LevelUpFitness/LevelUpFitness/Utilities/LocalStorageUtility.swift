@@ -171,18 +171,29 @@ class LocalStorageUtility {
         }
     }
     
-    
+    static func getUserProgramFileURL(userID: String, programS3Representation: String, fileName: String) -> URL? {
+        guard let documentsDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return nil }
+        return documentsDirectoryURL.appendingPathComponent("Programs/\(userID)/\(programS3Representation)/\(fileName)")
+    }
     
     static func getUserProgramFileURL(userID: String, programName: String, date: String, startDate: String) -> URL? {
         let endDate = DateUtility.getDateNWeeksAfterDate(dateString: startDate, weeks: 4)
         
         guard let documentsDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return nil }
-        return documentsDirectoryURL.appendingPathComponent("Programs/\(userID)/\(programName) (\(startDate)|\(endDate ?? "NoDate")/\(date).json")
+        return documentsDirectoryURL.appendingPathComponent("Programs/\(userID)/\(programName) (\(startDate)|\(endDate ?? "NoDate"))/\(date).json")
     }
 
     static func userProgramSaved(userID: String, programName: String, date: String, startDate: String) -> Bool {
         print("checking save")
         guard let fileURL = getUserProgramFileURL(userID: userID, programName: programName, date: date, startDate: startDate) else { return false }
+        
+        print("save \(FileManager.default.fileExists(atPath: fileURL.path))")
+        return FileManager.default.fileExists(atPath: fileURL.path)
+    }
+    
+    static func userProgramSaved(userID: String, programS3Representation: String, fileName: String) -> Bool {
+        print("checking save")
+        guard let fileURL = getUserProgramFileURL(userID: userID, programS3Representation: programS3Representation, fileName: fileName) else { return false }
         
         print("save \(FileManager.default.fileExists(atPath: fileURL.path))")
         return FileManager.default.fileExists(atPath: fileURL.path)
@@ -196,7 +207,7 @@ class LocalStorageUtility {
         guard let documentsDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
         let programsDirectoryURL = documentsDirectoryURL.appendingPathComponent("Programs")
         let userProgramsDirectoryURL = programsDirectoryURL.appendingPathComponent(userID)
-        let specificUserProgramDirectory = userProgramsDirectoryURL.appendingPathComponent("\(programName) (\(program.startDate)|\(endDate ?? "NoDate")")
+        let specificUserProgramDirectory = userProgramsDirectoryURL.appendingPathComponent("\(programName) (\(program.startDate)|\(endDate ?? "NoDate"))")
         let fileURL = specificUserProgramDirectory.appendingPathComponent("\(date).json")
         
         print("the path " + fileURL.path)

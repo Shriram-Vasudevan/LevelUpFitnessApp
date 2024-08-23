@@ -154,6 +154,9 @@ exports.handler = async (event) => {
         }
     }    
     else if (event.path == "/getUserProgramFiles" && event.httpMethod == "GET") {
+        console.log("Event received:", JSON.stringify(event, null, 2));
+        console.log("Query Parameters:", event.queryStringParameters);
+
         const UserID = event.queryStringParameters.UserID;
         const FolderName = event.queryStringParameters.FolderName;
     
@@ -166,7 +169,7 @@ exports.handler = async (event) => {
             const response = await s3.listObjectsV2(params).promise();
     
             console.log(response);
-            
+
             const fileNames = response.Contents ? response.Contents.map(item => item.Key.split('/').pop()) : [];
     
             console.log(fileNames);

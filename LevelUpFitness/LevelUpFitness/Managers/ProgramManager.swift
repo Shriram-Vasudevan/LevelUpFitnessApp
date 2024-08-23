@@ -34,8 +34,13 @@ class ProgramManager: ObservableObject {
     }
     
     func getUserProgramNames() async {
-        if let userProgramNames = await ProgramS3Utility.getUserProgramNames() {
-            self.userProgramNames = userProgramNames
+        do {
+            if let userProgramNames = await ProgramS3Utility.getUserProgramNames() {
+                self.userProgramNames = try JSONDecoder().decode([String].self, from: userProgramNames)
+                print("user program names: \(self.userProgramNames)")
+            }
+        } catch {
+            print(error)
         }
     }
     
@@ -78,7 +83,10 @@ class ProgramManager: ObservableObject {
                     }
                     
                     if !LocalStorageUtility.userProgramSaved(userID: userID, programName: programName, date: date, startDate: startDate) {
+                        print("downloading: \("UserPrograms/\(userID)/\(programName) (\(startDate)|\(endDate ?? ""))/\(date).json")")
                         let downloadTask = Amplify.Storage.downloadData(key: "UserPrograms/\(userID)/\(programName) (\(startDate)|\(endDate ?? ""))/\(date).json")
+                        
+                        print("downloading")
                         
                         let data = try await downloadTask.value
                         
@@ -89,7 +97,7 @@ class ProgramManager: ObservableObject {
                             self.program = decodedData
                         }
 
-                        print("caching the local storage")
+                        print("caching to local storage")
                         try LocalStorageUtility.cacheUserProgram(userID: userID, programName: programName, date: date, program: decodedData)
                         
                         DispatchQueue.main.async {
@@ -136,5 +144,42 @@ class ProgramManager: ObservableObject {
             self.standardProgramNames = await ProgramS3Utility.getStandardProgramNames()
         }
     }
-
+    
+    func getProgramsForInsights(programS3Representation: String) async -> [Program]? {
+        do {
+            let userID = try await Amplify.Auth.getCurrentUser().userId
+            
+            var programs: [Program] = []
+            
+            if let paths = await S3Utility.getUserProgramFilePaths(programS3Representation: programS3Representation) {
+                for path in paths {
+                    if !LocalStorageUtility.userProgramSaved(userID: userID, programS3Representation: programS3Representation, fileName: path) {
+                        let downloadTask = Amplify.Storage.downloadData(key: "UserPrograms/\(userID)/\(programS3Representation)/\(path)")
+                        
+                        let data = try await downloadTask.value
+                        
+                        let decoder = JSONDecoder()
+                        let decodedData = try decoder.decode(Program.self, from: data)
+                        
+                        programs.append(decodedData)
+                    } else {
+                        if let url = LocalStorageUtility.getUserProgramFileURL(userID: userID, programS3Representation: programS3Representation, fileName: path) {
+                            let programData = try Data(contentsOf: url)
+                            let program = try JSONDecoder().decode(Program.self, from: programData)
+                            programs.append(program)
+                        }
+                    }
+                }
+                print("the paths: \(paths)")
+            }
+            else {
+                return nil
+            }
+            
+            return programs
+        } catch {
+            print(error)
+            return nil
+        }
+    }
 }

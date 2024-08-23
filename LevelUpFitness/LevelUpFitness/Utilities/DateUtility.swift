@@ -124,4 +124,26 @@ class DateUtility {
         
         return weekday
     }
+    
+    static func determineWeekNumber(startDateString: String) -> Int? {
+        let dateformatter = DateFormatter()
+        dateformatter.dateFormat = "MM-dd-yyyy"
+        
+        guard let startDate = dateformatter.date(from: startDateString) else { return nil }
+        let currentDate = Date()
+        
+        let calendar = Calendar.current
+        
+        let dayDifference = calendar.dateComponents([.day], from: startDate, to: currentDate).day
+        
+        if let dayDifference = dayDifference {
+            let weekNumber = (dayDifference / 7) + 1
+            return weekNumber
+        } else {
+            return nil
+        }
+    }
+
+
+
 }

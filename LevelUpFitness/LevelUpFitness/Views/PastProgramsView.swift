@@ -10,14 +10,19 @@ import SwiftUI
 struct PastProgramsView: View {
     @ObservedObject var programManager: ProgramManager
     
+    var viewPastProgram: (String) -> Void
     var body: some View {
         ZStack {
             VStack {
                 if let userProgramNames = programManager.userProgramNames {
                     ForEach(userProgramNames, id: \.self) { name in
-                        let cleanedInput = name.trimmingCharacters(in: CharacterSet(charactersIn: "[]\""))
-                        let programFormatted = StringUtility.formatS3ProgramRepresentation(cleanedInput)
-                        PastProgramWidget(programFormatted: cleanedInput)
+                        if let programFormatted = StringUtility.formatS3ProgramRepresentation(name) {
+                            
+                            PastProgramWidget(programUnformatted: name, programFormatted: programFormatted, viewPastProgram: { programUnformatted in
+                                viewPastProgram(programUnformatted)
+                            })
+                        }
+                        
                     }
                 }
             }
@@ -33,5 +38,5 @@ struct PastProgramsView: View {
 }
 
 #Preview {
-(    PastProgramsView(programManager: ProgramManager())
+    (PastProgramsView(programManager: ProgramManager(), viewPastProgram: {_ in})
 )}
