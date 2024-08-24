@@ -33,6 +33,9 @@ struct ExerciseDataSetWidget: View {
     @State var numberOfSets: Int
     
     @State var exitWorkout: () -> Void
+    
+    @State var fieldsNotFilledOut: Bool = false
+    
     var body: some View {
         VStack  {
             HStack {
@@ -72,7 +75,10 @@ struct ExerciseDataSetWidget: View {
                             .font(.custom("Sailec Bold", size: 20))
                         
                         TextField("", text: $weightText)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 5)
+                                    .stroke(fieldsNotFilledOut ? Color.red : Color.black)
+                            )
                             .frame(width: 65)
                     }
                     
@@ -87,7 +93,10 @@ struct ExerciseDataSetWidget: View {
                              .font(.custom("Sailec Bold", size: 20))
                          
                          TextField("", text: $repText)
-                             .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 5)
+                                    .stroke(fieldsNotFilledOut ? Color.red : Color.black)
+                            )
                              .frame(width: 65)
                     }
                 }
@@ -193,10 +202,16 @@ struct ExerciseDataSetWidget: View {
                 }
                 else if isResting && !isExercising {
                     Button {
-                        stopTimer()
-                        isResting = false
-                        saveData()
-                        isLastSet ? lastSetCompleted() : setCompleted()
+                        if !weightText.isEmpty && !repText.isEmpty {
+                            fieldsNotFilledOut = false
+                            stopTimer()
+                            isResting = false
+                            saveData()
+                            isLastSet ? lastSetCompleted() : setCompleted()
+                        }
+                        else {
+                            fieldsNotFilledOut = true
+                        }
                     } label: {
                         Text(isLastSet ? "Next Exercise" : "Next Set")
                             .fontWeight(.bold)
