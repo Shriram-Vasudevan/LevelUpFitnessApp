@@ -12,12 +12,14 @@ struct ExerciseLibraryExercise: Codable, Hashable, Equatable {
     var name: String
     var exerciseType: String
     var progression: [Progression]
+    var isWeight: Bool
     
     enum CodingKeys: String, CodingKey {
         case id = "ID"
         case name = "Name"
         case exerciseType = "ExerciseType"
         case progression = "Progression"
+        case isWeight = "IsWeight"
     }
     
     init(from decoder: Decoder) throws {
@@ -28,6 +30,8 @@ struct ExerciseLibraryExercise: Codable, Hashable, Equatable {
         name = try container.decode(String.self, forKey: .name)
         
         exerciseType = try container.decode(String.self, forKey: .exerciseType)
+        
+        isWeight = try container.decode(Bool.self, forKey: .isWeight)
         
         let progressionDict = try container.decode([String: Progression].self, forKey: .progression)
         //print("Decoded Progression Dictionary \(progressionDict)")

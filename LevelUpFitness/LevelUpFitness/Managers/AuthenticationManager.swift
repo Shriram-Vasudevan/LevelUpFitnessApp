@@ -14,7 +14,7 @@ import SwiftUI
 
 //Handles Sign In + Login Stuff
 class AuthenticationManager: ObservableObject {
-    static var username: String = ""
+    static var username: String?
     static var name: String = ""
     
     func login(username: String, password: String, completion: @escaping (Bool, String?, Error?) async -> Void) async {
@@ -123,6 +123,21 @@ class AuthenticationManager: ObservableObject {
         
     }
     
+    func getProfilePicture() async -> Data? {
+        do {
+            let userID = try await Amplify.Auth.getCurrentUser().userId
+            
+            let downloadTask = Amplify.Storage.downloadData(key: "pfp-media/\(userID).png")
+            
+            let data = try await downloadTask.value
+            
+            return data
+        } catch {
+            print(error)
+            return nil
+        }
+    }
+    
     func uploadProfilePicture(userID: String) async {
         print(userID)
         
@@ -181,7 +196,7 @@ class AuthenticationManager: ObservableObject {
             let usernameAttribute = userAttributes.first(where: { $0.key == .custom("username") })
             
             AuthenticationManager.username = usernameAttribute?.value ?? ""
-            print("the username: " + AuthenticationManager.username)
+            print("the username: " + (AuthenticationManager.username ?? "not existent"))
         } catch {
             print("Unexpected error: \(error)")
         }

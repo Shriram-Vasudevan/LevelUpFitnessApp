@@ -321,6 +321,7 @@ extension Program {
             totalTime += day.getTotalWorkoutTime()
         }
         
+        print("the average time \(totalTime / Double(program.count))")
         return totalTime / Double(program.count)
     }
 

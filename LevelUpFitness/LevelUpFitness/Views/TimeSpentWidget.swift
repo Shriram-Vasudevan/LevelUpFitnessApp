@@ -10,14 +10,14 @@ struct TimeSpentWidget: View {
                 Image(systemName: "timer")
                     .foregroundColor(.primary)
                 
-                Text("Exercise Time")
+                Text("Average Program Time")
                     .font(.headline)
                     .foregroundColor(.primary)
                 
                 Spacer()
                 
                 Button(action: {
-           
+                    
                 }) {
                     HStack {
                         Text("More")
@@ -66,12 +66,12 @@ struct TimeSpentWidget: View {
 }
 
 #Preview {
-    TimeSpentWidget(program: Program(program: [ProgramDay(day: "Monday", workout: "", completed: false, exercises: [ProgramExercise(name: "", sets: 2, reps: 5, rpe: "", rest: 3, area: "test", completed: false, data: ExerciseData(sets: [ExerciseDataSet(weight: 0, reps: 1, time: 0.0, rest: 0.0)]))]),
-                                               ProgramDay(day: "Tuesday", workout: "", completed: false, exercises: [ProgramExercise(name: "", sets: 2, reps: 5, rpe: "", rest: 3, area: "test", completed: false, data: ExerciseData(sets: [ExerciseDataSet(weight: 0, reps: 1, time: 0.0, rest: 0.0)]))]),
-                                               ProgramDay(day: "Tuesday", workout: "", completed: false, exercises: [ProgramExercise(name: "", sets: 2, reps: 5, rpe: "", rest: 3, area: "test", completed: false, data: ExerciseData(sets: [ExerciseDataSet(weight: 0, reps: 1, time: 0.0, rest: 0.0)]))]),
-                                               ProgramDay(day: "Wednesday", workout: "", completed: false, exercises: [ProgramExercise(name: "", sets: 2, reps: 5, rpe: "", rest: 3, area: "test", completed: false, data: ExerciseData(sets: [ExerciseDataSet(weight: 0, reps: 1, time: 0.0, rest: 0.0)]))]),
-                                               ProgramDay(day: "Thursday", workout: "", completed: false, exercises: [ProgramExercise(name: "", sets: 2, reps: 5, rpe: "", rest: 3, area: "test", completed: false, data: ExerciseData(sets: [ExerciseDataSet(weight: 0, reps: 1, time: 0.0, rest: 0.0)]))]),
-                                               ProgramDay(day: "Friday", workout: "", completed: false, exercises: [ProgramExercise(name: "", sets: 2, reps: 5, rpe: "", rest: 3, area: "test", completed: false, data: ExerciseData(sets: [ExerciseDataSet(weight: 0, reps: 1, time: 0.0, rest: 0.0)]))]),
-                                               ProgramDay(day: "Saturday", workout: "", completed: false, exercises: [ProgramExercise(name: "", sets: 2, reps: 5, rpe: "", rest: 3, area: "test", completed: false, data: ExerciseData(sets: [ExerciseDataSet(weight: 0, reps: 1, time: 0.0, rest: 0.0)]))]),
-                                               ProgramDay(day: "Sunday", workout: "", completed: false, exercises: [ProgramExercise(name: "", sets: 2, reps: 5, rpe: "", rest: 3, area: "test", completed: false, data: ExerciseData(sets: [ExerciseDataSet(weight: 0, reps: 1, time: 0.0, rest: 0.0)]))])], programName: "TestProgram", programDuration: 4, startDate: "", startWeekday: ""))
+    TimeSpentWidget(program: Program(program: [ProgramDay(day: "Monday", workout: "", completed: false, exercises: [ProgramExercise(name: "", sets: 2, reps: 5, rpe: "", rest: 3, area: "test", isWeight: false, completed: false, data: ExerciseData(sets: [ExerciseDataSet(weight: 0, reps: 1, time: 0.0, rest: 0.0)]))]),
+                                               ProgramDay(day: "Tuesday", workout: "", completed: false, exercises: [ProgramExercise(name: "", sets: 2, reps: 5, rpe: "", rest: 3, area: "test", isWeight: false, completed: false, data: ExerciseData(sets: [ExerciseDataSet(weight: 0, reps: 1, time: 0.0, rest: 0.0)]))]),
+                                               ProgramDay(day: "Tuesday", workout: "", completed: false, exercises: [ProgramExercise(name: "", sets: 2, reps: 5, rpe: "", rest: 3, area: "test", isWeight: false, completed: false, data: ExerciseData(sets: [ExerciseDataSet(weight: 0, reps: 1, time: 0.0, rest: 0.0)]))]),
+                                               ProgramDay(day: "Wednesday", workout: "", completed: false, exercises: [ProgramExercise(name: "", sets: 2, reps: 5, rpe: "", rest: 3, area: "test", isWeight: false, completed: false, data: ExerciseData(sets: [ExerciseDataSet(weight: 0, reps: 1, time: 0.0, rest: 0.0)]))]),
+                                               ProgramDay(day: "Thursday", workout: "", completed: false, exercises: [ProgramExercise(name: "", sets: 2, reps: 5, rpe: "", rest: 3, area: "test", isWeight: false, completed: false, data: ExerciseData(sets: [ExerciseDataSet(weight: 0, reps: 1, time: 0.0, rest: 0.0)]))]),
+                                               ProgramDay(day: "Friday", workout: "", completed: false, exercises: [ProgramExercise(name: "", sets: 2, reps: 5, rpe: "", rest: 3, area: "test", isWeight: false, completed: false, data: ExerciseData(sets: [ExerciseDataSet(weight: 0, reps: 1, time: 0.0, rest: 0.0)]))]),
+                                               ProgramDay(day: "Saturday", workout: "", completed: false, exercises: [ProgramExercise(name: "", sets: 2, reps: 5, rpe: "", rest: 3, area: "test", isWeight: false, completed: false, data: ExerciseData(sets: [ExerciseDataSet(weight: 0, reps: 1, time: 0.0, rest: 0.0)]))]),
+                                               ProgramDay(day: "Sunday", workout: "", completed: false, exercises: [ProgramExercise(name: "", sets: 2, reps: 5, rpe: "", rest: 3, area: "test", isWeight: false, completed: false, data: ExerciseData(sets: [ExerciseDataSet(weight: 0, reps: 1, time: 0.0, rest: 0.0)]))])], programName: "TestProgram", programDuration: 4, startDate: "", startWeekday: ""))
 }

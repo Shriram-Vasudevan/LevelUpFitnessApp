@@ -78,7 +78,7 @@ struct WorkoutContent: View {
         VStack (spacing: 0) {
             WorkoutHeader(dismiss: dismiss)
             
-            ExerciseDataSetWidget(
+            ProramExerciseDataSetWidget(
                 model: $workoutManager.currentExerciseData.sets[workoutManager.currentSetIndex],
                 isLastSet: workoutManager.onLastSet,
                 setIndex: workoutManager.currentSetIndex,
@@ -97,7 +97,7 @@ struct WorkoutContent: View {
                                 })
                         }
                     }
-                }
+                }, isWeight: workoutManager.currentExercises[workoutManager.currentExerciseIndex].isWeight
             )
             .id("\(workoutManager.currentExerciseIndex)-\(workoutManager.currentSetIndex)")
             .onChange(of: workoutManager.programCompletedForDay, { oldValue, newValue in

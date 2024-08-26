@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ExerciseDataSetWidget: View {
+struct ProramExerciseDataSetWidget: View {
     @Binding var model: ExerciseDataSet
     
     @State var isExercising: Bool = false
@@ -34,7 +34,10 @@ struct ExerciseDataSetWidget: View {
     
     @State var exitWorkout: () -> Void
     
-    @State var fieldsNotFilledOut: Bool = false
+    @State var weightFieldNotFilledOut: Bool = false
+    @State var repsFieldNotFilledOut: Bool = false
+    
+    @State var isWeight: Bool
     
     var body: some View {
         VStack  {
@@ -73,12 +76,15 @@ struct ExerciseDataSetWidget: View {
                     VStack {
                        Text("Weight")
                             .font(.custom("Sailec Bold", size: 20))
+                            .opacity(isWeight ? 1 : 0.7)
                         
                         TextField("", text: $weightText)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 5)
-                                    .stroke(fieldsNotFilledOut ? Color.red : Color.black)
+                                    .stroke(weightFieldNotFilledOut ? Color.red : Color.black)
                             )
+                            .opacity(isWeight ? 1 : 0.7)
+                            .disabled(isWeight ? false : true)
                             .frame(width: 65)
                     }
                     
@@ -95,7 +101,7 @@ struct ExerciseDataSetWidget: View {
                          TextField("", text: $repText)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 5)
-                                    .stroke(fieldsNotFilledOut ? Color.red : Color.black)
+                                    .stroke(repsFieldNotFilledOut ? Color.red : Color.black)
                             )
                              .frame(width: 65)
                     }
@@ -203,14 +209,19 @@ struct ExerciseDataSetWidget: View {
                 else if isResting && !isExercising {
                     Button {
                         if !weightText.isEmpty && !repText.isEmpty {
-                            fieldsNotFilledOut = false
+                            repsFieldNotFilledOut = false
+                            weightFieldNotFilledOut = false
                             stopTimer()
                             isResting = false
                             saveData()
                             isLastSet ? lastSetCompleted() : setCompleted()
                         }
                         else {
-                            fieldsNotFilledOut = true
+                            if weightText.isEmpty && isWeight {
+                                weightFieldNotFilledOut = true
+                            }
+                            
+                            repsFieldNotFilledOut = true
                         }
                     } label: {
                         Text(isLastSet ? "Next Exercise" : "Next Set")
@@ -280,5 +291,5 @@ struct ExerciseDataSetWidget: View {
 
 
 #Preview {
-    ExerciseDataSetWidget(model: .constant(ExerciseDataSet(weight: 10, reps: 5, time: 0.0, rest: 0.0)), isLastSet: false, setIndex: 0, setCompleted: .constant({}), lastSetCompleted: .constant({}), exerciseName: "Deadlift", exerciseReps: 10, numberOfSets: 10, exitWorkout: {})
+    ProramExerciseDataSetWidget(model: .constant(ExerciseDataSet(weight: 10, reps: 5, time: 0.0, rest: 0.0)), isLastSet: false, setIndex: 0, setCompleted: .constant({}), lastSetCompleted: .constant({}), exerciseName: "Deadlift", exerciseReps: 10, numberOfSets: 10, exitWorkout: {}, isWeight: false)
 }

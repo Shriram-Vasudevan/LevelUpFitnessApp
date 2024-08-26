@@ -210,5 +210,5 @@ struct ProgramStatisticsView: View {
 
 // Add this preview provider at the bottom of your file
 #Preview {
-    ProgramStatisticsView(program: Program(program: [ProgramDay(day: "", workout: "", completed: false, exercises: [ProgramExercise(name: "", sets: 1, reps: 1, rpe: "", rest: 1, area: "test", completed: false, data: ExerciseData(sets: [ExerciseDataSet(weight: 0, reps: 10, time: 0.0, rest: 0.0)]))])], programName: "", programDuration: 4, startDate: "", startWeekday: ""))
+    ProgramStatisticsView(program: Program(program: [ProgramDay(day: "", workout: "", completed: false, exercises: [ProgramExercise(name: "", sets: 1, reps: 1, rpe: "", rest: 1, area: "test", isWeight: false, completed: false, data: ExerciseData(sets: [ExerciseDataSet(weight: 0, reps: 10, time: 0.0, rest: 0.0)]))])], programName: "", programDuration: 4, startDate: "", startWeekday: ""))
 }
