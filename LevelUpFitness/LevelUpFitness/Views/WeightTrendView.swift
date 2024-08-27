@@ -1,15 +1,13 @@
-//
-//  WeightTrendView.swift
-//  LevelUpFitness
-//
-//  Created by Shriram Vasudevan on 8/26/24.
-//
-
 import SwiftUI
 import Charts
 
 struct WeightTrendView: View {
+    @ObservedObject var trendManager = TrendManager.shared
     @State var weight: String = ""
+    
+    @State var maxValue: Double = 0
+    @State var minDate: Date = Date()
+    @State var maxDate: Date = Date()
     
     var body: some View {
         ZStack {
@@ -24,7 +22,9 @@ struct WeightTrendView: View {
                     Button {
                         if let weight = Double(weight) {
                             Task {
-                                await TrendManager.shared.addWeightToTrend(weight: weight)
+                                await trendManager.addWeightToTrend(weight: weight)
+                                self.weight = ""
+                                await updateChartData()
                             }
                         }
                     } label: {
@@ -33,7 +33,6 @@ struct WeightTrendView: View {
                             .frame(width: 23, height: 23)
                             .foregroundColor(.blue)
                     }
-
                 }
                 .padding(.horizontal)
                 
@@ -48,14 +47,19 @@ struct WeightTrendView: View {
                     )
                     .padding(.horizontal, 20)
                 
-                if let weightTrend = TrendManager.shared.weightTrend {
-                    Chart(weightTrend) {
+                if trendManager.weightTrend.count > 0 {
+                    Chart(trendManager.weightTrend) { dataPoint in
                         LineMark(
-                            x: .value("Date", $0.date, unit: .day),
-                            y: .value("Steps", $0.value)
+                            x: .value("Date", dataPoint.date),
+                            y: .value("Weight", dataPoint.value)
+                        )
+                        PointMark(
+                            x: .value("Date", dataPoint.date),
+                            y: .value("Weight", dataPoint.value)
                         )
                     }
-                    .chartYScale(domain: 0...300)
+                    .chartXScale(domain: minDate...maxDate)
+                    .chartYScale(domain: 0...maxValue)
                     .padding()
                 }
                 Spacer()
@@ -63,9 +67,21 @@ struct WeightTrendView: View {
         }
         .onAppear {
             Task {
-                await TrendManager.shared.getWeightTrend()
+                await updateChartData()
             }
         }
+    }
+    
+    func updateChartData() async {
+        if TrendManager.shared.weightTrend.isEmpty {
+            await TrendManager.shared.getWeightTrend()
+        }
+        
+        let sortedTrend = TrendManager.shared.weightTrend.sorted { $0.date < $1.date }
+        
+        maxValue = (sortedTrend.map { $0.value }.max() ?? 200) * 1.1
+        minDate = sortedTrend.first?.date ?? Date()
+        maxDate = sortedTrend.last?.date ?? Date()
     }
 }
 

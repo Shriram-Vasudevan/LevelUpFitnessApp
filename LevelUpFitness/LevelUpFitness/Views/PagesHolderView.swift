@@ -16,6 +16,7 @@ struct PagesHolderView: View {
     @ObservedObject var exerciseManager = ExerciseManager.shared
     @ObservedObject var challengeManager = ChallengeManager.shared
     @ObservedObject var levelChangeManager = LevelChangeManager.shared
+    @ObservedObject var toDoListManager = ToDoListManager.shared
     @ObservedObject var globalCoverManager = GlobalCoverManager.shared
     
     
@@ -36,7 +37,7 @@ struct PagesHolderView: View {
                         healthManager: healthManager,
                         xpManager: xpManager,
                         exerciseManager: exerciseManager,
-                        challengeManager: challengeManager, levelChangeManager: levelChangeManager,
+                        challengeManager: challengeManager, levelChangeManager: levelChangeManager, toDoListManager: toDoListManager,
                         pageType: $pageType
                     )
                     .preferredColorScheme(.light)

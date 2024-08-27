@@ -286,6 +286,14 @@ class HealthManager: ObservableObject {
         
         healthStore.execute(query)
     }
+    
+    func fetchAverageSteps(forLastNDays days: Int, completion: @escaping (Double) -> Void) {
+        fetchHistoricalData(forLastNDays: days, quantityType: .stepCount) { dataPoints in
+            let totalSteps = dataPoints.reduce(0.0) { $0 + $1.value }
+            let averageSteps = totalSteps / Double(days)
+            completion(averageSteps)
+        }
+    }
 
     func fetchHistoricalData(forLastNDays days: Int, quantityType identifier: HKQuantityTypeIdentifier, completion: @escaping ([HealthDataPoint]) -> Void) {
         guard let quantityType = HKQuantityType.quantityType(forIdentifier: identifier) else {

@@ -112,6 +112,8 @@ class WorkoutManager: ObservableObject {
                 await XPManager.shared.addXPToDB()
             }
             
+            ToDoListManager.shared.programCompleted()
+            
             programCompletedForDay = true
         }
     }

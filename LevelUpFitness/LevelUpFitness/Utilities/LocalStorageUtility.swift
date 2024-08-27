@@ -54,6 +54,29 @@ class LocalStorageUtility {
         }
     }
 
+    static func fileModifiedToday(at path: String) -> Bool {
+        guard let documentsDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return false }
+        let fileURL = documentsDirectoryURL.appendingPathComponent(path)
+        
+        do {
+            let fileAttributes = try FileManager.default.attributesOfItem(atPath: fileURL.path)
+            
+            if let modificationDate = fileAttributes[FileAttributeKey.modificationDate] as? Date {
+                if Date() == modificationDate
+                {
+                    return true
+                }
+                
+                return false
+            }
+        } catch {
+            print(error)
+            return false
+        }
+        
+        return false
+    }
+    
     
     static func fileModifiedInLast24Hours(at path: String) -> Bool {
         guard let documentsDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return false }
@@ -98,11 +121,6 @@ class LocalStorageUtility {
         }
         
         do {
-            let directoryURL = fileURL.deletingLastPathComponent()
-            if !FileManager.default.fileExists(atPath: directoryURL.path) {
-                try FileManager.default.createDirectory(at: directoryURL, withIntermediateDirectories: true, attributes: nil)
-            }
-            
             if FileManager.default.fileExists(atPath: fileURL.path) {
                 if let fileHandle = FileHandle(forWritingAtPath: fileURL.path) {
                     defer {
@@ -131,7 +149,6 @@ class LocalStorageUtility {
                 try FileManager.default.createDirectory(at: directoryURL, withIntermediateDirectories: true, attributes: nil)
             }
             
-            // Clear the file contents
             try "".write(to: fileURL, atomically: true, encoding: .utf8)
             print("File cleared successfully at path: \(path)")
         } catch {
@@ -158,6 +175,48 @@ class LocalStorageUtility {
         }
     }
 
+    static func updateTaskCompletionInFile(taskID: String, completed: Bool) {
+        let fileManager = FileManager.default
+        guard let documentsDirectoryURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+        let fileURL = documentsDirectoryURL.appendingPathComponent("todoList.json")
+        let tempFileURL = documentsDirectoryURL.appendingPathComponent("todoList_temp.json")
+        
+        do {
+            let fileHandle = try FileHandle(forReadingFrom: fileURL)
+            defer { try? fileHandle.close() }
+
+            if fileManager.fileExists(atPath: tempFileURL.path) {
+                try fileManager.removeItem(at: tempFileURL)
+            }
+            fileManager.createFile(atPath: tempFileURL.path, contents: nil, attributes: nil)
+            guard let tempFileHandle = try? FileHandle(forWritingTo: tempFileURL) else { return }
+            defer { try? tempFileHandle.close() }
+            
+            let jsonDecoder = JSONDecoder()
+            let jsonEncoder = JSONEncoder()
+            
+            while let line = fileHandle.readLine() {
+                if let data = line.data(using: .utf8),
+                   var task = try? jsonDecoder.decode(ToDoListTask.self, from: data),
+                   task.id == taskID {
+                    task.completed = completed
+                    if let updatedData = try? jsonEncoder.encode(task) {
+                        tempFileHandle.write(updatedData)
+                        tempFileHandle.write("\n".data(using: .utf8)!)
+                    }
+                } else {
+                    tempFileHandle.write(line.data(using: .utf8)!)
+                    tempFileHandle.write("\n".data(using: .utf8)!)
+                }
+            }
+            
+            try fileManager.removeItem(at: fileURL)
+            try fileManager.moveItem(at: tempFileURL, to: fileURL)
+            
+        } catch {
+            print("Error updating task completion status: \(error)")
+        }
+    }
     
     static func temporarilySaveStandardProgram(programName: String, data: Data, completionHandler: @escaping (Bool, URL?) async -> Void) async {
         let temporaryDirectory = FileManager.default.temporaryDirectory

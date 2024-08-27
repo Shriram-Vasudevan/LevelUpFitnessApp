@@ -543,3 +543,20 @@ extension String {
     }
 }
 
+extension FileHandle {
+    func readLine() -> String? {
+        var lineData = Data()
+        while true {
+            let data = self.readData(ofLength: 1)
+            if data.isEmpty {
+                // End of file or error
+                return lineData.isEmpty ? nil : String(data: lineData, encoding: .utf8)
+            }
+            if data == "\n".data(using: .utf8) {
+                // End of line
+                return String(data: lineData, encoding: .utf8)
+            }
+            lineData.append(data)
+        }
+    }
+}

@@ -624,7 +624,7 @@ exports.handler = async (event) => {
         const UserID = event.queryStringParameters.UserID
         const Weight = event.queryStringParameters.Weight
 
-        const Timestamp = DateTime.utc().toISOString();
+        const Timestamp = DateTime.utc().toISO();
         try {
             const params = {
                 TableName: "weight-trend-db-dev",
@@ -670,11 +670,11 @@ exports.handler = async (event) => {
 
         try {
             const params = {
-                TableName: 'WeightTrends', 
-                KeyConditionExpression: '#userID = :userID AND #timestamp BETWEEN :start AND :end',
+                TableName: "weight-trend-db-dev", 
+                KeyConditionExpression: "#userID = :userID AND #timestamp BETWEEN :start AND :end",
                 ExpressionAttributeNames: {
-                    '#userID': 'UserID',
-                    '#timestamp': 'Timestamp'
+                    "#userID": "UserID",
+                    "#timestamp": "Timestamp"
                 },
                 ExpressionAttributeValues: {
                     ':userID': UserID,
@@ -694,7 +694,15 @@ exports.handler = async (event) => {
                 body: JSON.stringify(result.Items)
             };
         } catch (error) {
-
+            console.log(error)
+            return {
+                statusCode: 500,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "*"
+                },
+                body: JSON.stringify(`${error}`)
+            };
         }
     }
 

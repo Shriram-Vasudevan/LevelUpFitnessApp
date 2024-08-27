@@ -11,6 +11,7 @@ struct HomeView: View {
     @ObservedObject var exerciseManager: ExerciseManager
     @ObservedObject var challengeManager: ChallengeManager
     @ObservedObject var levelChangeManager: LevelChangeManager
+    @ObservedObject var toDoListManager: ToDoListManager
 
     @State var avPlayer = AVPlayer()
     
@@ -73,6 +74,10 @@ struct HomeView: View {
                         .padding(.horizontal)
                         
                         VStack (spacing: 20) {
+                            if toDoListManager.toDoList.count > 0 {
+                                ToDoList()
+                            }
+                            
                             if let userXPData = xpManager.userXPData {
                                 LevelWidget(userXPData: userXPData, levelChanges: levelChangeManager.levelChanges, openLevelUpInfoView: {
                                     showLevelUpInformationView = true
@@ -375,5 +380,5 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeView(programManager: ProgramManager(), databaseManager: DatabaseManager(), healthManager: HealthManager(), xpManager: XPManager(), exerciseManager: ExerciseManager(), challengeManager: ChallengeManager(), levelChangeManager: LevelChangeManager(), pageType: .constant(.home))
+    HomeView(programManager: ProgramManager(), databaseManager: DatabaseManager(), healthManager: HealthManager(), xpManager: XPManager(), exerciseManager: ExerciseManager(), challengeManager: ChallengeManager(), levelChangeManager: LevelChangeManager(), toDoListManager: ToDoListManager(), pageType: .constant(.home))
 }
