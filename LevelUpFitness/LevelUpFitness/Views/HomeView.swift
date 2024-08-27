@@ -25,6 +25,12 @@ struct HomeView: View {
     
     @State var selectedExercise: Progression?
     
+    @State var healthStatType: String?
+    @State var navigateToHealthStatTrendView: Bool = false
+    
+    @State var navigateToWeightTrendView: Bool = false
+    
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -202,19 +208,57 @@ struct HomeView: View {
                                 .padding([.top, .horizontal])
                         }
                         
-                        if let steps = healthManager.todaysSteps, let calories = healthManager.todaysCalories, let distance = (healthManager.todaysDistance)  {
-                            HStack {
-                                Text("Today's Health Breakdown")
-                                    .font(.custom("EtruscoNow Medium", size: 25))
-                                    .bold()
+                        HStack {
+                            VStack (alignment: .leading) {
+                                Text("Trends")
+                                    .font(.custom("Sailec Bold", size: 20))
                                 
-                                Spacer()
+                                Text("Your Progress")
+                                    .foregroundColor(.gray)
+                                    .bold()
                             }
-                            .padding(.top)
-                            .padding(.horizontal)
                             
-                            HealthStatsWidget(stat1: steps, text1: "Steps", imageName1: "figure.walk", stat2: calories, text2: "Calories", imageName2: "flame.fill", stat3: distance, text3: "Distance", imageName3: "app.connected.to.app.below.fill")
+                            Spacer()
                         }
+                        .padding()
+                        
+                        HStack {
+                            if let steps = healthManager.todaysSteps, let calories = healthManager.todaysCalories {
+                                HealthStatsWidget(stat: steps, text: "Steps", imageName: "figure.walk", healthStatWidgetPressed: { type in
+                                    healthStatType = "Steps"
+                                    navigateToHealthStatTrendView = true
+                                })
+                                
+                                HealthStatsWidget(stat: calories, text: "Calories", imageName: "flame.fill", healthStatWidgetPressed: { type in
+                                    healthStatType = "Calories"
+                                    navigateToHealthStatTrendView = true
+                                })
+                            }
+                            
+                        }
+                        .padding(.horizontal)
+                        
+                        Button {
+                            navigateToWeightTrendView = true
+                        } label: {
+                            Text("See Weight Trend")
+                        }
+
+                        
+//                        if let steps = healthManager.todaysSteps, let calories = healthManager.todaysCalories, let distance = (healthManager.todaysDistance)  {
+//                            HStack {
+//                                Text("Today's Health Breakdown")
+//                                    .font(.custom("EtruscoNow Medium", size: 25))
+//                                    .bold()
+//                                
+//                                Spacer()
+//                            }
+//                            .padding(.top)
+//                            .padding(.horizontal)
+//                            
+//                            HealthStatsWidget(stat1: steps, text1: "Steps", imageName1: "figure.walk", stat2: calories, text2: "Calories", imageName2: "flame.fill", stat3: distance, text3: "Distance", imageName3: "app.connected.to.app.below.fill")
+//                        }
+//                        
                         
                         if let userXPData = xpManager.userXPData, challengeManager.challengeTemplates.filter({ challengeTemplate in
                             !challengeManager.userChallenges.contains { userChallenge in
@@ -259,34 +303,34 @@ struct HomeView: View {
                         }
                         .padding()
 
-                        VStack (spacing: 0) {
-                            HStack {
-                                VStack (alignment: .leading) {
-                                    Text("Trends")
-                                        .font(.custom("Sailec Bold", size: 20))
-                                    
-                                    Text("Your Progress")
-                                        .foregroundColor(.gray)
-                                        .bold()
-                                }
-                                
-                                Spacer()
-                            }
-                            .padding(.horizontal)
-                            .padding(.bottom, 7)
-
-                            GeometryReader { geometry in
-                                let totalWidth = geometry.size.width
-                                let padding: CGFloat = 10
-                                let squareWidth = (totalWidth - padding) / 2
-                                
-                                HStack(spacing: padding) {
-                                    StatisticsWidget(width: squareWidth, colorA: Color(red: 152/255, green: 230/255, blue: 138/255), colorB: .green, stat: 180.5, text: "Current Weight")
-                                }
-                            }
-                            .frame(height: (UIScreen.main.bounds.width - 10) / 2)
-                            .padding(.horizontal)
-                        }
+//                        VStack (spacing: 0) {
+//                            HStack {
+//                                VStack (alignment: .leading) {
+//                                    Text("Trends")
+//                                        .font(.custom("Sailec Bold", size: 20))
+//                                    
+//                                    Text("Your Progress")
+//                                        .foregroundColor(.gray)
+//                                        .bold()
+//                                }
+//                                
+//                                Spacer()
+//                            }
+//                            .padding(.horizontal)
+//                            .padding(.bottom, 7)
+//
+//                            GeometryReader { geometry in
+//                                let totalWidth = geometry.size.width
+//                                let padding: CGFloat = 10
+//                                let squareWidth = (totalWidth - padding) / 2
+//                                
+//                                HStack(spacing: padding) {
+//                                    StatisticsWidget(width: squareWidth, colorA: Color(red: 152/255, green: 230/255, blue: 138/255), colorB: .green, stat: 180.5, text: "Current Weight")
+//                                }
+//                            }
+//                            .frame(height: (UIScreen.main.bounds.width - 10) / 2)
+//                            .padding(.horizontal)
+//                        }
 
                         Spacer()
                     }
@@ -297,6 +341,14 @@ struct HomeView: View {
                 if let userXPData = xpManager.userXPData {
                     FullLevelBreakdownView(userXPData: userXPData)
                 }
+            }
+            .navigationDestination(isPresented: $navigateToHealthStatTrendView, destination: {
+                if let healthStatType = self.healthStatType {
+                    HealthTrendView(healthStatType: healthStatType)
+                }
+            })
+            .navigationDestination(isPresented: $navigateToWeightTrendView) {
+                WeightTrendView()
             }
             .fullScreenCover(isPresented: $showLevelUpInformationView, content: {
                 LevelInfoView()

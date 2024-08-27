@@ -60,19 +60,33 @@ struct LibraryExerciseDataView: View {
                                 .padding(.bottom)
                         }
                     case .inProgress:
-                        ForEach($exerciseData.sets.indices, id: \.self) { index in
+                        ForEach(exerciseData.sets.indices, id: \.self) { index in
                             LibraryExerciseDataSetWidget(exerciseDataSet: $exerciseData.sets[index], isWeight: isWeight, moveToNextSet: {
                                 if !(index == exerciseData.sets.count - 1) {
                                     currentExerciseDataSetIndex += 1
                                 } else {
-                                    
+                                    sectionType = .finished
                                 }
                             })
-                                .overlay (
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .stroke(currentExerciseDataSetIndex == index ? .black : .white, lineWidth: 2)
-                                )
+                            .disabled(currentExerciseDataSetIndex == index ? false : true)
+                            .padding()
+                            .overlay (
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(currentExerciseDataSetIndex == index ? .black : .white, lineWidth: 2)
+                            )
+                            .padding()
                         }
+                    case .finished:
+                        Text("Complete!")
+                        
+                    Button {
+                        self.exerciseData = ExerciseData(sets: [])
+                        
+                        sectionType = .start
+                    } label: {
+                        Text("Restart")
+                    }
+
                 }
             }
         }
@@ -130,6 +144,8 @@ struct LibraryExerciseDataSetWidget: View {
                     .frame(width: 65)
             }
             
+            Spacer()
+            
             VStack {
                 Text("Reps")
                      .font(.custom("Sailec Bold", size: 20))
@@ -141,6 +157,16 @@ struct LibraryExerciseDataSetWidget: View {
                     )
                      .frame(width: 65)
             }
+            
+            Spacer()
+            
+            Text("\(exerciseTime)")
+            
+            Spacer()
+            
+            Text("\(restTime)")
+            
+            Spacer()
             
             if !isExercising && !isResting {
                 Button {
@@ -161,7 +187,7 @@ struct LibraryExerciseDataSetWidget: View {
                 }
             } else if isResting && !isExercising {
                 Button {
-                    if !weightText.isEmpty && !repText.isEmpty {
+                    if (!weightText.isEmpty && isWeight && !repText.isEmpty) || (!repText.isEmpty && !isWeight) {
                         repsFieldNotFilledOut = false
                         weightFieldNotFilledOut = false
                         stopTimer()
@@ -182,6 +208,7 @@ struct LibraryExerciseDataSetWidget: View {
 
             Spacer()
         }
+        .padding(.horizontal)
     }
     
     func nextSet() {

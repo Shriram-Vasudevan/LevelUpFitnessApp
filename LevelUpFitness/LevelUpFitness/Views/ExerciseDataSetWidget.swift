@@ -7,12 +7,12 @@
 
 import SwiftUI
 
+
 struct ProramExerciseDataSetWidget: View {
     @Binding var model: ExerciseDataSet
     
     @State var isExercising: Bool = false
     @State var isResting: Bool = false
-    @State var isLastSet: Bool
     
     var setIndex: Int
     
@@ -25,14 +25,7 @@ struct ProramExerciseDataSetWidget: View {
     @State var weightText: String = ""
     @State var repText: String = ""
     
-    @Binding var setCompleted: () -> Void
-    @Binding var lastSetCompleted: () -> Void
-    
-    @State var exerciseName: String
-    @State var exerciseReps: Int
-    @State var numberOfSets: Int
-    
-    @State var exitWorkout: () -> Void
+    @State var setCompleted: () -> Void
     
     @State var weightFieldNotFilledOut: Bool = false
     @State var repsFieldNotFilledOut: Bool = false
@@ -40,216 +33,137 @@ struct ProramExerciseDataSetWidget: View {
     @State var isWeight: Bool
     
     var body: some View {
-        VStack  {
+        VStack {
             HStack {
-                VStack (alignment: .center, spacing: 0) {
-                    HStack {
-                        Text(exerciseName)
-                            .font(.custom("EtruscoNowCondensed Bold", size: 50))
-                            .multilineTextAlignment(.center)
-                            .padding(.bottom, -7)
-                            .padding(.top, -10)
-                            .lineLimit(1)
-                        
-                        Spacer()
-                    }
+                VStack {
+                   Text("Weight")
+                        .font(.custom("Sailec Bold", size: 20))
+                        .opacity(isWeight ? 1 : 0.7)
                     
-                    HStack {
-                        Text("Reps per Set: \(exerciseReps)")
-                            .font(.headline)
-                            .foregroundColor(.black)
-                            .padding(.bottom)
-                        
-                        Spacer()
-                    }
+                    TextField("", text: $weightText)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 5)
+                                .stroke(weightFieldNotFilledOut ? Color.red : Color.black)
+                        )
+                        .opacity(isWeight ? 1 : 0.7)
+                        .disabled(isWeight ? false : true)
+                        .frame(width: 65)
                 }
                 
                 Spacer()
                 
-                SetCounterWidget(colorA: .blue, colorB: .cyan, stat: "\(setIndex + 1)", text: "of \(numberOfSets)", width: UIScreen.main.bounds.width / 6)
-                    .padding(.bottom, 10)
+                Text("X")
+                
+                Spacer()
+                
+                VStack {
+                    Text("Reps")
+                         .font(.custom("Sailec Bold", size: 20))
+                     
+                     TextField("", text: $repText)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 5)
+                                .stroke(repsFieldNotFilledOut ? Color.red : Color.black)
+                        )
+                         .frame(width: 65)
+                }
             }
-            .padding([.horizontal, .bottom])
+            .padding(.horizontal, 50)
+
+            Spacer()
             
-            VStack {
-                HStack {
-                    VStack {
-                       Text("Weight")
-                            .font(.custom("Sailec Bold", size: 20))
-                            .opacity(isWeight ? 1 : 0.7)
-                        
-                        TextField("", text: $weightText)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 5)
-                                    .stroke(weightFieldNotFilledOut ? Color.red : Color.black)
-                            )
-                            .opacity(isWeight ? 1 : 0.7)
-                            .disabled(isWeight ? false : true)
-                            .frame(width: 65)
-                    }
+            if !isExercising && !isResting {
+                ZStack {
+                    Text("\(timeText)")
+                        .font(.custom("EtruscoNowCondensed Bold", size: 40))
+                        .bold()
+
+                }
+            }
+            else if isExercising {
+                ZStack {
+                    Text("\(timeText)")
+                        .font(.custom("EtruscoNowCondensed Bold", size: 40))
+                        .bold()
+
+                }
+            } else if isResting && !isExercising {
+                ZStack {
+                    Text("\(restText)")
+                        .font(.custom("EtruscoNowCondensed Bold", size: 40))
+                        .bold()
                     
-                    Spacer()
-                    
-                    Text("X")
-                    
-                    Spacer()
-                    
-                    VStack {
-                        Text("Reps")
-                             .font(.custom("Sailec Bold", size: 20))
-                         
-                         TextField("", text: $repText)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 5)
-                                    .stroke(repsFieldNotFilledOut ? Color.red : Color.black)
-                            )
-                             .frame(width: 65)
-                    }
                 }
-                .padding(.horizontal, 50)
-
-                Spacer()
-                
-                if !isExercising && !isResting {
-                    ZStack {
-                        Circle()
-                            .stroke(lineWidth: 5.0)
-                            .opacity(0.3)
-                            .foregroundColor(Color.blue)
-
-                        Circle()
-                            .stroke(style: StrokeStyle(lineWidth: 10.0, lineCap: .round, lineJoin: .round))
-                            .foregroundColor(Color.blue)
-                            .rotationEffect(Angle(degrees: 270.0))
-
-                        Text("\(timeText)")
-                            .font(.custom("EtruscoNowCondensed Bold", size: 40))
-                            .bold()
-
-                    }
-                    .frame(width: UIScreen.main.bounds.width / 1.3)
-                }
-                else if isExercising {
-                    ZStack {
-                        Circle()
-                            .stroke(lineWidth: 5.0)
-                            .opacity(0.3)
-                            .foregroundColor(Color.blue)
-
-                        Circle()
-                            .stroke(style: StrokeStyle(lineWidth: 10.0, lineCap: .round, lineJoin: .round))
-                            .foregroundColor(Color.blue)
-                            .rotationEffect(Angle(degrees: 270.0))
-                            
-                        
-                        Text("\(timeText)")
-                            .font(.custom("EtruscoNowCondensed Bold", size: 40))
-                            .bold()
-
-                    }
-                    .frame(width: UIScreen.main.bounds.width / 1.3)
-                } else if isResting && !isExercising {
-                    ZStack {
-                        Circle()
-                            .stroke(lineWidth: 5.0)
-                            .opacity(0.3)
-                            .foregroundColor(Color.blue)
-                        
-                        Circle()
-                            .stroke(style: StrokeStyle(lineWidth: 10.0, lineCap: .round, lineJoin: .round))
-                            .foregroundColor(Color.blue)
-                            .rotationEffect(Angle(degrees: 270.0))
-                        
-                        Text("\(restText)")
-                            .font(.custom("EtruscoNowCondensed Bold", size: 40))
-                            .bold()
-                        
-                    }
-                    .frame(width: UIScreen.main.bounds.width / 1.3)
-                }
-                
-                if !isExercising && !isResting {
-                    Button {
-                        startTimer(for: "time")
-                        isExercising = true
-                    } label: {
-                        Text("Begin Reps")
-                            .fontWeight(.bold)
-                            .foregroundColor(.white)
-                            .frame(minWidth: 0, maxWidth: .infinity)
-                            .padding()
-                            .background(.blue)
-                            .cornerRadius(7)
-                            .shadow(radius: 3)
-                            .padding(.horizontal, 20)
-                            .padding(.vertical)
-                            .padding(.bottom)
-                    }
-                }
-                else if isExercising {
-                    Button {
-                        stopTimer()
-                        isExercising = false
-                        isResting = true
-                        startTimer(for: "rest")
-                    } label: {
-                        Text("Begin Rest")
-                            .fontWeight(.bold)
-                            .foregroundColor(.white)
-                            .frame(minWidth: 0, maxWidth: .infinity)
-                            .padding()
-                            .background(.blue)
-                            .cornerRadius(7)
-                            .shadow(radius: 3)
-                            .padding(.horizontal, 20)
-                            .padding(.vertical)
-                            .padding(.bottom)
-                    }
-                }
-                else if isResting && !isExercising {
-                    Button {
-                        if !weightText.isEmpty && !repText.isEmpty {
-                            repsFieldNotFilledOut = false
-                            weightFieldNotFilledOut = false
-                            stopTimer()
-                            isResting = false
-                            saveData()
-                            isLastSet ? lastSetCompleted() : setCompleted()
-                        }
-                        else {
-                            if weightText.isEmpty && isWeight {
-                                weightFieldNotFilledOut = true
-                            }
-                            
-                            repsFieldNotFilledOut = true
-                        }
-                    } label: {
-                        Text(isLastSet ? "Next Exercise" : "Next Set")
-                            .fontWeight(.bold)
-                            .foregroundColor(.white)
-                            .frame(minWidth: 0, maxWidth: .infinity)
-                            .padding()
-                            .background(.blue)
-                            .cornerRadius(7)
-                            .shadow(radius: 3)
-                            .padding(.horizontal, 20)
-                            .padding(.vertical)
-                            .padding(.bottom)
-                    }
-                }
-                
-                Button(action: {
-                    exitWorkout()
-                }, label: {
-                    Image(systemName: "flag.checkered.circle.fill")
-                        .resizable()
+            }
+            
+            if !isExercising && !isResting {
+                Button {
+                    startTimer(for: "time")
+                    isExercising = true
+                } label: {
+                    Text("Begin Reps")
+                        .fontWeight(.bold)
                         .foregroundColor(.white)
-                        .frame(width: 60, height: 60)
-                        .shadow(radius: 5)
-                })
-                
-                Spacer()
-                
+                        .frame(minWidth: 0, maxWidth: .infinity)
+                        .padding()
+                        .background(.blue)
+                        .cornerRadius(7)
+                        .shadow(radius: 3)
+                        .padding(.horizontal, 20)
+                        .padding(.vertical)
+                        .padding(.bottom)
+                }
+            }
+            else if isExercising {
+                Button {
+                    stopTimer()
+                    isExercising = false
+                    isResting = true
+                    startTimer(for: "rest")
+                } label: {
+                    Text("Begin Rest")
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                        .frame(minWidth: 0, maxWidth: .infinity)
+                        .padding()
+                        .background(.blue)
+                        .cornerRadius(7)
+                        .shadow(radius: 3)
+                        .padding(.horizontal, 20)
+                        .padding(.vertical)
+                        .padding(.bottom)
+                }
+            }
+            else if isResting && !isExercising {
+                Button {
+                    if (!weightText.isEmpty && isWeight && !repText.isEmpty) || (!repText.isEmpty && !isWeight) {
+                        repsFieldNotFilledOut = false
+                        weightFieldNotFilledOut = false
+                        stopTimer()
+                        isResting = false
+                        saveData()
+                        setCompleted()
+                    }
+                    else {
+                        if weightText.isEmpty && isWeight {
+                            weightFieldNotFilledOut = true
+                        }
+                        
+                        repsFieldNotFilledOut = true
+                    }
+                } label: {
+                    Text("Continue")
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                        .frame(minWidth: 0, maxWidth: .infinity)
+                        .padding()
+                        .background(.blue)
+                        .cornerRadius(7)
+                        .shadow(radius: 3)
+                        .padding(.horizontal, 20)
+                        .padding(.vertical)
+                        .padding(.bottom)
+                }
             }
         }
     }
@@ -291,5 +205,5 @@ struct ProramExerciseDataSetWidget: View {
 
 
 #Preview {
-    ProramExerciseDataSetWidget(model: .constant(ExerciseDataSet(weight: 10, reps: 5, time: 0.0, rest: 0.0)), isLastSet: false, setIndex: 0, setCompleted: .constant({}), lastSetCompleted: .constant({}), exerciseName: "Deadlift", exerciseReps: 10, numberOfSets: 10, exitWorkout: {}, isWeight: false)
+    ProramExerciseDataSetWidget(model: .constant(ExerciseDataSet(weight: 10, reps: 5, time: 0.0, rest: 0.0)), setIndex: 0, setCompleted: {}, isWeight: false)
 }

@@ -14,7 +14,6 @@ class WorkoutManager: ObservableObject {
     @Published var currentExerciseData: ExerciseData = ExerciseData(sets: [ExerciseDataSet(weight: 0, reps: 0, time: 0.0, rest: 0.0)])
     @Published var currentExerciseIndex: Int = 0
     @Published var currentSetIndex: Int = 0
-    @Published var onLastSet: Bool = false
 
     @Published var programCompletedForDay: Bool = false
     
@@ -42,11 +41,12 @@ class WorkoutManager: ObservableObject {
             var exerciseDataSets: [ExerciseDataSet] = []
             
             for _ in 0..<currentExercises[currentExerciseIndex].sets {
-                let set = ExerciseDataSet(weight: 0, reps: 0, time: 0.0, rest: 0.0)
-                exerciseDataSets.append(set)
-            }
-            
+                        let set = ExerciseDataSet(weight: 0, reps: 0, time: 0.0, rest: 0.0)
+                        exerciseDataSets.append(set)
+                    }
+
             currentExerciseData = ExerciseData(sets: exerciseDataSets)
+            currentSetIndex = 0
             print(currentExerciseData.sets)
             
             print("Initialized exercise data for exercise \(currentExerciseIndex)")
@@ -58,8 +58,10 @@ class WorkoutManager: ObservableObject {
     func moveToNextSet() {
         if currentSetIndex < currentExerciseData.sets.count - 1 {
             currentSetIndex += 1
-            onLastSet = currentSetIndex == currentExerciseData.sets.count - 1
             objectWillChange.send()
+        }
+        else {
+            moveToNextExercise()
         }
     }
     
@@ -67,7 +69,6 @@ class WorkoutManager: ObservableObject {
         if currentExerciseIndex < currentExercises.count - 1 {
             print("Moving to next exercise")
             currentSetIndex = 0
-            onLastSet = false
             
             if let programArray = programManager.program?.program,
                let programIndex = programArray.firstIndex(where: { $0.day == getCurrentWeekday() }) {

@@ -53,7 +53,7 @@ class ProgramDynamoDBUtility {
             
             return exercises
         } catch {
-            print("getExercises \(error.localizedDescription)")
+            print("getExercises \(error)")
             throw APIError.failed
         }
     }

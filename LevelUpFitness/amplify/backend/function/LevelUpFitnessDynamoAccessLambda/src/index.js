@@ -3,6 +3,8 @@ const { DocumentClient } = require('aws-sdk/clients/dynamodb');
 const { json } = require('stream/consumers');
 const { v4: uuidv4 } = require('uuid');
 
+const { DateTime } = require('luxon');
+
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
 /**
@@ -617,6 +619,83 @@ exports.handler = async (event) => {
             body: JSON.stringify("Successfully Completed Challenges")
         };
         
+    }
+    else if (event.path == "/addWeightEntry" && event.httpMethod == "PUT") {
+        const UserID = event.queryStringParameters.UserID
+        const Weight = event.queryStringParameters.Weight
+
+        const Timestamp = DateTime.utc().toISOString();
+        try {
+            const params = {
+                TableName: "weight-trend-db-dev",
+                Item: {
+                    "UserID": UserID,
+                    "Timestamp": Timestamp,
+                    "Weight": Weight
+                }
+            }
+
+            const response = await dynamoDb.put(params).promise()
+
+            return {
+                statusCode: 200,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "*"
+                },
+                body: JSON.stringify(`Successfully Added Weight ${response}`)
+            };
+        } catch (error) {
+            console.log(error)
+            return {
+                statusCode: 500,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "*"
+                },
+                body: JSON.stringify(`${error}`)
+            };
+        }
+    }
+    else if (event.path == "/getUserWeightTrend" && event.httpMethod == "GET") {
+        const UserID = event.queryStringParameters.UserID
+        const Days = event.queryStringParameters.Days
+
+        const currentDate = new Date();
+        const startDate = new Date(currentDate);
+        startDate.setDate(currentDate.getDate() - Days);
+
+        const startDateString = startDate.toISOString();
+        const endDateString = currentDate.toISOString();
+
+        try {
+            const params = {
+                TableName: 'WeightTrends', 
+                KeyConditionExpression: '#userID = :userID AND #timestamp BETWEEN :start AND :end',
+                ExpressionAttributeNames: {
+                    '#userID': 'UserID',
+                    '#timestamp': 'Timestamp'
+                },
+                ExpressionAttributeValues: {
+                    ':userID': UserID,
+                    ':start': startDateString,
+                    ':end': endDateString
+                }
+            };
+    
+            const result = await dynamoDb.query(params).promise();
+
+            return {
+                statusCode: 200,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "*"
+                },
+                body: JSON.stringify(result.Items)
+            };
+        } catch (error) {
+
+        }
     }
 
     return {

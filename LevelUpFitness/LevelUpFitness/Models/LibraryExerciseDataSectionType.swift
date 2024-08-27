@@ -8,5 +8,5 @@
 import Foundation
 
 enum LibraryExerciseDataSectionType {
-    case start, inProgress
+    case start, inProgress, finished
 }

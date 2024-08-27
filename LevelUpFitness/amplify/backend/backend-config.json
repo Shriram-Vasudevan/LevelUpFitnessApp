@@ -310,6 +310,10 @@
     "LevelUpFitnessUserXPInfo": {
       "providerPlugin": "awscloudformation",
       "service": "DynamoDB"
+    },
+    "LevelUpFitnessWeightTrendDB": {
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB"
     }
   }
 }

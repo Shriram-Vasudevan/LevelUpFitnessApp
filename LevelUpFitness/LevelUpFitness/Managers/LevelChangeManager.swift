@@ -109,7 +109,7 @@ class LevelChangeManager: ObservableObject {
         switch property {
             case "Challenge":
                 await addChallengeContribution(contribution: contribution)
-        case "Program":
+            case "Program":
                 await addProgramContribution(contribution: contribution)
             default:
                 break

@@ -12,14 +12,12 @@ struct ExerciseLibraryExercise: Codable, Hashable, Equatable {
     var name: String
     var exerciseType: String
     var progression: [Progression]
-    var isWeight: Bool
     
     enum CodingKeys: String, CodingKey {
         case id = "ID"
         case name = "Name"
         case exerciseType = "ExerciseType"
         case progression = "Progression"
-        case isWeight = "IsWeight"
     }
     
     init(from decoder: Decoder) throws {
@@ -31,13 +29,11 @@ struct ExerciseLibraryExercise: Codable, Hashable, Equatable {
         
         exerciseType = try container.decode(String.self, forKey: .exerciseType)
         
-        isWeight = try container.decode(Bool.self, forKey: .isWeight)
-        
         let progressionDict = try container.decode([String: Progression].self, forKey: .progression)
         //print("Decoded Progression Dictionary \(progressionDict)")
 
         progression = Array(progressionDict.values)
-        //print("Array \(progression)")
+        print("Array \(progression)")
     }
     
     static func preview() -> ExerciseLibraryExercise? {
@@ -52,21 +48,24 @@ struct ExerciseLibraryExercise: Codable, Hashable, Equatable {
                     "Description": "Stand with feet shoulder-width apart, toes slightly pointed out. Keep your chest up and core engaged. Lower yourself by bending your knees and hips as if sitting back into a chair until your thighs are parallel to the ground. Return to the starting position.",
                     "Level": 1,
                     "CDNURL": "https://d18etpeujljjnv.cloudfront.net/SampleExercise.mp4",
-                    "ExerciseType": "Lower Body Compound"
+                    "ExerciseType": "Lower Body Compound",
+                    "IsWeight": True
                 },
                 "Pause Squat": {
                     "Name": "Pause Squat",
                     "Description": "Perform a standard bodyweight squat, but pause for 2-3 seconds at the bottom of the movement before standing back up. This builds strength and control in the bottom position.",
                     "Level": 2,
                     "CDNURL": "https://d18etpeujljjnv.cloudfront.net/SampleExercise.mp4",
-                    "ExerciseType": "Lower Body Compound"
+                    "ExerciseType": "Lower Body Compound",
+                    "IsWeight": True
                 },
                 "Reach Squat": {
                     "Name": "Reach Squat",
                     "Description": "Perform a bodyweight squat while extending your arms straight in front of you or overhead as you lower down. This adds a challenge to your balance and engages your shoulders and upper back.",
                     "Level": 3,
                     "CDNURL": "https://d18etpeujljjnv.cloudfront.net/SampleExercise.mp4",
-                    "ExerciseType": "Lower Body Compound"
+                    "ExerciseType": "Lower Body Compound",
+                    "IsWeight": True
                 }
             }
         }]
@@ -91,6 +90,7 @@ struct Progression: Codable, Hashable, Equatable {
     var level: Int
     var cdnURL: String
     var exerciseType: String
+    var isWeight: Bool
     
     enum CodingKeys: String, CodingKey {
         case name = "Name"
@@ -98,6 +98,7 @@ struct Progression: Codable, Hashable, Equatable {
         case level = "Level"
         case cdnURL = "CDNURL"
         case exerciseType = "ExerciseType"
+        case isWeight = "IsWeight"
     }
     
     static func preview() -> Progression? {
@@ -107,7 +108,8 @@ struct Progression: Codable, Hashable, Equatable {
             "Description": "A progression focused on building muscle strength.",
             "Level": 3,
             "CDNURL": "https://example.com/strength_training.mp4",
-            "ExerciseType": "Strength"
+            "ExerciseType": "Strength",
+            "IsWeight": True
         }
         """
 

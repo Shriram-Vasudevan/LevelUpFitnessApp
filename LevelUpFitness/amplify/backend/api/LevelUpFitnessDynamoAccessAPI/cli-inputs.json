@@ -134,6 +134,27 @@
           "delete"
         ]
       }
+    },
+    "/addWeightEntry": {
+      "name": "/addWeightEntry",
+      "lambdaFunction": "LevelUpFitnessDynamoAccessLambda",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "update"
+        ]
+      }
+    },
+    "/getUserWeightTrend": {
+      "name": "/getUserWeightTrend",
+      "lambdaFunction": "LevelUpFitnessDynamoAccessLambda",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "read"
+        ]
+      }
     }
   }
 }

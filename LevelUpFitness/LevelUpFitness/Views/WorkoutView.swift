@@ -14,9 +14,6 @@ struct WorkoutView: View {
     
     @Environment(\.dismiss) var dismiss
     
-    @State private var setCompleted: () -> Void = {}
-    @State private var lastSetCompleted: () -> Void = {}
-    
     init(programManager: ProgramManager, xpManager: XPManager) {
         _workoutManager = StateObject(wrappedValue: WorkoutManager(programManager: programManager, xpManager: xpManager))
         self.programManager = programManager
@@ -41,26 +38,13 @@ struct WorkoutView: View {
                             }
                         }
                 } else {
-                    WorkoutContent(workoutManager: workoutManager, programManager: programManager, xpManager: xpManager, dismiss: dismiss, setCompleted: $setCompleted, lastSetCompleted: $lastSetCompleted)
+                    WorkoutContent(workoutManager: workoutManager, programManager: programManager, xpManager: xpManager, dismiss: dismiss)
                 }
             }
             .navigationBarBackButtonHidden()
             .onAppear {
-                workoutManager.initializeExerciseData() 
-                setupCallbacks()
+                workoutManager.initializeExerciseData()
             }
-        }
-    }
-    
-    private func setupCallbacks() {
-        setCompleted = {
-            print("Moving to next set")
-            workoutManager.moveToNextSet()
-        }
-        
-        lastSetCompleted =  {
-            print("Moving to next exercise")
-            workoutManager.moveToNextExercise()
         }
     }
 }
@@ -71,48 +55,86 @@ struct WorkoutContent: View {
     @ObservedObject var xpManager: XPManager
     
     var dismiss: DismissAction
-    @Binding var setCompleted: () -> Void
-    @Binding var lastSetCompleted: () -> Void
     
     var body: some View {
         VStack (spacing: 0) {
             WorkoutHeader(dismiss: dismiss)
             
-            ProramExerciseDataSetWidget(
-                model: $workoutManager.currentExerciseData.sets[workoutManager.currentSetIndex],
-                isLastSet: workoutManager.onLastSet,
-                setIndex: workoutManager.currentSetIndex,
-                setCompleted: $setCompleted,
-                lastSetCompleted: $lastSetCompleted,
-                exerciseName: workoutManager.currentExercises[workoutManager.currentExerciseIndex].name, exerciseReps: workoutManager.currentExercises[workoutManager.currentExerciseIndex].reps, numberOfSets: workoutManager.currentExerciseData.sets.count, exitWorkout: {
-                    Task {
-                        if let todaysProgram = programManager.program?.program.first(where: { $0.day == getCurrentWeekday() }) {   
-                            print("uploading new status")
-                            await programManager.uploadNewProgramStatus(completion: { success in
-                                    if success {
-                                        dismiss()
-                                    } else {
-                                        
-                                    }
-                                })
-                        }
+            HStack {
+                VStack (alignment: .center, spacing: 0) {
+                    HStack {
+                        Text(workoutManager.currentExercises[workoutManager.currentExerciseIndex].name)
+                            .font(.custom("EtruscoNowCondensed Bold", size: 50))
+                            .multilineTextAlignment(.center)
+                            .padding(.bottom, -7)
+                            .padding(.top, -10)
+                            .lineLimit(1)
+                        
+                        Spacer()
                     }
-                }, isWeight: workoutManager.currentExercises[workoutManager.currentExerciseIndex].isWeight
-            )
-            .id("\(workoutManager.currentExerciseIndex)-\(workoutManager.currentSetIndex)")
-            .onChange(of: workoutManager.programCompletedForDay, { oldValue, newValue in
-                if newValue {
-                    dismiss()
                     
-                    GlobalCoverManager.shared.showProgramDayCompletion()
+                    HStack {
+                        Text("Reps per Set: \(workoutManager.currentExercises[workoutManager.currentExerciseIndex].reps)")
+                            .font(.headline)
+                            .foregroundColor(.black)
+                            .padding(.bottom)
+                        
+                        Spacer()
+                    }
                 }
-            })
-            .background(
-                RoundedRectangle(cornerRadius: 10, style: .continuous)
-                    .fill(.white)
-            )
-            .edgesIgnoringSafeArea(.bottom)
+                
+                Spacer()
+            }
+            .padding(.horizontal)
+            
+            ScrollView(.vertical) {
+                
+                ForEach(Array(workoutManager.currentExerciseData.sets.enumerated()), id: \.offset) { index, set in
+                    let isCurrentSet = index == workoutManager.currentSetIndex
+                    let isWeightExercise = workoutManager.currentExercises[workoutManager.currentExerciseIndex].isWeight
+                    
+                    ProramExerciseDataSetWidget(
+                        model: $workoutManager.currentExerciseData.sets[index],
+                        setIndex: index,
+                        setCompleted: {
+                            workoutManager.moveToNextSet()
+                        },
+                        isWeight: isWeightExercise
+                    )
+                    .disabled(!isCurrentSet)
+                    .padding()
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(isCurrentSet ? Color.black : Color.white, lineWidth: 2)
+                    )
+                    .padding()
+                }
+                
+                
+                Button(action: {
+                    exitWorkout()
+                }, label: {
+                    Image(systemName: "flag.checkered.circle.fill")
+                        .resizable()
+                        .foregroundColor(.white)
+                        .frame(width: 60, height: 60)
+                        .shadow(radius: 5)
+                })
+            }
         }
+        .background(content: {
+            Rectangle()
+                .fill(.white)
+                .edgesIgnoringSafeArea(.bottom)
+        })
+        .onChange(of: workoutManager.programCompletedForDay, { oldValue, newValue in
+            if newValue {
+                dismiss()
+                
+                GlobalCoverManager.shared.showProgramDayCompletion()
+            }
+        })
+        .id(workoutManager.currentExerciseIndex)
     }
     
     func getCurrentWeekday() -> String {
@@ -121,6 +143,21 @@ struct WorkoutContent: View {
         dateFormatter.dateFormat = "EEEE"
         
         return dateFormatter.string(from: date)
+    }
+    
+    func exitWorkout() {
+        Task {
+            if let todaysProgram = programManager.program?.program.first(where: { $0.day == getCurrentWeekday() }) {
+                print("uploading new status")
+                await programManager.uploadNewProgramStatus(completion: { success in
+                        if success {
+                            dismiss()
+                        } else {
+                            
+                        }
+                    })
+            }
+        }
     }
 }
 

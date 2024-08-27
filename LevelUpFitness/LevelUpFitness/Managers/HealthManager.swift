@@ -1,5 +1,6 @@
 import Foundation
 import HealthKit
+import SwiftUI
 
 @MainActor
 class HealthManager: ObservableObject {
@@ -39,7 +40,7 @@ class HealthManager: ObservableObject {
         getTodaysCalories()
         getTodaysDistance()
     }
-    
+        
     func getTodaysSteps() {
         let stepsQuantityType = HKQuantityType.quantityType(forIdentifier: .stepCount)!
         
@@ -245,7 +246,7 @@ class HealthManager: ObservableObject {
                         
                         DispatchQueue.main.sync {
                             self.todaysDistance = (count: Int(todaysDistance), comparison: comparison)
-                        }               
+                        }
                     }
                 }
             }
@@ -281,6 +282,61 @@ class HealthManager: ObservableObject {
             
             let distance = sum.doubleValue(for: .meter())
             completion(distance)
+        }
+        
+        healthStore.execute(query)
+    }
+
+    func fetchHistoricalData(forLastNDays days: Int, quantityType identifier: HKQuantityTypeIdentifier, completion: @escaping ([HealthDataPoint]) -> Void) {
+        guard let quantityType = HKQuantityType.quantityType(forIdentifier: identifier) else {
+            completion([])
+            return
+        }
+        
+        let calendar = Calendar.current
+        let now = Date()
+        let startDate = calendar.date(byAdding: .day, value: -days, to: now)!
+        let anchorDate = calendar.startOfDay(for: now)
+        
+        let predicate = HKQuery.predicateForSamples(withStart: startDate, end: now, options: .strictStartDate)
+        
+        let query = HKStatisticsCollectionQuery(
+            quantityType: quantityType,
+            quantitySamplePredicate: predicate,
+            options: .cumulativeSum,
+            anchorDate: anchorDate,
+            intervalComponents: DateComponents(day: 1)
+        )
+        
+        query.initialResultsHandler = { _, results, error in
+            var dataPoints: [HealthDataPoint] = []
+            
+            guard let results = results else {
+                print("Failed to fetch historical data: \(String(describing: error))")
+                completion(dataPoints)
+                return
+            }
+            
+            results.enumerateStatistics(from: startDate, to: now) { statistics, _ in
+                if let sum = statistics.sumQuantity() {
+                    var value: Double
+                
+                    if identifier == .stepCount {
+                        value = sum.doubleValue(for: .count())
+                    } else if identifier == .distanceWalkingRunning {
+                        value = sum.doubleValue(for: .meter()) / 1000.0
+                    } else if identifier == .activeEnergyBurned {
+                        value = sum.doubleValue(for: .kilocalorie())
+                    } else {
+                        value = 0
+                    }
+                    
+                    let date = statistics.startDate
+                    dataPoints.append(HealthDataPoint(date: date, value: value))
+                }
+            }
+            
+            completion(dataPoints)
         }
         
         healthStore.execute(query)
