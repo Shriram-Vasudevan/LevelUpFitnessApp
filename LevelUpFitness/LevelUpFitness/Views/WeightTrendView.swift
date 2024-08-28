@@ -25,6 +25,7 @@ struct WeightTrendView: View {
                                 await trendManager.addWeightToTrend(weight: weight)
                                 self.weight = ""
                                 await updateChartData()
+                                ToDoListManager.shared.weightAdded()
                             }
                         }
                     } label: {
@@ -82,6 +83,14 @@ struct WeightTrendView: View {
         maxValue = (sortedTrend.map { $0.value }.max() ?? 200) * 1.1
         minDate = sortedTrend.first?.date ?? Date()
         maxDate = sortedTrend.last?.date ?? Date()
+        
+        let calendar = Calendar.current
+        if sortedTrend.first(where: { dataPoint in
+            calendar.isDateInToday(dataPoint.date)
+        }) != nil {
+            print("Data point")
+            ToDoListManager.shared.weightAdded()
+        }
     }
 }
 

@@ -55,27 +55,30 @@ class LocalStorageUtility {
     }
 
     static func fileModifiedToday(at path: String) -> Bool {
-        guard let documentsDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return false }
+        guard let documentsDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            return false
+        }
+        
         let fileURL = documentsDirectoryURL.appendingPathComponent(path)
         
         do {
             let fileAttributes = try FileManager.default.attributesOfItem(atPath: fileURL.path)
             
             if let modificationDate = fileAttributes[FileAttributeKey.modificationDate] as? Date {
-                if Date() == modificationDate
-                {
+                let calendar = Calendar.current
+                if calendar.isDateInToday(modificationDate) {
                     return true
                 }
-                
                 return false
             }
         } catch {
-            print(error)
+            print("file modification error \(error)")
             return false
         }
         
         return false
     }
+
     
     
     static func fileModifiedInLast24Hours(at path: String) -> Bool {
@@ -115,6 +118,8 @@ class LocalStorageUtility {
         guard let documentsDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
         let fileURL = documentsDirectoryURL.appendingPathComponent(path)
         
+        print("appending")
+        
         guard let newlineData = "\n".data(using: .utf8) else {
             print("Failed to encode the newline character as UTF-8 data.")
             return
@@ -129,8 +134,11 @@ class LocalStorageUtility {
                     try fileHandle.seekToEnd()
                     fileHandle.write(data)
                     fileHandle.write(newlineData)
+                    
+                    print("writing")
                 }
             } else {
+                print("does not exist")
                 try (data + newlineData).write(to: fileURL)
             }
         } catch {
@@ -146,7 +154,7 @@ class LocalStorageUtility {
         do {
             let directoryURL = fileURL.deletingLastPathComponent()
             if !FileManager.default.fileExists(atPath: directoryURL.path) {
-                try FileManager.default.createDirectory(at: directoryURL, withIntermediateDirectories: true, attributes: nil)
+                print("file does not exist")
             }
             
             try "".write(to: fileURL, atomically: true, encoding: .utf8)

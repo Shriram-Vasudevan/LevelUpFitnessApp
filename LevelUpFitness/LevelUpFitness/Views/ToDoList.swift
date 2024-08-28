@@ -12,6 +12,15 @@ struct ToDoList: View {
     
     var body: some View {
         VStack {
+            HStack {
+                Text("Today's To Do")
+                    .font(.title)
+                    .bold()
+                
+                Spacer()
+            }
+            .padding(.bottom)
+            
             if toDoListManager.toDoList.count > 0 {
                 ForEach(toDoListManager.toDoList, id: \.id) { toDoListTask in
                     HStack {

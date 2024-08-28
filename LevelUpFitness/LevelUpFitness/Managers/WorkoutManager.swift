@@ -107,6 +107,8 @@ class WorkoutManager: ObservableObject {
             
             print("Workout completed")
             
+            saveProgramStatus()
+            
             Task {
                 await LevelChangeManager.shared.addNewLevelChange(property: "Program", contribution: 5) 
                 await XPManager.shared.addXPToDB()
@@ -115,6 +117,20 @@ class WorkoutManager: ObservableObject {
             ToDoListManager.shared.programCompleted()
             
             programCompletedForDay = true
+        }
+    }
+    
+    func saveProgramStatus() {
+        Task {
+            if let todaysProgram = programManager.program?.program.first(where: { $0.day == getCurrentWeekday() }) {
+                print("uploading new status")
+                await programManager.uploadNewProgramStatus(completion: { success in
+                        if success {
+                        } else {
+                            
+                        }
+                    })
+            }
         }
     }
   

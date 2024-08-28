@@ -16,5 +16,5 @@ struct ToDoListTask: Identifiable, Codable {
 }
 
 enum ToDoListTaskType: Codable {
-    case program, steps
+    case program, steps, weight
 }

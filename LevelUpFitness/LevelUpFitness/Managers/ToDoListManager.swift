@@ -37,7 +37,8 @@ class ToDoListManager: ObservableObject {
                 }
                 
                 HealthManager.shared.fetchAverageSteps(forLastNDays: 7) { averageSteps in
-                    let goalSteps = averageSteps + 500
+                    var goalSteps = averageSteps + 500
+                    goalSteps = ((goalSteps + 50) / 100) * 100
                     let taskDescription = "Reach \(Int(goalSteps)) steps today"
                     let stepTask = ToDoListTask(id: UUID().uuidString, description: taskDescription, completed: false, completionValue: goalSteps, taskType: .steps)
                     
@@ -48,6 +49,15 @@ class ToDoListManager: ObservableObject {
                     if let stepTaskData = try? jsonEncoder.encode(stepTask) {
                         LocalStorageUtility.appendDataToDocumentsDirectoryFile(at: "todoList.json", data: stepTaskData)
                     }
+                }
+                
+                let weightTask = ToDoListTask(id: UUID().uuidString, description: "Add your Weight Today", completed: false, taskType: .weight)
+                DispatchQueue.main.async {
+                    self.toDoList.append(weightTask)
+                }
+                
+                if let weightTaskData = try? jsonEncoder.encode(weightTask) {
+                    LocalStorageUtility.appendDataToDocumentsDirectoryFile(at: "todoList.json", data: weightTaskData)
                 }
                 
                 print("to do list \(toDoList)")
@@ -96,6 +106,17 @@ class ToDoListManager: ObservableObject {
         }) {
             toDoList[programTaskIndex].completed = true
             let taskID = toDoList[programTaskIndex].id
+            LocalStorageUtility.updateTaskCompletionInFile(taskID: taskID, completed: true)
+            
+        }
+    }
+    
+    func weightAdded() {
+        if let weightTaskIndex = toDoList.firstIndex(where: { toDoListTask in
+            toDoListTask.taskType == .weight
+        }) {
+            toDoList[weightTaskIndex].completed = true
+            let taskID = toDoList[weightTaskIndex].id
             LocalStorageUtility.updateTaskCompletionInFile(taskID: taskID, completed: true)
             
         }

@@ -14,6 +14,8 @@ struct WorkoutView: View {
     
     @Environment(\.dismiss) var dismiss
     
+    @State var navigateToExerciseVideoView: Bool = false
+    
     init(programManager: ProgramManager, xpManager: XPManager) {
         _workoutManager = StateObject(wrappedValue: WorkoutManager(programManager: programManager, xpManager: xpManager))
         self.programManager = programManager
@@ -38,9 +40,12 @@ struct WorkoutView: View {
                             }
                         }
                 } else {
-                    WorkoutContent(workoutManager: workoutManager, programManager: programManager, xpManager: xpManager, dismiss: dismiss)
+                    WorkoutContent(workoutManager: workoutManager, programManager: programManager, xpManager: xpManager, navigateToExerciseVideoView: $navigateToExerciseVideoView, dismiss: dismiss)
                 }
             }
+            .navigationDestination(isPresented: $navigateToExerciseVideoView, destination: {
+                FullPageVideoView(cdnURL: workoutManager.currentExercises[workoutManager.currentExerciseIndex].CDNURL)
+            })
             .navigationBarBackButtonHidden()
             .onAppear {
                 workoutManager.initializeExerciseData()
@@ -53,6 +58,8 @@ struct WorkoutContent: View {
     @ObservedObject var workoutManager: WorkoutManager
     @ObservedObject var programManager: ProgramManager
     @ObservedObject var xpManager: XPManager
+    
+    @Binding var navigateToExerciseVideoView: Bool
     
     var dismiss: DismissAction
     
@@ -87,6 +94,10 @@ struct WorkoutContent: View {
             }
             .padding(.horizontal)
             
+            Text("view video")
+                .onTapGesture {
+                    navigateToExerciseVideoView = true
+                }
             ScrollView(.vertical) {
                 
                 ForEach(Array(workoutManager.currentExerciseData.sets.enumerated()), id: \.offset) { index, set in

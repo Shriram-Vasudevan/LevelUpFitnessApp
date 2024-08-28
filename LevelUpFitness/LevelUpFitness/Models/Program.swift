@@ -39,6 +39,7 @@ struct ProgramExercise: Codable, Hashable {
     var area: String
     var isWeight: Bool
     var completed: Bool
+    var CDNURL: String
     var data: ExerciseData
 }
 
