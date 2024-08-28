@@ -705,6 +705,91 @@ exports.handler = async (event) => {
             };
         }
     }
+    else if (event.path == "/addLevelEntry" && event.httpMethod == "PUT") {
+        const UserID = event.queryStringParameters.UserID
+        const Level = event.queryStringParameters.Level
+
+        const Timestamp = DateTime.utc().toISO();
+        try {
+            const params = {
+                TableName: "level-trend-db-dev",
+                Item: {
+                    "UserID": UserID,
+                    "Timestamp": Timestamp,
+                    "Level": Level
+                }
+            }
+
+            const response = await dynamoDb.put(params).promise()
+
+            return {
+                statusCode: 200,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "*"
+                },
+                body: JSON.stringify(`Successfully Added Level ${response}`)
+            };
+        } catch (error) {
+            console.log(error)
+            return {
+                statusCode: 500,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "*"
+                },
+                body: JSON.stringify(`${error}`)
+            };
+        }
+    }
+    else if (event.path == "/getUserLevelTrend" && event.httpMethod == "GET") {
+        const UserID = event.queryStringParameters.UserID
+        const Days = event.queryStringParameters.Days
+
+        const currentDate = new Date();
+        const startDate = new Date(currentDate);
+        startDate.setDate(currentDate.getDate() - Days);
+
+        const startDateString = startDate.toISOString();
+        const endDateString = currentDate.toISOString();
+
+        try {
+            const params = {
+                TableName: "level-trend-db-dev", 
+                KeyConditionExpression: "#userID = :userID AND #timestamp BETWEEN :start AND :end",
+                ExpressionAttributeNames: {
+                    "#userID": "UserID",
+                    "#timestamp": "Timestamp"
+                },
+                ExpressionAttributeValues: {
+                    ':userID': UserID,
+                    ':start': startDateString,
+                    ':end': endDateString
+                }
+            };
+    
+            const result = await dynamoDb.query(params).promise();
+
+            return {
+                statusCode: 200,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "*"
+                },
+                body: JSON.stringify(result.Items)
+            };
+        } catch (error) {
+            console.log(error)
+            return {
+                statusCode: 500,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "*"
+                },
+                body: JSON.stringify(`${error}`)
+            };
+        }
+    }
 
     return {
         statusCode: 200,

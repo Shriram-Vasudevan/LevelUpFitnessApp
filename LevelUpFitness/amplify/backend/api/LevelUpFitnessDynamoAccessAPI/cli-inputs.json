@@ -155,6 +155,27 @@
           "read"
         ]
       }
+    },
+    "/getUserLevelTrend": {
+      "name": "/getUserLevelTrend",
+      "lambdaFunction": "LevelUpFitnessDynamoAccessLambda",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "read"
+        ]
+      }
+    },
+    "/addLevelEntry": {
+      "name": "/addLevelEntry",
+      "lambdaFunction": "LevelUpFitnessDynamoAccessLambda",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "update"
+        ]
+      }
     }
   }
 }

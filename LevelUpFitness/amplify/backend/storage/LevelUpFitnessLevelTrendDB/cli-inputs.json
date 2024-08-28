@@ -1,0 +1,14 @@
+{
+  "resourceName": "LevelUpFitnessLevelTrendDB",
+  "tableName": "level-trend-db",
+  "partitionKey": {
+    "fieldName": "UserID",
+    "fieldType": "string"
+  },
+  "sortKey": {
+    "fieldName": "Timestamp",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}

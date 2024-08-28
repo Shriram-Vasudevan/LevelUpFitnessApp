@@ -344,7 +344,7 @@ struct HomeView: View {
             .navigationBarBackButtonHidden()
             .navigationDestination(isPresented: $showFullLevelBreakdownView) {
                 if let userXPData = xpManager.userXPData {
-                    FullLevelBreakdownView(userXPData: userXPData)
+                    FullLevelBreakdownView()
                 }
             }
             .navigationDestination(isPresented: $navigateToHealthStatTrendView, destination: {

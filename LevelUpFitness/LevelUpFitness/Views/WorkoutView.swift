@@ -44,7 +44,11 @@ struct WorkoutView: View {
                 }
             }
             .navigationDestination(isPresented: $navigateToExerciseVideoView, destination: {
-                FullPageVideoView(cdnURL: workoutManager.currentExercises[workoutManager.currentExerciseIndex].CDNURL)
+                if workoutManager.currentExerciseIndex < workoutManager.currentExercises.count {
+                    FullPageVideoView(cdnURL: workoutManager.currentExercises[workoutManager.currentExerciseIndex].cdnURL)
+                } else {
+                    Text("No video available").foregroundColor(.white)
+                }
             })
             .navigationBarBackButtonHidden()
             .onAppear {
@@ -98,6 +102,7 @@ struct WorkoutContent: View {
                 .onTapGesture {
                     navigateToExerciseVideoView = true
                 }
+            
             ScrollView(.vertical) {
                 
                 ForEach(Array(workoutManager.currentExerciseData.sets.enumerated()), id: \.offset) { index, set in

@@ -290,6 +290,10 @@
       "providerPlugin": "awscloudformation",
       "service": "DynamoDB"
     },
+    "LevelUpFitnessLevelTrendDB": {
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB"
+    },
     "LevelUpFitnessStorage": {
       "dependsOn": [],
       "providerPlugin": "awscloudformation",

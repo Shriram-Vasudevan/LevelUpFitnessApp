@@ -71,11 +71,15 @@ class XPManager: ObservableObject {
                 
             
                 let newLevel = calculateLevel(fromXP: userXPData.xp)
-                userXPData.level = newLevel
+                userXPData.level = newLevel.0
                         
-                userXPData.xpNeeded = calculateXPForLevel(newLevel)
+                userXPData.xpNeeded = calculateXPForLevel(newLevel.0)
                 
                 Task {
+                    if newLevel.1 {
+                        await TrendManager.shared.addLevelToTrend(level: newLevel.0)
+                    }
+                    
                     await ChallengeManager.shared.checkForChallengeCompletion(challengeField: "Level", newValue: userXPData.level)
                 }
         }
@@ -107,20 +111,23 @@ class XPManager: ObservableObject {
         }
     }
     
-    func calculateLevel(fromXP xp: Int) -> Int {
+    func calculateLevel(fromXP xp: Int) -> (Int, Bool) {
         if xp < 50 {
-            return 1
+            return (1, false)
         }
-
+        
+        var levelIncremented: Bool = false
+        
         var level = 1
         var accumulatedXP = 50
 
         while xp >= accumulatedXP {
             level += 1
             accumulatedXP += level * 30
+            levelIncremented = true
         }
 
-        return level
+        return (level, levelIncremented)
     }
 
     func calculateXPForLevel(_ level: Int) -> Int {

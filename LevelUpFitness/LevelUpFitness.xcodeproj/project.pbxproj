@@ -105,6 +105,7 @@
 		9978CDFC2C7D8A6200659813 /* TrendManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9978CDFB2C7D8A6200659813 /* TrendManager.swift */; };
 		9978CDFE2C7E5CE700659813 /* ToDoListTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9978CDFD2C7E5CE700659813 /* ToDoListTask.swift */; };
 		9978CE002C7E69D200659813 /* ToDoList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9978CDFF2C7E69D200659813 /* ToDoList.swift */; };
+		9978CE022C7FC96C00659813 /* ExerciseData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9978CE012C7FC96C00659813 /* ExerciseData.swift */; };
 		998475182BFC18F200295C6E /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998475172BFC18F200295C6E /* AuthenticationManager.swift */; };
 		998ADA6A2C56FA28008C2795 /* ConfirmLeaveProgramWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998ADA692C56FA28008C2795 /* ConfirmLeaveProgramWidget.swift */; };
 		998DA0152C1A18940078E882 /* ViewModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998DA0142C1A18940078E882 /* ViewModifiers.swift */; };
@@ -234,6 +235,7 @@
 		9978CDFB2C7D8A6200659813 /* TrendManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendManager.swift; sourceTree = "<group>"; };
 		9978CDFD2C7E5CE700659813 /* ToDoListTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoListTask.swift; sourceTree = "<group>"; };
 		9978CDFF2C7E69D200659813 /* ToDoList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoList.swift; sourceTree = "<group>"; };
+		9978CE012C7FC96C00659813 /* ExerciseData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseData.swift; sourceTree = "<group>"; };
 		998475172BFC18F200295C6E /* AuthenticationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationManager.swift; sourceTree = "<group>"; };
 		998ADA692C56FA28008C2795 /* ConfirmLeaveProgramWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmLeaveProgramWidget.swift; sourceTree = "<group>"; };
 		998DA0142C1A18940078E882 /* ViewModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModifiers.swift; sourceTree = "<group>"; };
@@ -414,7 +416,6 @@
 				99FC9E452C5EC1F900DAFFAC /* AnalyticsView.swift */,
 				99FC9E472C5EC56B00DAFFAC /* RequestCustomProgramWidget.swift */,
 				992F26A22C60079200F25400 /* ProgramSummaryView.swift */,
-				992F26A42C6032A100F25400 /* FullLevelBreakdownView.swift */,
 				992F26A62C61225300F25400 /* LevelInfoView.swift */,
 				992F26AA2C626FC300F25400 /* ProfileView.swift */,
 				991FB43F2C628084006B4ACE /* HealthStatsWidget.swift */,
@@ -434,6 +435,7 @@
 				9978CDEF2C7C22E800659813 /* ExerciseDataSetWidget.swift */,
 				9978CDF12C7C22F500659813 /* LibraryExerciseDataView.swift */,
 				9978CDF72C7D79C700659813 /* HealthTrendView.swift */,
+				992F26A42C6032A100F25400 /* FullLevelBreakdownView.swift */,
 				9978CDF92C7D83C700659813 /* WeightTrendView.swift */,
 				9978CDFF2C7E69D200659813 /* ToDoList.swift */,
 			);
@@ -493,6 +495,7 @@
 				9978CDF32C7C233D00659813 /* LibraryExerciseDataSectionType.swift */,
 				9978CDF52C7D797C00659813 /* HealthDataPoint.swift */,
 				9978CDFD2C7E5CE700659813 /* ToDoListTask.swift */,
+				9978CE012C7FC96C00659813 /* ExerciseData.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -759,6 +762,7 @@
 				991FB4752C69394D006B4ACE /* LevelChangeWidget.swift in Sources */,
 				994E7DC72C03DE5400BAD9E0 /* PascalCaseCodingKey.swift in Sources */,
 				994E7DB72C026A1D00BAD9E0 /* AuthStateObserver.swift in Sources */,
+				9978CE022C7FC96C00659813 /* ExerciseData.swift in Sources */,
 				998DA0172C1A34840078E882 /* ChatView.swift in Sources */,
 				99FC9E462C5EC1F900DAFFAC /* AnalyticsView.swift in Sources */,
 				994E7DC52C03AC3E00BAD9E0 /* DatabaseManager.swift in Sources */,

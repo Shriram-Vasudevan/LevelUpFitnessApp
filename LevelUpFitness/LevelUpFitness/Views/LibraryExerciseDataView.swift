@@ -18,6 +18,7 @@ struct LibraryExerciseDataView: View {
     @State var currentExerciseDataSetIndex: Int = 0
     
     var isWeight: Bool
+    var exerciseType: String
     
     var body: some View {
         ZStack {
@@ -65,6 +66,13 @@ struct LibraryExerciseDataView: View {
                                 if !(index == exerciseData.sets.count - 1) {
                                     currentExerciseDataSetIndex += 1
                                 } else {
+                                    let xpAdditionType = getExerciseTypeEnum(exerciseType: exerciseType)
+                                    
+                                    Task {
+                                        await XPManager.shared.addXP(increment: 5, type: xpAdditionType)
+                                        await XPManager.shared.addXPToDB()
+                                    }
+                                    
                                     sectionType = .finished
                                 }
                             })
@@ -101,6 +109,15 @@ struct LibraryExerciseDataView: View {
             self.exerciseData.sets.append(ExerciseDataSet(weight: 0, reps: 0, time: 0.0, rest: 0.0))
         }
         
+    }
+    
+    func getExerciseTypeEnum(exerciseType: String) -> XPAdditionType {
+        switch exerciseType {
+            case "Lower Body Compound":
+                return .lowerBodyCompound
+            default:
+                return .lowerBodyCompound
+        }
     }
 }
 
@@ -248,5 +265,5 @@ struct LibraryExerciseDataSetWidget: View {
 }
 
 #Preview {
-    LibraryExerciseDataView(exerciseData: ExerciseData(sets: []), isWeight: false)
+    LibraryExerciseDataView(exerciseData: ExerciseData(sets: []), isWeight: false, exerciseType: "LowerBody")
 }

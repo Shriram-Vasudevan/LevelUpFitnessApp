@@ -42,7 +42,7 @@ struct PagesHolderView: View {
                     )
                     .preferredColorScheme(.light)
                 case .levelBreakdown:
-                    FullLevelBreakdownView(userXPData: XPManager.shared.userXPData ?? XPData(userID: "", level: 0, xp: 0, xpNeeded: 0, subLevels: Sublevels(lowerBodyCompound: XPAttribute(xp: 0, level: 0, xpNeeded: 0), lowerBodyIsolation: XPAttribute(xp: 0, level: 0, xpNeeded: 0), upperBodyCompound: XPAttribute(xp: 0, level: 0, xpNeeded: 0), upperBodyIsolation: XPAttribute(xp: 0, level: 0, xpNeeded: 0))))
+                    FullLevelBreakdownView()
                 case .program:
                     ProgramView(
                         programManager: programManager,

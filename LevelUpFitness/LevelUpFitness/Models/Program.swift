@@ -39,18 +39,7 @@ struct ProgramExercise: Codable, Hashable {
     var area: String
     var isWeight: Bool
     var completed: Bool
-    var CDNURL: String
+    var cdnURL: String
     var data: ExerciseData
-}
-
-struct ExerciseData: Codable, Hashable {
-    var sets: [ExerciseDataSet]
-}
-
-struct ExerciseDataSet: Codable, Hashable {
-    var weight: Int
-    var reps: Int
-    var time: Double
-    var rest: Double
 }
 
