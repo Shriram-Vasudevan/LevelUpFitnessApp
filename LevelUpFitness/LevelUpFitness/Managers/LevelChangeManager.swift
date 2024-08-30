@@ -105,12 +105,19 @@ class LevelChangeManager: ObservableObject {
         }
     }
 
-    func addNewLevelChange(property: String, contribution: Int) async {
+    func createNewLevelChange(property: String, contribution: Int) async {
         switch property {
             case "Challenge":
-                await addChallengeContribution(contribution: contribution)
+                await addLevelChange(contribution: contribution, keyword: "Challenge", description: "You completed your challenge!")
             case "Program":
-                await addProgramContribution(contribution: contribution)
+                await addLevelChange(contribution: contribution, keyword: "Program", description: "Completed your program for today!")
+            case "AddedWeight":
+                await addLevelChange(contribution: contribution, keyword: "AddedWeight", description: "For adding your Weight today!")
+            case "MetStepsGoal":
+                await addLevelChange(contribution: contribution, keyword: "MetStepsGoal", description: "You crushed your steps goal!")
+            case "MetXPGoal":
+                await addLevelChange(contribution: contribution, keyword: "MetXPGoal", description: "You're on top of your XP!")
+            
             default:
                 break
         }
@@ -195,25 +202,17 @@ class LevelChangeManager: ObservableObject {
         }
     }
     
-    func addChallengeContribution(contribution: Int) async {
+    func addLevelChange(contribution: Int, keyword: String, description: String) async {
         do {
+            print("adding level change")
             let userID = try await Amplify.Auth.getCurrentUser().userId
             
-            let levelChangeInfo = LevelChangeInfo(keyword: "Challenge", description: "You completed your challenge!", change: contribution, timestamp: Date().ISO8601Format())
-            appendLevelChangeToFile(levelChangeInfo: levelChangeInfo, contribution: contribution, userID: userID)
-        } catch {
-            print(error)
-        }
-    }
-    
-    func addProgramContribution(contribution: Int) async {
-        do {
-            let userID = try await Amplify.Auth.getCurrentUser().userId
+            let levelChangeInfo = LevelChangeInfo(keyword: keyword, description: description, change: contribution, timestamp: Date().ISO8601Format())
             
-            let levelChangeInfo = LevelChangeInfo(keyword: "Program", description: "You completed your program for the day!", change: contribution, timestamp: Date().ISO8601Format())
+            print("level change info \(levelChangeInfo)")
             appendLevelChangeToFile(levelChangeInfo: levelChangeInfo, contribution: contribution, userID: userID)
         } catch {
-            print(error)
+            print("add level change error \(error)")
         }
     }
     

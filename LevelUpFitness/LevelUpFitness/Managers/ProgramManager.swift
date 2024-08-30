@@ -20,8 +20,8 @@ class ProgramManager: ObservableObject {
     
     @Published var exercises: [ExerciseLibraryExercise] = []
 
-    func joinStandardProgram(programName: String, badgeManager: BadgeManager) async {
-        await ProgramS3Utility.joinStandardProgram(programName: programName, badgeManager: badgeManager, completion: { result in
+    func joinStandardProgram(programName: String) async {
+        await ProgramS3Utility.joinStandardProgram(programName: programName, completion: { result in
             switch result {
                 case .success(let program):
                     DispatchQueue.main.sync {
@@ -66,7 +66,7 @@ class ProgramManager: ObservableObject {
         self.program = nil
     }
     
-    func getUserProgram(badgeManager: BadgeManager) async {
+    func getUserProgram() async {
         if let (programName, startDate) = await ProgramDynamoDBUtility.getUserProgramDBRepresentation()  {
             let endDate = DateUtility.getDateNWeeksAfterDate(dateString: startDate, weeks: 4)
             do {
@@ -131,7 +131,7 @@ class ProgramManager: ObservableObject {
                     self.retrievingProgram = false
                 }
                 
-                await ProgramS3Utility.joinStandardProgram(programName: programName, badgeManager: badgeManager, completion: { result in
+                await ProgramS3Utility.joinStandardProgram(programName: programName, completion: { result in
                     switch result {
                         case .success(let program):
                             self.program = program

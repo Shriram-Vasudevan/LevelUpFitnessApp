@@ -15,13 +15,14 @@ struct NotificationManager {
     init() {
         askPermission()
         
-        Task {
-            do {
-                let user = try await Amplify.Auth.getCurrentUser().userId
-                try await Amplify.Notifications.Push.identifyUser(userId: user)
-            } catch {
-                print("Failed to get userID: \(error)")
-            }
+    }
+    
+    func identifyUser() async {
+        do {
+            let user = try await Amplify.Auth.getCurrentUser().userId
+            try await Amplify.Notifications.Push.identifyUser(userId: user)
+        } catch {
+            print("Failed to get userID: \(error)")
         }
     }
     

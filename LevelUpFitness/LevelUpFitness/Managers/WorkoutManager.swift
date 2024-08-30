@@ -110,7 +110,7 @@ class WorkoutManager: ObservableObject {
             saveProgramStatus()
             
             Task {
-                await LevelChangeManager.shared.addNewLevelChange(property: "Program", contribution: 5) 
+                await LevelChangeManager.shared.createNewLevelChange(property: "Program", contribution: 5)
                 await XPManager.shared.addXPToDB()
             }
             

@@ -101,7 +101,7 @@ struct ProgramView: View {
                                         JoinProgramWidget(programName: name)
                                             .onTapGesture {
                                                 Task {
-                                                    await programManager.joinStandardProgram(programName: name, badgeManager: badgeManager)
+                                                    await programManager.joinStandardProgram(programName: name)
                                                 }
                                             }
                                     }

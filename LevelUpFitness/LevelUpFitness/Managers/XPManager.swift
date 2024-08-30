@@ -20,12 +20,12 @@ class XPManager: ObservableObject {
     let allProperties = ["Weight", "Rest", "Endurance", "Consistency",]
     var currentProperties: [String] = []
     
-    init() {
-        Task {
-            await getUserXPData()
-            await LevelChangeManager.shared.getLevelChanges()
-            await LevelChangeManager.shared.addNewProgramLevelChanges()
-        }
+    func xpManagerInit() async {
+        async let getUserXPData: () =  await getUserXPData()
+        async let getLevelChanges: () =   await LevelChangeManager.shared.getLevelChanges()
+        async let addNewProgramLevelChanges: () =  await LevelChangeManager.shared.addNewProgramLevelChanges()
+        
+        _ = await(getUserXPData, getLevelChanges, addNewProgramLevelChanges)
     }
     
     func getUserXPData() async {

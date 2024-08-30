@@ -15,14 +15,13 @@ class ChallengeManager: ObservableObject {
     @Published var challengeTemplates: [ChallengeTemplate] = []
     @Published var userChallenges: [UserChallenge] = []
     
-    init() {
-        Task {
-            async let getChallengeTemplates: () = getChallengeTemplates()
-            async let getActiveUserChallenges: () = getActiveUserChallenges()
-            
-            _ = await(getChallengeTemplates, getActiveUserChallenges)
-        }
+    func challengeManagerInitialization() async {
+        async let getChallengeTemplates: () = getChallengeTemplates()
+        async let getActiveUserChallenges: () = getActiveUserChallenges()
+        
+        _ = await(getChallengeTemplates, getActiveUserChallenges)
     }
+    
     func getChallengeTemplates() async {
         do {
             let request = RESTRequest(apiName: "LevelUpFitnessDynamoAccessAPI", path: "/getChallengeTemplates")
@@ -125,8 +124,7 @@ class ChallengeManager: ObservableObject {
                 let request = RESTRequest(apiName: "LevelUpFitnessDynamoAccessAPI", path: "/challengesCompleted", queryParameters: ["UserID" : userID, "CompletedChallenges": jsonString])
                 let response = try await Amplify.API.put(request: request)
                 
-                await LevelChangeManager.shared.addNewLevelChange(property: "Challenge", contribution: completedChallenges.count * 10) 
-                
+                await LevelChangeManager.shared.createNewLevelChange(property: "Challenge", contribution: completedChallenges.count * 10) 
                 await XPManager.shared.addXPToDB()
                 
                 GlobalCoverManager.shared.showChallengeCompletion()

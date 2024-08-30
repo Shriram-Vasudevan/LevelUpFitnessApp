@@ -13,11 +13,9 @@ class ToDoListManager: ObservableObject {
     
     @Published var toDoList: [ToDoListTask] = []
     
-    init() {
-        Task {
-            await initializeToDoList()
-            checkIfStepGoalMet()
-        }
+    func toDoListInit() async {
+        await initializeToDoList()
+        checkIfStepGoalMet()
     }
     
     func initializeToDoList() async {
@@ -105,6 +103,11 @@ class ToDoListManager: ObservableObject {
                 toDoList[stepTaskIndex].completed = true
                 let taskID = toDoList[stepTaskIndex].id
                 LocalStorageUtility.updateTaskCompletionInFile(taskID: taskID, completed: true)
+                
+                Task {
+                    await LevelChangeManager.shared.createNewLevelChange(property: "MetStepsGoal", contribution: 5)
+                    await XPManager.shared.addXPToDB()
+                }
             }
         }
     }
@@ -121,6 +124,7 @@ class ToDoListManager: ObservableObject {
     }
     
     func weightAdded() {
+        print("weight added")
         if let weightTaskIndex = toDoList.firstIndex(where: { toDoListTask in
             toDoListTask.taskType == .weight
         }) {
@@ -128,6 +132,10 @@ class ToDoListManager: ObservableObject {
             let taskID = toDoList[weightTaskIndex].id
             LocalStorageUtility.updateTaskCompletionInFile(taskID: taskID, completed: true)
             
+            Task {
+                await LevelChangeManager.shared.createNewLevelChange(property: "AddedWeight", contribution: 3)
+                await XPManager.shared.addXPToDB()
+            }
         }
     }
     
@@ -142,6 +150,11 @@ class ToDoListManager: ObservableObject {
                 toDoList[xpTaskIndex].completed = true
                 let taskID = toDoList[xpTaskIndex].id
                 LocalStorageUtility.updateTaskCompletionInFile(taskID: taskID, completed: true)
+                
+                Task {
+                    await LevelChangeManager.shared.createNewLevelChange(property: "MetXPGoal", contribution: 7)
+                    await XPManager.shared.addXPToDB()
+                }
             }
             
         }

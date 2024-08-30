@@ -162,9 +162,14 @@ struct PagesHolderView: View {
                     healthManager.getInitialHealthData()
                 }
                     
-                async let userProgram: ()? = programManager.program == nil ? programManager.getUserProgram(badgeManager: badgeManager) : nil
+                async let userProgram: ()? = programManager.program == nil ? programManager.getUserProgram() : nil
+                async let notificationManager: () = notificationManager.identifyUser()
+                async let challengeManager: () = challengeManager.challengeManagerInitialization()
+                async let toDoListManager = toDoListManager.toDoListInit()
+                async let exerciseManager = exerciseManager.exerciseManagerInit()
+                async let xpManager = xpManager.xpManagerInit()
                 
-                _ = await (userProgram)
+                _ = await (userProgram, notificationManager, challengeManager, toDoListManager, exerciseManager, xpManager)
             }
         }
         .fullScreenCover(isPresented: $globalCoverManager.showProgramDayCompletionCover) {

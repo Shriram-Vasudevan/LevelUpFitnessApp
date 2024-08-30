@@ -17,13 +17,11 @@ class ExerciseManager: ObservableObject {
     @Published var recommendedExercise: Progression?
     @Published var recommendedExerciseType: String?
     
-    init() {
-        Task {
-            await getExercises()
-            
-            if let recommendedExercise = getRecommendedProgression() {
-                self.recommendedExercise = recommendedExercise
-            }
+    func exerciseManagerInit() async {
+        await getExercises()
+        
+        if let recommendedExercise = getRecommendedProgression() {
+            self.recommendedExercise = recommendedExercise
         }
     }
     

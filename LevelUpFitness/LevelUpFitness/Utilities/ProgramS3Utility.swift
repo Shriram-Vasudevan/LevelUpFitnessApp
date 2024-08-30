@@ -46,7 +46,7 @@ class ProgramS3Utility {
         }
     }
     
-    static func joinStandardProgram(programName: String, badgeManager: BadgeManager, completion: @escaping (Result<Program, Error>) -> Void) async {
+    static func joinStandardProgram(programName: String, completion: @escaping (Result<Program, Error>) -> Void) async {
         do {
             print("StandardPrograms/\(programName).json")
             let downloadTask = Amplify.Storage.downloadData(key: "StandardPrograms/\(programName).json")
@@ -64,7 +64,7 @@ class ProgramS3Utility {
             
             await LocalStorageUtility.temporarilySaveStandardProgram(programName: programName, data: modifiedData) { success, url in
                 if success, let fileURL = url {
-                    await self.uploadStandardProgram(fileURL: fileURL, programName: programName, badgeManager: badgeManager) { success in
+                    await self.uploadStandardProgram(fileURL: fileURL, programName: programName) { success in
                         if success {
                             completion(.success(decodedData))
                         }
@@ -92,7 +92,7 @@ class ProgramS3Utility {
         }
     }
     
-    static func uploadStandardProgram(fileURL: URL, programName: String, badgeManager: BadgeManager, completion: @escaping (Bool) -> Void) async {
+    static func uploadStandardProgram(fileURL: URL, programName: String, completion: @escaping (Bool) -> Void) async {
         do {
             let userID = try await Amplify.Auth.getCurrentUser().userId
                 
