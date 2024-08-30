@@ -47,13 +47,13 @@ class ChallengeManager: ObservableObject {
             
             let response = try await Amplify.API.get(request: request)
             
-          //  print("get active user challenges response: \(String(describing: String(data: response, encoding: .utf8)))")
+            print("get active user challenges response: \(String(describing: String(data: response, encoding: .utf8)))")
             let decoder = JSONDecoder()
             let responseDecoded = try decoder.decode([UserChallenge].self, from: response)
             
             self.userChallenges = responseDecoded
         } catch {
-            print(error)
+            print("get active user challenges error \(error)")
         }
         
     }
@@ -65,6 +65,18 @@ class ChallengeManager: ObservableObject {
                 guard let dateRange = DateUtility.createDateDurationISO(duration: 30) else { return }
             
             await updateChallenge(challengeTemplateID: challengeTemplateID, challengeName: challengeName, startDate: dateRange.0, endDate: dateRange.1, startValue: userXPData.level, targetValue: userXPData.level + levelsRequired, field: "Level")
+            case "Perfect Program Week":
+                if let program = ProgramManager.shared.program {
+                    let daysRequired = program.program.count
+                    guard let dateRange = DateUtility.createDateDurationISO(duration: 7) else { return }
+                    
+                    switch program.getConsecutiveCompletionDays() {
+                        case .success(let consecutiveDays):
+                        await updateChallenge(challengeTemplateID: challengeTemplateID, challengeName: challengeName, startDate: dateRange.0, endDate: dateRange.1, startValue: consecutiveDays, targetValue: daysRequired, field: "Level")
+                        case .failure(let error):
+                            print("Error: \(error.localizedDescription)")
+                    }
+                }
             default:
                 break
         }
@@ -98,11 +110,11 @@ class ChallengeManager: ObservableObject {
             let userID = try await Amplify.Auth.getCurrentUser().userId
             let applicableChallenges = self.userChallenges.filter({ $0.field == challengeField })
             
-            var completedChallenges: [String] = []
+            var completedChallenges: [CompletedChallenge] = []
             
             for applicableChallenge in applicableChallenges {
                 if applicableChallenge.targetValue == newValue {
-                    completedChallenges.append(applicableChallenge.id)
+                    completedChallenges.append(CompletedChallenge(challengeID: applicableChallenge.id, challengeTemplateID: applicableChallenge.challengeTemplateID))
                 }
             }
             

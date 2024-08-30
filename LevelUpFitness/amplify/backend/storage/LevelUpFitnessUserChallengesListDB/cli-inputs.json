@@ -1,0 +1,33 @@
+{
+  "resourceName": "LevelUpFitnessUserChallengesListDB",
+  "tableName": "user-challenges-list-db",
+  "partitionKey": {
+    "fieldName": "UserID",
+    "fieldType": "string"
+  },
+  "sortKey": {
+    "fieldName": "ChallengeTemplateID",
+    "fieldType": "string"
+  },
+  "gsi": [
+    {
+      "name": "UserIDGSI",
+      "partitionKey": {
+        "fieldName": "UserID",
+        "fieldType": "string"
+      }
+    },
+    {
+      "name": "EndDateIndexGSI",
+      "partitionKey": {
+        "fieldName": "UserID",
+        "fieldType": "string"
+      },
+      "sortKey": {
+        "fieldName": "EndDate",
+        "fieldType": "string"
+      }
+    }
+  ],
+  "triggerFunctions": []
+}

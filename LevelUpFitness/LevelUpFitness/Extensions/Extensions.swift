@@ -357,6 +357,55 @@ extension Program {
         let sortedMuscleGroups = muscleGroupCounts.sorted { $0.value > $1.value }
         return sortedMuscleGroups.map { MuscleGroupStat(area: $0.key, count: $0.value) }
     }
+    
+    func getConsecutiveCompletionDays() -> Result<Int, Error> {
+        guard let startDate = DateUtility.getDateNWeeksAfterDate(dateString: self.startDate, weeks: 0) else {
+            return .failure(NSError(domain: "Invalid start date", code: 0, userInfo: nil))
+        }
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM-dd-yyyy"
+        
+        guard let programStartDate = dateFormatter.date(from: startDate) else {
+            return .failure(NSError(domain: "Invalid start date format", code: 1, userInfo: nil))
+        }
+        
+        let calendar = Calendar.current
+        let currentDate = Date()
+        let programStartDay = calendar.startOfDay(for: programStartDate)
+        
+        guard currentDate >= programStartDay else {
+            return .failure(NSError(domain: "Program hasn't started yet", code: 2, userInfo: nil))
+        }
+        
+        var consecutiveDays = 0
+        var currentCheckDate = programStartDay
+        
+        while currentCheckDate <= currentDate {
+            let dayOfWeek = calendar.component(.weekday, from: currentCheckDate)
+            let weekdayName = dateFormatter.weekdaySymbols[dayOfWeek - 1].lowercased()
+            
+            if let programDay = program.first(where: { $0.day.lowercased() == weekdayName }) {
+                if !programDay.completed {
+                    return .failure(NSError(domain: "Incomplete program day", code: 3, userInfo: nil))
+                } else {
+                    consecutiveDays += 1
+                }
+            }
+            
+            currentCheckDate = calendar.date(byAdding: .day, value: 1, to: currentCheckDate)!
+        }
+
+        let todayDayOfWeek = calendar.component(.weekday, from: currentDate)
+        let todayWeekdayName = dateFormatter.weekdaySymbols[todayDayOfWeek - 1].lowercased()
+        
+        if let todayProgramDay = program.first(where: { $0.day.lowercased() == todayWeekdayName }), todayProgramDay.completed {
+            consecutiveDays += 1
+        }
+        
+        return .success(consecutiveDays)
+    }
+
 }
 
 extension ProgramDay {

@@ -22,3 +22,8 @@ struct ChallengeTemplate: Codable, Identifiable {
         case targetField = "TargetField"
     }
 }
+
+struct CompletedChallenge: Codable {
+    var challengeID: String
+    var challengeTemplateID: String
+}

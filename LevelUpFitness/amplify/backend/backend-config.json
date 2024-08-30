@@ -80,6 +80,7 @@
   "function": {
     "LevelUpFitnessChallengeExpirationCheckLambda": {
       "build": true,
+      "dependsOn": [],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
@@ -117,6 +118,7 @@
     },
     "LevelUpFitnessDynamoAccessLambda": {
       "build": true,
+      "dependsOn": [],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
@@ -304,6 +306,10 @@
       "service": "DynamoDB"
     },
     "LevelUpFitnessUserChallengesDB": {
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB"
+    },
+    "LevelUpFitnessUserChallengesListDB": {
       "providerPlugin": "awscloudformation",
       "service": "DynamoDB"
     },

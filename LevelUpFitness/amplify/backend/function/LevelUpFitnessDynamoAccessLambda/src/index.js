@@ -1,4 +1,7 @@
-const AWS = require('aws-sdk');
+/* Amplify Params - DO NOT EDIT
+	ENV
+	REGION
+Amplify Params - DO NOT EDIT */const AWS = require('aws-sdk');
 const { DocumentClient } = require('aws-sdk/clients/dynamodb');
 const { json } = require('stream/consumers');
 const { v4: uuidv4 } = require('uuid');
@@ -468,16 +471,11 @@ exports.handler = async (event) => {
         const UserID = event.queryStringParameters.UserID
 
         const params = {
-            TableName: "user-challenges-db-dev",
-            KeyConditionExpression: "#userID = :userID",
-            FilterExpression: "#isActive = :isActive",
+            TableName: "user-challenges-list-db-dev",
+            IndexName: "UserIDGSI",
+            KeyConditionExpression: "UserID = :userID",
             ExpressionAttributeValues: {
-                ":userID": UserID,
-                ":isActive": true
-            },
-            ExpressionAttributeNames: {
-                "#userID": "UserID",
-                "#isActive": "IsActive"
+                ":userID": UserID
             }
         };
 
@@ -530,14 +528,14 @@ exports.handler = async (event) => {
         const IsActive = body.IsActive
 
         const params = {
-            TableName: "user-challenges-db-dev",
+            TableName: "user-challenges-list-db-dev",
             Key: {
-                UserID: UserID
+                UserID: UserID,
+                ChallengeTemplateID: ChallengeTemplateID
             },
-            UpdateExpression: "set #id = :id, #challengeTemplateID = :challengeTemplateID, #name = :name, #startDate = :startDate, #endDate = :endDate, #startValue = :startValue, #targetValue = :targetValue, #field = :field, #isFailed = :isFailed, #isActive = :isActive",
+            UpdateExpression: "set #id = :id, #name = :name, #startDate = :startDate, #endDate = :endDate, #startValue = :startValue, #targetValue = :targetValue, #field = :field, #isFailed = :isFailed, #isActive = :isActive",
             ExpressionAttributeNames: {
                 "#id": "ID",
-                "#challengeTemplateID": "ChallengeTemplateID",
                 "#name": "Name",
                 "#startDate": "StartDate",
                 "#endDate": "EndDate",
@@ -549,7 +547,6 @@ exports.handler = async (event) => {
             },
             ExpressionAttributeValues: {
                 ":id": ID,
-                ":challengeTemplateID": ChallengeTemplateID,
                 ":name": Name,
                 ":startDate": StartDate,
                 ":endDate": EndDate,
@@ -589,15 +586,18 @@ exports.handler = async (event) => {
 
         for (challenge of CompletedChallenges) {
             const params = {
-                TableName: "user-challenges-db-dev",
-                Key: UserID,
+                TableName: "user-challenges-list-db-dev",
+                Key: {
+                    UserID: UserID,
+                    ChallengeTemplateID: challenge.challengeTemplateID
+                },
                 ConditionExpression: "#challengeID = :challengeID AND #isActive = :isActive",
                 ExpressionAttributeNames: {
-                    "#challengeID": "ChallengeID",
+                    "#challengeID": "ID",
                     "#isActive": "IsActive"
                 },
                 ExpressionAttributeValues: {
-                    "challengeID": challenge,
+                    ":challengeID": challenge.challengeID,
                     ":isActive": true
                 }
             }

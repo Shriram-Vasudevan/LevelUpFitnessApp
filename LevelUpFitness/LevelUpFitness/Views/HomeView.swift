@@ -372,6 +372,18 @@ struct HomeView: View {
                 } else {
                     return nil
                 }
+            case "ProgramConsistency":
+                if let program = ProgramManager.shared.program {
+                    switch program.getConsecutiveCompletionDays() {
+                        case .success(let consecutiveDays):
+                            return consecutiveDays
+                        case .failure(let error):
+                            print("Error: \(error.localizedDescription)")
+                            return nil
+                    }
+                }
+            
+                return nil
             default:
                 return nil
         }

@@ -27,7 +27,7 @@ class ToDoListManager: ObservableObject {
                 
                 let jsonEncoder = JSONEncoder()
                 
-                let programTask = ToDoListTask(id: UUID().uuidString, description: "Complete Your Program for Today", completed: false, taskType: .program)
+                let programTask = ToDoListTask(id: UUID().uuidString, description: "Complete Your Program for Today", completed: false, currentValue: 0.0, taskType: .program)
                 DispatchQueue.main.async {
                     self.toDoList.append(programTask)
                 }
@@ -40,7 +40,7 @@ class ToDoListManager: ObservableObject {
                     var goalSteps = averageSteps + 500
                     goalSteps = ((goalSteps + 50) / 100) * 100
                     let taskDescription = "Reach \(Int(goalSteps)) steps today"
-                    let stepTask = ToDoListTask(id: UUID().uuidString, description: taskDescription, completed: false, completionValue: goalSteps, taskType: .steps)
+                    let stepTask = ToDoListTask(id: UUID().uuidString, description: taskDescription, completed: false, currentValue: 0.0, completionValue: goalSteps, taskType: .steps)
                     
                     DispatchQueue.main.async {
                         self.toDoList.append(stepTask)
@@ -51,13 +51,22 @@ class ToDoListManager: ObservableObject {
                     }
                 }
                 
-                let weightTask = ToDoListTask(id: UUID().uuidString, description: "Add your Weight Today", completed: false, taskType: .weight)
+                let weightTask = ToDoListTask(id: UUID().uuidString, description: "Add your Weight Today", completed: false, currentValue: 0.0, taskType: .weight)
                 DispatchQueue.main.async {
                     self.toDoList.append(weightTask)
                 }
                 
                 if let weightTaskData = try? jsonEncoder.encode(weightTask) {
                     LocalStorageUtility.appendDataToDocumentsDirectoryFile(at: "todoList.json", data: weightTaskData)
+                }
+                
+                let xpTask = ToDoListTask(id: UUID().uuidString, description: "Gain 100 XP Today", completed: false, currentValue: 0, completionValue: 100, taskType: .xp)
+                DispatchQueue.main.async {
+                    self.toDoList.append(xpTask)
+                }
+                
+                if let xpTaskData = try? jsonEncoder.encode(xpTask) {
+                    LocalStorageUtility.appendDataToDocumentsDirectoryFile(at: "todoList.json", data: xpTaskData)
                 }
                 
                 print("to do list \(toDoList)")
@@ -118,6 +127,22 @@ class ToDoListManager: ObservableObject {
             toDoList[weightTaskIndex].completed = true
             let taskID = toDoList[weightTaskIndex].id
             LocalStorageUtility.updateTaskCompletionInFile(taskID: taskID, completed: true)
+            
+        }
+    }
+    
+    func xpAdded(xp: Int) {
+        if let xpTaskIndex = toDoList.firstIndex(where: { toDoListTask in
+            toDoListTask.taskType == .xp
+        }) {
+            guard let completionValue = toDoList[xpTaskIndex].completionValue else { return }
+            toDoList[xpTaskIndex].currentValue += Double(xp)
+            
+            if toDoList[xpTaskIndex].currentValue >= completionValue {
+                toDoList[xpTaskIndex].completed = true
+                let taskID = toDoList[xpTaskIndex].id
+                LocalStorageUtility.updateTaskCompletionInFile(taskID: taskID, completed: true)
+            }
             
         }
     }

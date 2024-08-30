@@ -1,4 +1,7 @@
-const AWS = require('aws-sdk');
+/* Amplify Params - DO NOT EDIT
+	ENV
+	REGION
+Amplify Params - DO NOT EDIT */const AWS = require('aws-sdk');
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 const { DateTime } = require('luxon');
 
@@ -11,8 +14,8 @@ exports.handler = async (event) => {
     const currentDate = DateTime.utc().toISO();
 
     const params = {
-        TableName: "user-challenges-db-dev",
-        IndexName: "endDate-Index",
+        TableName: "user-challenges-list-db-dev",
+        IndexName: "EndDateIndexGSI",
         KeyConditionExpression: "EndDate < :currentDate",
         ExpressionAttributeValues: {
             ":currentDate": currentDate
@@ -22,7 +25,7 @@ exports.handler = async (event) => {
     try {
         for (const challenge of challenges) {
             const deleteParams = {
-                TableName: "user-challenges-db-dev",  
+                TableName: "user-challenges-list-db-dev",  
                 Key: {
                     partitionKey: challenge["endDate"],
                 }

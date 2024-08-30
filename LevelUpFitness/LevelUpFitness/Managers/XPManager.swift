@@ -59,13 +59,19 @@ class XPManager: ObservableObject {
         switch type {
             case .lowerBodyCompound:
                 userXPData.subLevels.lowerBodyCompound.incrementXP(increment: increment)
+                ToDoListManager.shared.xpAdded(xp: increment)
             case .lowerBodyIsolation:
                 userXPData.subLevels.lowerBodyIsolation.incrementXP(increment: increment)
+                ToDoListManager.shared.xpAdded(xp: increment)
             case .upperBodyCompound:
                 userXPData.subLevels.upperBodyCompound.incrementXP(increment: increment)
+                ToDoListManager.shared.xpAdded(xp: increment)
             case .upperBodyIsolation:
                 userXPData.subLevels.upperBodyIsolation.incrementXP(increment: increment)
+                ToDoListManager.shared.xpAdded(xp: increment)
             case .total:
+                ToDoListManager.shared.xpAdded(xp: increment)
+            
                 userXPData.xp += increment
                 print("new xp \(userXPData.xp)")
                 
