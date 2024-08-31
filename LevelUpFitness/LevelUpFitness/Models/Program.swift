@@ -13,6 +13,7 @@ struct Program: Codable {
     var programDuration: Int
     var startDate: String
     var startWeekday: String
+    var environment: String
     
     enum CodingKeys: String, CodingKey {
         case program = "workout_schedule"
@@ -20,6 +21,7 @@ struct Program: Codable {
         case programDuration = "program_duration"
         case startDate = "start_date"
         case startWeekday = "start_week_day"
+        case environment = "environment"
         
     }
 }
@@ -40,6 +42,7 @@ struct ProgramExercise: Codable, Hashable {
     var isWeight: Bool
     var completed: Bool
     var cdnURL: String
+    var equipment: String
     var data: ExerciseData
 }
 

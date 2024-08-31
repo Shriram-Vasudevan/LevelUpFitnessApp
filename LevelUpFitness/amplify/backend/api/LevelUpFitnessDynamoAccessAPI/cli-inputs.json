@@ -176,6 +176,16 @@
           "update"
         ]
       }
+    },
+    "/getStandardProgramDBRepresentations": {
+      "name": "/getStandardProgramDBRepresentations",
+      "lambdaFunction": "LevelUpFitnessDynamoAccessLambda",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "read"
+        ]
+      }
     }
   }
 }

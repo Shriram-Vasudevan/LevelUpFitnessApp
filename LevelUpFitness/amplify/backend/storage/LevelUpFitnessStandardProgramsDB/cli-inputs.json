@@ -1,0 +1,10 @@
+{
+  "resourceName": "LevelUpFitnessStandardProgramsDB",
+  "tableName": "standard-programs-db",
+  "partitionKey": {
+    "fieldName": "ID",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}

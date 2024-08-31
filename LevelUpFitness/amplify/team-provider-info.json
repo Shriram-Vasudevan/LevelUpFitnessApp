@@ -28,12 +28,13 @@
         "LevelUpFitnessExercisesDB": {},
         "LevelUpFitnessWeightTrendDB": {},
         "LevelUpFitnessLevelTrendDB": {},
-        "LevelUpFitnessUserChallengesListDB": {}
+        "LevelUpFitnessUserChallengesListDB": {},
+        "LevelUpFitnessStandardProgramsDB": {}
       },
       "function": {
         "LevelUpFitnessDynamoAccessLambda": {
           "deploymentBucketName": "amplify-levelupfitnessapp-dev-33cf0-deployment",
-          "s3Key": "amplify-builds/LevelUpFitnessDynamoAccessLambda-307744724d3833586c71-build.zip"
+          "s3Key": "amplify-builds/LevelUpFitnessDynamoAccessLambda-4b4f73767a44554d4e51-build.zip"
         },
         "LevelUpFitnessS3AccessLambda": {
           "deploymentBucketName": "amplify-levelupfitnessapp-dev-33cf0-deployment",
@@ -49,7 +50,7 @@
         },
         "LevelUpFitnessChallengeExpirationCheckLambda": {
           "deploymentBucketName": "amplify-levelupfitnessapp-dev-33cf0-deployment",
-          "s3Key": "amplify-builds/LevelUpFitnessChallengeExpirationCheckLambda-6a344533626572666a31-build.zip"
+          "s3Key": "amplify-builds/LevelUpFitnessChallengeExpirationCheckLambda-567469416e6a344a3438-build.zip"
         }
       },
       "api": {

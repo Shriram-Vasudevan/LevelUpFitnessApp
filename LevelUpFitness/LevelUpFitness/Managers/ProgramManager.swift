@@ -15,7 +15,7 @@ class ProgramManager: ObservableObject {
     
     @Published var program: Program?
     @Published var retrievingProgram: Bool = false
-    @Published var standardProgramNames: [String]?
+    @Published var standardProgramDBRepresentations: [StandardProgramDBRepresentation]?
     @Published var userProgramNames: [String]?
     
     @Published var exercises: [ExerciseLibraryExercise] = []
@@ -141,7 +141,8 @@ class ProgramManager: ObservableObject {
                 })
             }
         } else {
-            self.standardProgramNames = await ProgramS3Utility.getStandardProgramNames()
+            print("cant get program db representation")
+            self.standardProgramDBRepresentations = await ProgramS3Utility.getStandardProgramDBRepresentations()
         }
     }
     

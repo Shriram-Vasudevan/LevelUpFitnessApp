@@ -9,9 +9,9 @@ const { DateTime } = require('luxon');
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
  */
 exports.handler = async (event) => {
-    console.log(`EVENT: ${JSON.stringify(event)}`);
 
     if (event.path == "/checkChallengeExpiry" && event.httpMethod == "DELETE") {
+        console.log("checking challenge expiry")
         const UserID = event.queryStringParameters.UserID
         const currentDate = DateTime.utc().toISO();
 

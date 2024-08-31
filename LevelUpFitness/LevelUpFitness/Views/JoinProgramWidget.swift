@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct JoinProgramWidget: View {
-    var programName: String
+    var standardProgramDBRepresentation: StandardProgramDBRepresentation
+    
     var body: some View {
         Image("GuyAtTheGym")
             .resizable()
@@ -19,7 +20,7 @@ struct JoinProgramWidget: View {
             .brightness(-0.5)
             .overlay (
                 VStack {
-                    Text(programName)
+                    Text(standardProgramDBRepresentation.name)
                         .font(.custom("EtruscoNowCondensed Bold", size: 30))
                         .foregroundColor(.white)
                         .multilineTextAlignment(.center)
@@ -29,9 +30,9 @@ struct JoinProgramWidget: View {
                 
             )
             .onAppear {
-                if ProgramManager.shared.standardProgramNames == nil {
+                if ProgramManager.shared.standardProgramDBRepresentations == nil {
                     Task {
-                        ProgramManager.shared.standardProgramNames = await ProgramS3Utility.getStandardProgramNames()
+                        ProgramManager.shared.standardProgramDBRepresentations = await ProgramS3Utility.getStandardProgramDBRepresentations()
                     }
                 }
             }
@@ -39,5 +40,5 @@ struct JoinProgramWidget: View {
 }
 
 #Preview {
-    JoinProgramWidget(programName: "Program")
+    JoinProgramWidget(standardProgramDBRepresentation: StandardProgramDBRepresentation(id: "", name: "", environment: ""))
 }

@@ -249,6 +249,48 @@ extension UserChallenge {
 
 
 extension Program {
+    func getLongestStreakOfCompletedDays() -> Int {
+            var longestStreak = 0
+            var currentStreak = 0
+            
+            for day in program {
+                if day.completed {
+                    currentStreak += 1
+                    if currentStreak > longestStreak {
+                        longestStreak = currentStreak
+                    }
+                } else {
+                    currentStreak = 0
+                }
+            }
+            
+            return longestStreak
+        }
+    
+    func getMaxWeightUsed() -> (weight: Int, exerciseName: String, day: String)? {
+            var maxWeight: Int = 0
+            var exerciseName: String = ""
+            var day: String = ""
+
+            for programDay in program {
+                for exercise in programDay.exercises {
+                    for set in exercise.data.sets {
+                        if set.weight > maxWeight {
+                            maxWeight = set.weight
+                            exerciseName = exercise.name
+                            day = programDay.day
+                        }
+                    }
+                }
+            }
+
+            guard maxWeight > 0 else {
+                return nil
+            }
+            
+            return (maxWeight, exerciseName, day)
+        }
+    
     func getProgramCompletionPercentage() -> Double {
         let totalDays = program.count
         guard totalDays > 0 else {
@@ -409,6 +451,33 @@ extension Program {
 }
 
 extension ProgramDay {
+    func getTotalWeightByMuscleGroup() -> [String: Int] {
+            var weightByMuscleGroup: [String: Int] = [:]
+
+            for exercise in exercises {
+                let muscleGroup = exercise.area
+                let totalWeight = exercise.data.sets.reduce(0) { $0 + $1.weight * $1.reps }
+                weightByMuscleGroup[muscleGroup, default: 0] += totalWeight
+            }
+
+            return weightByMuscleGroup
+        }
+    
+    func getAverageWeightUsed() -> Double {
+            var totalWeight = 0
+            var totalSets = 0
+
+            for exercise in exercises {
+                for set in exercise.data.sets {
+                    totalWeight += set.weight
+                    totalSets += 1
+                }
+            }
+
+            guard totalSets > 0 else { return 0.0 }
+            return Double(totalWeight) / Double(totalSets)
+        }
+    
     func getAverageRestDifferential() -> Double {
         var totalRestDifferential = 0.0
         var totalExercises = 0

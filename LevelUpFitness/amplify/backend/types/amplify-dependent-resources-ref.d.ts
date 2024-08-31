@@ -124,6 +124,14 @@ export type AmplifyDependentResourcesAttributes = {
       "SortKeyType": "string",
       "StreamArn": "string"
     },
+    "LevelUpFitnessStandardProgramsDB": {
+      "Arn": "string",
+      "Name": "string",
+      "PartitionKeyName": "string",
+      "PartitionKeyType": "string",
+      "Region": "string",
+      "StreamArn": "string"
+    },
     "LevelUpFitnessStorage": {
       "BucketName": "string",
       "Region": "string"

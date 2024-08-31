@@ -236,8 +236,14 @@ class LevelChangeManager: ObservableObject {
     }
     
     func addLevelChangeToArray(levelChangeInfo: LevelChangeInfo) {
-        self.levelChanges.remove(at: 0)
-        self.levelChanges.append(levelChangeInfo)
+        print("apending to array")
+        if self.levelChanges.count >= 4 {
+            self.levelChanges.remove(at: 0)
+            self.levelChanges.append(levelChangeInfo)
+        }
+        else {
+            self.levelChanges.append(levelChangeInfo)
+        }
     }
     
     func selectedProperties() -> [String] {

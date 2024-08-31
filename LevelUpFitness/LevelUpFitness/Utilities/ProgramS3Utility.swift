@@ -9,22 +9,27 @@ import Foundation
 import Amplify
 
 class ProgramS3Utility {
-    static func getStandardProgramNames() async -> [String]? {
+    static func getStandardProgramDBRepresentations() async -> [StandardProgramDBRepresentation]? {
         do {
-            let restRequest = RESTRequest(apiName: "LevelUpFitnessS3AccessAPI", path: "/getStandardProgramNames")
+            let restRequest = RESTRequest(apiName: "LevelUpFitnessDynamoAccessAPI", path: "/getStandardProgramDBRepresentations")
             let response = try await Amplify.API.get(request: restRequest)
             
-            _ = String(data: response, encoding: .utf8)
+            let responseString = String(data: response, encoding: .utf8)
             
-            if let array = try JSONSerialization.jsonObject(with: response) as? [String] {
-                return array.map( { String($0.dropLast(5)) })
-            } else {
-                print("Error getting names")
-                return nil
-            }
+//            if let array = try JSONSerialization.jsonObject(with: response) as? [String] {
+//                return array.map( { String($0.dropLast(5)) })
+//            } else {
+//                print("Error getting names")
+//                return nil
+//            }
             
+            print("getStandardProgramDBRepresentations \(responseString)")
+            
+            let standardProgramDBRepresentations = try JSONDecoder().decode([StandardProgramDBRepresentation].self, from: response)
+            
+            return standardProgramDBRepresentations
         } catch {
-            print(error)
+            print("getStandardProgramDBRepresentations error \(error)")
             return nil
         }
     }

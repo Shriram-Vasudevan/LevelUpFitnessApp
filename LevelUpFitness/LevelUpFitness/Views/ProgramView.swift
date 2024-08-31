@@ -95,13 +95,13 @@ struct ProgramView: View {
                             .padding(.horizontal)
                             
                             if programPageType == .newProgram {
-                                if let standardProgramNames = programManager.standardProgramNames {
+                                if let standardProgramDBRepresentations = programManager.standardProgramDBRepresentations {
                                     
-                                    ForEach(standardProgramNames, id: \.self) { name in
-                                        JoinProgramWidget(programName: name)
+                                    ForEach(standardProgramDBRepresentations, id: \.id) { standardProgramDBRepresentation in
+                                        JoinProgramWidget(standardProgramDBRepresentation: standardProgramDBRepresentation)
                                             .onTapGesture {
                                                 Task {
-                                                    await programManager.joinStandardProgram(programName: name)
+                                                    await programManager.joinStandardProgram(programName: standardProgramDBRepresentation.name)
                                                 }
                                             }
                                     }

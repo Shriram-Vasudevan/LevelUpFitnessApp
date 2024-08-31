@@ -20,7 +20,7 @@ class ProgramDynamoDBUtility {
           //  print("program db representation \(jsonString)")
             
             let jsonDecoder = JSONDecoder()
-            let programDBRepresentation = try jsonDecoder.decode(ProgramDBRepresentation.self, from: response)
+            let programDBRepresentation = try jsonDecoder.decode(UserProgramDBRepresentation.self, from: response)
             
             return (programDBRepresentation.program, programDBRepresentation.startDate)
         } catch {

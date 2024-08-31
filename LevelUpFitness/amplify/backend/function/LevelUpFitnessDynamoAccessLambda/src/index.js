@@ -789,6 +789,44 @@ exports.handler = async (event) => {
                 body: JSON.stringify(`${error}`)
             };
         }
+    } else if (event.path == "/getStandardProgramDBRepresentations" && event.httpMethod == "GET") { 
+        const params = {
+            TableName: "standard-programs-db-dev"
+        };
+
+        try {
+            const data = await dynamoDb.scan(params).promise();
+
+            if (data.Items.length > 0) {
+                return {
+                    statusCode: 200,
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
+                        "Access-Control-Allow-Headers": "*"
+                    },
+                    body: JSON.stringify(data.Items)
+                };
+            } else {
+                return {
+                    statusCode: 404,
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
+                        "Access-Control-Allow-Headers": "*"
+                    },
+                    body: JSON.stringify({ message: "No workouts found for the given UserID" })
+                };
+            }
+        } catch (error) {
+            console.log(error);
+            return {
+                statusCode: 500,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "*"
+                },
+                body: JSON.stringify(error)
+            };
+        }
     }
 
     return {
