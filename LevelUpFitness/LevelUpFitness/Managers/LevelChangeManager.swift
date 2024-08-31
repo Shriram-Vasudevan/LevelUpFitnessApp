@@ -107,8 +107,8 @@ class LevelChangeManager: ObservableObject {
 
     func createNewLevelChange(property: String, contribution: Int) async {
         switch property {
-            case "Challenge":
-                await addLevelChange(contribution: contribution, keyword: "Challenge", description: "You completed your challenge!")
+            case "ChallengeSuccess":
+                await addLevelChange(contribution: contribution, keyword: "ChallengeSuccess", description: "You completed your challenge!")
             case "Program":
                 await addLevelChange(contribution: contribution, keyword: "Program", description: "Completed your program for today!")
             case "AddedWeight":
@@ -117,7 +117,8 @@ class LevelChangeManager: ObservableObject {
                 await addLevelChange(contribution: contribution, keyword: "MetStepsGoal", description: "You crushed your steps goal!")
             case "MetXPGoal":
                 await addLevelChange(contribution: contribution, keyword: "MetXPGoal", description: "You're on top of your XP!")
-            
+            case "ChallengeFailed":
+                await addLevelChange(contribution: contribution, keyword: "ChallengeFailed", description: "You failed to complete your challenge.")
             default:
                 break
         }
@@ -225,11 +226,18 @@ class LevelChangeManager: ObservableObject {
             LocalStorageUtility.appendDataToDocumentsDirectoryFile(at: "\(userID)-LevelChangeInfo.json", data: jsonData)
 //            levelChanges.append(levelChangeInfo)
             
+            addLevelChangeToArray(levelChangeInfo: levelChangeInfo)
+            
             print("adding xp")
             XPManager.shared.addXP(increment: contribution, type: .total)
         } catch {
             print(error)
         }
+    }
+    
+    func addLevelChangeToArray(levelChangeInfo: LevelChangeInfo) {
+        self.levelChanges.remove(at: 0)
+        self.levelChanges.append(levelChangeInfo)
     }
     
     func selectedProperties() -> [String] {

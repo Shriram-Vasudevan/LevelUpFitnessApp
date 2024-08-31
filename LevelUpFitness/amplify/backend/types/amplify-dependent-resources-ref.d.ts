@@ -7,7 +7,7 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "api": {
-    "LevelUpFitnessChallengesAPI": {
+    "LevelUpFitnessChallengeAPI": {
       "ApiId": "string",
       "ApiName": "string",
       "RootUrl": "string"
@@ -42,7 +42,6 @@ export type AmplifyDependentResourcesAttributes = {
   "function": {
     "LevelUpFitnessChallengeExpirationCheckLambda": {
       "Arn": "string",
-      "CloudWatchEventRule": "string",
       "LambdaExecutionRole": "string",
       "LambdaExecutionRoleArn": "string",
       "Name": "string",

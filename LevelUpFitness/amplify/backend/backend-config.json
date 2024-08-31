@@ -6,6 +6,20 @@
     }
   },
   "api": {
+    "LevelUpFitnessChallengeAPI": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "LevelUpFitnessChallengeExpirationCheckLambda"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    },
     "LevelUpFitnessCustomProgramRequestAPI": {
       "dependsOn": [
         {

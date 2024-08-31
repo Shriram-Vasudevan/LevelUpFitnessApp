@@ -42,15 +42,30 @@ class ChallengeManager: ObservableObject {
     func getActiveUserChallenges() async {
         do {
             let userID = try await Amplify.Auth.getCurrentUser().userId
-            var request = RESTRequest(apiName: "LevelUpFitnessDynamoAccessAPI", path: "/getActiveUserChallenges", queryParameters: ["UserID" : userID])
+            var activeChallengesRequest = RESTRequest(apiName: "LevelUpFitnessDynamoAccessAPI", path: "/getActiveUserChallenges", queryParameters: ["UserID" : userID])
             
-            let response = try await Amplify.API.get(request: request)
+            let activeChallengesResponse = try await Amplify.API.get(request: activeChallengesRequest)
             
-            print("get active user challenges response: \(String(describing: String(data: response, encoding: .utf8)))")
+            print("get active user challenges response: \(String(describing: String(data: activeChallengesResponse, encoding: .utf8)))")
             let decoder = JSONDecoder()
-            let responseDecoded = try decoder.decode([UserChallenge].self, from: response)
+            var userChallenges = try decoder.decode([UserChallenge].self, from: activeChallengesResponse)
             
-            self.userChallenges = responseDecoded
+            let originalUserChallengesCount = userChallenges.count
+            let isoFormatter = ISO8601DateFormatter()
+            
+            userChallenges.removeAll { UserChallenge in
+                isoFormatter.date(from: UserChallenge.endDate) ?? Date() < Date()
+            }
+            
+            self.userChallenges = userChallenges
+            
+            if self.userChallenges.count < originalUserChallengesCount {
+                await LevelChangeManager.shared.createNewLevelChange(property: "ChallengeFailed", contribution: (originalUserChallengesCount - userChallenges.count) * 15)
+                await XPManager.shared.addXPToDB()
+            }
+            
+            var checkChallengeExpiryRequest = RESTRequest(apiName: "LevelUpFitnessChallengeAPI", path: "/checkChallengeExpiry", queryParameters: ["UserID" : userID])
+            let checkChallengeExpiryResponse = try await Amplify.API.delete(request: checkChallengeExpiryRequest)
         } catch {
             print("get active user challenges error \(error)")
         }
@@ -124,7 +139,7 @@ class ChallengeManager: ObservableObject {
                 let request = RESTRequest(apiName: "LevelUpFitnessDynamoAccessAPI", path: "/challengesCompleted", queryParameters: ["UserID" : userID, "CompletedChallenges": jsonString])
                 let response = try await Amplify.API.put(request: request)
                 
-                await LevelChangeManager.shared.createNewLevelChange(property: "Challenge", contribution: completedChallenges.count * 10) 
+                await LevelChangeManager.shared.createNewLevelChange(property: "ChallengeSuccess", contribution: completedChallenges.count * 10) 
                 await XPManager.shared.addXPToDB()
                 
                 GlobalCoverManager.shared.showChallengeCompletion()

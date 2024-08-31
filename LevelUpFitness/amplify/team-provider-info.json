@@ -49,14 +49,14 @@
         },
         "LevelUpFitnessChallengeExpirationCheckLambda": {
           "deploymentBucketName": "amplify-levelupfitnessapp-dev-33cf0-deployment",
-          "s3Key": "amplify-builds/LevelUpFitnessChallengeExpirationCheckLambda-65513657716b6d665133-build.zip"
+          "s3Key": "amplify-builds/LevelUpFitnessChallengeExpirationCheckLambda-6a344533626572666a31-build.zip"
         }
       },
       "api": {
         "LevelUpFitnessDynamoAccessAPI": {},
         "LevelUpFitnessS3AccessAPI": {},
         "LevelUpFitnessCustomProgramRequestAPI": {},
-        "LevelUpFitnessChallengesAPI": {}
+        "LevelUpFitnessChallengeAPI": {}
       },
       "analytics": {
         "LevelUpFitnessAPNS": {},

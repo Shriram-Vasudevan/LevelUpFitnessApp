@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "paths": {
+    "/checkChallengeExpiry": {
+      "name": "/checkChallengeExpiry",
+      "lambdaFunction": "LevelUpFitnessChallengeExpirationCheckLambda",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "read",
+          "delete"
+        ]
+      }
+    }
+  }
+}

@@ -11,44 +11,50 @@ const { DateTime } = require('luxon');
 exports.handler = async (event) => {
     console.log(`EVENT: ${JSON.stringify(event)}`);
 
-    const currentDate = DateTime.utc().toISO();
+    if (event.path == "/checkChallengeExpiry" && event.httpMethod == "DELETE") {
+        const UserID = event.queryStringParameters.UserID
+        const currentDate = DateTime.utc().toISO();
 
-    const params = {
-        TableName: "user-challenges-list-db-dev",
-        IndexName: "EndDateIndexGSI",
-        KeyConditionExpression: "EndDate < :currentDate",
-        ExpressionAttributeValues: {
-            ":currentDate": currentDate
+        const params = {
+            TableName: "user-challenges-list-db-dev",
+            IndexName: "EndDateIndexGSI",
+            KeyConditionExpression: "UserID = :userID AND EndDate < :currentDate",
+            ExpressionAttributeValues: {
+                ":userID": UserID,
+                ":currentDate": currentDate
+            }
         }
-    }
-
-    try {
-        for (const challenge of challenges) {
-            const deleteParams = {
-                TableName: "user-challenges-list-db-dev",  
-                Key: {
-                    partitionKey: challenge["endDate"],
-                }
+    
+        try {
+            for (const challenge of challenges) {
+                console.log(JSON.stringify(challenge))
+                const deleteParams = {
+                    TableName: "user-challenges-list-db-dev",  
+                    Key: {
+                        UserID: UserID,
+                        ChallengeTemplateID: challenge["ChallengeTemplateID"]
+                    }
+                };
+                await dynamodb.delete(deleteParams).promise();
+            }
+        } catch (error) {
+            return {
+                statusCode: 500,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "*"
+                },
+                body: JSON.stringify(error),
             };
-            await dynamodb.delete(deleteParams).promise();
         }
-    } catch (error) {
+    
         return {
-            statusCode: 500,
+            statusCode: 200,
             headers: {
                 "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Headers": "*"
             },
-            body: JSON.stringify(error),
+            body: JSON.stringify('Hello from Lambda!'),
         };
     }
-
-    return {
-        statusCode: 200,
-        headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Headers": "*"
-        },
-        body: JSON.stringify('Hello from Lambda!'),
-    };
 };
