@@ -12,41 +12,67 @@ struct ActiveUserChallengeWidget: View {
     var currentProgress: Int
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(challenge.name)
-                        .font(.system(size: 22, weight: .bold, design: .rounded))
-                        .foregroundColor(.white)
-                    
-                    HStack {
-                        ProgressView(value: Double(currentProgress), total: Double(challenge.targetValue))
-                            .progressViewStyle(CustomProgressViewStyle())
-                            .frame(height: 8)
-                        
-                        Text("\(currentProgress)/\(challenge.targetValue)")
-                            .font(.system(size: 14, weight: .semibold, design: .rounded))
-                            .foregroundColor(.white.opacity(0.9))
-                    }
-                }
-                
-                Spacer()
-                
-                Image(systemName: "flame.fill")
-                    .font(.system(size: 24))
-                    .foregroundColor(.white.opacity(0.7))
-            }
-        }
-        .padding(20)
-        .background(
-            LinearGradient(gradient: Gradient(colors: [
-                Color(red: 0.678, green: 0.847, blue: 0.902),
-                Color(red: 0.565, green: 0.933, blue: 0.565)
-            ]), startPoint: .topLeading, endPoint: .bottomTrailing)
-        )
-        .cornerRadius(16)
-        .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 5)
-        .padding()
+        RoundedRectangle(cornerRadius: 10)
+            .frame(width: UIScreen.main.bounds.width / 2, height: UIScreen.main.bounds.height / 6)
+            .overlay(
+                Image("GuyAtTheGym")
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: UIScreen.main.bounds.width / 2, height: UIScreen.main.bounds.height / 6)
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .overlay(
+                        Color.black.opacity(0.4)
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                    )
+            )
+            .overlay(
+                Text(formattedChallengeName(challenge.name))
+                    .font(.system(size: 22, weight: .bold, design: .rounded))
+                    .foregroundColor(.white)
+                    .padding(7),
+                alignment: .topLeading
+            )
+            .overlay (
+                Text("\(currentProgress)/\(challenge.targetValue)")
+                    .foregroundColor(.white)
+                    .padding(),
+                alignment: .bottomTrailing
+            )
+
+//        
+//        VStack(alignment: .leading, spacing: 12) {
+//            HStack {
+//                VStack(alignment: .leading, spacing: 4) {
+//                    Text(formattedChallengeName(challenge.name))
+//                                            .font(.system(size: 22, weight: .bold, design: .rounded))
+//                                            .foregroundColor(.white)
+//                    
+////                    HStack {
+////                        ProgressView(value: Double(currentProgress), total: Double(challenge.targetValue))
+////                            .progressViewStyle(CustomProgressViewStyle())
+////                            .frame(height: 8)
+////                        
+////                        Text("\(currentProgress)/\(challenge.targetValue)")
+////                            .font(.system(size: 14, weight: .semibold, design: .rounded))
+////                            .foregroundColor(.white.opacity(0.9))
+////                    }
+//                }
+//
+//            }
+//        }
+//        .padding(20)
+//        .background(
+//            Image("GuyAtTheGym")
+//        )
+//        .cornerRadius(10)
+//        .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 5)
+//        .padding()
+    }
+    
+    func formattedChallengeName(_ name: String) -> String {
+        var words = name.split(separator: " ")
+        guard let lastWord = words.popLast() else { return name }
+        return words.joined(separator: " ") + "\n" + lastWord
     }
 }
 

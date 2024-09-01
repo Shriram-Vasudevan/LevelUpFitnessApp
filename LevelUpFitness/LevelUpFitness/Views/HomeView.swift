@@ -35,7 +35,8 @@ struct HomeView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color(red: 240 / 255.0, green: 244 / 255.0, blue: 252 / 255.0)
+//                Color(red: 240 / 255.0, green: 244 / 255.0, blue: 252 / 255.0)
+                Color.white
                     .ignoresSafeArea(.all)
                 
                 ScrollView(.vertical) {
@@ -43,7 +44,7 @@ struct HomeView: View {
                     VStack (spacing: 0){
                         HStack {
                             Text("Hello Shriram")
-                                .font(.custom("EtruscoNow Medium", size: 30))
+                                .font(.custom("YanoneKaffeesatz-Bold", size: 45))
                                 .bold()
                             
                             Spacer()
@@ -54,135 +55,156 @@ struct HomeView: View {
                                     Image("Headshot")
                                         .resizable()
                                         .scaledToFill()
-                                        .frame(width: UIScreen.main.bounds.width / 16, height: UIScreen.main.bounds.width / 16)
+                                        .frame(width: UIScreen.main.bounds.width / 13, height: UIScreen.main.bounds.width / 13)
                                         .clipShape(Circle())
-                                )
-                            
-                            Circle()
-                                .fill(.gray.opacity(0.15))
-                                .frame(width: UIScreen.main.bounds.width / 16, height: UIScreen.main.bounds.width / 16)
-                            
-                                .overlay (
-                                    Image(systemName: "bell")
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                        .clipped()
-                                        .padding(5)
-                                        
                                 )
                         }
                         .padding(.horizontal)
+                        .padding(.top)
                         
                         VStack (spacing: 20) {
+//                            if let userXPData = xpManager.userXPData {
+//                                LevelWidget(userXPData: userXPData, levelChanges: levelChangeManager.levelChanges, openLevelUpInfoView: {
+//                                    showLevelUpInformationView = true
+//                                })
+//                            }
+//                            else {
+//                                LevelWidget(userXPData: XPData(userID: "", level: 0, xp: 0, xpNeeded: 15, subLevels: Sublevels(lowerBodyCompound: XPAttribute(xp: 0, level: 0, xpNeeded: 0), lowerBodyIsolation: XPAttribute(xp: 0, level: 0, xpNeeded: 0), upperBodyCompound: XPAttribute(xp: 0, level: 0, xpNeeded: 0), upperBodyIsolation: XPAttribute(xp: 0, level: 0, xpNeeded: 0))), levelChanges: [], openLevelUpInfoView: {
+//                                    showLevelUpInformationView = true
+//                                })
+//                            }
+                            
                             if toDoListManager.toDoList.count > 0 {
                                 ToDoList()
                             }
                             
-                            if let userXPData = xpManager.userXPData {
-                                LevelWidget(userXPData: userXPData, levelChanges: levelChangeManager.levelChanges, openLevelUpInfoView: {
-                                    showLevelUpInformationView = true
-                                })
-                            }
-                            else {
-                                LevelWidget(userXPData: XPData(userID: "", level: 0, xp: 0, xpNeeded: 15, subLevels: Sublevels(lowerBodyCompound: XPAttribute(xp: 0, level: 0, xpNeeded: 0), lowerBodyIsolation: XPAttribute(xp: 0, level: 0, xpNeeded: 0), upperBodyCompound: XPAttribute(xp: 0, level: 0, xpNeeded: 0), upperBodyIsolation: XPAttribute(xp: 0, level: 0, xpNeeded: 0))), levelChanges: [], openLevelUpInfoView: {
-                                    showLevelUpInformationView = true
-                                })
-                            }
-                            
-                            ScrollView (.horizontal) {
+                            VStack(spacing: 5) {
                                 HStack {
-                                    RoundedRectangle(cornerRadius: 7)
-                                        .fill(
-                                            LinearGradient(
-                                                gradient: Gradient(colors: [
-                                                    Color(red: 47 / 255, green: 196 / 255, blue: 298 / 255),
-                                                    Color(red: 17 / 255, green: 150 / 255, blue: 238 / 255)
-                                                ]),
-                                                startPoint: .topLeading,
-                                                endPoint: .bottomTrailing
+                                    Text("Time to Start Moving!")
+                                        .font(.custom("", size: 23))
+                                        .foregroundColor(.black)
+                                    Spacer()
+                                }
+                                
+                                ScrollView (.horizontal) {
+                                    HStack {
+                                        RoundedRectangle(cornerRadius: 7)
+                                            .fill(
+                                                LinearGradient(
+                                                    gradient: Gradient(colors: [
+                                                        Color(red: 47 / 255, green: 196 / 255, blue: 298 / 255),
+                                                        Color(red: 17 / 255, green: 150 / 255, blue: 238 / 255)
+                                                    ]),
+                                                    startPoint: .topLeading,
+                                                    endPoint: .bottomTrailing
+                                                )
                                             )
-                                        )
-                                        .overlay (
-                                            VStack {
-                                                Spacer()
-                                                
-                                                Image("ManRunning")
-                                                    .resizable()
-                                                    .aspectRatio(contentMode: .fit)
-                                                
-                                                Text("Exercise Now")
-                                                    .font(.headline)
-                                                    .foregroundColor(.white)
-                                                    .multilineTextAlignment(.center)
-                                                
-                                                Button(action: {
-                                                    pageType = .library
-                                                }, label: {
-                                                    Text("Start")
+                                            .overlay (
+                                                VStack {
+                                                    Spacer()
+                                                    
+                                                    Image("ManRunning")
+                                                        .resizable()
+                                                        .aspectRatio(contentMode: .fit)
+                                                    
+                                                    Text("Exercise Now")
                                                         .font(.headline)
-                                                        .foregroundColor(.blue)
-                                                        .frame(minWidth: 0, maxWidth: .infinity)
-                                                        .padding()
-                                                        .background(
-                                                            RoundedRectangle(cornerRadius: 5)
-                                                                .fill(.white)
-                                                        )
-                                                })
-                                            }
-                                                .padding()
-                                        )
-                                        .frame(width: UIScreen.main.bounds.width / 2, height: UIScreen.main.bounds.height / 3.5)
-                                    
-                                    RoundedRectangle(cornerRadius: 7)
-                                        .fill(
-                                            LinearGradient(
-                                                gradient: Gradient(colors: [
-                                                    Color(red: 152/255, green: 230/255, blue: 138/255),
-                                                    Color(red: 17 / 255, green: 150 / 255, blue: 238 / 255)
-                                                ]),
-                                                startPoint: .topLeading,
-                                                endPoint: .bottomTrailing
-                                            )
-                                        )
-                                        .overlay (
-                                            VStack {
-                                                Spacer()
-                                                
-                                                Image("ManExercising - PushUp - No BG")
-                                                    .resizable()
-                                                    .aspectRatio(contentMode: .fit)
-                                                
-                                                Text("Do your Program")
-                                                    .font(.headline)
-                                                    .foregroundColor(.white)
-                                                    .multilineTextAlignment(.center)
-                                                
-                                                Button {
-                                                    pageType = .program
-                                                } label: {
-                                                    Text("Start")
-                                                        .font(.headline)
-                                                        .foregroundColor(.blue)
-                                                        .frame(minWidth: 0, maxWidth: .infinity)
-                                                        .padding()
-                                                        .background(
-                                                            RoundedRectangle(cornerRadius: 5)
-                                                                .fill(.white)
-                                                        )
+                                                        .foregroundColor(.white)
+                                                        .multilineTextAlignment(.center)
+                                                    
+                                                    Button(action: {
+                                                        pageType = .library
+                                                    }, label: {
+                                                        Text("Start")
+                                                            .font(.headline)
+                                                            .foregroundColor(.blue)
+                                                            .frame(minWidth: 0, maxWidth: .infinity)
+                                                            .padding()
+                                                            .background(
+                                                                RoundedRectangle(cornerRadius: 5)
+                                                                    .fill(.white)
+                                                            )
+                                                    })
                                                 }
+                                                    .padding()
+                                            )
+                                            .frame(width: UIScreen.main.bounds.width / 2, height: UIScreen.main.bounds.height / 3.5)
+                                        
+                                        RoundedRectangle(cornerRadius: 7)
+                                            .fill(
+                                                LinearGradient(
+                                                    gradient: Gradient(colors: [
+                                                        Color(red: 152/255, green: 230/255, blue: 138/255),
+                                                        Color(red: 17 / 255, green: 150 / 255, blue: 238 / 255)
+                                                    ]),
+                                                    startPoint: .topLeading,
+                                                    endPoint: .bottomTrailing
+                                                )
+                                            )
+                                            .overlay (
+                                                VStack {
+                                                    Spacer()
+                                                    
+                                                    Image("ManExercising - PushUp - No BG")
+                                                        .resizable()
+                                                        .aspectRatio(contentMode: .fit)
+                                                    
+                                                    Text("Do your Program")
+                                                        .font(.headline)
+                                                        .foregroundColor(.white)
+                                                        .multilineTextAlignment(.center)
+                                                    
+                                                    Button {
+                                                        pageType = .program
+                                                    } label: {
+                                                        Text("Start")
+                                                            .font(.headline)
+                                                            .foregroundColor(.blue)
+                                                            .frame(minWidth: 0, maxWidth: .infinity)
+                                                            .padding()
+                                                            .background(
+                                                                RoundedRectangle(cornerRadius: 5)
+                                                                    .fill(.white)
+                                                            )
+                                                    }
 
-                                            }
-                                                .padding()
-                                        )
-                                        .frame(width: UIScreen.main.bounds.width / 2, height: UIScreen.main.bounds.height / 3.5)
+                                                }
+                                                    .padding()
+                                            )
+                                            .frame(width: UIScreen.main.bounds.width / 2, height: UIScreen.main.bounds.height / 3.5)
+                                    }
+                                    
                                 }
                                 
                             }
+
                  
                         }
                         .scrollIndicators(.hidden)
                         .padding([.top, .horizontal])
                          
+                        if challengeManager.userChallenges.count > 0 {
+                            HStack {
+                                Text("My Challenges")
+                                    .font(.custom("", size: 23))
+                                    .bold()
+                                
+                                Spacer()
+                            }
+                            .padding()
+                            
+                            ScrollView(.horizontal) {
+                                HStack {
+                                    ForEach(challengeManager.userChallenges, id: \.id) { challenge in
+                                        if let currentProgress = getCurrentChallengeProgress(challengeField: challenge.field) {
+                                            ActiveUserChallengeWidget(challenge: challenge, currentProgress: currentProgress)
+                                        }
+                                    }
+                                }
+                            }
+                            .padding(.horizontal)
+                        }
+                        
                         if let recommendedExercise = exerciseManager.recommendedExercise {
                             RecommendedExerciseWidget(exercise: recommendedExercise, exerciseSelected: {
                                 self.selectedExercise = recommendedExercise
@@ -190,80 +212,50 @@ struct HomeView: View {
                             .padding()
                         }
                         
-                        
-                        if challengeManager.userChallenges.count > 0 {
-                            HStack {
-                                Text("Your Challenges")
-                                    .font(.custom("EtruscoNow Medium", size: 23))
-                                    .bold()
-                                
-                                Spacer()
-                            }
-                            .padding(.horizontal)
-                            .padding(.top)
-                            
-                            ForEach(challengeManager.userChallenges, id: \.id) { challenge in
-                                if let currentProgress = getCurrentChallengeProgress(challengeField: challenge.field) {
-                                    ActiveUserChallengeWidget(challenge: challenge, currentProgress: currentProgress)
-                                }
-                            }
-                        }
                         if let program = programManager.program {
                             TimeSpentWidget(program: program)
                                 .padding([.top, .horizontal])
                         }
                         
                         HStack {
-                            VStack (alignment: .leading) {
-                                Text("Trends")
-                                    .font(.custom("Sailec Bold", size: 20))
-                                
-                                Text("Your Progress")
-                                    .foregroundColor(.gray)
-                                    .bold()
-                            }
+                            Text("Your Metrics")
+                                .font(.custom("", size: 23))
+                                .bold()
                             
                             Spacer()
                         }
                         .padding()
                         
-                        HStack {
-                            if let steps = healthManager.todaysSteps, let calories = healthManager.todaysCalories {
-                                HealthStatsWidget(stat: steps, text: "Steps", imageName: "figure.walk", healthStatWidgetPressed: { type in
-                                    healthStatType = "Steps"
-                                    navigateToHealthStatTrendView = true
-                                })
-                                
-                                HealthStatsWidget(stat: calories, text: "Calories", imageName: "flame.fill", healthStatWidgetPressed: { type in
-                                    healthStatType = "Calories"
-                                    navigateToHealthStatTrendView = true
-                                })
+                        if let steps = healthManager.todaysSteps, let calories = healthManager.todaysCalories {
+                            GeometryReader { geometry in
+                                HStack(spacing: 7) {
+                                    HealthStatsWidget(stat: steps, text: "Steps", imageName: "figure.walk", color: Color.purple, healthStatWidgetPressed: { type in
+                                        healthStatType = "Steps"
+                                        navigateToHealthStatTrendView = true
+                                    })
+                                    .frame(width: (geometry.size.width) / 2)
+                                    
+                                    Spacer()
+                                    
+                                    HealthStatsWidget(stat: calories, text: "Calories", imageName: "flame.fill", color: Color.purple, healthStatWidgetPressed: { type in
+                                        healthStatType = "Calories"
+                                        navigateToHealthStatTrendView = true
+                                    })
+                                    .frame(width: (geometry.size.width) / 2)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                }
                             }
-                            
-                        }
-                        .padding(.horizontal)
-                        
-                        Button {
-                            navigateToWeightTrendView = true
-                        } label: {
-                            Text("See Weight Trend")
+                            .frame(height: 155)
+                            .padding(.horizontal)
                         }
 
+
                         
-//                        if let steps = healthManager.todaysSteps, let calories = healthManager.todaysCalories, let distance = (healthManager.todaysDistance)  {
-//                            HStack {
-//                                Text("Today's Health Breakdown")
-//                                    .font(.custom("EtruscoNow Medium", size: 25))
-//                                    .bold()
-//                                
-//                                Spacer()
-//                            }
-//                            .padding(.top)
-//                            .padding(.horizontal)
-//                            
-//                            HealthStatsWidget(stat1: steps, text1: "Steps", imageName1: "figure.walk", stat2: calories, text2: "Calories", imageName2: "flame.fill", stat3: distance, text3: "Distance", imageName3: "app.connected.to.app.below.fill")
-//                        }
-//                        
+                        WeightStatView()
+                            .onTapGesture {
+                                navigateToWeightTrendView = true
+                            }
+
                         
                         if let userXPData = xpManager.userXPData, challengeManager.challengeTemplates.filter({ challengeTemplate in
                             !challengeManager.userChallenges.contains { userChallenge in
@@ -272,7 +264,7 @@ struct HomeView: View {
                         }).count > 0 {
                             HStack {
                                 Text("Available Challenges")
-                                    .font(.custom("EtruscoNow Medium", size: 23))
+                                    .font(.custom("", size: 23))
                                     .bold()
                                 
                                 Spacer()

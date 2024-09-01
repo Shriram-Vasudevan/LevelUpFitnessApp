@@ -37,7 +37,8 @@ class ToDoListManager: ObservableObject {
                 HealthManager.shared.fetchAverageSteps(forLastNDays: 7) { averageSteps in
                     var goalSteps = averageSteps + 500
                     goalSteps = ((goalSteps + 50) / 100) * 100
-                    let taskDescription = "Reach \(Int(goalSteps)) steps today"
+                    print("step goal \(goalSteps)")
+                    let taskDescription = "Reach \(Int(goalSteps)) steps"
                     let stepTask = ToDoListTask(id: UUID().uuidString, description: taskDescription, completed: false, currentValue: 0.0, completionValue: goalSteps, taskType: .steps)
                     
                     DispatchQueue.main.async {
@@ -49,7 +50,7 @@ class ToDoListManager: ObservableObject {
                     }
                 }
                 
-                let weightTask = ToDoListTask(id: UUID().uuidString, description: "Add your Weight Today", completed: false, currentValue: 0.0, taskType: .weight)
+                let weightTask = ToDoListTask(id: UUID().uuidString, description: "Add your Weight", completed: false, currentValue: 0.0, taskType: .weight)
                 DispatchQueue.main.async {
                     self.toDoList.append(weightTask)
                 }
@@ -58,7 +59,7 @@ class ToDoListManager: ObservableObject {
                     LocalStorageUtility.appendDataToDocumentsDirectoryFile(at: "todoList.json", data: weightTaskData)
                 }
                 
-                let xpTask = ToDoListTask(id: UUID().uuidString, description: "Gain 100 XP Today", completed: false, currentValue: 0, completionValue: 100, taskType: .xp)
+                let xpTask = ToDoListTask(id: UUID().uuidString, description: "Gain 100 XP", completed: false, currentValue: 0, completionValue: 100, taskType: .xp)
                 DispatchQueue.main.async {
                     self.toDoList.append(xpTask)
                 }

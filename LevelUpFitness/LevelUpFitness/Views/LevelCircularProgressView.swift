@@ -10,22 +10,20 @@ import SwiftUI
 struct LevelCircularProgressBar: View {
     var progress: Double
     var level: Int
+    
     var body: some View {
         ZStack {
-//            Circle()
-//                .stroke(lineWidth: 5.0)
-//                .opacity(0.3)
-//                .foregroundColor(Color.blue)
-
             Circle()
-                .fill(Color.blue)
-                .rotationEffect(Angle(degrees: 270.0))
-
+                .stroke(Color.white.opacity(0.3), lineWidth: 8)
+            
+            Circle()
+                .trim(from: 0, to: CGFloat(progress))
+                .stroke(Color.white, style: StrokeStyle(lineWidth: 8, lineCap: .round))
+                .rotationEffect(Angle(degrees: -90))
+            
             Text("\(level)")
-                .font(.custom("EtruscoNowCondensed Bold", size: 40))
+                .font(.system(size: 32, weight: .bold, design: .rounded))
                 .foregroundColor(.white)
-                .bold()
-                .scaledToFill()
         }
     }
 }

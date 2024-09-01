@@ -106,6 +106,12 @@
 		9978CDFE2C7E5CE700659813 /* ToDoListTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9978CDFD2C7E5CE700659813 /* ToDoListTask.swift */; };
 		9978CE002C7E69D200659813 /* ToDoList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9978CDFF2C7E69D200659813 /* ToDoList.swift */; };
 		9978CE022C7FC96C00659813 /* ExerciseData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9978CE012C7FC96C00659813 /* ExerciseData.swift */; };
+		9978CE042C83A74300659813 /* AzeretMono-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9978CE032C83A6AA00659813 /* AzeretMono-Regular.ttf */; };
+		9978CE062C83A75100659813 /* AzeretMono-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9978CE052C83A75100659813 /* AzeretMono-Bold.ttf */; };
+		9978CE082C83A88000659813 /* Gugi-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9978CE072C83A87D00659813 /* Gugi-Regular.ttf */; };
+		9978CE0B2C83A94500659813 /* YanoneKaffeesatz-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9978CE092C83A94500659813 /* YanoneKaffeesatz-Bold.ttf */; };
+		9978CE0C2C83A94500659813 /* YanoneKaffeesatz-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9978CE0A2C83A94500659813 /* YanoneKaffeesatz-Regular.ttf */; };
+		9978CE102C83DE9800659813 /* WeightStatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9978CE0F2C83DE9800659813 /* WeightStatView.swift */; };
 		998475182BFC18F200295C6E /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998475172BFC18F200295C6E /* AuthenticationManager.swift */; };
 		998ADA6A2C56FA28008C2795 /* ConfirmLeaveProgramWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998ADA692C56FA28008C2795 /* ConfirmLeaveProgramWidget.swift */; };
 		998DA0152C1A18940078E882 /* ViewModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998DA0142C1A18940078E882 /* ViewModifiers.swift */; };
@@ -236,6 +242,12 @@
 		9978CDFD2C7E5CE700659813 /* ToDoListTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoListTask.swift; sourceTree = "<group>"; };
 		9978CDFF2C7E69D200659813 /* ToDoList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoList.swift; sourceTree = "<group>"; };
 		9978CE012C7FC96C00659813 /* ExerciseData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseData.swift; sourceTree = "<group>"; };
+		9978CE032C83A6AA00659813 /* AzeretMono-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "AzeretMono-Regular.ttf"; sourceTree = "<group>"; };
+		9978CE052C83A75100659813 /* AzeretMono-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "AzeretMono-Bold.ttf"; sourceTree = "<group>"; };
+		9978CE072C83A87D00659813 /* Gugi-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Gugi-Regular.ttf"; sourceTree = "<group>"; };
+		9978CE092C83A94500659813 /* YanoneKaffeesatz-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "YanoneKaffeesatz-Bold.ttf"; sourceTree = "<group>"; };
+		9978CE0A2C83A94500659813 /* YanoneKaffeesatz-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "YanoneKaffeesatz-Regular.ttf"; sourceTree = "<group>"; };
+		9978CE0F2C83DE9800659813 /* WeightStatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightStatView.swift; sourceTree = "<group>"; };
 		998475172BFC18F200295C6E /* AuthenticationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationManager.swift; sourceTree = "<group>"; };
 		998ADA692C56FA28008C2795 /* ConfirmLeaveProgramWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmLeaveProgramWidget.swift; sourceTree = "<group>"; };
 		998DA0142C1A18940078E882 /* ViewModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModifiers.swift; sourceTree = "<group>"; };
@@ -419,6 +431,7 @@
 				992F26A62C61225300F25400 /* LevelInfoView.swift */,
 				992F26AA2C626FC300F25400 /* ProfileView.swift */,
 				991FB43F2C628084006B4ACE /* HealthStatsWidget.swift */,
+				9978CE0F2C83DE9800659813 /* WeightStatView.swift */,
 				991FB4472C62C085006B4ACE /* RecommendedExerciseWidget.swift */,
 				991FB4492C653C38006B4ACE /* IndividualExerciseView.swift */,
 				991FB44B2C654A69006B4ACE /* VerticalLevelBanner.swift */,
@@ -454,11 +467,16 @@
 		99A67EED2BF45211002DC3DC /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
+				9978CE032C83A6AA00659813 /* AzeretMono-Regular.ttf */,
 				99A67EF22BF45250002DC3DC /* EtruscoNow Medium.ttf */,
 				99A67EF12BF45250002DC3DC /* EtruscoNowCondensed Bold.ttf */,
 				99A67EEE2BF45250002DC3DC /* Sailec Bold.ttf */,
+				9978CE072C83A87D00659813 /* Gugi-Regular.ttf */,
+				9978CE052C83A75100659813 /* AzeretMono-Bold.ttf */,
 				99A67EF32BF45250002DC3DC /* Sailec Light.ttf */,
 				99A67EF72BF45250002DC3DC /* Sailec Medium.ttf */,
+				9978CE092C83A94500659813 /* YanoneKaffeesatz-Bold.ttf */,
+				9978CE0A2C83A94500659813 /* YanoneKaffeesatz-Regular.ttf */,
 				99A67EF82BF45251002DC3DC /* Sailec Regular Italic.ttf */,
 				99A67EF42BF45250002DC3DC /* Sailec Thin.ttf */,
 				99A67EEF2BF45250002DC3DC /* times new roman bold italic.ttf */,
@@ -652,17 +670,22 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9978CE062C83A75100659813 /* AzeretMono-Bold.ttf in Resources */,
+				9978CE0C2C83A94500659813 /* YanoneKaffeesatz-Regular.ttf in Resources */,
 				99A67F032BF45251002DC3DC /* Sailec Regular Italic.ttf in Resources */,
 				99CFAAED2BEB075700EFF67E /* Preview Assets.xcassets in Resources */,
 				99A67EFC2BF45251002DC3DC /* EtruscoNowCondensed Bold.ttf in Resources */,
 				99A67F002BF45251002DC3DC /* times new roman bold.ttf in Resources */,
 				99A67EFF2BF45251002DC3DC /* Sailec Thin.ttf in Resources */,
+				9978CE042C83A74300659813 /* AzeretMono-Regular.ttf in Resources */,
 				99CFAAEA2BEB075700EFF67E /* Assets.xcassets in Resources */,
 				99A67EF92BF45251002DC3DC /* Sailec Bold.ttf in Resources */,
 				99A67EFA2BF45251002DC3DC /* times new roman bold italic.ttf in Resources */,
 				99A67F022BF45251002DC3DC /* Sailec Medium.ttf in Resources */,
 				99A67EFE2BF45251002DC3DC /* Sailec Light.ttf in Resources */,
 				99A67EFD2BF45251002DC3DC /* EtruscoNow Medium.ttf in Resources */,
+				9978CE082C83A88000659813 /* Gugi-Regular.ttf in Resources */,
+				9978CE0B2C83A94500659813 /* YanoneKaffeesatz-Bold.ttf in Resources */,
 				99A67F012BF45251002DC3DC /* times new roman italic.ttf in Resources */,
 				99A67EFB2BF45251002DC3DC /* times new roman.ttf in Resources */,
 				0E5CE1C6E0490B7BE5F50F4D /* awsconfiguration.json in Resources */,
@@ -787,6 +810,7 @@
 				99FC9E442C5EADC800DAFFAC /* XPAdditionType.swift in Sources */,
 				9978CDFC2C7D8A6200659813 /* TrendManager.swift in Sources */,
 				995B94BB2C596F0B007AECF0 /* TimeData.swift in Sources */,
+				9978CE102C83DE9800659813 /* WeightStatView.swift in Sources */,
 				994E7DB92C026BE500BAD9E0 /* AuthCheckView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
