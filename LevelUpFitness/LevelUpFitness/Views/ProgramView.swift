@@ -29,19 +29,10 @@ struct ProgramView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color(red: 240 / 255.0, green: 244 / 255.0, blue: 252 / 255.0)
+                Color.white
                     .ignoresSafeArea(.all)
                 
                 VStack (spacing: 0){
-                    HStack {
-                        Text("Your Program")
-                            .font(.custom("EtruscoNow Medium", size: 30))
-                            .bold()
-                        
-                        Spacer()
-                    }
-                    .padding(.horizontal)
-                    
                     if programManager.program == nil && !programManager.retrievingProgram {
                         VStack {
                             HStack(spacing: 0) {
@@ -122,15 +113,71 @@ struct ProgramView: View {
                             Rectangle()
                                 .fill(.white)
                         )
-                        .ignoresSafeArea(.all)
+                        .edgesIgnoringSafeArea(.bottom)
                     } else {
-                        VStack {
+                        VStack (spacing: 3) {
+                            HStack {
+                                VStack (alignment: .leading, spacing: 4){
+                                    HStack {
+                                        Text("My Program")
+                                            .font(.custom("Sailec Medium", size: 30))
+                                        
+                                        Image("Trophy")
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                            .frame(height: 20)
+                                    }
+                                    Text(ProgramManager.shared.program?.programName ?? "Program")
+                                        .font(.custom("Sailec Regular Italic", size: 12))
+                                }
+                                
+                                Spacer()
+                                
+                                Text("Week \(DateUtility.determineWeekNumber(startDateString: ProgramManager.shared.program?.startDate ?? "Getting Week Number") ?? 1)")
+                                    .bold()
+                            }
+                            .padding(.horizontal)
+                            
                             ScrollView(.vertical) {
                                 VStack (spacing: 0) {
-                                    Text("\(DateUtility.determineWeekNumber(startDateString: ProgramManager.shared.program?.startDate ?? "Getting Week Number") ?? 0)")
-                                    ProgramListWidget(programManager: programManager, navigateToWorkoutView: $navigateToWorkoutView)
+                                    
+                                    UpNextProgramExerciseWidget(programManager: programManager, navigateToWorkoutView: $navigateToWorkoutView)
                                         .padding(.top)
+                                        .padding(.bottom, 3)
                                        
+                                    if let todaysProgram = programManager.program?.program.first(where: { $0.day == DateUtility.getCurrentWeekday() }) {
+                                        
+                                        HStack {
+                                            Text("Required Equipment")
+                                                .font(.headline)
+                                                .bold()
+                                            
+                                            Spacer()
+                                        }
+                                        .padding(.horizontal)
+                                        .padding(.bottom, 5)
+                                         
+                                        ScrollView(.horizontal) {
+                                            HStack {
+                                                ForEach(todaysProgram.requiredEquipment(), id: \.self) { equipment in
+                                                    
+                                                    VStack {
+                                                        Image(equipment)
+                                                            .resizable()
+                                                            .aspectRatio(contentMode: .fit)
+                                                            .frame(width: 50)
+                                                        
+                                                        Text(equipment)
+                                                            .lineLimit(1)
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        .padding(.horizontal)
+                                        
+                                    }
+                                    
+                                    
                                     GeometryReader { geometry in
                                         let totalWidth = geometry.size.width
                                         let padding: CGFloat = 10

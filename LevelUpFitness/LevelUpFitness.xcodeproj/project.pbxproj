@@ -89,7 +89,6 @@
 		994E7DC72C03DE5400BAD9E0 /* PascalCaseCodingKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994E7DC62C03DE5400BAD9E0 /* PascalCaseCodingKey.swift */; };
 		994E7DC92C03DF5C00BAD9E0 /* ProgramView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994E7DC82C03DF5C00BAD9E0 /* ProgramView.swift */; };
 		994E7DCB2C05289F00BAD9E0 /* Program.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994E7DCA2C05289F00BAD9E0 /* Program.swift */; };
-		994E7DCF2C0551FE00BAD9E0 /* ProgramListWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994E7DCE2C0551FE00BAD9E0 /* ProgramListWidget.swift */; };
 		99569FC52C34CD06001DFCB8 /* JoinProgramWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99569FC42C34CD06001DFCB8 /* JoinProgramWidget.swift */; };
 		995B94B92C596EEF007AECF0 /* TimeSpentWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995B94B82C596EEF007AECF0 /* TimeSpentWidget.swift */; };
 		995B94BB2C596F0B007AECF0 /* TimeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995B94BA2C596F0B007AECF0 /* TimeData.swift */; };
@@ -145,6 +144,7 @@
 		99CFAAED2BEB075700EFF67E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 99CFAAEC2BEB075700EFF67E /* Preview Assets.xcassets */; };
 		99DD3D522C1D0839006C07B3 /* ExerciseLibraryExerciseWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DD3D512C1D0839006C07B3 /* ExerciseLibraryExerciseWidget.swift */; };
 		99DD3D542C1D0871006C07B3 /* FullPageVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DD3D532C1D0871006C07B3 /* FullPageVideoView.swift */; };
+		99E0A5112C86458E00CC1224 /* UpNextProgramExerciseWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99E0A5102C86458E00CC1224 /* UpNextProgramExerciseWidget.swift */; };
 		99ECAD262C76C6610012F8E7 /* ProgramCompletedCover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99ECAD252C76C6610012F8E7 /* ProgramCompletedCover.swift */; };
 		99ECAD282C76E35C0012F8E7 /* GlobalCoverManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99ECAD272C76E35C0012F8E7 /* GlobalCoverManager.swift */; };
 		99ECAD2A2C76F0B30012F8E7 /* ChallengeCompletedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99ECAD292C76F0B30012F8E7 /* ChallengeCompletedView.swift */; };
@@ -225,7 +225,6 @@
 		994E7DC62C03DE5400BAD9E0 /* PascalCaseCodingKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PascalCaseCodingKey.swift; sourceTree = "<group>"; };
 		994E7DC82C03DF5C00BAD9E0 /* ProgramView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramView.swift; sourceTree = "<group>"; };
 		994E7DCA2C05289F00BAD9E0 /* Program.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Program.swift; sourceTree = "<group>"; };
-		994E7DCE2C0551FE00BAD9E0 /* ProgramListWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramListWidget.swift; sourceTree = "<group>"; };
 		99569FC42C34CD06001DFCB8 /* JoinProgramWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinProgramWidget.swift; sourceTree = "<group>"; };
 		995B94B82C596EEF007AECF0 /* TimeSpentWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSpentWidget.swift; sourceTree = "<group>"; };
 		995B94BA2C596F0B007AECF0 /* TimeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeData.swift; sourceTree = "<group>"; };
@@ -283,6 +282,7 @@
 		99CFAAEC2BEB075700EFF67E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		99DD3D512C1D0839006C07B3 /* ExerciseLibraryExerciseWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseLibraryExerciseWidget.swift; sourceTree = "<group>"; };
 		99DD3D532C1D0871006C07B3 /* FullPageVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullPageVideoView.swift; sourceTree = "<group>"; };
+		99E0A5102C86458E00CC1224 /* UpNextProgramExerciseWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpNextProgramExerciseWidget.swift; sourceTree = "<group>"; };
 		99ECAD252C76C6610012F8E7 /* ProgramCompletedCover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramCompletedCover.swift; sourceTree = "<group>"; };
 		99ECAD272C76E35C0012F8E7 /* GlobalCoverManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalCoverManager.swift; sourceTree = "<group>"; };
 		99ECAD292C76F0B30012F8E7 /* ChallengeCompletedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeCompletedView.swift; sourceTree = "<group>"; };
@@ -399,7 +399,6 @@
 				991F8FE32C1527A900A134A5 /* ProgramStatisticsView.swift */,
 				993DF2402C397C5C00BBC1BF /* SetCounterWidget.swift */,
 				993DF23E2C38AFEF00BBC1BF /* SetStatWidget.swift */,
-				994E7DCE2C0551FE00BAD9E0 /* ProgramListWidget.swift */,
 				99A67F052BF456A7002DC3DC /* PagesHolderView.swift */,
 				99F71F9E2C023A3D00E27B60 /* UsageTimeView.swift */,
 				994E7DB02C02643D00BAD9E0 /* LoginView.swift */,
@@ -451,6 +450,7 @@
 				992F26A42C6032A100F25400 /* FullLevelBreakdownView.swift */,
 				9978CDF92C7D83C700659813 /* WeightTrendView.swift */,
 				9978CDFF2C7E69D200659813 /* ToDoList.swift */,
+				99E0A5102C86458E00CC1224 /* UpNextProgramExerciseWidget.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -769,7 +769,6 @@
 				99F71F9F2C023A3D00E27B60 /* UsageTimeView.swift in Sources */,
 				99DD3D542C1D0871006C07B3 /* FullPageVideoView.swift in Sources */,
 				99ECAD2E2C783C2F0012F8E7 /* ToDoListManager.swift in Sources */,
-				994E7DCF2C0551FE00BAD9E0 /* ProgramListWidget.swift in Sources */,
 				9978CDF22C7C22F500659813 /* LibraryExerciseDataView.swift in Sources */,
 				99FC9E482C5EC56B00DAFFAC /* RequestCustomProgramWidget.swift in Sources */,
 				991F8FEA2C17841300A134A5 /* BadgeManager.swift in Sources */,
@@ -809,6 +808,7 @@
 				999F70762C0F6D9C00B35A78 /* Double.swift in Sources */,
 				99FC9E442C5EADC800DAFFAC /* XPAdditionType.swift in Sources */,
 				9978CDFC2C7D8A6200659813 /* TrendManager.swift in Sources */,
+				99E0A5112C86458E00CC1224 /* UpNextProgramExerciseWidget.swift in Sources */,
 				995B94BB2C596F0B007AECF0 /* TimeData.swift in Sources */,
 				9978CE102C83DE9800659813 /* WeightStatView.swift in Sources */,
 				994E7DB92C026BE500BAD9E0 /* AuthCheckView.swift in Sources */,

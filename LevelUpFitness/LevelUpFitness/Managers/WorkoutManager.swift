@@ -26,7 +26,7 @@ class WorkoutManager: ObservableObject {
     }
    
     func initializeExerciseData() {
-        if let todaysProgram = programManager.program?.program.first(where: { $0.day == getCurrentWeekday() }) {
+        if let todaysProgram = programManager.program?.program.first(where: { $0.day == DateUtility.getCurrentWeekday() }) {
             self.currentExercises = todaysProgram.exercises
             
             if currentExerciseIndex == 0 {
@@ -71,7 +71,7 @@ class WorkoutManager: ObservableObject {
             currentSetIndex = 0
             
             if let programArray = programManager.program?.program,
-               let programIndex = programArray.firstIndex(where: { $0.day == getCurrentWeekday() }) {
+               let programIndex = programArray.firstIndex(where: { $0.day == DateUtility.getCurrentWeekday() }) {
                 var todaysProgram = programArray[programIndex]
                 todaysProgram.exercises[currentExerciseIndex].completed = true
                 todaysProgram.exercises[currentExerciseIndex].data = currentExerciseData
@@ -89,7 +89,7 @@ class WorkoutManager: ObservableObject {
             objectWillChange.send()
         } else {
             if let programArray = programManager.program?.program,
-               let programIndex = programArray.firstIndex(where: { $0.day == getCurrentWeekday() }) {
+               let programIndex = programArray.firstIndex(where: { $0.day == DateUtility.getCurrentWeekday() }) {
                 var todaysProgram = programArray[programIndex]
                 todaysProgram.exercises[currentExerciseIndex].completed = true
                 todaysProgram.exercises[currentExerciseIndex].data = currentExerciseData
@@ -122,7 +122,7 @@ class WorkoutManager: ObservableObject {
     
     func saveProgramStatus() {
         Task {
-            if let todaysProgram = programManager.program?.program.first(where: { $0.day == getCurrentWeekday() }) {
+            if let todaysProgram = programManager.program?.program.first(where: { $0.day == DateUtility.getCurrentWeekday() }) {
                 print("uploading new status")
                 await programManager.uploadNewProgramStatus(completion: { success in
                         if success {
@@ -150,15 +150,5 @@ class WorkoutManager: ObservableObject {
     
     func hasExercisesForToday() -> Bool {
         return !currentExercises.isEmpty
-    }
-    
-    func getCurrentWeekday() -> String {
-        let date = Date()
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "EEEE"
-        let weekday = dateFormatter.string(from: date)
-        
-        return weekday
     }
 }

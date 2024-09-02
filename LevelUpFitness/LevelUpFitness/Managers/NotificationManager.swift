@@ -36,6 +36,33 @@ struct NotificationManager {
         }
     }
     
+    func scheduleMorningNotification() {
+        let calendar = Calendar.current
+        
+        guard let tomorrowsDate = calendar.date(byAdding: .day, value: 1, to: Date()) else { return }
+        var tomorrowsDateComponents = calendar.dateComponents([.year, .hour, .minute], from: tomorrowsDate)
+        
+        tomorrowsDateComponents.hour = 8
+        tomorrowsDateComponents.minute = 0
+        
+        let content = UNMutableNotificationContent()
+        content.title = "Ready for Today?"
+        content.body = "Time to Move!"
+        content.sound = UNNotificationSound.default
+        
+        let trigger = UNCalendarNotificationTrigger(dateMatching: tomorrowsDateComponents, repeats: false)
+
+        let request = UNNotificationRequest(identifier: "MorningNotification", content: content, trigger: trigger)
+        
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error = error {
+                print("Error scheduling notification: \(error.localizedDescription)")
+            } else {
+                print("Notification scheduled successfully!")
+            }
+        }
+    }
+    
     func scheduleInactiveNotification() {
         let timeInterval: TimeInterval = 24 * 60 * 60
         
@@ -57,6 +84,11 @@ struct NotificationManager {
         }
     }
     
+    func cancelMorningNotification() {
+        print("Cancelling morning notification")
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["MorningNotification"])
+    }
+    
     func cancelInactiveNotification() {
         print("Cancelling inactive notification")
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["InactiveNotification"])
@@ -65,9 +97,11 @@ struct NotificationManager {
     func appDidEnterBackground() {
         UserDefaults.standard.set(Date(), forKey: "LastActiveTime")
         scheduleInactiveNotification()
+        scheduleMorningNotification()
     }
     
     func appDidBecomeActive() {
         cancelInactiveNotification()
+        cancelMorningNotification()
     }
 }

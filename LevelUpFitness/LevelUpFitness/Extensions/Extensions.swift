@@ -451,6 +451,14 @@ extension Program {
 }
 
 extension ProgramDay {
+    func requiredEquipment() -> [String] {
+            let equipmentSet = Set(exercises
+                .filter { $0.equipment != "None" } 
+                .map { $0.equipment }
+            )
+            return Array(equipmentSet)
+        }
+    
     func getTotalWeightByMuscleGroup() -> [String: Int] {
             var weightByMuscleGroup: [String: Int] = [:]
 
