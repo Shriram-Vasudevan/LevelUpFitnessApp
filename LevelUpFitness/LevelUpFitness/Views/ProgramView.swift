@@ -137,18 +137,14 @@ struct ProgramView: View {
                                     .bold()
                             }
                             .padding(.horizontal)
+                            .padding(.bottom)
                             
                             ScrollView(.vertical) {
                                 VStack (spacing: 0) {
-                                    
-                                    UpNextProgramExerciseWidget(programManager: programManager, navigateToWorkoutView: $navigateToWorkoutView)
-                                        .padding(.top)
-                                        .padding(.bottom, 3)
-                                       
                                     if let todaysProgram = programManager.program?.program.first(where: { $0.day == DateUtility.getCurrentWeekday() }) {
                                         
                                         HStack {
-                                            Text("Required Equipment")
+                                            Text("Today's Required Equipment")
                                                 .font(.headline)
                                                 .bold()
                                             
@@ -174,10 +170,17 @@ struct ProgramView: View {
                                             }
                                         }
                                         .padding(.horizontal)
+                                        .padding(.bottom, 3)
                                         
                                     }
                                     
-                                    
+                                    UpNextProgramExerciseWidget(programManager: programManager, navigateToWorkoutView: $navigateToWorkoutView)
+                                        .padding(.top)
+                                       
+                       
+                                    TodaysScheduleWidget(programManager: programManager)
+                                        .padding(.bottom)
+
                                     GeometryReader { geometry in
                                         let totalWidth = geometry.size.width
                                         let padding: CGFloat = 10
@@ -185,92 +188,88 @@ struct ProgramView: View {
                                         
                                         HStack(spacing: padding) {
                                             Button(action: {
-                                                
-                                            }, label: {
-                                                Rectangle()
-                                                    .fill(.white)
-                                                    .frame(width: squareWidth, height: squareWidth)
-                                                 
-                                                    .overlay (
-                                                        Text("Message \nLuke")
-                                                            .font(.custom("Sailec Bold", size: 25))
-                                                            .multilineTextAlignment(.leading)
-                                                            .foregroundColor(.black)
-                                                            .padding(),
-                                                        alignment: .topLeading
-                                                    )
-                                                    .overlay (
-                                                        Image("Chat")
-                                                            .resizable()
-                                                            .aspectRatio(contentMode: .fit)
-                                                            .frame(width: 40, height: 40)
-                                                            .padding(),
-                                                        alignment: .bottomTrailing
-                                                    )
-                                            })
-                                            
-                                            Button(action: {
                                                 navigateToMetricsView = true
-                                            }, label: {
-                                                Rectangle()
-                                                    .fill(.white)
-                                                    .frame(width: squareWidth, height: squareWidth)
-                                             
-                                                    .overlay (
-                                                        Text("Your \nMetrics")
-                                                            .font(.custom("Sailec Bold", size: 25))
-                                                            .multilineTextAlignment(.leading)
-                                                            .foregroundColor(.black)
-                                                            .padding(),
-                                                        alignment: .topLeading
-                                                    )
-                                                    .overlay (
-                                                        Image("PieChart")
+                                            }) {
+                                                VStack(alignment: .leading, spacing: 16) {
+                                                    Text("Program Stats")
+                                                        .font(.system(size: 24, weight: .bold, design: .rounded))
+                                                        .foregroundColor(.primary)
+                                                    
+                                                    HStack {
+                                                        VStack(alignment: .leading, spacing: 8) {
+                                                            Text("Your")
+                                                                .font(.system(size: 22, weight: .medium, design: .rounded))
+                                                                .foregroundColor(.primary)
+                                                            Text("Metrics")
+                                                                .font(.system(size: 22, weight: .medium, design: .rounded))
+                                                                .foregroundColor(.primary)
+                                                        }
+                                                        
+                                                        Spacer()
+                                                        
+                                                        Image(systemName: "chart.pie.fill")
                                                             .resizable()
                                                             .aspectRatio(contentMode: .fit)
                                                             .frame(width: 60, height: 60)
-                                                            .padding(),
-                                                        alignment: .bottomTrailing
-                                                    )
-                                            })
+                                                            .foregroundColor(.blue)
+                                                    }
+                                                }
+                                                .padding()
+                                                .frame(width: squareWidth, height: squareWidth)
+                                                .background(
+                                                    RoundedRectangle(cornerRadius: 24)
+                                                        .fill(Color(.systemBackground))
+                                                        .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 5)
+                                                )
+                                                .overlay(
+                                                    RoundedRectangle(cornerRadius: 24)
+                                                        .stroke(Color.blue.opacity(0.5), lineWidth: 1)
+                                                )
+                                            }
+                                            .buttonStyle(PlainButtonStyle())
+                                            
+                                            Button(action: {
+                                                showConfirmationWidget = true
+                                            }) {
+                                                VStack(alignment: .leading, spacing: 16) {
+                                                    Text("Leave Program")
+                                                        .font(.system(size: 24, weight: .bold, design: .rounded))
+                                                        .foregroundColor(.primary)
+                                                    
+                                                    HStack {
+                                                        
+                                                        Spacer()
+                                                        
+                                                        Image("Exit")
+                                                            .resizable()
+                                                            .aspectRatio(contentMode: .fit)
+                                                            .frame(width: 60, height: 60)
+                                                            .foregroundColor(.blue)
+                                                    }
+                                                }
+                                                .padding()
+                                                .frame(width: squareWidth, height: squareWidth)
+                                                .background(
+                                                    RoundedRectangle(cornerRadius: 24)
+                                                        .fill(Color(.systemBackground))
+                                                        .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 5)
+                                                )
+                                                .overlay(
+                                                    RoundedRectangle(cornerRadius: 24)
+                                                        .stroke(Color.blue.opacity(0.5), lineWidth: 1)
+                                                )
+                                            }
+                                            .buttonStyle(PlainButtonStyle())
                                         }
                                     }
                                     .frame(height: (UIScreen.main.bounds.width - 10) / 2)
                                     .padding(.horizontal)
                                     
                                     
-                                    Button(action: {
-                                        showConfirmationWidget = true
-                                    }, label: {
-                                        Rectangle()
-                                            .fill(.white)
-                                            .frame(minWidth: 0, maxWidth: .infinity)
-                                            .frame(height: UIScreen.main.bounds.height / 5)
-                                            .shadow(radius: 5)
-                                            .overlay (
-                                                Text("Leave \nProgram")
-                                                    .font(.custom("Sailec Bold", size: 25))
-                                                    .multilineTextAlignment(.leading)
-                                                    .foregroundColor(.black)
-                                                    .padding(),
-                                                alignment: .topLeading
-                                            )
-                                            .overlay (
-                                                Image("Exit")
-                                                    .resizable()
-                                                    .aspectRatio(contentMode: .fit)
-                                                    .frame(width: 60, height: 60)
-                                                    .padding(),
-                                                alignment: .bottomTrailing
-                                            )
-                                            .padding(.horizontal)
-                                    })
-
-                                    
                                     HStack {
                                         Text("Achievements")
-                                            .font(.custom("EtruscoNowCondensed Bold", size: 35))
-                                            .foregroundColor(.black)
+                                            .font(.headline)
+                                            .bold()
                                         
                                         Spacer()
                                     }

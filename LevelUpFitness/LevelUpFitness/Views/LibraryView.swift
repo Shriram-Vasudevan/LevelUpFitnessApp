@@ -23,91 +23,56 @@ struct LibraryView: View {
     
     var body: some View {
         NavigationStack {
-            ZStack {
-                Color(red: 240 / 255.0, green: 244 / 255.0, blue: 252 / 255.0)
-                    .ignoresSafeArea(.all)
-                
-                ScrollView(.vertical) {
-                    VStack (spacing: 0) {
-                        HStack {
-                            Text("LevelUp Library")
-                                .font(.custom("EtruscoNow Medium", size: 30))
-                            
-                            
-                            Spacer()
-                            
-                            Image(systemName: "bell")
+            ScrollView(.vertical, showsIndicators: false) {
+                VStack(spacing: 24) {
+                    HStack {
+                        Text("Exercise Library")
+                            .font(.custom("Sailec Medium", size: 30))
+                        Spacer()
+                        Image(systemName: "bell")
+                            .font(.system(size: 20))
+                            .foregroundColor(.secondary)
+                    }
+                    
+                    if let userXPData = xpManager.userXPData {
+                        ForEach(exerciseTypeKeys, id: \.self) { key in
+                            exerciseCategoryView(for: key, userXPData: userXPData)
                         }
-                        .padding(.horizontal)
-                        .padding(.bottom)
-                        
-                        RoundedRectangle(cornerRadius: 20)
-                            .fill(LinearGradient(gradient: Gradient(colors: [Color.blue, Color.white]), startPoint: .topLeading, endPoint: .bottomTrailing))
-                            .frame(height: UIScreen.main.bounds.height / 4)
-                            .shadow(radius: 7)
-                            .overlay(
-                                Image("PersonRunningForward")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .padding(.vertical)
-                                    .padding(.leading),
-                                alignment: .trailing
-                            )
-                            .overlay(
-                                Text("Check out Our New Additions!")
-                                    .bold()
-                                    .foregroundColor(.white)
-                                    .font(.system(size: 25))
-                                    .padding(),
-                                alignment: .bottomLeading
-                            )
-                            .padding(.horizontal)
-                            .padding(.bottom)
-                        
-                        
-                        if let userXPData = xpManager.userXPData {
-                            ForEach(exerciseTypeKeys, id: \.self) { key in
-                                VStack (spacing: 0) {
-                                    HStack {
-                                        Text(key.capitalizingFirstLetter())
-                                            .font(.custom("EtruscoNow Medium", size: 25))
-                                        
-                                        Spacer()
-                                        
-                                        if let level = userXPData.subLevels.attribute(for: key)?.level {
-                                            Text("Level \(level)")
-                                                .font(.caption)
-                                                .foregroundColor(.gray)
-                                        }
-                                    }
-                                    .padding(.horizontal)
-                                    
-                                    let filteredExercises = exerciseManager.exercises.filter { $0.exerciseType == key.capitalizingFirstLetter() }
-                                        if filteredExercises.isEmpty {
-                                            HStack {
-                                                Text("No exercises for \(key)")
-                                                
-                                                Spacer()
-                                            }
-                                            .padding(.horizontal)
-                                        } else {
-                                            ForEach(filteredExercises, id: \.id) { exercise in
-                                                ExerciseLibraryExerciseWidget(exercise: exercise, userXPData: userXPData, exerciseSelected: { progression in
-                                                    self.selectedExercise = progression
-                                                })
-                                                    
-                                                    .padding(.bottom)
-                                            }
-                                        }
-                                }
-                            }
-                        }
-
                     }
                 }
+                .padding(.horizontal)
             }
+            .background(Color(UIColor.systemBackground))
             .navigationDestination(item: $selectedExercise) { exercise in
                 IndividualExerciseView(progression: exercise)
+            }
+        }
+    }
+    
+    
+    private func exerciseCategoryView(for key: String, userXPData: XPData) -> some View {
+        VStack(alignment: .leading, spacing: 16) {
+            HStack {
+                Text(key.capitalizingFirstLetter())
+                    .font(.system(size: 22, weight: .semibold, design: .rounded))
+                Spacer()
+                if let level = userXPData.subLevels.attribute(for: key)?.level {
+                    Text("Level \(level)")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                }
+            }
+            
+            let filteredExercises = exerciseManager.exercises.filter { $0.exerciseType == key.capitalizingFirstLetter() }
+            if filteredExercises.isEmpty {
+                Text("No exercises for \(key)")
+                    .foregroundColor(.secondary)
+            } else {
+                ForEach(filteredExercises, id: \.id) { exercise in
+                    ExerciseLibraryExerciseWidget(exercise: exercise, userXPData: userXPData) { progression in
+                        self.selectedExercise = progression
+                    }
+                }
             }
         }
     }
