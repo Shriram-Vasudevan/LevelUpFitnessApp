@@ -109,7 +109,7 @@ struct Progression: Codable, Hashable, Equatable {
             "Level": 3,
             "CDNURL": "https://example.com/strength_training.mp4",
             "ExerciseType": "Strength",
-            "IsWeight": True
+            "IsWeight": true
         }
         """
 
@@ -119,10 +119,10 @@ struct Progression: Codable, Hashable, Equatable {
             let decoder = JSONDecoder()
             let progression = try decoder.decode(Progression.self, from: jsonData)
             return progression
-        }
-        catch {
+        } catch {
             return nil
         }
     }
+
 }
 

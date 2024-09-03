@@ -198,7 +198,7 @@ struct ProgramView: View {
                                                     HStack {
                                                         VStack(alignment: .leading, spacing: 8) {
                                                             Text("Your")
-                                                                .font(.system(size: 22, weight: .medium, design: .rounded))
+                                                                .font(.system(size: 20, weight: .medium, design: .rounded))
                                                                 .foregroundColor(.primary)
                                                             Text("Metrics")
                                                                 .font(.system(size: 22, weight: .medium, design: .rounded))

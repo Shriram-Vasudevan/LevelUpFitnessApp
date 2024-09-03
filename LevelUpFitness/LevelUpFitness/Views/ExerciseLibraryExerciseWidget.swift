@@ -13,64 +13,66 @@ struct ExerciseLibraryExerciseWidget: View {
     var userXPData: XPData
     var exerciseSelected: (Progression) -> Void
     
+    @State private var isExpanded = false
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             if let progression = getMainProgression() {
-                HStack(spacing: 16) {
-                    Image("GuyAtTheGym")
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: 80, height: 80)
-                        .clipShape(RoundedRectangle(cornerRadius: 12))
-                    
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(progression.name)
-                            .font(.headline)
-                        Text("Level \(progression.level)")
-                            .font(.subheadline)
-                            .foregroundColor(.blue)
-                    }
-                    
-                    Spacer()
-                    
-                    Image(systemName: "chevron.right")
-                        .foregroundColor(.secondary)
-                }
-                .contentShape(Rectangle())
-                .onTapGesture {
-                    exerciseSelected(progression)
-                }
+                mainProgressionView(progression: progression)
             }
             
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 16) {
-                    ForEach(getOtherProgressions(), id: \.self) { progression in
-                        VStack(spacing: 8) {
-                            Image("GuyAtTheGym")
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: 60, height: 60)
-                                .clipShape(RoundedRectangle(cornerRadius: 8))
-                            
-                            Text(progression.name)
-                                .font(.caption)
-                                .lineLimit(2)
-                                .multilineTextAlignment(.center)
-                            
-                            Text("Level \(progression.level)")
-                                .font(.caption2)
-                                .foregroundColor(.blue)
-                            
-                            if isLocked(progression: progression) {
-                                Image(systemName: "lock.fill")
-                                    .foregroundColor(.secondary)
-                            }
-                        }
-                        .frame(width: 80)
-                        .opacity(isLocked(progression: progression) ? 0.6 : 1.0)
-                        .onTapGesture {
-                            if !isLocked(progression: progression) {
-                                exerciseSelected(progression)
+            if isExpanded {
+                VStack(alignment: .leading, spacing: 16) {
+                    Text("Other Progressions")
+                        .font(.headline)
+                        .foregroundColor(Color(hex: "1E293B"))
+                    
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 16) {
+                            ForEach(getOtherProgressions(), id: \.self) { progression in
+                                VStack(spacing: 8) {
+                                    ZStack {
+                                        Image("GuyAtTheGym")
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fill)
+                                            .frame(width: 80, height: 80)
+                                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                                        
+                                        if isLocked(progression: progression) {
+                                            Color.black.opacity(0.6)
+                                            Image(systemName: "lock.fill")
+                                                .foregroundColor(.white)
+                                        }
+                                    }
+                                    
+                                    Text(progression.name)
+                                        .font(.caption)
+                                        .lineLimit(2)
+                                        .multilineTextAlignment(.center)
+                                    
+                                    Text("Level \(progression.level)")
+                                        .font(.caption2)
+                                        .foregroundColor(Color(hex: "3B82F6"))
+                                    
+                                    Button(action: {
+                                        if !isLocked(progression: progression) {
+                                            exerciseSelected(progression)
+                                        }
+                                    }) {
+                                        Text(isLocked(progression: progression) ? "Locked" : "Start")
+                                            .font(.caption)
+                                            .foregroundColor(.white)
+                                            .padding(.horizontal, 12)
+                                            .padding(.vertical, 6)
+                                            .background(isLocked(progression: progression) ? Color.gray : Color(hex: "3B82F6"))
+                                            .cornerRadius(12)
+                                    }
+                                    .disabled(isLocked(progression: progression))
+                                }
+                                .frame(width: 100)
+                                .padding(8)
+                                .background(Color(hex: "F8FAFC"))
+                                .cornerRadius(12)
                             }
                         }
                     }
@@ -78,8 +80,53 @@ struct ExerciseLibraryExerciseWidget: View {
             }
         }
         .padding()
-        .background(Color(UIColor.secondarySystemBackground))
+        .background(Color.white)
         .cornerRadius(16)
+        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
+    }
+    
+    private func mainProgressionView(progression: Progression) -> some View {
+        HStack(spacing: 16) {
+            Image("GuyAtTheGym")
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(width: 80, height: 80)
+                .clipShape(RoundedRectangle(cornerRadius: 12))
+            
+            VStack(alignment: .leading, spacing: 4) {
+                Text(progression.name)
+                    .font(.headline)
+                    .foregroundColor(Color(hex: "1E293B"))
+                Text("Level \(progression.level)")
+                    .font(.subheadline)
+                    .foregroundColor(Color(hex: "3B82F6"))
+                Text(exercise.exerciseType)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            
+            Spacer()
+            
+            VStack {
+                Button(action: {
+                    exerciseSelected(progression)
+                }) {
+                    Image(systemName: "play.circle.fill")
+                        .foregroundColor(Color(hex: "3B82F6"))
+                        .font(.system(size: 30))
+                }
+                
+                Button(action: {
+                    withAnimation {
+                        isExpanded.toggle()
+                    }
+                }) {
+                    Image(systemName: isExpanded ? "chevron.up.circle.fill" : "chevron.down.circle.fill")
+                        .foregroundColor(.secondary)
+                        .font(.system(size: 24))
+                }
+            }
+        }
     }
     
 
