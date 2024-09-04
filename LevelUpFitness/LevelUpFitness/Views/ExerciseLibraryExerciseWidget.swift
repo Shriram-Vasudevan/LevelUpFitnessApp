@@ -37,12 +37,16 @@ struct ExerciseLibraryExerciseWidget: View {
                                             .aspectRatio(contentMode: .fill)
                                             .frame(width: 80, height: 80)
                                             .clipShape(RoundedRectangle(cornerRadius: 8))
-                                        
-                                        if isLocked(progression: progression) {
-                                            Color.black.opacity(0.6)
-                                            Image(systemName: "lock.fill")
-                                                .foregroundColor(.white)
-                                        }
+                                            .overlay (isLocked(progression: progression) ?
+                                                RoundedRectangle(cornerRadius: 8)
+                                                .background(
+                                                    Color.black.opacity(0.6)
+                                                )
+                                                .overlay {
+                                                    Image(systemName: "lock.fill")
+                                                        .foregroundColor(.white)
+                                                } : nil
+                                            )
                                     }
                                     
                                     Text(progression.name)

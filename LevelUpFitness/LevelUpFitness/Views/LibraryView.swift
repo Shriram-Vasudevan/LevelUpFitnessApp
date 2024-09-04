@@ -18,7 +18,7 @@ struct LibraryView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color(hex: "F5F7FA")
+                Color.white
                     .ignoresSafeArea()
                 
                 ScrollView(.vertical, showsIndicators: false) {
@@ -63,6 +63,7 @@ struct LibraryView: View {
                                     HStack(spacing: 16) {
                                         ForEach(featuredProgressions, id: \.name) { progression in
                                             FeaturedExerciseCard(progression: progression)
+                                                .padding(.vertical, 3)
                                         }
                                     }
                                 }

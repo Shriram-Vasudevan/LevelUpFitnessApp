@@ -6,125 +6,23 @@ struct FullLevelBreakdownView: View {
     @ObservedObject var levelChangeManager = LevelChangeManager.shared
     @ObservedObject var trendManager = TrendManager.shared
     
-    let gradient = LinearGradient(colors: [Color.blue, Color.purple], startPoint: .topLeading, endPoint: .bottomTrailing)
+    let gradient = LinearGradient(colors: [Color(hex: "3B82F6"), Color(hex: "1E40AF")], startPoint: .topLeading, endPoint: .bottomTrailing)
     
-    let sublevelKeys = [
-        "Lower Body Compound",
-        "Lower Body Isolation",
-        "Upper Body Compound",
-        "Upper Body Isolation"
-    ]
-
-    
-    @State var maxValue: Double = 0
-    @State var minDate: Date = Date()
-    @State var maxDate: Date = Date()
+    @State private var maxValue: Double = 0
+    @State private var minDate: Date = Date()
+    @State private var maxDate: Date = Date()
     
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 20)
-                        .fill(gradient)
-                        .frame(height: 200)
-                        .shadow(radius: 10)
-                    
-                    VStack {
-                        Text("Level \(xpManager.userXPData?.level ?? 0)")
-                            .font(.system(size: 48, weight: .bold, design: .rounded))
-                            .foregroundColor(.white)
-                        
-                        Text("XP: \(xpManager.userXPData?.xp ?? 0) / \(xpManager.userXPData?.xpNeeded ?? 0)")
-                            .font(.title3)
-                            .foregroundColor(.white.opacity(0.8))
-                        
-                        ProgressView(value: Float(xpManager.userXPData?.xp ?? 0), total: Float(xpManager.userXPData?.xpNeeded ?? 1))
-                            .progressViewStyle(GaugeProgressStyle())
-                            .frame(width: 200, height: 20)
-                    }
-                }
-                
-                VStack(alignment: .leading, spacing: 15) {
-                    Text("Core Sublevels")
-                        .font(.title2)
-                        .fontWeight(.bold)
-                    
-                    ForEach(sublevelKeys, id: \.self) { key in
-                        if let attribute = xpManager.userXPData?.subLevels.attribute(for: key) {
-                            VStack(alignment: .leading, spacing: 5) {
-                                HStack {
-                                    Text(key)
-                                        .font(.headline)
-                                    Spacer()
-                                    Text("Level \(attribute.level)")
-                                        .font(.subheadline)
-                                        .foregroundColor(.secondary)
-                                }
-                                
-                                ProgressView(value: Float(attribute.xp), total: Float(attribute.xpNeeded))
-                                    .progressViewStyle(LinearProgressStyle())
-                                
-                                Text("\(attribute.xp) / \(attribute.xpNeeded) XP")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                            }
-                            .padding()
-                            .background(Color(UIColor.secondarySystemBackground))
-                            .cornerRadius(10)
-                        }
-                    }
-                }
-                
-                if trendManager.levelTrend.count > 0 {
-                    Chart(trendManager.levelTrend) { dataPoint in
-                        LineMark(
-                            x: .value("Date", dataPoint.date),
-                            y: .value("Level", dataPoint.value)
-                        )
-                        PointMark(
-                            x: .value("Date", dataPoint.date),
-                            y: .value("Level", dataPoint.value)
-                        )
-                    }
-                    .chartXScale(domain: minDate...maxDate)
-                    .chartYScale(domain: 0...maxValue)
-                    .padding()
-                }
-                
-                VStack(alignment: .leading, spacing: 15) {
-                    Text("Recent Level Changes")
-                        .font(.title2)
-                        .fontWeight(.bold)
-                    
-                    ForEach(levelChangeManager.levelChanges, id: \.id) { change in
-                        HStack(spacing: 15) {
-                            Image(systemName: iconName(for: change.keyword))
-                                .font(.title)
-                                .foregroundColor(.white)
-                                .frame(width: 50, height: 50)
-                                .background(Color.blue)
-                                .clipShape(Circle())
-                            
-                            VStack(alignment: .leading, spacing: 5) {
-                                Text(change.keyword)
-                                    .font(.headline)
-                                Text(change.description)
-                                    .font(.subheadline)
-                                    .foregroundColor(.secondary)
-                                Text("XP Gained: \(change.change)")
-                                    .font(.caption)
-                                    .foregroundColor(.green)
-                            }
-                        }
-                        .padding()
-                        .background(Color(UIColor.secondarySystemBackground))
-                        .cornerRadius(10)
-                    }
-                }
+                overviewSection
+                sublevelsSection
+                trendsSection
+                recentChangesSection
             }
             .padding()
         }
-        .background(Color(UIColor.systemBackground))
+        .background(Color(hex: "F0F4F8"))
         .navigationBarTitle("Level Breakdown", displayMode: .inline)
         .onAppear {
             Task {
@@ -133,19 +31,158 @@ struct FullLevelBreakdownView: View {
         }
     }
     
+    private var overviewSection: some View {
+        HStack(spacing: 20) {
+            ZStack {
+                Circle()
+                    .stroke(Color(hex: "CBD5E1"), lineWidth: 10)
+                Circle()
+                    .trim(from: 0, to: CGFloat(Float(xpManager.userXPData?.xp ?? 0) / Float(xpManager.userXPData?.xpNeeded ?? 1)))
+                    .stroke(gradient, style: StrokeStyle(lineWidth: 10, lineCap: .round))
+                    .rotationEffect(.degrees(-90))
+                VStack(spacing: 4) {
+                    Text("Level")
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundColor(Color(hex: "64748B"))
+                    Text("\(xpManager.userXPData?.level ?? 0)")
+                        .font(.system(size: 24, weight: .bold))
+                        .foregroundColor(Color(hex: "1E293B"))
+                }
+            }
+            .frame(width: 100, height: 100)
+            
+            VStack(alignment: .leading, spacing: 8) {
+                Text("XP Progress")
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundColor(Color(hex: "1E293B"))
+                Text("\(xpManager.userXPData?.xp ?? 0) / \(xpManager.userXPData?.xpNeeded ?? 0)")
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundColor(Color(hex: "64748B"))
+                ProgressView(value: Float(xpManager.userXPData?.xp ?? 0), total: Float(xpManager.userXPData?.xpNeeded ?? 1))
+                    .progressViewStyle(CustomProgressLevelViewStyle())
+            }
+        }
+        .padding(20)
+        .background(Color.white)
+        .cornerRadius(16)
+        .shadow(color: Color.black.opacity(0.05), radius: 10, x: 0, y: 5)
+    }
+    
+    private var sublevelsSection: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text("Sublevels")
+                .font(.system(size: 20, weight: .bold))
+                .foregroundColor(Color(hex: "1E293B"))
+            
+            ForEach(xpManager.userXPData?.subLevels.allAttributes() ?? [], id: \.key) { key, attribute in
+                HStack {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(key)
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundColor(Color(hex: "1E293B"))
+                        Text("Level \(attribute.level)")
+                            .font(.system(size: 14, weight: .medium))
+                            .foregroundColor(Color(hex: "64748B"))
+                    }
+                    Spacer()
+                    Text("\(attribute.xp)/\(attribute.xpNeeded)")
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundColor(Color(hex: "64748B"))
+                }
+                ProgressView(value: Float(attribute.xp), total: Float(attribute.xpNeeded))
+                    .progressViewStyle(CustomProgressLevelViewStyle())
+            }
+        }
+        .padding(20)
+        .background(Color.white)
+        .cornerRadius(16)
+        .shadow(color: Color.black.opacity(0.05), radius: 10, x: 0, y: 5)
+    }
+    
+    private var trendsSection: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text("Level Trends")
+                .font(.system(size: 20, weight: .bold))
+                .foregroundColor(Color(hex: "1E293B"))
+            
+            if trendManager.levelTrend.count > 0 {
+                Chart(trendManager.levelTrend) { dataPoint in
+                    LineMark(
+                        x: .value("Date", dataPoint.date),
+                        y: .value("Level", dataPoint.value)
+                    )
+                    .foregroundStyle(gradient)
+                    PointMark(
+                        x: .value("Date", dataPoint.date),
+                        y: .value("Level", dataPoint.value)
+                    )
+                    .foregroundStyle(Color(hex: "3B82F6"))
+                }
+                .chartXScale(domain: minDate...maxDate)
+                .chartYScale(domain: 0...maxValue)
+                .frame(height: 200)
+            } else {
+                Text("No trend data available")
+                    .foregroundColor(Color(hex: "64748B"))
+            }
+        }
+        .padding(20)
+        .background(Color.white)
+        .cornerRadius(16)
+        .shadow(color: Color.black.opacity(0.05), radius: 10, x: 0, y: 5)
+    }
+    
+    private var recentChangesSection: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text("Recent Level Changes")
+                .font(.system(size: 20, weight: .bold))
+                .foregroundColor(Color(hex: "1E293B"))
+            
+            ForEach(levelChangeManager.levelChanges.prefix(5), id: \.id) { change in
+                HStack(spacing: 16) {
+                    Image(systemName: iconName(for: change.keyword))
+                        .font(.system(size: 18))
+                        .foregroundColor(.white)
+                        .frame(width: 36, height: 36)
+                        .background(gradient)
+                        .clipShape(Circle())
+                    
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(change.keyword)
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundColor(Color(hex: "1E293B"))
+                        Text(change.description)
+                            .font(.system(size: 14))
+                            .foregroundColor(Color(hex: "64748B"))
+                    }
+                    
+                    Spacer()
+                    
+                    Text("+\(change.change) XP")
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundColor(Color(hex: "10B981"))
+                }
+            }
+        }
+        .padding(20)
+        .background(Color.white)
+        .cornerRadius(16)
+        .shadow(color: Color.black.opacity(0.05), radius: 10, x: 0, y: 5)
+    }
+    
     private func iconName(for keyword: String) -> String {
         switch keyword {
-        case "Weight": return "dollarsign.circle"
-        case "Rest": return "bed.double"
-        case "Endurance": return "heart.circle"
-        case "Consistency": return "chart.bar"
-        case "Challenge": return "flag.filled.and.flag.crossed"
+        case "Weight": return "scalemass.fill"
+        case "Rest": return "bed.double.fill"
+        case "Endurance": return "flame.fill"
+        case "Consistency": return "chart.bar.fill"
+        case "Challenge": return "trophy.fill"
         case "Program": return "calendar"
-        default: return "star"
+        default: return "star.fill"
         }
     }
     
-    func updateChartData() async {
+    private func updateChartData() async {
         if TrendManager.shared.levelTrend.isEmpty {
             await TrendManager.shared.getLevelTrend()
         }
@@ -158,25 +195,21 @@ struct FullLevelBreakdownView: View {
     }
 }
 
-struct GaugeProgressStyle: ProgressViewStyle {
+struct CustomProgressLevelViewStyle: ProgressViewStyle {
     func makeBody(configuration: Configuration) -> some View {
-        ZStack(alignment: .leading) {
-            RoundedRectangle(cornerRadius: 10)
-                .fill(Color.white.opacity(0.3))
-                .frame(height: 20)
-            
-            RoundedRectangle(cornerRadius: 10)
-                .fill(Color.white)
-                .frame(width: CGFloat(configuration.fractionCompleted ?? 0) * 200, height: 20)
+        GeometryReader { geometry in
+            ZStack(alignment: .leading) {
+                Rectangle()
+                    .foregroundColor(Color(hex: "E2E8F0"))
+                    .cornerRadius(5)
+                
+                Rectangle()
+                    .foregroundColor(Color(hex: "3B82F6"))
+                    .cornerRadius(5)
+                    .frame(width: CGFloat(configuration.fractionCompleted ?? 0) * geometry.size.width)
+            }
         }
-    }
-}
-
-struct LinearProgressStyle: ProgressViewStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        ProgressView(configuration)
-            .accentColor(.blue)
-            .scaleEffect(x: 1, y: 2, anchor: .center)
+        .frame(height: 10)
     }
 }
 
