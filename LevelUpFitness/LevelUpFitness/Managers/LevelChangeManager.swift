@@ -108,17 +108,17 @@ class LevelChangeManager: ObservableObject {
     func createNewLevelChange(property: String, contribution: Int) async {
         switch property {
             case "ChallengeSuccess":
-                await addLevelChange(contribution: contribution, keyword: "ChallengeSuccess", description: "You completed your challenge!")
+                await addLevelChange(contribution: contribution, keyword: "Challenge Success", description: "You completed your challenge!")
             case "Program":
                 await addLevelChange(contribution: contribution, keyword: "Program", description: "Completed your program for today!")
             case "AddedWeight":
-                await addLevelChange(contribution: contribution, keyword: "AddedWeight", description: "For adding your Weight today!")
+                await addLevelChange(contribution: contribution, keyword: "Added Weight", description: "For adding your Weight today!")
             case "MetStepsGoal":
-                await addLevelChange(contribution: contribution, keyword: "MetStepsGoal", description: "You crushed your steps goal!")
+                await addLevelChange(contribution: contribution, keyword: "Met Steps Goal", description: "You crushed your steps goal!")
             case "MetXPGoal":
-                await addLevelChange(contribution: contribution, keyword: "MetXPGoal", description: "You're on top of your XP!")
+                await addLevelChange(contribution: contribution, keyword: "Met XP Goal", description: "You're on top of your XP!")
             case "ChallengeFailed":
-                await addLevelChange(contribution: contribution, keyword: "ChallengeFailed", description: "You failed to complete your challenge.")
+                await addLevelChange(contribution: contribution, keyword: "Challenge Failed", description: "You failed to complete your challenge.")
             default:
                 break
         }

@@ -51,7 +51,7 @@ struct FullLevelBreakdownView: View {
                 
                 VStack(alignment: .leading, spacing: 24) {
                     Text("Sublevels")
-                        .font(.system(size: 24, weight: .medium, design: .rounded))
+                        .font(.system(size: 24, weight: .light, design: .rounded))
                         .foregroundColor(.gray)
                     
                     ForEach(Array(xpManager.userXPData?.subLevels.allAttributes().enumerated() ?? [].enumerated()), id: \.element.key) { index, sublevel in
@@ -79,7 +79,7 @@ struct FullLevelBreakdownView: View {
                 
                 VStack(alignment: .leading, spacing: 24) {
                     Text("Recent Level Changes")
-                        .font(.system(size: 24, weight: .medium, design: .rounded))
+                        .font(.system(size: 24, weight: .light, design: .rounded))
                         .foregroundColor(.gray)
                     
                     ForEach(levelChangeManager.levelChanges.prefix(5), id: \.id) { change in
@@ -113,7 +113,7 @@ struct FullLevelBreakdownView: View {
             
                 VStack(alignment: .leading, spacing: 24) {
                     Text("Level Trends")
-                        .font(.system(size: 24, weight: .medium, design: .rounded))
+                        .font(.system(size: 24, weight: .light, design: .rounded))
                         .foregroundColor(.gray)
                     
                     if trendManager.levelTrend.count > 0 {
