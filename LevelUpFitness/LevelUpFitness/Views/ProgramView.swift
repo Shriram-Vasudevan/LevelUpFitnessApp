@@ -120,21 +120,24 @@ struct ProgramView: View {
                                 VStack (alignment: .leading, spacing: 4){
                                     HStack {
                                         Text("My Program")
-                                            .font(.custom("Sailec Medium", size: 30))
+                                            .font(.system(size: 30, weight: .light, design: .rounded))
+                                            .foregroundColor(.black)
                                         
-                                        Image("Trophy")
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fit)
-                                            .frame(height: 20)
+//                                        Image("Trophy")
+//                                            .resizable()
+//                                            .aspectRatio(contentMode: .fit)
+//                                            .frame(height: 20)
                                     }
+                                    
                                     Text(ProgramManager.shared.program?.programName ?? "Program")
-                                        .font(.custom("Sailec Regular Italic", size: 12))
+                                        .font(.system(size: 15, weight: .medium, design: .rounded))
+                                        .foregroundColor(.black)
                                 }
                                 
                                 Spacer()
                                 
-                                Text("Week \(DateUtility.determineWeekNumber(startDateString: ProgramManager.shared.program?.startDate ?? "Getting Week Number") ?? 1)")
-                                    .bold()
+//                                Text("Week \(DateUtility.determineWeekNumber(startDateString: ProgramManager.shared.program?.startDate ?? "Getting Week Number") ?? 1)")
+//                                    .bold()
                             }
                             .padding(.horizontal)
                             .padding(.bottom)

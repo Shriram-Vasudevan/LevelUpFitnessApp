@@ -73,9 +73,9 @@ struct PagesHolderView: View {
                                         .frame(width: 30, height: 30)
                                         .aspectRatio(contentMode:  .fill)
                                     
-                                    Text("Home")
-                                        .font(.caption)
-                                        .foregroundColor(pageType == .home ? .blue : .gray)
+//                                    Text("Home")
+//                                        .font(.caption)
+//                                        .foregroundColor(pageType == .home ? .blue : .gray)
                                 }
                                 .padding(.bottom)
                             })
@@ -95,9 +95,9 @@ struct PagesHolderView: View {
                                         .frame(width: 30, height: 30)
                                         .aspectRatio(contentMode:  .fill)
                                     
-                                    Text("Level")
-                                        .font(.caption)
-                                        .foregroundColor(pageType == .levelBreakdown ? .blue : .gray)
+//                                    Text("Level")
+//                                        .font(.caption)
+//                                        .foregroundColor(pageType == .levelBreakdown ? .blue : .gray)
                                 }
                                 .padding(.bottom)
                             })
@@ -112,14 +112,14 @@ struct PagesHolderView: View {
                                 pageType = .program
                             }, label: {
                                 VStack {
-                                    Image(pageType == .program ? "TrainBlue" : "TrainGrey")
+                                    Image(pageType == .program ? "ProgramBlue" : "ProgramGrey")
                                         .resizable()
                                         .frame(width: 30, height: 30)
                                         .aspectRatio(contentMode:  .fill)
                                     
-                                    Text("Program")
-                                        .font(.caption)
-                                        .foregroundColor(pageType == .program ? .blue : .gray)
+//                                    Text("Program")
+//                                        .font(.caption)
+//                                        .foregroundColor(pageType == .program ? .blue : .gray)
                                     
                                 }
                                 .padding(.bottom)
@@ -140,9 +140,9 @@ struct PagesHolderView: View {
                                         .frame(width: 30, height: 30)
                                         .aspectRatio(contentMode:  .fill)
                                     
-                                    Text("Library")
-                                        .font(.caption)
-                                        .foregroundColor(pageType == .library ? .blue : .gray)
+//                                    Text("Library")
+//                                        .font(.caption)
+//                                        .foregroundColor(pageType == .library ? .blue : .gray)
                                     
                                 }
                                 .padding(.bottom)

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AVKit
 
 struct WorkoutView: View {
     @StateObject private var workoutManager: WorkoutManager
@@ -67,42 +68,64 @@ struct WorkoutContent: View {
     
     var dismiss: DismissAction
     
+    @State private var avPlayer = AVPlayer()
+    
     var body: some View {
         VStack (spacing: 0) {
-            WorkoutHeader(dismiss: dismiss)
-            
-            HStack {
-                VStack (alignment: .center, spacing: 0) {
+            VStack (spacing: 0) {
+                ZStack
+                {
                     HStack {
-                        Text(workoutManager.currentExercises[workoutManager.currentExerciseIndex].name)
-                            .font(.custom("EtruscoNowCondensed Bold", size: 50))
-                            .multilineTextAlignment(.center)
-                            .padding(.bottom, -7)
-                            .padding(.top, -10)
-                            .lineLimit(1)
+                        Button {
+                            dismiss()
+                        } label: {
+                            Image(systemName: "chevron.left")
+                                .foregroundColor(.black)
+                        }
+                        
                         
                         Spacer()
                     }
+                    .padding(.horizontal)
                     
-                    HStack {
-                        Text("Reps per Set: \(workoutManager.currentExercises[workoutManager.currentExerciseIndex].reps)")
-                            .font(.headline)
-                            .foregroundColor(.black)
-                            .padding(.bottom)
-                        
-                        Spacer()
-                    }
+                    Text("Exercise")
+                        .font(.custom("Sailec Bold", size: 20))
+                        .foregroundColor(.black)
+                }
+                .padding(.bottom)
+                
+                if let videoURL = URL(string: workoutManager.currentExercises[workoutManager.currentExerciseIndex].cdnURL) {
+                    VideoPlayer(player: avPlayer)
+                        .aspectRatio(16/9, contentMode: .fit)
+                        .onAppear {
+                            avPlayer = AVPlayer(url: videoURL)
+                            avPlayer.play()
+                        }
+                        .padding(.horizontal)
+                } else {
+                    Text("Retrieving Video")
                 }
                 
-                Spacer()
-            }
-            .padding(.horizontal)
-            
-            Text("view video")
-                .onTapGesture {
-                    navigateToExerciseVideoView = true
+                HStack {
+                    Text(workoutManager.currentExercises[workoutManager.currentExerciseIndex].name)
+                        .font(.system(size: 30, weight: .bold, design: .rounded))
+                        .foregroundColor(.black)
+                    
+                    
+                    Spacer()
                 }
-            
+                .padding(.horizontal)
+                
+                HStack {
+                    Text("Reps per Set: \(workoutManager.currentExercises[workoutManager.currentExerciseIndex].reps)")
+                        .font(.system(size: 20, weight: .light, design: .rounded))
+                        .foregroundColor(.black)
+                    
+                    Spacer()
+                }
+                .padding(.horizontal)
+            }
+        
             ScrollView(.vertical) {
                 
                 ForEach(Array(workoutManager.currentExerciseData.sets.enumerated()), id: \.offset) { index, set in
@@ -141,7 +164,7 @@ struct WorkoutContent: View {
         .background(content: {
             Rectangle()
                 .fill(.white)
-                .edgesIgnoringSafeArea(.bottom)
+                .edgesIgnoringSafeArea(.all)
         })
         .onChange(of: workoutManager.programCompletedForDay, { oldValue, newValue in
             if newValue {
@@ -169,54 +192,6 @@ struct WorkoutContent: View {
     }
 }
 
-
-struct WorkoutHeader: View {
-    @State var timeText: String = "00:00"
-    @State var timer: Timer?
-    @State var elapsedTime: Double = 0.0
-    
-    var dismiss: DismissAction
-
-    var body: some View {
-        ZStack {
-            HStack {
-                Text("Workout Time")
-                    .font(.custom("EtruscoNowCondensed Bold", size: 35))
-                    .foregroundColor(.white)
-                
-                Spacer()
-                
-                Text(timeText)
-                    .font(.custom("Sailec Bold", size: 30))
-                    .foregroundColor(.white)
-                    .padding(.top, 5)
-            }
-            .padding(.horizontal)
-       }
-        .onAppear {
-            startTimer()
-        }
-        .onDisappear {
-            stopTimer()
-        }
-    }
-    
-    func startTimer() {
-            elapsedTime = 0.0
-            
-            timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: { _ in
-                elapsedTime += 0.1
-                let minutes = Int(elapsedTime) / 60
-                let seconds = Int(elapsedTime) % 60
-                timeText = String(format: "%02d:%02d", minutes, seconds)
-            })
-        }
-    
-    func stopTimer() {
-        timer?.invalidate()
-        timer = nil
-    }
-}
 
 
 #Preview {

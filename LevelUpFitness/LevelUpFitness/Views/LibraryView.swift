@@ -29,7 +29,8 @@ struct LibraryView: View {
                                     VStack (alignment: .leading, spacing: 4){
                                         HStack {
                                             Text("Exercise Library")
-                                                .font(.custom("Sailec Medium", size: 30))
+                                                .font(.system(size: 30, weight: .light, design: .rounded))
+                                                .foregroundColor(.black)
                                         }
                                         
                                         Text("Discover and master new exercises.")
@@ -56,8 +57,8 @@ struct LibraryView: View {
                         if let featuredProgressions = getFeaturedProgressions() {
                             VStack(alignment: .leading, spacing: 16) {
                                 Text("Featured Exercises")
-                                    .font(.system(size: 24, weight: .bold, design: .rounded))
-                                    .foregroundColor(Color(hex: "1E293B"))
+                                    .font(.system(size: 24, weight: .light, design: .rounded))
+                                    .foregroundColor(.gray)
                                 
                                 ScrollView(.horizontal, showsIndicators: false) {
                                     HStack(spacing: 16) {
@@ -76,8 +77,8 @@ struct LibraryView: View {
                                 VStack(alignment: .leading, spacing: 16) {
                                     HStack {
                                         Text(key.capitalizingFirstLetter())
-                                            .font(.system(size: 24, weight: .bold, design: .rounded))
-                                            .foregroundColor(Color(hex: "1E293B"))
+                                            .font(.system(size: 24, weight: .light, design: .rounded))
+                                            .foregroundColor(.gray)
                                         Spacer()
                                         if let level = userXPData.subLevels.attribute(for: key)?.level {
                                             Text("Level \(level)")

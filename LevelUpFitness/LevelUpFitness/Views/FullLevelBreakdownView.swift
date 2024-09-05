@@ -28,7 +28,7 @@ struct FullLevelBreakdownView: View {
                         HStack {
                             Text("Level")
                                 .font(.system(size: 48, weight: .light, design: .rounded))
-                                .foregroundColor(Color(hex: "E0E0E0"))
+                                .foregroundColor(.black)
                             
                             ZStack {
                                 Circle()
@@ -77,41 +77,40 @@ struct FullLevelBreakdownView: View {
                     }
                 }
                 
-                VStack(alignment: .leading, spacing: 24) {
-                    Text("Recent Level Changes")
-                        .font(.system(size: 24, weight: .light, design: .rounded))
-                        .foregroundColor(.gray)
-                    
-                    ForEach(levelChangeManager.levelChanges.prefix(5), id: \.id) { change in
-                        HStack(alignment: .top, spacing: 16) {
-                            Image(systemName: iconName(for: change.keyword))
-                                .font(.system(size: 24))
-                                .foregroundColor(Color.white)
-                                .frame(width: 40, height: 40)
-                                .background(gradient)
-                                .clipShape(Circle())
-                                .shadow(radius: 10)
-                            
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(change.keyword)
-                                    .font(.system(size: 18, weight: .medium, design: .rounded))
-                                    .foregroundColor(.black)
-                                Text(change.description)
-                                    .font(.system(size: 16, weight: .medium, design: .rounded))
-                                    .foregroundColor(.black.opacity(0.7))
+                if levelChangeManager.levelChanges.count > 0 {
+                    VStack(alignment: .leading, spacing: 7) {
+                        Text("Recent Level Changes")
+                            .font(.system(size: 24, weight: .light, design: .rounded))
+                            .foregroundColor(.gray)
+                        
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 16) {
+                                ForEach(levelChangeManager.levelChanges.prefix(5), id: \.id) { change in
+                                    VStack(alignment: .leading, spacing: 8) {
+                                        Text(change.keyword)
+                                            .font(.system(size: 18, weight: .medium, design: .rounded))
+                                            .foregroundColor(.black)
+                                        
+                                        Text(change.description)
+                                            .font(.system(size: 16, weight: .medium, design: .rounded))
+                                            .foregroundColor(.black.opacity(0.7))
+                                        
+                                        Text("\(change.change) XP")
+                                            .font(.system(size: 18, weight: .light, design: .rounded))
+                                            .foregroundColor(Color(hex: "10B981"))
+                                    }
+                                    .padding()
+                                    .background(Color(hex: "F5F5F5"))
+                                    .cornerRadius(15)
+                                    .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 3)
+                                }
                             }
-                            
-                            Spacer()
-                            
-                            Text("\(change.change) XP")
-                                .font(.system(size: 18, weight: .light, design: .rounded))
-                                .foregroundColor(Color(hex: "10B981"))
-                                .padding(.top, 4)
+                            .padding(.vertical, 10)
                         }
                     }
                 }
             
-                VStack(alignment: .leading, spacing: 24) {
+                VStack(alignment: .leading, spacing: 10) {
                     Text("Level Trends")
                         .font(.system(size: 24, weight: .light, design: .rounded))
                         .foregroundColor(.gray)
@@ -141,6 +140,7 @@ struct FullLevelBreakdownView: View {
                             .foregroundColor(Color(hex: "64748B"))
                     }
                 }
+                .padding(.top, -10)
             }
             .padding()
         }
@@ -186,7 +186,7 @@ struct CustomProgressLevelViewStyle: ProgressViewStyle {
         GeometryReader { geometry in
             ZStack(alignment: .leading) {
                 Capsule()
-                    .foregroundColor(Color(hex: "E0F2FE"))
+                    .foregroundColor(progressColor.opacity(0.3))
                     .frame(height: 8)
                 
                 Capsule()
