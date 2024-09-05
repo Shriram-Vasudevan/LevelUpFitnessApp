@@ -71,85 +71,69 @@ struct WorkoutContent: View {
     @State private var avPlayer = AVPlayer()
     
     var body: some View {
-        VStack (spacing: 0) {
-            VStack (spacing: 0) {
-                ZStack
-                {
-                    HStack {
-                        Button {
-                            dismiss()
-                        } label: {
-                            Image(systemName: "chevron.left")
-                                .foregroundColor(.black)
+        VStack(spacing: 0) {
+            ScrollView(.vertical) {
+                VStack(spacing: 0) {
+                    ZStack {
+                        HStack {
+                            Button {
+                                dismiss()
+                            } label: {
+                                Image(systemName: "chevron.left")
+                                    .foregroundColor(.black)
+                            }
+                            Spacer()
                         }
-                        
-                        
+                        .padding(.horizontal)
+
+                        Text("Exercise")
+                            .font(.custom("Sailec Bold", size: 20))
+                            .foregroundColor(.black)
+                    }
+                    .padding(.bottom)
+
+                    if let videoURL = URL(string: workoutManager.currentExercises[workoutManager.currentExerciseIndex].cdnURL) {
+                        VideoPlayer(player: avPlayer)
+                            .aspectRatio(16/9, contentMode: .fit)
+                            .onAppear {
+                                avPlayer = AVPlayer(url: videoURL)
+                                avPlayer.play()
+                            }
+                            .padding(.horizontal)
+                    } else {
+                        Text("Retrieving Video")
+                    }
+
+                    HStack {
+                        Text(workoutManager.currentExercises[workoutManager.currentExerciseIndex].name)
+                            .font(.system(size: 30, weight: .bold, design: .rounded))
+                            .foregroundColor(.black)
+
                         Spacer()
                     }
                     .padding(.horizontal)
-                    
-                    Text("Exercise")
-                        .font(.custom("Sailec Bold", size: 20))
-                        .foregroundColor(.black)
+
+                    HStack {
+                        Text("Reps per Set: \(workoutManager.currentExercises[workoutManager.currentExerciseIndex].reps)")
+                            .font(.system(size: 20, weight: .light, design: .rounded))
+                            .foregroundColor(.black)
+
+                        Spacer()
+                    }
+                    .padding(.horizontal)
                 }
-                .padding(.bottom)
-                
-                if let videoURL = URL(string: workoutManager.currentExercises[workoutManager.currentExerciseIndex].cdnURL) {
-                    VideoPlayer(player: avPlayer)
-                        .aspectRatio(16/9, contentMode: .fit)
-                        .onAppear {
-                            avPlayer = AVPlayer(url: videoURL)
-                            avPlayer.play()
-                        }
-                        .padding(.horizontal)
-                } else {
-                    Text("Retrieving Video")
-                }
-                
-                HStack {
-                    Text(workoutManager.currentExercises[workoutManager.currentExerciseIndex].name)
-                        .font(.system(size: 30, weight: .bold, design: .rounded))
-                        .foregroundColor(.black)
-                    
-                    
-                    Spacer()
-                }
-                .padding(.horizontal)
-                
-                HStack {
-                    Text("Reps per Set: \(workoutManager.currentExercises[workoutManager.currentExerciseIndex].reps)")
-                        .font(.system(size: 20, weight: .light, design: .rounded))
-                        .foregroundColor(.black)
-                    
-                    Spacer()
-                }
-                .padding(.horizontal)
-            }
-        
-            ScrollView(.vertical) {
-                
-                ForEach(Array(workoutManager.currentExerciseData.sets.enumerated()), id: \.offset) { index, set in
-                    let isCurrentSet = index == workoutManager.currentSetIndex
-                    let isWeightExercise = workoutManager.currentExercises[workoutManager.currentExerciseIndex].isWeight
-                    
-                    ProramExerciseDataSetWidget(
-                        model: $workoutManager.currentExerciseData.sets[index],
-                        setIndex: index,
+
+                if workoutManager.currentSetIndex < workoutManager.currentExerciseData.sets.count {
+                    ProgramExerciseDataSetWidget(
+                        model: $workoutManager.currentExerciseData.sets[workoutManager.currentSetIndex], exercise: workoutManager.currentExercises[workoutManager.currentExerciseIndex],
+                        setIndex: workoutManager.currentSetIndex,
                         setCompleted: {
-                            workoutManager.moveToNextSet()
-                        },
-                        isWeight: isWeightExercise
+                            completeCurrentSet()
+                        }
                     )
-                    .disabled(!isCurrentSet)
-                    .padding()
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(isCurrentSet ? Color.black : Color.white, lineWidth: 2)
-                    )
-                    .padding()
+                    .id(UUID().uuidString)
                 }
-                
-                
+
                 Button(action: {
                     exitWorkout()
                 }, label: {
@@ -169,28 +153,30 @@ struct WorkoutContent: View {
         .onChange(of: workoutManager.programCompletedForDay, { oldValue, newValue in
             if newValue {
                 dismiss()
-                
                 GlobalCoverManager.shared.showProgramDayCompletion()
             }
         })
         .id(workoutManager.currentExerciseIndex)
     }
-    
+
+    func completeCurrentSet() {
+        workoutManager.moveToNextSet()
+    }
+
     func exitWorkout() {
         Task {
-            if let todaysProgram = programManager.program?.program.first(where: { $0.day == DateUtility.getCurrentWeekday() }) {
+            if (programManager.program?.program.first(where: { $0.day == DateUtility.getCurrentWeekday() })) != nil {
                 print("uploading new status")
                 await programManager.uploadNewProgramStatus(completion: { success in
-                        if success {
-                            dismiss()
-                        } else {
-                            
-                        }
-                    })
+                    if success {
+                        dismiss()
+                    }
+                })
             }
         }
     }
 }
+
 
 
 
