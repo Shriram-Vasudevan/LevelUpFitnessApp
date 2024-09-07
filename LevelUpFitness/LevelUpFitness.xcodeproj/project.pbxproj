@@ -144,8 +144,6 @@
 		99CFAAED2BEB075700EFF67E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 99CFAAEC2BEB075700EFF67E /* Preview Assets.xcassets */; };
 		99DD3D522C1D0839006C07B3 /* ExerciseLibraryExerciseWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DD3D512C1D0839006C07B3 /* ExerciseLibraryExerciseWidget.swift */; };
 		99DD3D542C1D0871006C07B3 /* FullPageVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DD3D532C1D0871006C07B3 /* FullPageVideoView.swift */; };
-		99E0A5112C86458E00CC1224 /* UpNextProgramExerciseWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99E0A5102C86458E00CC1224 /* UpNextProgramExerciseWidget.swift */; };
-		99E0A5132C868F7D00CC1224 /* TodaysScheduleWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99E0A5122C868F7D00CC1224 /* TodaysScheduleWidget.swift */; };
 		99E0A5152C86908B00CC1224 /* ProgramStatsButtonWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99E0A5142C86908A00CC1224 /* ProgramStatsButtonWidget.swift */; };
 		99ECAD262C76C6610012F8E7 /* ProgramCompletedCover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99ECAD252C76C6610012F8E7 /* ProgramCompletedCover.swift */; };
 		99ECAD282C76E35C0012F8E7 /* GlobalCoverManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99ECAD272C76E35C0012F8E7 /* GlobalCoverManager.swift */; };
@@ -284,8 +282,6 @@
 		99CFAAEC2BEB075700EFF67E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		99DD3D512C1D0839006C07B3 /* ExerciseLibraryExerciseWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseLibraryExerciseWidget.swift; sourceTree = "<group>"; };
 		99DD3D532C1D0871006C07B3 /* FullPageVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullPageVideoView.swift; sourceTree = "<group>"; };
-		99E0A5102C86458E00CC1224 /* UpNextProgramExerciseWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpNextProgramExerciseWidget.swift; sourceTree = "<group>"; };
-		99E0A5122C868F7D00CC1224 /* TodaysScheduleWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodaysScheduleWidget.swift; sourceTree = "<group>"; };
 		99E0A5142C86908A00CC1224 /* ProgramStatsButtonWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramStatsButtonWidget.swift; sourceTree = "<group>"; };
 		99ECAD252C76C6610012F8E7 /* ProgramCompletedCover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramCompletedCover.swift; sourceTree = "<group>"; };
 		99ECAD272C76E35C0012F8E7 /* GlobalCoverManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalCoverManager.swift; sourceTree = "<group>"; };
@@ -399,8 +395,13 @@
 				99A67EE92BF451EF002DC3DC /* HomeView.swift */,
 				992F26A42C6032A100F25400 /* FullLevelBreakdownView.swift */,
 				994E7DC82C03DF5C00BAD9E0 /* ProgramView.swift */,
+				999F70642C06C80300B35A78 /* WorkoutView.swift */,
 				991F8FF12C18D0A100A134A5 /* LibraryView.swift */,
 				99DD3D512C1D0839006C07B3 /* ExerciseLibraryExerciseWidget.swift */,
+				991FB4492C653C38006B4ACE /* IndividualExerciseView.swift */,
+				9978CDF12C7C22F500659813 /* LibraryExerciseDataView.swift */,
+				9978CDEF2C7C22E800659813 /* ExerciseDataSetWidget.swift */,
+				991FB44B2C654A69006B4ACE /* VerticalLevelBanner.swift */,
 				991F8FE32C1527A900A134A5 /* ProgramStatisticsView.swift */,
 				993DF2402C397C5C00BBC1BF /* SetCounterWidget.swift */,
 				993DF23E2C38AFEF00BBC1BF /* SetStatWidget.swift */,
@@ -437,7 +438,6 @@
 				991FB43F2C628084006B4ACE /* HealthStatsWidget.swift */,
 				9978CE0F2C83DE9800659813 /* WeightStatView.swift */,
 				991FB4472C62C085006B4ACE /* RecommendedExerciseWidget.swift */,
-				991FB44B2C654A69006B4ACE /* VerticalLevelBanner.swift */,
 				991FB4742C69394D006B4ACE /* LevelChangeWidget.swift */,
 				991FB47C2C6C3BCE006B4ACE /* ChallengeTemplateWidget.swift */,
 				991FB47E2C6D561F006B4ACE /* ActiveUserChallengeWidget.swift */,
@@ -447,15 +447,9 @@
 				99ECAD312C7844080012F8E7 /* PastProgramWidget.swift */,
 				99ECAD352C7850F40012F8E7 /* PastProgramInsightView.swift */,
 				99EEC6122C3201780044F906 /* LevelUpBar.swift */,
-				991FB4492C653C38006B4ACE /* IndividualExerciseView.swift */,
-				999F70642C06C80300B35A78 /* WorkoutView.swift */,
-				9978CDEF2C7C22E800659813 /* ExerciseDataSetWidget.swift */,
-				9978CDF12C7C22F500659813 /* LibraryExerciseDataView.swift */,
 				9978CDF72C7D79C700659813 /* HealthTrendView.swift */,
 				9978CDF92C7D83C700659813 /* WeightTrendView.swift */,
 				9978CDFF2C7E69D200659813 /* ToDoList.swift */,
-				99E0A5102C86458E00CC1224 /* UpNextProgramExerciseWidget.swift */,
-				99E0A5122C868F7D00CC1224 /* TodaysScheduleWidget.swift */,
 				99E0A5142C86908A00CC1224 /* ProgramStatsButtonWidget.swift */,
 			);
 			path = Views;
@@ -788,7 +782,6 @@
 				99ECAD302C7841BA0012F8E7 /* StringUtility.swift in Sources */,
 				99B627482C38561D00482E3B /* WorkoutManager.swift in Sources */,
 				99EEC6152C320FC30044F906 /* FitnessOptionType.swift in Sources */,
-				99E0A5132C868F7D00CC1224 /* TodaysScheduleWidget.swift in Sources */,
 				991FB4752C69394D006B4ACE /* LevelChangeWidget.swift in Sources */,
 				994E7DC72C03DE5400BAD9E0 /* PascalCaseCodingKey.swift in Sources */,
 				994E7DB72C026A1D00BAD9E0 /* AuthStateObserver.swift in Sources */,
@@ -816,7 +809,6 @@
 				999F70762C0F6D9C00B35A78 /* Double.swift in Sources */,
 				99FC9E442C5EADC800DAFFAC /* XPAdditionType.swift in Sources */,
 				9978CDFC2C7D8A6200659813 /* TrendManager.swift in Sources */,
-				99E0A5112C86458E00CC1224 /* UpNextProgramExerciseWidget.swift in Sources */,
 				995B94BB2C596F0B007AECF0 /* TimeData.swift in Sources */,
 				9978CE102C83DE9800659813 /* WeightStatView.swift in Sources */,
 				994E7DB92C026BE500BAD9E0 /* AuthCheckView.swift in Sources */,

@@ -23,78 +23,67 @@ struct LibraryView: View {
                 
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack(spacing: 24) {
-                        VStack (spacing: 10) {
-                            VStack (spacing: 3) {
-                                HStack {
-                                    VStack (alignment: .leading, spacing: 4){
-                                        HStack {
-                                            Text("Exercise Library")
-                                                .font(.system(size: 30, weight: .light, design: .rounded))
-                                                .foregroundColor(.black)
-                                        }
-                                        
-                                        Text("Discover and master new exercises.")
-                                            .font(.custom("Sailec Regular Italic", size: 12))
-                                    }
-                                    
-                                    Spacer()
-                                    
-                                    
+                        VStack(spacing: 16) {
+                            HStack {
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text("Exercise Library")
+                                        .font(.system(size: 28, weight: .medium, design: .default))
+                                        .foregroundColor(.black)
+                                    Text("Discover and master new exercises.")
+                                        .font(.system(size: 14, weight: .regular, design: .default))
+                                        .foregroundColor(.gray)
                                 }
+                                Spacer()
                             }
                             
                             HStack {
                                 Image(systemName: "magnifyingglass")
-                                    .foregroundColor(.secondary)
+                                    .foregroundColor(.gray)
                                 TextField("Search exercises", text: $searchText)
                             }
                             .padding()
-                            .background(Color.white)
-                            .cornerRadius(10)
-                            .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
+                            .background(Color(hex: "F5F5F5"))
+                            .cornerRadius(8)
                         }
                         
                         if let featuredProgressions = getFeaturedProgressions() {
                             VStack(alignment: .leading, spacing: 16) {
                                 Text("Featured Exercises")
-                                    .font(.system(size: 24, weight: .light, design: .rounded))
-                                    .foregroundColor(.gray)
+                                    .font(.system(size: 22, weight: .medium, design: .default))
+                                    .foregroundColor(.black)
                                 
                                 ScrollView(.horizontal, showsIndicators: false) {
                                     HStack(spacing: 16) {
                                         ForEach(featuredProgressions, id: \.name) { progression in
                                             FeaturedExerciseCard(progression: progression)
-                                                .padding(.vertical, 3)
                                         }
                                     }
                                 }
                             }
                         }
 
-                        
                         if let userXPData = xpManager.userXPData {
                             ForEach(exerciseTypeKeys, id: \.self) { key in
                                 VStack(alignment: .leading, spacing: 16) {
                                     HStack {
                                         Text(key.capitalizingFirstLetter())
-                                            .font(.system(size: 24, weight: .light, design: .rounded))
-                                            .foregroundColor(.gray)
+                                            .font(.system(size: 22, weight: .medium, design: .default))
+                                            .foregroundColor(.black)
                                         Spacer()
                                         if let level = userXPData.subLevels.attribute(for: key)?.level {
                                             Text("Level \(level)")
-                                                .font(.subheadline)
+                                                .font(.system(size: 14, weight: .medium, design: .default))
                                                 .foregroundColor(.white)
                                                 .padding(.horizontal, 12)
                                                 .padding(.vertical, 6)
-                                                .background(Color(hex: "3B82F6"))
-                                                .cornerRadius(20)
+                                                .background(Color(hex: "40C4FC"))
                                         }
                                     }
                                     
                                     let filteredExercises = exerciseManager.exercises.filter { $0.exerciseType == key.capitalizingFirstLetter() }
                                     if filteredExercises.isEmpty {
                                         Text("No exercises for \(key)")
-                                            .foregroundColor(.secondary)
+                                            .foregroundColor(.gray)
                                     } else {
                                         ForEach(filteredExercises, id: \.id) { exercise in
                                             ExerciseLibraryExerciseWidget(exercise: exercise, userXPData: userXPData) { progression in
@@ -151,21 +140,24 @@ struct FeaturedExerciseCard: View {
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(width: 200, height: 120)
-                .clipShape(RoundedRectangle(cornerRadius: 12))
+                .clipped()
             
-            Text("Featured Exercise")
-                .font(.headline)
-                .foregroundColor(Color(hex: "1E293B"))
-            
-            Text(progression.name)
-                .font(.subheadline)
-                .foregroundColor(.secondary)
+            VStack(alignment: .leading, spacing: 4) {
+                Text(progression.name)
+                    .font(.system(size: 16, weight: .medium, design: .default))
+                    .foregroundColor(.black)
+                
+                Text("Featured Exercise")
+                    .font(.system(size: 14, weight: .regular, design: .default))
+                    .foregroundColor(.gray)
+            }
+            .padding(.horizontal, 8)
+            .padding(.bottom, 8)
         }
         .frame(width: 200)
-        .padding()
         .background(Color.white)
-        .cornerRadius(16)
-        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
+        .cornerRadius(4)
+        .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
     }
 }
 

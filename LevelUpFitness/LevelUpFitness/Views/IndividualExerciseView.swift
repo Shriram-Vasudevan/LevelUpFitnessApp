@@ -17,61 +17,64 @@ struct IndividualExerciseView: View {
     @State var videoURL: URL?
     var body: some View {
         ZStack {
-            Color(red: 240 / 255.0, green: 244 / 255.0, blue: 252 / 255.0)
-                .ignoresSafeArea(.all)
+            Color.white.ignoresSafeArea(.all)
             
-            VStack (spacing: 0){
-                ZStack
-                {
-                    HStack {
-                        Button {
-                            dismiss()
-                        } label: {
-                            Image(systemName: "chevron.left")
-                                .foregroundColor(.black)
-                        }
+            ScrollView(.vertical) {
+                VStack (spacing: 0){
+                    ZStack
+                    {
+                        HStack {
+                            Button {
+                                dismiss()
+                            } label: {
+                                Image(systemName: "chevron.left")
+                                    .foregroundColor(.black)
+                            }
 
+                            
+                            Spacer()
+                        }
+                        .padding(.horizontal)
                         
+                        Text("Exercise")
+                            .font(.custom("Sailec Bold", size: 20))
+                            .foregroundColor(.black)
+                    }
+                    .padding(.bottom)
+                    
+                    if let videoURL = self.videoURL {
+                        VideoPlayer(player: avPlayer)
+                            .aspectRatio(16/9, contentMode: .fit)
+                            .onAppear {
+                                avPlayer = AVPlayer(url: videoURL)
+                                avPlayer.play()
+                            }
+                    } else {
+                        Text("Retrieving Video")
+                    }
+                    
+                    HStack {
+                        Text(progression.name)
+                            .font(.system(size: 20, weight: .medium, design: .default))
+
                         Spacer()
                     }
                     .padding(.horizontal)
+                    .padding(.top, 7)
                     
-                    Text("Exercise")
-                        .font(.custom("Sailec Bold", size: 20))
-                        .foregroundColor(.black)
-                }
-                .padding(.bottom)
-                
-                if let videoURL = self.videoURL {
-                    VideoPlayer(player: avPlayer)
-                        .aspectRatio(16/9, contentMode: .fit)
-                        .onAppear {
-                            avPlayer = AVPlayer(url: videoURL)
-                            avPlayer.play()
-                        }
-                } else {
-                    Text("Retrieving Video")
-                }
-                
-                ScrollView(.vertical) {
                     HStack {
-                        VStack(alignment: .leading) {
-                            Text(progression.name)
-                                .font(.custom("Sailec Bold", size: 25))
-                                .fontWeight(.bold)
-                            Text("Exercise Type: \(progression.exerciseType)")
-                                .font(.subheadline)
-                                .foregroundColor(.gray)
-                        }
-                        
+                        Text("Exercise Type: \(progression.exerciseType)")
+                            .font(.system(size: 14, weight: .medium, design: .default))
+
                         Spacer()
-                    
                     }
+                    .padding(.horizontal)
+
                     
                     LibraryExerciseDataView(exerciseData: ExerciseData(sets: []), isWeight: progression.isWeight, exerciseType: progression.exerciseType)
                     
                 }
-                .padding([.top, .horizontal])
+                
             }
         }
         .navigationBarBackButtonHidden()

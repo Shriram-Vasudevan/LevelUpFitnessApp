@@ -82,7 +82,27 @@ struct WorkoutContent: View {
                                 Image(systemName: "chevron.left")
                                     .foregroundColor(.black)
                             }
+                            
                             Spacer()
+                            
+                            Button(action: {
+                                exitWorkout()
+                            }, label: {
+                                Text("Finish")
+                                    .font(.caption)
+                                    .foregroundColor(.white)
+                                    .padding(7)
+                                    .background(
+                                        Capsule()
+                                            .fill(
+                                                LinearGradient(
+                                                    gradient: Gradient(colors: [Color(hex: "40C4FC"), Color(hex: "0077FF")]),
+                                                    startPoint: .leading,
+                                                    endPoint: .trailing
+                                                )
+                                            )
+                                    )
+                            })
                         }
                         .padding(.horizontal)
 
@@ -106,16 +126,16 @@ struct WorkoutContent: View {
 
                     HStack {
                         Text(workoutManager.currentExercises[workoutManager.currentExerciseIndex].name)
-                            .font(.system(size: 30, weight: .bold, design: .rounded))
-                            .foregroundColor(.black)
+                            .font(.system(size: 20, weight: .medium, design: .default))
 
                         Spacer()
                     }
                     .padding(.horizontal)
+                    .padding(.top, 7)
 
                     HStack {
-                        Text("Reps per Set: \(workoutManager.currentExercises[workoutManager.currentExerciseIndex].reps)")
-                            .font(.system(size: 20, weight: .light, design: .rounded))
+                        Text("Recommended Reps per Set: \(workoutManager.currentExercises[workoutManager.currentExerciseIndex].reps)")
+                            .font(.system(size: 13, weight: .light, design: .rounded))
                             .foregroundColor(.black)
 
                         Spacer()
@@ -133,16 +153,6 @@ struct WorkoutContent: View {
                     )
                     .id(UUID().uuidString)
                 }
-
-                Button(action: {
-                    exitWorkout()
-                }, label: {
-                    Image(systemName: "flag.checkered.circle.fill")
-                        .resizable()
-                        .foregroundColor(.white)
-                        .frame(width: 60, height: 60)
-                        .shadow(radius: 5)
-                })
             }
         }
         .background(content: {

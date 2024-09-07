@@ -25,76 +25,99 @@ struct LibraryExerciseDataView: View {
             VStack {
                 switch sectionType {
                     case .start:
-                        HStack {
-                            Text("Sets")
-                                 .font(.custom("Sailec Bold", size: 20))
-                             
-                             TextField("", text: $numberOfSets)
+                    VStack(spacing: 24) {
+                        Text("Set up your exercise")
+                            .font(.system(size: 24, weight: .bold, design: .rounded))
+                            .multilineTextAlignment(.center)
+                        
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Number of Sets")
+                                .font(.system(size: 16, weight: .semibold, design: .rounded))
+                            
+                            TextField("", text: $numberOfSets)
+                                .keyboardType(.numberPad)
+                                .padding()
+                                .background(Color(.systemGray6))
+                                .cornerRadius(10)
                                 .overlay(
-                                    RoundedRectangle(cornerRadius: 5)
-                                        .stroke(setsFieldNotFilledOut ? Color.red : Color.black)
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(setsFieldNotFilledOut ? Color.red : Color.clear, lineWidth: 2)
                                 )
-                                 .frame(width: 65)
                         }
-                    
-                        Button {
+                        
+                        Button(action: {
                             if !numberOfSets.isEmpty {
                                 setsFieldNotFilledOut = false
-                                
                                 initializeExerciseData(numberOfSets: numberOfSets)
-                                
                                 sectionType = .inProgress
                             } else {
                                 setsFieldNotFilledOut = true
                             }
-                        } label: {
+                        }) {
                             Text("Begin Sets")
-                                .fontWeight(.bold)
+                                .font(.system(size: 18, weight: .bold, design: .rounded))
                                 .foregroundColor(.white)
-                                .frame(minWidth: 0, maxWidth: .infinity)
+                                .frame(maxWidth: .infinity)
                                 .padding()
-                                .background(.blue)
-                                .cornerRadius(7)
-                                .shadow(radius: 3)
-                                .padding(.horizontal, 20)
-                                .padding(.vertical)
-                                .padding(.bottom)
+                                .background(Color.blue)
+                                .cornerRadius(15)
                         }
-                    case .inProgress:
-                        ForEach(exerciseData.sets.indices, id: \.self) { index in
-                            LibraryExerciseDataSetWidget(exerciseDataSet: $exerciseData.sets[index], isWeight: isWeight, moveToNextSet: {
-                                if !(index == exerciseData.sets.count - 1) {
-                                    currentExerciseDataSetIndex += 1
-                                } else {
-                                    let xpAdditionType = getExerciseTypeEnum(exerciseType: exerciseType)
-                                    
-                                    Task {
-                                        await XPManager.shared.addXP(increment: 5, type: xpAdditionType)
-                                        await XPManager.shared.addXPToDB()
-                                    }
-                                    
-                                    sectionType = .finished
-                                }
-                            })
-                            .disabled(currentExerciseDataSetIndex == index ? false : true)
-                            .padding()
-                            .overlay (
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(currentExerciseDataSetIndex == index ? .black : .white, lineWidth: 2)
-                            )
-                            .padding()
-                        }
-                    case .finished:
-                        Text("Complete!")
-                        
-                    Button {
-                        self.exerciseData = ExerciseData(sets: [])
-                        
-                        sectionType = .start
-                    } label: {
-                        Text("Restart")
+                        .padding(.top, 16)
                     }
-
+                    .padding()
+                    .background(Color(.systemBackground))
+                    .cornerRadius(20)
+                    .shadow(radius: 5)
+                    
+                    case .inProgress:
+                        LibraryExerciseDataSetWidget(exerciseDataSet: $exerciseData.sets[currentExerciseDataSetIndex], isWeight: isWeight, setIndex: currentExerciseDataSetIndex, moveToNextSet: {
+                            if !(currentExerciseDataSetIndex == exerciseData.sets.count - 1) {
+                                currentExerciseDataSetIndex += 1
+                            } else {
+                                let xpAdditionType = getExerciseTypeEnum(exerciseType: exerciseType)
+                                
+                                Task {
+                                    await XPManager.shared.addXP(increment: 5, type: xpAdditionType)
+                                    await XPManager.shared.addXPToDB()
+                                }
+                                
+                                sectionType = .finished
+                            }
+                        })
+                        .padding()
+                    case .finished:
+                        VStack(spacing: 30) {
+                            Image(systemName: "checkmark.circle.fill")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 100, height: 100)
+                                .foregroundColor(.green)
+                            
+                            Text("Exercise Complete!")
+                                .font(.system(size: 28, weight: .bold, design: .rounded))
+                            
+                            Text("Great job! You've finished all your sets.")
+                                .font(.system(size: 18, design: .rounded))
+                                .multilineTextAlignment(.center)
+                                .foregroundColor(.secondary)
+                            
+                            Button(action: {
+                                self.exerciseData = ExerciseData(sets: [])
+                                sectionType = .start
+                            }) {
+                                Text("Start New Exercise")
+                                    .font(.system(size: 18, weight: .bold, design: .rounded))
+                                    .foregroundColor(.white)
+                                    .frame(maxWidth: .infinity)
+                                    .padding()
+                                    .background(Color.blue)
+                                    .cornerRadius(15)
+                            }
+                        }
+                        .padding()
+                        .background(Color(.systemBackground))
+                        .cornerRadius(20)
+                        .shadow(radius: 5)
                 }
             }
         }
@@ -142,126 +165,151 @@ struct LibraryExerciseDataSetWidget: View {
     @State var isExercising: Bool = false
     @State var isResting: Bool = false
     
+    var setIndex: Int
+    
     var moveToNextSet: () -> Void
     
     var body: some View {
-        HStack {
-            VStack {
-               Text("Weight")
-                    .font(.custom("Sailec Bold", size: 20))
-                    .opacity(isWeight ? 1 : 0.7)
-                
-                TextField("", text: $weightText)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 5)
-                            .stroke(weightFieldNotFilledOut ? Color.red : Color.black)
-                    )
-                    .opacity(isWeight ? 1 : 0.7)
-                    .disabled(isWeight ? false : true)
-                    .frame(width: 65)
+        VStack(alignment: .leading, spacing: 20) {
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Set \(setIndex + 1)")
+                        .font(.system(size: 24, weight: .bold, design: .rounded))
+                    Text(isResting ? "Rest" : "Exercise")
+                        .font(.system(size: 16, weight: .medium, design: .rounded))
+                        .foregroundColor(.secondary)
+                }
+                Spacer()
+                .frame(width: 60, height: 60)
+                .cornerRadius(8)
             }
             
-            Spacer()
-            
-            VStack {
-                Text("Reps")
-                     .font(.custom("Sailec Bold", size: 20))
-                 
-                 TextField("", text: $repText)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 5)
-                            .stroke(repsFieldNotFilledOut ? Color.red : Color.black)
-                    )
-                     .frame(width: 65)
+//            if exercise.equipment != "none" {
+//                HStack {
+//                    Image(systemName: "dumbbell.fill")
+//                        .foregroundColor(.blue)
+//                    Text(exercise.equipment)
+//                        .font(.system(size: 14, weight: .medium, design: .rounded))
+//                        .foregroundColor(.secondary)
+//                }
+//                .padding(.vertical, 8)
+//                .padding(.horizontal, 12)
+//                .background(Color.blue.opacity(0.1))
+//                .cornerRadius(20)
+//            }
+//            
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Time")
+                        .font(.system(size: 14, weight: .medium, design: .rounded))
+                        .foregroundColor(.secondary)
+                    Text(String(format: "%.1f", elapsedTime))
+                        .font(.system(size: 36, weight: .bold, design: .rounded))
+                }
+                Spacer()
+                ZStack {
+                    Circle()
+                        .stroke(lineWidth: 4)
+                        .opacity(0.3)
+                        .foregroundColor(.blue)
+                    
+                    Circle()
+                        .trim(from: 0.0, to: min(CGFloat(elapsedTime) / 60.0, 1.0))
+                        .stroke(style: StrokeStyle(lineWidth: 4, lineCap: .round, lineJoin: .round))
+                        .foregroundColor(.blue)
+                        .rotationEffect(Angle(degrees: 270.0))
+                        .animation(.linear, value: elapsedTime)
+                }
+                .frame(width: 50, height: 50)
             }
             
-            Spacer()
-            
-            Text("\(exerciseTime)")
-            
-            Spacer()
-            
-            Text("\(restTime)")
-            
-            Spacer()
-            
-            if !isExercising && !isResting {
-                Button {
-                    startTimer(for: "time")
-                    isExercising = true
-                } label: {
-                    Text("next")
+            HStack(spacing: 20) {
+                if isWeight {
+                    inputField(title: "Weight", text: $weightText, unit: "kg")
                 }
-
-            } else if isExercising {
-                Button {
-                    stopTimer()
-                    isExercising = false
-                    isResting = true
-                    startTimer(for: "rest")
-                } label: {
-                    Text("next")
-                }
-            } else if isResting && !isExercising {
-                Button {
-                    if (!weightText.isEmpty && isWeight && !repText.isEmpty) || (!repText.isEmpty && !isWeight) {
-                        repsFieldNotFilledOut = false
-                        weightFieldNotFilledOut = false
-                        stopTimer()
-                        isResting = false
-                        nextSet()
-                    }
-                    else {
-                        if weightText.isEmpty && isWeight {
-                            weightFieldNotFilledOut = true
-                        }
-                        
-                        repsFieldNotFilledOut = true
-                    }
-                } label: {
-                    Text("next")
-                }
+                inputField(title: "Reps", text: $repText, unit: "reps")
             }
-
-            Spacer()
+            
+            Button(action: handleSetCompletion) {
+                HStack {
+                    Spacer()
+                    Text(buttonTitle)
+                        .font(.system(size: 16, weight: .bold, design: .rounded))
+                    Spacer()
+                }
+                .padding()
+                .background(buttonColor)
+                .foregroundColor(.white)
+                .cornerRadius(8)
+            }
         }
-        .padding(.horizontal)
+        .padding()
+        .background(Color(.systemBackground))
     }
     
-    func nextSet() {
-        let weight = Int(weightText) ?? 0
-        let reps = Int(repText) ?? 0
-        let exerciseTime = exerciseTime
-        let restTime = restTime
-        
-        exerciseDataSet.weight = weight
-        exerciseDataSet.reps = reps
-        exerciseDataSet.time = exerciseTime
-        exerciseDataSet.rest = restTime
-        
-        moveToNextSet()
+    
+    private func inputField(title: String, text: Binding<String>, unit: String) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(title)
+                .font(.system(size: 14, weight: .medium, design: .rounded))
+                .foregroundColor(.secondary)
+            HStack {
+                TextField("0", text: text)
+                    .keyboardType(.numberPad)
+                    .font(.system(size: 24, weight: .bold, design: .rounded))
+                Text(unit)
+                    .font(.system(size: 14, weight: .medium, design: .rounded))
+                    .foregroundColor(.secondary)
+            }
+            .padding(.vertical, 8)
+            .padding(.horizontal, 12)
+            .background(Color(.systemGray6))
+            .cornerRadius(8)
+        }
     }
     
-    func startTimer(for type: String) {
+    private var buttonTitle: String {
+        if isResting { return "Continue" }
+        else if isExercising { return "Begin Rest" }
+        else { return "Begin Exercise" }
+    }
+    
+    private var buttonColor: Color {
+        if isResting { return .green }
+        else if isExercising { return .red }
+        else { return .blue }
+    }
+    
+    private func handleSetCompletion() {
+        if !isExercising && !isResting {
+            startTimer(for: "time")
+            isExercising = true
+        } else if isExercising {
+            stopTimer()
+            isExercising = false
+            isResting = true
+            startTimer(for: "rest")
+        } else if isResting {
+            if (!weightText.isEmpty && isWeight && !repText.isEmpty) || (!repText.isEmpty && !isWeight) {
+                stopTimer()
+                isResting = false
+                moveToNextSet()
+            }
+        }
+    }
+    
+    private func startTimer(for type: String) {
         elapsedTime = 0.0
-        
-        if type == "time" {
-            timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: { _ in
-                elapsedTime += 0.1
-                exerciseTime = elapsedTime
-            })
-        } else if type == "rest" {
-            timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: { _ in
-                elapsedTime += 0.1
-                restTime = elapsedTime
-            })
+        timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
+            elapsedTime += 0.1
         }
     }
     
-    func stopTimer() {
+    private func stopTimer() {
         timer?.invalidate()
         timer = nil
     }
+    
 }
 
 #Preview {
