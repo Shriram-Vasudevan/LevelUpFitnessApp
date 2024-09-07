@@ -65,9 +65,6 @@ struct LibraryExerciseDataView: View {
                         .padding(.top, 16)
                     }
                     .padding()
-                    .background(Color(.systemBackground))
-                    .cornerRadius(20)
-                    .shadow(radius: 5)
                     
                     case .inProgress:
                         LibraryExerciseDataSetWidget(exerciseDataSet: $exerciseData.sets[currentExerciseDataSetIndex], isWeight: isWeight, setIndex: currentExerciseDataSetIndex, moveToNextSet: {
@@ -84,7 +81,7 @@ struct LibraryExerciseDataView: View {
                                 sectionType = .finished
                             }
                         })
-                        .padding()
+                    
                     case .finished:
                         VStack(spacing: 30) {
                             Image(systemName: "checkmark.circle.fill")
@@ -115,9 +112,6 @@ struct LibraryExerciseDataView: View {
                             }
                         }
                         .padding()
-                        .background(Color(.systemBackground))
-                        .cornerRadius(20)
-                        .shadow(radius: 5)
                 }
             }
         }
