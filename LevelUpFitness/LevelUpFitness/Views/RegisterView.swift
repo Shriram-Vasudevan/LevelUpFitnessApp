@@ -1,163 +1,117 @@
-//
-//  RegisterView.swift
-//  LevelUpFitness
-//
-//  Created by Shriram Vasudevan on 5/25/24.
-//
-
 import SwiftUI
-
 
 struct RegisterView: View {
     @ObservedObject var authenticationManager: AuthenticationManager
+    @StateObject private var keyboardResponder = KeyboardResponder()
     
     @State private var email: String = ""
     @State private var username: String = ""
     @State private var name: String = ""
     @State private var password: String = ""
-//    @State private var confirmPassword: String = ""
     
-    @State var emailUnfilled: Bool = false
-    @State var usernameUnfilled: Bool = false
-    @State var nameUnfilled: Bool = false
-    @State var passwordUnfilled: Bool = false
-//    @State var confirmPasswordUnfilled: Bool = false
-//    @State var passwordsDontMatch: Bool = false
+    @State private var emailError: Bool = false
+    @State private var usernameError: Bool = false
+    @State private var nameError: Bool = false
+    @State private var passwordError: Bool = false
     
-    @State var navigateToConfirm: Bool = false
-        @State var accountConfirmed: Bool = false
+    @State private var navigateToConfirm: Bool = false
+    @State private var accountConfirmed: Bool = false
     
     @Environment(\.dismiss) var dismiss
-
     
-    var customGrey: Color = Color(red: 248/255.0, green: 252/255.0, blue: 252/255.0)
+    private let accentColor = Color(hex: "40C4FC")
+    private let textColor = Color.black
+    private let placeholderColor = Color.gray.opacity(0.7)
     
     var body: some View {
         NavigationStack {
             ZStack {
-                VStack(spacing: 0) {
-                    HStack {
-                        Text("Let's Create an \nAccount!")
-                            .foregroundColor(.black)
-                            .font(.custom("Sailec Bold", size: 35))
-                        
-                        Spacer()
-                    }
-                    .padding(.horizontal)
-                    .padding(.vertical, 40)
-                    
-
-             
-                    CustomTextField(placeholder: Text("Email").foregroundColor(.gray), text: $email)
-                        .padding()
-                        .background(RoundedRectangle(cornerRadius: 10).fill(emailUnfilled ? .red.opacity(0.7) : customGrey))
-                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(emailUnfilled ? .red : .gray.opacity(0.3), lineWidth: 1))
-                        .padding(.horizontal, 20)
-                        .autocapitalization(.none)
-                        .padding(.bottom, 15)
-                    
-                    CustomTextField(placeholder: Text("Username").foregroundColor(.gray), text: $username)
-                        .padding()
-                        .background(RoundedRectangle(cornerRadius: 10).fill(usernameUnfilled ? .red.opacity(0.7) : customGrey))
-                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(usernameUnfilled ? .red : .gray.opacity(0.3), lineWidth: 1))
-                        .padding(.horizontal, 20)
-                        .autocapitalization(.none)
-                        .padding(.bottom, 15)
-                    
-                    CustomTextField(placeholder: Text("Name").foregroundColor(.gray), text: $name)
-                        .padding()
-                        .background(RoundedRectangle(cornerRadius: 10).fill(nameUnfilled ? .red.opacity(0.7) : customGrey))
-                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(nameUnfilled ? .red : .gray.opacity(0.3), lineWidth: 1))
-                        .padding(.horizontal, 20)
-                        .autocapitalization(.none)
-                        .padding(.bottom, 15)
-
-               
-                    CustomSecureField(placeholder: Text("Password").foregroundColor(.gray), text: $password)
-                        .padding()
-                        .background(RoundedRectangle(cornerRadius: 10).fill(passwordUnfilled ? .red.opacity(0.7) : customGrey))
-                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(passwordUnfilled ? .red : .gray.opacity(0.3), lineWidth: 1))
-                        .padding(.horizontal, 20)
-                        .padding(.bottom, 15)
-                    
-
-
-                  
-                    Button(action: {
-                        withAnimation {
-                            checkFieldsAndSignUp()
+                Color.white.ignoresSafeArea()
+                
+                VStack {
+                    ScrollView {
+                        VStack(spacing: 24) {
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text("Create an Account")
+                                    .font(.system(size: 32, weight: .bold))
+                                    .foregroundColor(textColor)
+                                Text("Join us to start your fitness journey")
+                                    .font(.system(size: 18, weight: .regular))
+                                    .foregroundColor(placeholderColor)
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            
+                            VStack(spacing: 16) {
+                                CustomTextField(placeholder: "Email", text: $email, isSecure: false, error: emailError)
+                                CustomTextField(placeholder: "Username", text: $username, isSecure: false, error: usernameError)
+                                CustomTextField(placeholder: "Name", text: $name, isSecure: false, error: nameError)
+                                CustomTextField(placeholder: "Password", text: $password, isSecure: true, error: passwordError)
+                            }
+                            
+                            Button(action: checkFieldsAndSignUp) {
+                                Text("Register")
+                                    .font(.system(size: 18, weight: .semibold))
+                                    .foregroundColor(.white)
+                                    .frame(maxWidth: .infinity)
+                                    .frame(height: 56)
+                                    .background(accentColor)
+                                    .cornerRadius(8)
+                            }
                         }
-                    }) {
-                        Text("Register")
-                            .fontWeight(.bold)
-                            .foregroundColor(.white)
-                            .frame(minWidth: 0, maxWidth: .infinity)
-                            .padding(20)
-                            .background(.black)
-                            .cornerRadius(7)
-                            .padding(.horizontal, 20)
+                        .padding(.horizontal, 24)
+                        .padding(.top, 60)
                     }
-                    .padding(.top, 15)
+                    .animation(.easeOut(duration: 0.16), value: keyboardResponder.keyboardHeight)
                     
                     Spacer()
                     
-                    VStack {
+                    VStack(spacing: 16) {
                         HStack {
                             Text("Already have an account?")
-                                .font(.footnote)
-                                .foregroundColor(.black)
-                                .bold()
-                            
-                            Button(action: {
-                                dismiss()
-                            }) {
+                                .font(.system(size: 16, weight: .regular))
+                                .foregroundColor(placeholderColor)
+                            Button(action: { dismiss() }) {
                                 Text("Sign In")
-                                    .font(.footnote)
-                                    .fontWeight(.semibold)
-                                    .bold()
-                                    .foregroundColor(Color.blue)
+                                    .font(.system(size: 16, weight: .semibold))
+                                    .foregroundColor(accentColor)
                             }
                         }
-                        .padding(.top, 20)
                         
                         Text("By signing up, you agree to our Terms and Conditions.")
-                            .font(.footnote)
-                            .foregroundColor(.black)
+                            .font(.system(size: 14, weight: .regular))
+                            .foregroundColor(placeholderColor)
                             .multilineTextAlignment(.center)
-                            .bold()
-                            .padding(.top, 5)
-                            .padding(.bottom, 20)
                     }
-
                 }
+                
+                
             }
-            .onChange(of: accountConfirmed, perform: { newValue in
+            .onChange(of: accountConfirmed) { newValue in
                 if newValue {
                     dismiss()
                 }
-            })
-            .navigationDestination(isPresented: $navigateToConfirm) {
-                ConfirmationCodeView(email: email, accountConfirmed: $accountConfirmed)
             }
-            .navigationBarBackButtonHidden()
+            .navigationDestination(isPresented: $navigateToConfirm) {
+                ConfirmationCodeView(accountConfirmed: $accountConfirmed, email: email)
+            }
+            .navigationBarBackButtonHidden(true)
         }
     }
+
     
-    func checkFieldsAndSignUp() {
-        emailUnfilled = email.isEmpty
-        usernameUnfilled = username.isEmpty
-        nameUnfilled = name.isEmpty
-        passwordUnfilled = password.isEmpty
+
+    
+    private func checkFieldsAndSignUp() {
+        emailError = email.isEmpty
+        usernameError = username.isEmpty
+        nameError = name.isEmpty
+        passwordError = password.isEmpty
         
-        if (!emailUnfilled && !usernameUnfilled && !nameUnfilled && !passwordUnfilled) {
+        if !emailError && !usernameError && !nameError && !passwordError {
             Task {
                 await authenticationManager.register(email: email, name: name, username: username, password: password) { success, userID, failed in
-                    print("something")
                     if success {
-                        print("success")
                         navigateToConfirm = true
-                    } else {
-                        print("failed")
                     }
                 }
             }

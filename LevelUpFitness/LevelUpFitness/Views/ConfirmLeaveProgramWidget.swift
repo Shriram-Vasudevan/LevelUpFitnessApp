@@ -14,9 +14,10 @@ struct ConfirmLeaveProgramWidget: View {
                     close()
                 }
             
-            VStack {
+            VStack (spacing: 5) {
                 Text("Are you sure?")
-                    .bold()
+                    .font(.system(size: 18, weight: .medium, design: .default))
+                    .foregroundColor(.black)
                 
                 Button(action: {
                     withAnimation {
@@ -29,8 +30,8 @@ struct ConfirmLeaveProgramWidget: View {
                         .foregroundColor(.white)
                         .frame(minWidth: 0, maxWidth: .infinity)
                         .padding()
-                        .background(Color.black)
-                        .cornerRadius(20)
+                        .background(Color(hex: "40C4FC"))
+                        .cornerRadius(3)
                         .shadow(radius: 3)
                         .padding(.horizontal, 20)
                         .padding(.top)
@@ -39,9 +40,8 @@ struct ConfirmLeaveProgramWidget: View {
             }
             .padding()
             .background(
-                RoundedRectangle(cornerRadius: 15)
-                    .fill(Color.white)
-                    .shadow(radius: 5)
+                Rectangle()
+                    .fill(Color(hex: "F5F5F5"))
             )
             .padding()
             .offset(x: 0, y: offset)

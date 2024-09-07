@@ -43,6 +43,15 @@ struct ProgramView: View {
                     }
                     .padding()
                 }
+                
+                if showConfirmationWidget {
+                    ConfirmLeaveProgramWidget(isOpen: $showConfirmationWidget, confirmed: {
+                        Task {
+                            await programManager.leaveProgram()
+                        }
+                    })
+                }
+                
             }
         //    .navigationBarTitleDisplayMode(.inline)
 //            .toolbar {

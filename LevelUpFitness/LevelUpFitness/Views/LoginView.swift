@@ -1,167 +1,153 @@
-//
-//  LoginView.swift
-//  LevelUpFitness
-//
-//  Created by Shriram Vasudevan on 5/25/24.
-//
-
-
 import SwiftUI
-import AVKit
 
 struct LoginView: View {
-    @ObservedObject var authenticationManager = AuthenticationManager()
-    @ObservedObject private var keyboardResponder = KeyboardResponder()
+    @StateObject private var authenticationManager = AuthenticationManager()
+    @StateObject private var keyboardResponder = KeyboardResponder()
     
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var emailError: Bool = false
     @State private var passwordError: Bool = false
     
-    @State var navigateToRegister: Bool = false
-    @State var navigateToHomePage: Bool = false
+    @State private var navigateToRegister: Bool = false
+    @State private var navigateToHomePage: Bool = false
     
-    @Environment(\.dismiss) var dismiss
-    
-    var customGrey: Color = Color(red: 248/255.0, green: 252/255.0, blue: 252/255.0)
+    private let accentColor = Color(hex: "40C4FC")
+    private let backgroundColor = Color.white
+    private let textColor = Color.black
+    private let placeholderColor = Color.gray.opacity(0.7)
     
     var body: some View {
         NavigationStack {
             ZStack {
-                VStack(spacing: 20) {
-                    HStack {
-                        Text("Welcome Back!")
-                            .foregroundColor(.black)
-                            .font(.custom("Sailec Bold", size: 35))
-                        
-                        Spacer()
+                backgroundColor.ignoresSafeArea()
+                
+                VStack(spacing: 24) {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Welcome Back")
+                            .font(.system(size: 32, weight: .bold))
+                            .foregroundColor(textColor)
+                        Text("Sign in to continue")
+                            .font(.system(size: 18, weight: .regular))
+                            .foregroundColor(placeholderColor)
                     }
-                    .padding(.horizontal)
-                    .padding(.vertical, 40)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     
-                    CustomTextField(placeholder: Text("Email").foregroundColor(.gray), text: $email)
-                        .padding()
-                        .background(RoundedRectangle(cornerRadius: 10).fill(emailError ? .red.opacity(0.7) : customGrey))
-                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(emailError ? .red : .gray.opacity(0.3), lineWidth: 1))
-                        .padding(.horizontal, 20)
-                        .autocapitalization(.none)
-
-                    CustomSecureField(placeholder: Text("Password").foregroundColor(.gray), text: $password)
-                        .padding()
-                        .background(RoundedRectangle(cornerRadius: 10).fill(passwordError ? .red.opacity(0.7): customGrey))
-                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(passwordError ? .red : .gray.opacity(0.3), lineWidth: 1))
-                        .padding(.horizontal, 20)
-                    
-                    HStack {
-                        Text("Forgot Password?")
-                            .foregroundColor(.black)
-                        
-                        Spacer()
+                    VStack(spacing: 16) {
+                        CustomTextField(placeholder: "Email", text: $email, isSecure: false, error: emailError)
+                        CustomTextField(placeholder: "Password", text: $password, isSecure: true, error: passwordError)
                     }
-                    .padding(.horizontal)
+                    
+                    Button(action: checkFieldsAndLogin) {
+                        Text("Log In")
+                            .font(.system(size: 18, weight: .semibold))
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 56)
+                            .background(accentColor)
+                            .cornerRadius(8)
+                    }
                     
                     Button(action: {
-                        withAnimation {
-                            checkFieldsAndLogin()
-                        }
+                        // Handle forgot password
                     }) {
-                        Text("Log In")
-                            .fontWeight(.bold)
-                            .foregroundColor(.white)
-                            .frame(minWidth: 0, maxWidth: .infinity)
-                            .padding()
-                            .background(.black)
-                            .cornerRadius(7)
-                            .shadow(radius: 3)
-                            .padding(.horizontal, 20)
-                            .padding(.top)
+                        Text("Forgot Password?")
+                            .font(.system(size: 16, weight: .medium))
+                            .foregroundColor(accentColor)
                     }
-                    .padding(.bottom, keyboardResponder.keyboardHeight - keyboardResponder.keyboardHeight * 0.5)
-                    .animation(.spring(), value: keyboardResponder.keyboardHeight)
-
+                    
                     Spacer()
-
-                    VStack {
-                        HStack {
-                            Text("Don't have an account?")
-                                .font(.footnote)
-                                .foregroundColor(.black)
-                            
-                            Button(action: {
-                                navigateToRegister = true
-                            }) {
-                                Text("Sign Up")
-                                    .font(.footnote)
-                                    .fontWeight(.semibold)
-                                    .foregroundColor(Color.blue)
-                            }
+                    
+                    HStack {
+                        Text("Don't have an account?")
+                            .font(.system(size: 16, weight: .regular))
+                            .foregroundColor(placeholderColor)
+                        Button(action: { navigateToRegister = true }) {
+                            Text("Sign Up")
+                                .font(.system(size: 16, weight: .semibold))
+                                .foregroundColor(accentColor)
                         }
-                        .padding(.top, 20)
-                        
-                        Text("By signing in, you agree to our Terms and Conditions.")
-                            .font(.footnote)
-                            .foregroundColor(.black)
-                            .multilineTextAlignment(.center)
-                            .padding(.top, 5)
-                            .padding(.bottom, 20)
                     }
-
                 }
+                .padding(.horizontal, 24)
+                .padding(.top, 60)
+                .padding(.bottom, keyboardResponder.keyboardHeight)
+                .animation(.easeOut(duration: 0.16), value: keyboardResponder.keyboardHeight)
             }
             .navigationDestination(isPresented: $navigateToRegister) {
-                RegisterView(authenticationManager: authenticationManager)
+                Text("Register View")
             }
             .navigationDestination(isPresented: $navigateToHomePage) {
-                PagesHolderView(pageType: .home)
+                Text("Home Page")
             }
         }
     }
     
-    func checkFieldsAndLogin() {
+
+
+    private func checkFieldsAndLogin() {
         emailError = email.isEmpty
         passwordError = password.isEmpty
         
-        if (!emailError && !passwordError) {
+        if !emailError && !passwordError {
             Task {
-                await authenticationManager.login(username: email, password: password, completion: { success, userID, failed in
+                await authenticationManager.login(username: email, password: password) { success, userID, failed in
                     if success {
                         navigateToHomePage = true
                     }
-                })
+                }
             }
         }
     }
 }
 
 struct CustomTextField: View {
-    var placeholder: Text
+    let placeholder: String
     @Binding var text: String
-
+    let isSecure: Bool
+    let error: Bool
+    
+    private let accentColor = Color(hex: "40C4FC")
+    private let errorColor = Color.red.opacity(0.7)
+    private let placeholderColor = Color.gray.opacity(0.7)
+    
     var body: some View {
-        ZStack(alignment: .leading) {
-            if text.isEmpty { placeholder }
-            TextField("", text: $text)
-                .foregroundColor(.black)
+        VStack(alignment: .leading, spacing: 4) {
+            if isSecure {
+                SecureField(placeholder, text: $text)
+                    .textFieldStyle(CustomTextFieldStyle(error: error))
+            } else {
+                TextField(placeholder, text: $text)
+                    .textFieldStyle(CustomTextFieldStyle(error: error))
+            }
+            if error {
+                Text("\(placeholder) is required")
+                    .font(.system(size: 12, weight: .regular))
+                    .foregroundColor(errorColor)
+            }
         }
     }
 }
 
-struct CustomSecureField: View {
-    var placeholder: Text
-    @Binding var text: String
-
-    var body: some View {
-        ZStack(alignment: .leading) {
-            if text.isEmpty { placeholder }
-            SecureField("", text: $text)
-                .foregroundColor(.black)
-        }
+struct CustomTextFieldStyle: TextFieldStyle {
+    let error: Bool
+    
+    private let accentColor = Color(hex: "40C4FC")
+    private let errorColor = Color.red.opacity(0.7)
+    private let backgroundColor = Color(hex: "F5F5F5")
+    
+    func _body(configuration: TextField<Self._Label>) -> some View {
+        configuration
+            .padding(16)
+            .background(backgroundColor)
+            .cornerRadius(8)
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(error ? errorColor : accentColor, lineWidth: error ? 1 : 0)
+            )
     }
 }
-
 
 #Preview {
     LoginView()
 }
-
-

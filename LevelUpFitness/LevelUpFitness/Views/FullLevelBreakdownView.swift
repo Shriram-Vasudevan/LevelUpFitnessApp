@@ -198,8 +198,6 @@ struct CustomProgressLevelViewStyle: ProgressViewStyle {
     }
 }
 
-struct FullLevelBreakdownView_Previews: PreviewProvider {
-    static var previews: some View {
-        FullLevelBreakdownView()
-    }
+#Preview {
+    FullLevelBreakdownView()
 }
