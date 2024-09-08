@@ -1,7 +1,6 @@
 import SwiftUI
 
 struct LoginView: View {
-    @StateObject private var authenticationManager = AuthenticationManager()
     @StateObject private var keyboardResponder = KeyboardResponder()
     
     @State private var email: String = ""
@@ -75,7 +74,7 @@ struct LoginView: View {
                 .animation(.easeOut(duration: 0.16), value: keyboardResponder.keyboardHeight)
             }
             .navigationDestination(isPresented: $navigateToRegister) {
-                RegisterView(authenticationManager: authenticationManager)
+                RegisterView()
             }
             .navigationDestination(isPresented: $navigateToHomePage) {
                 PagesHolderView(pageType: .home)
@@ -91,7 +90,7 @@ struct LoginView: View {
         
         if !emailError && !passwordError {
             Task {
-                await authenticationManager.login(username: email, password: password) { success, userID, failed in
+                await AuthenticationManager.shared.login(username: email, password: password) { success, userID, failed in
                     if success {
                         navigateToHomePage = true
                     }

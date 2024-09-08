@@ -1,7 +1,6 @@
 import SwiftUI
 
 struct RegisterView: View {
-    @ObservedObject var authenticationManager: AuthenticationManager
     @StateObject private var keyboardResponder = KeyboardResponder()
     
     @State private var email: String = ""
@@ -109,7 +108,7 @@ struct RegisterView: View {
         
         if !emailError && !usernameError && !nameError && !passwordError {
             Task {
-                await authenticationManager.register(email: email, name: name, username: username, password: password) { success, userID, failed in
+                await AuthenticationManager.shared.register(email: email, name: name, username: username, password: password) { success, userID, failed in
                     if success {
                         navigateToConfirm = true
                     }
@@ -121,5 +120,5 @@ struct RegisterView: View {
 
 
 #Preview {
-    RegisterView(authenticationManager: AuthenticationManager())
+    RegisterView()
 }

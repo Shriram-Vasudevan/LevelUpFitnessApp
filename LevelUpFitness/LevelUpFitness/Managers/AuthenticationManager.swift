@@ -14,8 +14,12 @@ import SwiftUI
 
 //Handles Sign In + Login Stuff
 class AuthenticationManager: ObservableObject {
-    static var username: String?
-    static var name: String = ""
+    static let shared = AuthenticationManager()
+    
+    @Published var username: String?
+    @Published var name: String?
+//    static var pfp: Data?
+    
     
     func login(username: String, password: String, completion: @escaping (Bool, String?, Error?) async -> Void) async {
         do {
@@ -26,7 +30,7 @@ class AuthenticationManager: ObservableObject {
             if signInResult.isSignedIn {
                 print("Sign in succeeded")
                 if let userID = try? await Amplify.Auth.getCurrentUser().userId {
-                    await AuthenticationManager.getUsername()
+                    await getUsername()
                     await completion(true, userID, nil)
                 } else {
                     await completion(true, nil, nil)
@@ -188,28 +192,28 @@ class AuthenticationManager: ObservableObject {
         }
     }
     
-    static func getUsername() async {
+    func getUsername() async {
         do {
             let userAttributes = try await Amplify.Auth.fetchUserAttributes()
             print("User attributes - \(userAttributes)")
             
             let usernameAttribute = userAttributes.first(where: { $0.key == .custom("username") })
             
-            AuthenticationManager.username = usernameAttribute?.value ?? ""
-            print("the username: " + (AuthenticationManager.username ?? "not existent"))
+            self.username = usernameAttribute?.value ?? ""
+            print("the username: " + (self.username ?? "not existent"))
         } catch {
             print("Unexpected error: \(error)")
         }
     }
     
-    static func getName() async {
+    func getName() async {
         do {
             let userAttributes = try await Amplify.Auth.fetchUserAttributes()
             
             let nameAttribute = userAttributes.first(where: { $0.key == .name })
             
-            AuthenticationManager.name = nameAttribute?.value ?? ""
-            print("the username: " + AuthenticationManager.name)
+            self.name = nameAttribute?.value ?? ""
+            print("the username: " + self.name)
         } catch {
             print("Unexpected error: \(error)")
         }

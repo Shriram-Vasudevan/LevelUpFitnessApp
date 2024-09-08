@@ -10,7 +10,6 @@ import Combine
 
 struct ConfirmationCodeView: View {
     @Environment(\.dismiss) var dismiss
-    @ObservedObject private var authenticationManager = AuthenticationManager()
     @Binding var accountConfirmed: Bool
     
     let email: String
@@ -25,7 +24,7 @@ struct ConfirmationCodeView: View {
     private let placeholderColor = Color.gray.opacity(0.7)
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ZStack {
                 backgroundColor.ignoresSafeArea()
                 
@@ -94,7 +93,7 @@ struct ConfirmationCodeView: View {
         
         if !codeError {
             Task {
-                await authenticationManager.confirm(email: email, code: code) { success, error in
+                await AuthenticationManager.shared.confirm(email: email, code: code) { success, error in
                     if success {
                         accountConfirmed = true
                         dismiss()

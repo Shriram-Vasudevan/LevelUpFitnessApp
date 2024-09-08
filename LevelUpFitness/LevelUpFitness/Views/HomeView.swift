@@ -31,11 +31,11 @@ struct HomeView: View {
     
     @State var navigateToWeightTrendView: Bool = false
     
+    @State var navigateToProfileView: Bool = false
     
     var body: some View {
         NavigationStack {
             ZStack {
-//                Color(red: 240 / 255.0, green: 244 / 255.0, blue: 252 / 255.0)
                 Color.white
                     .ignoresSafeArea(.all)
                 
@@ -43,9 +43,15 @@ struct HomeView: View {
                     
                     VStack (spacing: 0){
                         HStack {
-                            Text("Hello Shriram")
-                                .font(.custom("YanoneKaffeesatz-Bold", size: 45))
-                                .bold()
+                            if let name = AuthenticationManager.shared.name {
+                                Text("Hello \(name)")
+                                    .font(.custom("YanoneKaffeesatz-Bold", size: 45))
+                                    .bold()
+                            } else {
+                                Text("Hey There!")
+                                    .font(.custom("YanoneKaffeesatz-Bold", size: 45))
+                                    .bold()
+                            }
                             
                             Spacer()
                             
@@ -57,6 +63,9 @@ struct HomeView: View {
                                         .scaledToFill()
                                         .frame(width: UIScreen.main.bounds.width / 13, height: UIScreen.main.bounds.width / 13)
                                         .clipShape(Circle())
+                                        .onTapGesture {
+                                            navigateToProfileView = true
+                                        }
                                 )
                         }
                         .padding(.horizontal)
@@ -347,6 +356,9 @@ struct HomeView: View {
             .navigationDestination(isPresented: $navigateToWeightTrendView) {
                 WeightTrendView()
             }
+            .navigationDestination(isPresented: $navigateToProfileView, destination: {
+                ProfileView()
+            })
             .fullScreenCover(isPresented: $showLevelUpInformationView, content: {
                 LevelInfoView()
             })

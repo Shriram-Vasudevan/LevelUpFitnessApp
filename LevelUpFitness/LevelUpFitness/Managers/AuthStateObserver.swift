@@ -29,8 +29,8 @@ class AuthStateObserver: ObservableObject {
                     if self.isSignedIn {
                         Task {
                             print("signed in")
-                            await AuthenticationManager.getUsername()
-                            await AuthenticationManager.getName()
+                            await AuthenticationManager.shared.getUsername()
+                            await AuthenticationManager.shared.getName()
                         }
                     }
                 }

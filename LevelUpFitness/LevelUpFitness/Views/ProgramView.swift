@@ -20,7 +20,7 @@ struct ProgramView: View {
     @State var programS3Representation: String = ""
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ZStack {
                 Color.white
                     .ignoresSafeArea()

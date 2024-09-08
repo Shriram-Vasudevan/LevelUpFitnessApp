@@ -6,8 +6,11 @@
 //
 
 import Foundation
+import UIKit
 
 class LocalStorageUtility {
+    private static let imageCache = NSCache<AnyObject, AnyObject>()
+    
     static func getCachedUserPrograms(at path: String) -> [Program]? {
         do {
             guard let documentsDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return nil }
@@ -299,6 +302,17 @@ class LocalStorageUtility {
         } catch {
             print("Failed to cache: \(error)")
             throw FileError.failed
+        }
+    }
+    
+    static func profilePictureSaved(userID: String) -> (Data?) {
+        guard let image = imageCache.object(forKey: userID as AnyObject) as? UIImage else { return nil }
+        return image.pngData()
+    }
+    
+    static func saveProfilePicture(pfpData: Data, userID: String) {
+        if let image = UIImage(data: pfpData) {
+            imageCache.setObject(image, forKey: userID as AnyObject)
         }
     }
     

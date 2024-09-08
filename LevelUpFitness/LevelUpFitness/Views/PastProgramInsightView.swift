@@ -12,7 +12,7 @@ struct PastProgramInsightView: View {
     @State private var programs: [Program]?
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ScrollView {
                 LazyVStack(spacing: 24) {
                     if let programs = self.programs {
