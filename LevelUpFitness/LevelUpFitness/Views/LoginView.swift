@@ -75,10 +75,10 @@ struct LoginView: View {
                 .animation(.easeOut(duration: 0.16), value: keyboardResponder.keyboardHeight)
             }
             .navigationDestination(isPresented: $navigateToRegister) {
-                Text("Register View")
+                RegisterView(authenticationManager: authenticationManager)
             }
             .navigationDestination(isPresented: $navigateToHomePage) {
-                Text("Home Page")
+                PagesHolderView(pageType: .home)
             }
         }
     }

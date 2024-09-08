@@ -132,7 +132,7 @@ struct ProgramExerciseDataSetWidget: View {
     private var buttonColor: Color {
         if isResting { return .green }
         else if isExercising { return .red }
-        else { return .blue }
+        else { return Color(hex: "40C4FC") }
     }
     
     private func handleSetCompletion() {

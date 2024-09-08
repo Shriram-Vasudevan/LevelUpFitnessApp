@@ -9,7 +9,7 @@ struct ProgramStatisticsView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                Color(UIColor.systemBackground).edgesIgnoringSafeArea(.all)
+                Color.white.edgesIgnoringSafeArea(.all)
                 
                 VStack(spacing: 0) {
                     HStack {
@@ -30,7 +30,6 @@ struct ProgramStatisticsView: View {
                         }
                     }
                     .padding()
-                    .background(Color(UIColor.secondarySystemBackground))
                     
                     Picker("", selection: $selectedTab) {
                         Text("Overview").tag(0)
@@ -85,7 +84,7 @@ struct ProgramStatisticsView: View {
                 }
             }
             .padding()
-            .background(Color(UIColor.secondarySystemBackground))
+            .background(Color(hex: "F5F5F5"))
             .cornerRadius(12)
             
             VStack(alignment: .leading, spacing: 10) {
@@ -103,7 +102,7 @@ struct ProgramStatisticsView: View {
                 }
             }
             .padding()
-            .background(Color(UIColor.secondarySystemBackground))
+            .background(Color(hex: "F5F5F5"))
             .cornerRadius(12)
             
         }
@@ -141,7 +140,7 @@ struct ProgramStatisticsView: View {
             }
         }
         .padding()
-        .background(Color(UIColor.secondarySystemBackground))
+        .background(Color(hex: "F5F5F5"))
         .cornerRadius(12)
     }
     
@@ -163,7 +162,7 @@ struct ProgramStatisticsView: View {
                 }
             }
             .padding()
-            .background(Color(UIColor.secondarySystemBackground))
+            .background(Color(hex: "F5F5F5"))
             .cornerRadius(12)
             
             HStack(spacing: 20) {
@@ -188,7 +187,7 @@ struct ProgramStatisticsView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
-        .background(Color(UIColor.secondarySystemBackground))
+        .background(Color(hex: "F5F5F5"))
         .cornerRadius(12)
     }
     

@@ -8,47 +8,33 @@
 import SwiftUI
 
 struct PastProgramWidget: View {
-    var programUnformatted: String
-    var programFormatted: String
-    
-    var viewPastProgram: (String) -> Void
+    let programUnformatted: String
+    let programFormatted: String
+    let viewPastProgram: (String) -> Void
     
     var body: some View {
-        VStack {
-            HStack () {
-                Text(programFormatted)
-                    .font(.title)
-                    .bold()
-                
-                Spacer()
-            }
-            
+        Button(action: { viewPastProgram(programUnformatted) }) {
             HStack {
-                Spacer()
-                
-                Button {
-                    viewPastProgram(programUnformatted)
-                } label: {
-                    Text("See More")
-                        .font(.system(size: 14, weight: .semibold, design: .rounded))
-                        .foregroundColor(.blue)
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 8)
-                        .background(.gray.opacity(0.1))
-                        .cornerRadius(20)
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(programFormatted)
+                        .font(.system(size: 18, weight: .medium, design: .default))
+                        .foregroundColor(.black)
+                    Text("Tap to view details")
+                        .font(.system(size: 14, weight: .light, design: .default))
+                        .foregroundColor(.gray)
                 }
-
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .foregroundColor(Color(hex: "40C4FC"))
             }
+            .padding()
+            .background(Color.white)
+            .cornerRadius(8)
+            .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
         }
-        .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 10)
-                .fill(.white)
-                .shadow(radius: 5)
-        )
-        .padding()
     }
 }
+
 
 #Preview {
     PastProgramWidget(programUnformatted: "Original", programFormatted: "Program: August 22 - September 19", viewPastProgram: {_ in })

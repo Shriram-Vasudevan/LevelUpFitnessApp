@@ -14,41 +14,41 @@ struct ProgramCompletedForTheDayCover: View {
         ZStack {
             Color.white.edgesIgnoringSafeArea(.all)
             
-            VStack() {
+            VStack(spacing: 24) {
                 Image(systemName: "trophy.fill")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 100, height: 100)
-                    .foregroundColor(.yellow)
-                    .shadow(color: .yellow.opacity(0.3), radius: 5, x: 0, y: 2)
-                    .padding(.bottom)
+                    .foregroundColor(Color(hex: "40C4FC"))
+                    .shadow(color: Color(hex: "40C4FC").opacity(0.3), radius: 5, x: 0, y: 2)
                 
-                Text("Program Completed!")
-                    .font(.system(size: 32, weight: .bold, design: .rounded))
-                    .foregroundColor(.black)
+                VStack(spacing: 6) {
+                    Text("Program Completed!")
+                        .font(.system(size: 30, weight: .bold, design: .default))
+                        .foregroundColor(.black)
+                    
+                    Text("Congratulations on finishing your program today!")
+                        .font(.system(size: 16, weight: .light, design: .default))
+                        .foregroundColor(.gray)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal)
+                }
                 
-                Text("Congratulations on finishing your program today!")
-                    .font(.headline)
-                    .foregroundColor(.gray)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal)
-                
-            
+
                 Spacer()
                 
-                VStack(spacing: 15) {
+                VStack(spacing: 8) {
                     Text("+5 XP")
-                        .font(.system(size: 24, weight: .bold, design: .rounded))
-                        .foregroundColor(.green)
+                        .font(.system(size: 24, weight: .bold, design: .default))
+                        .foregroundColor(Color(hex: "40C4FC"))
                     
                     Text("for completion")
-                        .font(.subheadline)
+                        .font(.system(size: 14, weight: .ultraLight, design: .default))
                         .foregroundColor(.gray)
                 }
                 .padding()
-                .background(Color.gray.opacity(0.1))
-                .cornerRadius(15)
-                .padding(.bottom)
+                .background(Color(hex: "F5F5F5"))
+                .cornerRadius(8)
                 
                 Button(action: {
                     Task {
@@ -58,17 +58,17 @@ struct ProgramCompletedForTheDayCover: View {
                     dismiss()
                 }) {
                     Text("Continue")
-                        .fontWeight(.bold)
+                        .font(.system(size: 18, weight: .medium, design: .default))
                         .foregroundColor(.white)
                         .frame(minWidth: 0, maxWidth: .infinity)
                         .padding()
-                        .background(Color.blue)
-                        .cornerRadius(25)
-                        .shadow(color: .blue.opacity(0.3), radius: 5, x: 0, y: 2)
+                        .background(Color(hex: "40C4FC"))
+                        .cornerRadius(8)
                 }
                 .padding(.horizontal)
             }
             .padding(.top, 75)
+            .padding(.bottom, 40)
         }
     }
 }

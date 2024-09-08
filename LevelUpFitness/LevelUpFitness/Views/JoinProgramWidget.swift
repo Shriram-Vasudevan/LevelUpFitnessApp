@@ -11,34 +11,36 @@ struct JoinProgramWidget: View {
     var standardProgramDBRepresentation: StandardProgramDBRepresentation
     
     var body: some View {
-        Image("GuyAtTheGym")
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .cornerRadius(10)
-            .padding()
-            .blur(radius: 2)
-            .brightness(-0.5)
-            .overlay (
-                VStack {
-                    Text(standardProgramDBRepresentation.name)
-                        .font(.custom("EtruscoNowCondensed Bold", size: 30))
-                        .foregroundColor(.white)
-                        .multilineTextAlignment(.center)
-                        .shadow(color: .blue, radius: 5, x: 5, y: 5)
-                }
-                .padding()
-                
-            )
-            .onAppear {
-                if ProgramManager.shared.standardProgramDBRepresentations == nil {
-                    Task {
-                        ProgramManager.shared.standardProgramDBRepresentations = await ProgramS3Utility.getStandardProgramDBRepresentations()
-                    }
-                }
+        VStack(alignment: .leading, spacing: 16) {
+            Text(standardProgramDBRepresentation.name)
+                .font(.system(size: 22, weight: .bold, design: .default))
+                .foregroundColor(.black)
+            
+            HStack {
+                programInfoItem(title: "Environment:", value: standardProgramDBRepresentation.environment)
+                Spacer()
+                Image(systemName: "arrow.right.circle.fill")
+                    .foregroundColor(Color(hex: "40C4FC"))
+                    .font(.system(size: 24))
             }
+        }
+        .padding()
+        .background(Color(hex: "F5F5F5"))
+        .cornerRadius(8)
+    }
+    
+    private func programInfoItem(title: String, value: String) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(title)
+                .font(.system(size: 14, weight: .ultraLight, design: .default))
+                .foregroundColor(.gray)
+            Text(value)
+                .font(.system(size: 16, weight: .light, design: .default))
+                .foregroundColor(.black)
+        }
     }
 }
 
 #Preview {
-    JoinProgramWidget(standardProgramDBRepresentation: StandardProgramDBRepresentation(id: "", name: "", environment: ""))
+    JoinProgramWidget(standardProgramDBRepresentation: StandardProgramDBRepresentation(id: "vwerfwefegrw", name: "Masucle Maximization Program", environment: "Gym"))
 }

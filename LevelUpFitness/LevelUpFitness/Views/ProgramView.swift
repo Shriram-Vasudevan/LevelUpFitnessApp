@@ -27,15 +27,50 @@ struct ProgramView: View {
                 
                 ScrollView {
                     VStack(spacing: 0) {
-                        headerView
+                        HStack {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(ProgramManager.shared.program?.programName ?? "My Program")
+                                    .font(.system(size: 22, weight: .bold, design: .default))
+                                Text("Week \(DateUtility.determineWeekNumber(startDateString: ProgramManager.shared.program?.startDate ?? "") ?? 1)")
+                                    .font(.system(size: 12, weight: .ultraLight, design: .default))
+                                    .foregroundColor(Color(hex: "F5F5F5"))
+                            }
+                            Spacer()
+                        }
                         
                         if programManager.program == nil && !programManager.retrievingProgram {
-                            noProgramView
+                            VStack(spacing: 24) {
+                                segmentedControl
+                                
+                                if programPageType == .newProgram {
+                                    newProgramView
+                                } else {
+                                    pastProgramsView
+                                }
+                            }
                         } else {
                             if let todaysProgram = programManager.program?.program.first(where: { $0.day == DateUtility.getCurrentWeekday() }) {
                                 
-                                requiredEquipmentView(for: todaysProgram)
-                                    .padding(.bottom)
+                                VStack(alignment: .leading, spacing: 16) {
+                                    Text("Today's Required Equipment")
+                                        .font(.system(size: 20, weight: .medium, design: .default))
+                                        .foregroundColor(.black)
+                                    
+                                    if todaysProgram.requiredEquipment().isEmpty {
+                                        Text("No equipment required for today's workout")
+                                            .font(.system(size: 16, weight: .regular, design: .default))
+                                            .foregroundColor(.gray)
+                                    } else {
+                                        ScrollView(.horizontal) {
+                                            HStack {
+                                                ForEach(todaysProgram.requiredEquipment(), id: \.self) { equipment in
+                                                    EquipmentItemView(equipment: equipment)
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                .padding(.bottom)
                                 
                                 activeProgramView
                             }
@@ -53,14 +88,6 @@ struct ProgramView: View {
                 }
                 
             }
-        //    .navigationBarTitleDisplayMode(.inline)
-//            .toolbar {
-//                ToolbarItem(placement: .principal) {
-//                    Text("My Program")
-//                        .font(.system(size: 20, weight: .ultraLight, design: .default))
-//                        .foregroundColor(.black)
-//                }
-//            }
         }
         .fullScreenCover(isPresented: $navigateToWorkoutView) {
             WorkoutView(programManager: programManager, xpManager: xpManager)
@@ -74,38 +101,13 @@ struct ProgramView: View {
             PastProgramInsightView(programS3Representation: programS3Representation)
         }
     }
-    
-    private var headerView: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 4) {
-                Text(ProgramManager.shared.program?.programName ?? "Program")
-                    .font(.system(size: 22, weight: .bold, design: .default))
-                Text("Week \(DateUtility.determineWeekNumber(startDateString: ProgramManager.shared.program?.startDate ?? "") ?? 1)")
-                    .font(.system(size: 12, weight: .ultraLight, design: .default))
-                    .foregroundColor(Color(hex: "F5F5F5"))
-            }
-            Spacer()
-        }
-    }
-    
-    private var noProgramView: some View {
-        VStack(spacing: 24) {
-            segmentedControl
-            
-            if programPageType == .newProgram {
-                newProgramView
-            } else {
-                pastProgramsView
-            }
-        }
-    }
-    
+
     private var segmentedControl: some View {
         HStack {
             Button(action: { programPageType = .newProgram }) {
                 Text("Join Program")
                     .font(.system(size: 16, weight: .light, design: .default))
-                    .foregroundColor(programPageType == .newProgram ? .black : Color(hex: "F5F5F5"))
+                    .foregroundColor(.black)
                     .padding(.vertical, 8)
                     .frame(maxWidth: .infinity)
                     .background(programPageType == .newProgram ? Color(hex: "40C4FC").opacity(0.1) : Color.clear)
@@ -114,7 +116,7 @@ struct ProgramView: View {
             Button(action: { programPageType = .pastPrograms }) {
                 Text("Past Programs")
                     .font(.system(size: 16, weight: .light, design: .default))
-                    .foregroundColor(programPageType == .pastPrograms ? .black : Color(hex: "F5F5F5"))
+                    .foregroundColor(.black)
                     .padding(.vertical, 8)
                     .frame(maxWidth: .infinity)
                     .background(programPageType == .pastPrograms ? Color(hex: "40C4FC").opacity(0.1) : Color.clear)
@@ -143,27 +145,7 @@ struct ProgramView: View {
         })
     }
     
-    private func requiredEquipmentView(for todaysProgram: ProgramDay) -> some View {
-            VStack(alignment: .leading, spacing: 16) {
-                Text("Today's Required Equipment")
-                    .font(.system(size: 20, weight: .medium, design: .default))
-                    .foregroundColor(.black)
-                
-                if todaysProgram.requiredEquipment().isEmpty {
-                    Text("No equipment required for today's workout")
-                        .font(.system(size: 16, weight: .regular, design: .default))
-                        .foregroundColor(.gray)
-                } else {
-                    ScrollView(.horizontal) {
-                        HStack {
-                            ForEach(todaysProgram.requiredEquipment(), id: \.self) { equipment in
-                                EquipmentItemView(equipment: equipment)
-                            }
-                        }
-                    }
-                }
-            }
-        }
+
 
     private var activeProgramView: some View {
         VStack(spacing: 16) {

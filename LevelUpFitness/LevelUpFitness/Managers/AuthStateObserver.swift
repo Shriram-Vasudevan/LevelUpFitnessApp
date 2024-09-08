@@ -22,7 +22,7 @@ class AuthStateObserver: ObservableObject {
                // await Amplify.Auth.signOut()
                 
                 let authResult = try await Amplify.Auth.fetchAuthSession()
-                DispatchQueue.main.sync {
+                DispatchQueue.main.async {
                     self.isSignedIn = authResult.isSignedIn
                     self.hasFinishedChecking = true
                     
