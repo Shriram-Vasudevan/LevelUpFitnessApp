@@ -16,91 +16,90 @@ struct LibraryView: View {
     ]
     
     var body: some View {
-        NavigationStack {
-            ZStack {
-                Color.white
-                    .ignoresSafeArea()
-                
-                ScrollView(.vertical, showsIndicators: false) {
-                    VStack(spacing: 24) {
-                        VStack(spacing: 16) {
-                            HStack {
-                                VStack(alignment: .leading, spacing: 4) {
-                                    Text("Exercise Library")
-                                        .font(.system(size: 28, weight: .medium, design: .default))
-                                        .foregroundColor(.black)
-                                    Text("Discover and master new exercises.")
-                                        .font(.system(size: 14, weight: .regular, design: .default))
-                                        .foregroundColor(.gray)
-                                }
-                                Spacer()
-                            }
-                            
-                            HStack {
-                                Image(systemName: "magnifyingglass")
+        ZStack {
+            Color.white
+                .ignoresSafeArea()
+            
+            ScrollView(.vertical, showsIndicators: false) {
+                VStack(spacing: 24) {
+                    VStack(spacing: 16) {
+                        HStack {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Exercise Library")
+                                    .font(.system(size: 28, weight: .medium, design: .default))
+                                    .foregroundColor(.black)
+                                Text("Discover and master new exercises.")
+                                    .font(.system(size: 14, weight: .regular, design: .default))
                                     .foregroundColor(.gray)
-                                TextField("Search exercises", text: $searchText)
                             }
-                            .padding()
-                            .background(Color(hex: "F5F5F5"))
-                            .cornerRadius(8)
+                            Spacer()
                         }
                         
-                        if let featuredProgressions = getFeaturedProgressions() {
-                            VStack(alignment: .leading, spacing: 16) {
-                                Text("Featured Exercises")
-                                    .font(.system(size: 22, weight: .medium, design: .default))
-                                    .foregroundColor(.black)
-                                
-                                ScrollView(.horizontal, showsIndicators: false) {
-                                    HStack(spacing: 16) {
-                                        ForEach(featuredProgressions, id: \.name) { progression in
-                                            FeaturedExerciseCard(progression: progression)
-                                        }
+                        HStack {
+                            Image(systemName: "magnifyingglass")
+                                .foregroundColor(.gray)
+                            TextField("Search exercises", text: $searchText)
+                        }
+                        .padding()
+                        .background(Color(hex: "F5F5F5"))
+                        .cornerRadius(8)
+                    }
+                    
+                    if let featuredProgressions = getFeaturedProgressions() {
+                        VStack(alignment: .leading, spacing: 16) {
+                            Text("Featured Exercises")
+                                .font(.system(size: 22, weight: .medium, design: .default))
+                                .foregroundColor(.black)
+                            
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 16) {
+                                    ForEach(featuredProgressions, id: \.name) { progression in
+                                        FeaturedExerciseCard(progression: progression)
                                     }
                                 }
                             }
                         }
+                    }
 
-                        if let userXPData = xpManager.userXPData {
-                            ForEach(exerciseTypeKeys, id: \.self) { key in
-                                VStack(alignment: .leading, spacing: 16) {
-                                    HStack {
-                                        Text(key.capitalizingFirstLetter())
-                                            .font(.system(size: 22, weight: .medium, design: .default))
-                                            .foregroundColor(.black)
-                                        Spacer()
-                                        if let level = userXPData.subLevels.attribute(for: key)?.level {
-                                            Text("Level \(level)")
-                                                .font(.system(size: 14, weight: .medium, design: .default))
-                                                .foregroundColor(.white)
-                                                .padding(.horizontal, 12)
-                                                .padding(.vertical, 6)
-                                                .background(Color(hex: "40C4FC"))
-                                        }
+                    if let userXPData = xpManager.userXPData {
+                        ForEach(exerciseTypeKeys, id: \.self) { key in
+                            VStack(alignment: .leading, spacing: 16) {
+                                HStack {
+                                    Text(key.capitalizingFirstLetter())
+                                        .font(.system(size: 22, weight: .medium, design: .default))
+                                        .foregroundColor(.black)
+                                    Spacer()
+                                    if let level = userXPData.subLevels.attribute(for: key)?.level {
+                                        Text("Level \(level)")
+                                            .font(.system(size: 14, weight: .medium, design: .default))
+                                            .foregroundColor(.white)
+                                            .padding(.horizontal, 12)
+                                            .padding(.vertical, 6)
+                                            .background(Color(hex: "40C4FC"))
                                     }
-                                    
-                                    let filteredExercises = exerciseManager.exercises.filter { $0.exerciseType == key.capitalizingFirstLetter() }
-                                    if filteredExercises.isEmpty {
-                                        Text("No exercises for \(key)")
-                                            .foregroundColor(.gray)
-                                    } else {
-                                        ForEach(filteredExercises, id: \.id) { exercise in
-                                            ExerciseLibraryExerciseWidget(exercise: exercise, userXPData: userXPData) { progression in
-                                                self.selectedExercise = progression
-                                            }
+                                }
+                                
+                                let filteredExercises = exerciseManager.exercises.filter { $0.exerciseType == key.capitalizingFirstLetter() }
+                                if filteredExercises.isEmpty {
+                                    Text("No exercises for \(key)")
+                                        .foregroundColor(.gray)
+                                } else {
+                                    ForEach(filteredExercises, id: \.id) { exercise in
+                                        ExerciseLibraryExerciseWidget(exercise: exercise, userXPData: userXPData) { progression in
+                                            self.selectedExercise = progression
                                         }
                                     }
                                 }
                             }
                         }
                     }
-                    .padding(.horizontal)
                 }
+                .padding(.horizontal)
             }
-            .navigationDestination(item: $selectedExercise) { exercise in
-                IndividualExerciseView(progression: exercise)
-            }
+        }
+        .navigationBarBackButtonHidden()
+        .navigationDestination(item: $selectedExercise) { exercise in
+            IndividualExerciseView(progression: exercise)
         }
     }
     

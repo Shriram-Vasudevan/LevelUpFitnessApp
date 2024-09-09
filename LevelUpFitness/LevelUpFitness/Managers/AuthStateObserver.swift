@@ -13,14 +13,14 @@ import AWSAPIPlugin
 import AWSS3StoragePlugin
 
 class AuthStateObserver: ObservableObject {
+    static let shared = AuthStateObserver()
+    
     @Published var isSignedIn = false
     @Published var hasFinishedChecking = false
     
     func checkAuthState() {
         Task {
             do {
-               // await Amplify.Auth.signOut()
-                
                 let authResult = try await Amplify.Auth.fetchAuthSession()
                 DispatchQueue.main.async {
                     self.isSignedIn = authResult.isSignedIn
@@ -42,5 +42,15 @@ class AuthStateObserver: ObservableObject {
                 }
             }
         }
+    }
+    
+    func signOut() async {
+        await AuthenticationManager.shared.signOut()
+        isSignedIn = false
+    }
+    
+    func deleteAccount() async {
+        await AuthenticationManager.shared.deleteUser()
+        isSignedIn = false
     }
 }

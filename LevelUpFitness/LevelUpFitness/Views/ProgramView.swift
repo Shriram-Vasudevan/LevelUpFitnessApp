@@ -20,75 +20,74 @@ struct ProgramView: View {
     @State var programS3Representation: String = ""
     
     var body: some View {
-        NavigationStack {
-            ZStack {
-                Color.white
-                    .ignoresSafeArea()
-                
-                ScrollView {
-                    VStack(spacing: 0) {
-                        HStack {
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(ProgramManager.shared.program?.programName ?? "My Program")
-                                    .font(.system(size: 22, weight: .bold, design: .default))
-                                Text("Week \(DateUtility.determineWeekNumber(startDateString: ProgramManager.shared.program?.startDate ?? "") ?? 1)")
-                                    .font(.system(size: 12, weight: .ultraLight, design: .default))
-                                    .foregroundColor(Color(hex: "F5F5F5"))
-                            }
-                            Spacer()
+        ZStack {
+            Color.white
+                .ignoresSafeArea()
+            
+            ScrollView {
+                VStack(spacing: 0) {
+                    HStack {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(ProgramManager.shared.program?.programName ?? "My Program")
+                                .font(.system(size: 22, weight: .bold, design: .default))
+                            Text("Week \(DateUtility.determineWeekNumber(startDateString: ProgramManager.shared.program?.startDate ?? "") ?? 1)")
+                                .font(.system(size: 12, weight: .ultraLight, design: .default))
+                                .foregroundColor(Color(hex: "F5F5F5"))
                         }
-                        
-                        if programManager.program == nil && !programManager.retrievingProgram {
-                            VStack(spacing: 24) {
-                                segmentedControl
-                                
-                                if programPageType == .newProgram {
-                                    newProgramView
-                                } else {
-                                    pastProgramsView
-                                }
+                        Spacer()
+                    }
+                    
+                    if programManager.program == nil && !programManager.retrievingProgram {
+                        VStack(spacing: 24) {
+                            segmentedControl
+                            
+                            if programPageType == .newProgram {
+                                newProgramView
+                            } else {
+                                pastProgramsView
                             }
-                        } else {
-                            if let todaysProgram = programManager.program?.program.first(where: { $0.day == DateUtility.getCurrentWeekday() }) {
+                        }
+                    } else {
+                        if let todaysProgram = programManager.program?.program.first(where: { $0.day == DateUtility.getCurrentWeekday() }) {
+                            
+                            VStack(alignment: .leading, spacing: 16) {
+                                Text("Today's Required Equipment")
+                                    .font(.system(size: 20, weight: .medium, design: .default))
+                                    .foregroundColor(.black)
                                 
-                                VStack(alignment: .leading, spacing: 16) {
-                                    Text("Today's Required Equipment")
-                                        .font(.system(size: 20, weight: .medium, design: .default))
-                                        .foregroundColor(.black)
-                                    
-                                    if todaysProgram.requiredEquipment().isEmpty {
-                                        Text("No equipment required for today's workout")
-                                            .font(.system(size: 16, weight: .regular, design: .default))
-                                            .foregroundColor(.gray)
-                                    } else {
-                                        ScrollView(.horizontal) {
-                                            HStack {
-                                                ForEach(todaysProgram.requiredEquipment(), id: \.self) { equipment in
-                                                    EquipmentItemView(equipment: equipment)
-                                                }
+                                if todaysProgram.requiredEquipment().isEmpty {
+                                    Text("No equipment required for today's workout")
+                                        .font(.system(size: 16, weight: .regular, design: .default))
+                                        .foregroundColor(.gray)
+                                } else {
+                                    ScrollView(.horizontal) {
+                                        HStack {
+                                            ForEach(todaysProgram.requiredEquipment(), id: \.self) { equipment in
+                                                EquipmentItemView(equipment: equipment)
                                             }
                                         }
                                     }
                                 }
-                                .padding(.bottom)
-                                
-                                activeProgramView
                             }
+                            .padding(.bottom)
+                            
+                            activeProgramView
                         }
                     }
-                    .padding()
                 }
-                
-                if showConfirmationWidget {
-                    ConfirmLeaveProgramWidget(isOpen: $showConfirmationWidget, confirmed: {
-                        Task {
-                            await programManager.leaveProgram()
-                        }
-                    })
-                }
-                
+                .padding()
             }
+            
+            if showConfirmationWidget {
+                ConfirmLeaveProgramWidget(isOpen: $showConfirmationWidget, confirmed: {
+                    Task {
+                        await programManager.leaveProgram()
+                    }
+                })
+            }
+            
         }
+        .navigationBarBackButtonHidden()
         .fullScreenCover(isPresented: $navigateToWorkoutView) {
             WorkoutView(programManager: programManager, xpManager: xpManager)
         }
@@ -254,17 +253,17 @@ struct UpNextProgramExerciseWidget: View {
             if let todaysProgram = programManager.program?.program.first(where: { $0.day == DateUtility.getCurrentWeekday() }),
                let (_, nextExercise) = todaysProgram.exercises.enumerated().first(where: { !$0.element.completed }) {
                 exerciseDetailsView(for: nextExercise)
+                    .onTapGesture {
+                        withAnimation(.spring()) {
+                            navigateToWorkoutView = true
+                        }
+                    }
             } else {
                 noWorkoutView
             }
         }
         .padding()
         .background(Color(hex: "F5F5F5"))
-        .onTapGesture {
-            withAnimation(.spring()) {
-                navigateToWorkoutView = true
-            }
-        }
     }
     
     private func exerciseDetailsView(for exercise: ProgramExercise) -> some View {
@@ -306,7 +305,7 @@ struct UpNextProgramExerciseWidget: View {
     }
     
     private var noWorkoutView: some View {
-        Text("No workout for today")
+        Text("Nothing more to do!")
             .font(.system(size: 16, weight: .light, design: .default))
             .foregroundColor(.gray)
             .frame(maxWidth: .infinity, alignment: .center)

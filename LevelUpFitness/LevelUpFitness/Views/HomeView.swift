@@ -34,44 +34,43 @@ struct HomeView: View {
     @State var navigateToProfileView: Bool = false
     
     var body: some View {
-        NavigationStack {
-            ZStack {
-                Color.white
-                    .ignoresSafeArea(.all)
+        ZStack {
+            Color.white
+                .ignoresSafeArea(.all)
+            
+            ScrollView(.vertical) {
                 
-                ScrollView(.vertical) {
-                    
-                    VStack (spacing: 0){
-                        HStack {
-                            if let name = AuthenticationManager.shared.name {
-                                Text("Hello \(name)")
-                                    .font(.custom("YanoneKaffeesatz-Bold", size: 45))
-                                    .bold()
-                            } else {
-                                Text("Hey There!")
-                                    .font(.custom("YanoneKaffeesatz-Bold", size: 45))
-                                    .bold()
-                            }
-                            
-                            Spacer()
-                            
-                            Circle()
-                                .frame(width: UIScreen.main.bounds.width / 16, height: UIScreen.main.bounds.width / 16)
-                                .overlay(
-                                    Image("Headshot")
-                                        .resizable()
-                                        .scaledToFill()
-                                        .frame(width: UIScreen.main.bounds.width / 13, height: UIScreen.main.bounds.width / 13)
-                                        .clipShape(Circle())
-                                        .onTapGesture {
-                                            navigateToProfileView = true
-                                        }
-                                )
+                VStack (spacing: 0){
+                    HStack {
+                        if let name = AuthenticationManager.shared.name {
+                            Text("Hello \(name)")
+                                .font(.custom("YanoneKaffeesatz-Bold", size: 45))
+                                .bold()
+                        } else {
+                            Text("Hey There!")
+                                .font(.custom("YanoneKaffeesatz-Bold", size: 45))
+                                .bold()
                         }
-                        .padding(.horizontal)
-                        .padding(.top)
                         
-                        VStack (spacing: 20) {
+                        Spacer()
+                        
+                        Circle()
+                            .frame(width: UIScreen.main.bounds.width / 16, height: UIScreen.main.bounds.width / 16)
+                            .overlay(
+                                Image("Headshot")
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: UIScreen.main.bounds.width / 13, height: UIScreen.main.bounds.width / 13)
+                                    .clipShape(Circle())
+                                    .onTapGesture {
+                                        navigateToProfileView = true
+                                    }
+                            )
+                    }
+                    .padding(.horizontal)
+                    .padding(.top)
+                    
+                    VStack (spacing: 20) {
 //                            if let userXPData = xpManager.userXPData {
 //                                LevelWidget(userXPData: userXPData, levelChanges: levelChangeManager.levelChanges, openLevelUpInfoView: {
 //                                    showLevelUpInformationView = true
@@ -82,152 +81,119 @@ struct HomeView: View {
 //                                    showLevelUpInformationView = true
 //                                })
 //                            }
-                            
-                            if toDoListManager.toDoList.count > 0 {
-                                ToDoList()
-                            }
-                            
-                            VStack(spacing: 5) {
-                                HStack {
-                                    Text("Time to Start Moving!")
-                                        .font(.custom("", size: 23))
-                                        .foregroundColor(.black)
-                                    Spacer()
-                                }
-                                
-                                ScrollView (.horizontal) {
-                                    HStack {
-                                        RoundedRectangle(cornerRadius: 7)
-                                            .fill(
-                                                LinearGradient(
-                                                    gradient: Gradient(colors: [
-                                                        Color(red: 47 / 255, green: 196 / 255, blue: 298 / 255),
-                                                        Color(red: 17 / 255, green: 150 / 255, blue: 238 / 255)
-                                                    ]),
-                                                    startPoint: .topLeading,
-                                                    endPoint: .bottomTrailing
-                                                )
-                                            )
-                                            .overlay (
-                                                VStack {
-                                                    Spacer()
-                                                    
-                                                    Image("ManRunning")
-                                                        .resizable()
-                                                        .aspectRatio(contentMode: .fit)
-                                                    
-                                                    Text("Exercise Now")
-                                                        .font(.headline)
-                                                        .foregroundColor(.white)
-                                                        .multilineTextAlignment(.center)
-                                                    
-                                                    Button(action: {
-                                                        pageType = .library
-                                                    }, label: {
-                                                        Text("Start")
-                                                            .font(.headline)
-                                                            .foregroundColor(.blue)
-                                                            .frame(minWidth: 0, maxWidth: .infinity)
-                                                            .padding()
-                                                            .background(
-                                                                RoundedRectangle(cornerRadius: 5)
-                                                                    .fill(.white)
-                                                            )
-                                                    })
-                                                }
-                                                    .padding()
-                                            )
-                                            .frame(width: UIScreen.main.bounds.width / 2, height: UIScreen.main.bounds.height / 3.5)
-                                        
-                                        RoundedRectangle(cornerRadius: 7)
-                                            .fill(
-                                                LinearGradient(
-                                                    gradient: Gradient(colors: [
-                                                        Color(red: 152/255, green: 230/255, blue: 138/255),
-                                                        Color(red: 17 / 255, green: 150 / 255, blue: 238 / 255)
-                                                    ]),
-                                                    startPoint: .topLeading,
-                                                    endPoint: .bottomTrailing
-                                                )
-                                            )
-                                            .overlay (
-                                                VStack {
-                                                    Spacer()
-                                                    
-                                                    Image("ManExercising - PushUp - No BG")
-                                                        .resizable()
-                                                        .aspectRatio(contentMode: .fit)
-                                                    
-                                                    Text("Do your Program")
-                                                        .font(.headline)
-                                                        .foregroundColor(.white)
-                                                        .multilineTextAlignment(.center)
-                                                    
-                                                    Button {
-                                                        pageType = .program
-                                                    } label: {
-                                                        Text("Start")
-                                                            .font(.headline)
-                                                            .foregroundColor(.blue)
-                                                            .frame(minWidth: 0, maxWidth: .infinity)
-                                                            .padding()
-                                                            .background(
-                                                                RoundedRectangle(cornerRadius: 5)
-                                                                    .fill(.white)
-                                                            )
-                                                    }
-
-                                                }
-                                                    .padding()
-                                            )
-                                            .frame(width: UIScreen.main.bounds.width / 2, height: UIScreen.main.bounds.height / 3.5)
-                                    }
-                                    
-                                }
-                                
-                            }
-
-                 
+                        
+                        if toDoListManager.toDoList.count > 0 {
+                            ToDoList()
                         }
-                        .scrollIndicators(.hidden)
-                        .padding([.top, .horizontal])
-                         
-                        if challengeManager.userChallenges.count > 0 {
+                        
+                        VStack(spacing: 5) {
                             HStack {
-                                Text("My Challenges")
+                                Text("Time to Start Moving!")
                                     .font(.custom("", size: 23))
-                                    .bold()
-                                
+                                    .foregroundColor(.black)
                                 Spacer()
                             }
-                            .padding()
                             
-                            ScrollView(.horizontal) {
+                            ScrollView (.horizontal) {
                                 HStack {
-                                    ForEach(challengeManager.userChallenges, id: \.id) { challenge in
-                                        if let currentProgress = getCurrentChallengeProgress(challengeField: challenge.field) {
-                                            ActiveUserChallengeWidget(challenge: challenge, currentProgress: currentProgress)
-                                        }
-                                    }
+                                    RoundedRectangle(cornerRadius: 7)
+                                        .fill(
+                                            LinearGradient(
+                                                gradient: Gradient(colors: [
+                                                    Color(red: 47 / 255, green: 196 / 255, blue: 298 / 255),
+                                                    Color(red: 17 / 255, green: 150 / 255, blue: 238 / 255)
+                                                ]),
+                                                startPoint: .topLeading,
+                                                endPoint: .bottomTrailing
+                                            )
+                                        )
+                                        .overlay (
+                                            VStack {
+                                                Spacer()
+                                                
+                                                Image("ManRunning")
+                                                    .resizable()
+                                                    .aspectRatio(contentMode: .fit)
+                                                
+                                                Text("Exercise Now")
+                                                    .font(.headline)
+                                                    .foregroundColor(.white)
+                                                    .multilineTextAlignment(.center)
+                                                
+                                                Button(action: {
+                                                    pageType = .library
+                                                }, label: {
+                                                    Text("Start")
+                                                        .font(.headline)
+                                                        .foregroundColor(.blue)
+                                                        .frame(minWidth: 0, maxWidth: .infinity)
+                                                        .padding()
+                                                        .background(
+                                                            RoundedRectangle(cornerRadius: 5)
+                                                                .fill(.white)
+                                                        )
+                                                })
+                                            }
+                                                .padding()
+                                        )
+                                        .frame(width: UIScreen.main.bounds.width / 2, height: UIScreen.main.bounds.height / 3.5)
+                                    
+                                    RoundedRectangle(cornerRadius: 7)
+                                        .fill(
+                                            LinearGradient(
+                                                gradient: Gradient(colors: [
+                                                    Color(red: 152/255, green: 230/255, blue: 138/255),
+                                                    Color(red: 17 / 255, green: 150 / 255, blue: 238 / 255)
+                                                ]),
+                                                startPoint: .topLeading,
+                                                endPoint: .bottomTrailing
+                                            )
+                                        )
+                                        .overlay (
+                                            VStack {
+                                                Spacer()
+                                                
+                                                Image("ManExercising - PushUp - No BG")
+                                                    .resizable()
+                                                    .aspectRatio(contentMode: .fit)
+                                                
+                                                Text("Do your Program")
+                                                    .font(.headline)
+                                                    .foregroundColor(.white)
+                                                    .multilineTextAlignment(.center)
+                                                
+                                                Button {
+                                                    pageType = .program
+                                                } label: {
+                                                    Text("Start")
+                                                        .font(.headline)
+                                                        .foregroundColor(.blue)
+                                                        .frame(minWidth: 0, maxWidth: .infinity)
+                                                        .padding()
+                                                        .background(
+                                                            RoundedRectangle(cornerRadius: 5)
+                                                                .fill(.white)
+                                                        )
+                                                }
+
+                                            }
+                                                .padding()
+                                        )
+                                        .frame(width: UIScreen.main.bounds.width / 2, height: UIScreen.main.bounds.height / 3.5)
                                 }
+                                
                             }
-                            .padding(.horizontal)
+                            
                         }
-                        
-                        if let recommendedExercise = exerciseManager.recommendedExercise {
-                            RecommendedExerciseWidget(exercise: recommendedExercise, exerciseSelected: {
-                                self.selectedExercise = recommendedExercise
-                            })
-                            .padding()
-                        }
-                        
-                        if let program = programManager.program {
-                            TimeSpentWidget(program: program)
-                                .padding([.top, .horizontal])
-                        }
-                        
+
+             
+                    }
+                    .scrollIndicators(.hidden)
+                    .padding([.top, .horizontal])
+                     
+                    if challengeManager.userChallenges.count > 0 {
                         HStack {
-                            Text("Your Metrics")
+                            Text("My Challenges")
                                 .font(.custom("", size: 23))
                                 .bold()
                             
@@ -235,91 +201,124 @@ struct HomeView: View {
                         }
                         .padding()
                         
-                        if let steps = healthManager.todaysSteps, let calories = healthManager.todaysCalories {
-                            GeometryReader { geometry in
-                                HStack(spacing: 7) {
-                                    HealthStatsWidget(stat: steps, text: "Steps", imageName: "figure.walk", color: Color.purple, healthStatWidgetPressed: { type in
-                                        healthStatType = "Steps"
-                                        navigateToHealthStatTrendView = true
-                                    })
-                                    .frame(width: (geometry.size.width) / 2)
-                                    
-                                    Spacer()
-                                    
-                                    HealthStatsWidget(stat: calories, text: "Calories", imageName: "flame.fill", color: Color.purple, healthStatWidgetPressed: { type in
-                                        healthStatType = "Calories"
-                                        navigateToHealthStatTrendView = true
-                                    })
-                                    .frame(width: (geometry.size.width) / 2)
-                                    .fixedSize(horizontal: false, vertical: true)
+                        ScrollView(.horizontal) {
+                            HStack {
+                                ForEach(challengeManager.userChallenges, id: \.id) { challenge in
+                                    if let currentProgress = getCurrentChallengeProgress(challengeField: challenge.field) {
+                                        ActiveUserChallengeWidget(challenge: challenge, currentProgress: currentProgress)
+                                    }
                                 }
                             }
-                            .frame(height: 155)
-                            .padding(.horizontal)
+                        }
+                        .padding(.horizontal)
+                    }
+                    
+                    if let recommendedExercise = exerciseManager.recommendedExercise {
+                        RecommendedExerciseWidget(exercise: recommendedExercise, exerciseSelected: {
+                            self.selectedExercise = recommendedExercise
+                        })
+                        .padding()
+                    }
+                    
+                    if let program = programManager.program {
+                        TimeSpentWidget(program: program)
+                            .padding([.top, .horizontal])
+                    }
+                    
+                    HStack {
+                        Text("Your Metrics")
+                            .font(.custom("", size: 23))
+                            .bold()
+                        
+                        Spacer()
+                    }
+                    .padding()
+                    
+                    if let steps = healthManager.todaysSteps, let calories = healthManager.todaysCalories {
+                        GeometryReader { geometry in
+                            HStack(spacing: 7) {
+                                HealthStatsWidget(stat: steps, text: "Steps", imageName: "figure.walk", color: Color.purple, healthStatWidgetPressed: { type in
+                                    healthStatType = "Steps"
+                                    navigateToHealthStatTrendView = true
+                                })
+                                .frame(width: (geometry.size.width) / 2)
+                                
+                                Spacer()
+                                
+                                HealthStatsWidget(stat: calories, text: "Calories", imageName: "flame.fill", color: Color.purple, healthStatWidgetPressed: { type in
+                                    healthStatType = "Calories"
+                                    navigateToHealthStatTrendView = true
+                                })
+                                .frame(width: (geometry.size.width) / 2)
+                                .fixedSize(horizontal: false, vertical: true)
+                            }
+                        }
+                        .frame(height: 155)
+                        .padding(.horizontal)
+                    }
+
+
+                    
+                    WeightStatView()
+                        .onTapGesture {
+                            navigateToWeightTrendView = true
                         }
 
-
+                    
+                    if let userXPData = xpManager.userXPData, challengeManager.challengeTemplates.filter({ challengeTemplate in
+                        !challengeManager.userChallenges.contains { userChallenge in
+                            userChallenge.challengeTemplateID == challengeTemplate.id
+                        }
+                    }).count > 0 {
+                        HStack {
+                            Text("Available Challenges")
+                                .font(.custom("", size: 23))
+                                .bold()
+                            
+                            Spacer()
+                        }
+                        .padding(.horizontal)
+                        .padding(.top)
                         
-                        WeightStatView()
-                            .onTapGesture {
-                                navigateToWeightTrendView = true
-                            }
-
-                        
-                        if let userXPData = xpManager.userXPData, challengeManager.challengeTemplates.filter({ challengeTemplate in
+                        ForEach(challengeManager.challengeTemplates.filter { challengeTemplate in
                             !challengeManager.userChallenges.contains { userChallenge in
                                 userChallenge.challengeTemplateID == challengeTemplate.id
                             }
-                        }).count > 0 {
-                            HStack {
-                                Text("Available Challenges")
-                                    .font(.custom("", size: 23))
-                                    .bold()
-                                
-                                Spacer()
-                            }
-                            .padding(.horizontal)
-                            .padding(.top)
-                            
-                            ForEach(challengeManager.challengeTemplates.filter { challengeTemplate in
-                                !challengeManager.userChallenges.contains { userChallenge in
-                                    userChallenge.challengeTemplateID == challengeTemplate.id
+                        }, id: \.id) { challengeTemplate in
+                            ChallengeTemplateWidget(challenge: challengeTemplate) {
+                                Task {
+                                    await challengeManager.createChallenge(challengeName: challengeTemplate.name, challengeTemplateID: challengeTemplate.id, userXPData: userXPData)
                                 }
-                            }, id: \.id) { challengeTemplate in
-                                ChallengeTemplateWidget(challenge: challengeTemplate) {
-                                    Task {
-                                        await challengeManager.createChallenge(challengeName: challengeTemplate.name, challengeTemplateID: challengeTemplate.id, userXPData: userXPData)
-                                    }
-                                }
-                                .padding()
                             }
+                            .padding()
                         }
+                    }
 
 
-                        VStack (spacing: 10) {
-                            HStack {
-                                
-                                
-                                Spacer()
-                            }
-                            
-                            Divider()
+                    VStack (spacing: 10) {
+                        HStack {
                             
                             
+                            Spacer()
                         }
-                        .padding()
+                        
+                        Divider()
+                        
+                        
+                    }
+                    .padding()
 
 //                        VStack (spacing: 0) {
 //                            HStack {
 //                                VStack (alignment: .leading) {
 //                                    Text("Trends")
 //                                        .font(.custom("Sailec Bold", size: 20))
-//                                    
+//
 //                                    Text("Your Progress")
 //                                        .foregroundColor(.gray)
 //                                        .bold()
 //                                }
-//                                
+//
 //                                Spacer()
 //                            }
 //                            .padding(.horizontal)
@@ -329,7 +328,7 @@ struct HomeView: View {
 //                                let totalWidth = geometry.size.width
 //                                let padding: CGFloat = 10
 //                                let squareWidth = (totalWidth - padding) / 2
-//                                
+//
 //                                HStack(spacing: padding) {
 //                                    StatisticsWidget(width: squareWidth, colorA: Color(red: 152/255, green: 230/255, blue: 138/255), colorB: .green, stat: 180.5, text: "Current Weight")
 //                                }
@@ -338,33 +337,32 @@ struct HomeView: View {
 //                            .padding(.horizontal)
 //                        }
 
-                        Spacer()
-                    }
+                    Spacer()
                 }
             }
-            .navigationBarBackButtonHidden()
-            .navigationDestination(isPresented: $showFullLevelBreakdownView) {
-                if let userXPData = xpManager.userXPData {
-                    FullLevelBreakdownView()
-                }
+        }
+        .navigationBarBackButtonHidden()
+        .navigationDestination(isPresented: $showFullLevelBreakdownView) {
+            if let userXPData = xpManager.userXPData {
+                FullLevelBreakdownView()
             }
-            .navigationDestination(isPresented: $navigateToHealthStatTrendView, destination: {
-                if let healthStatType = self.healthStatType {
-                    HealthTrendView(healthStatType: healthStatType)
-                }
-            })
-            .navigationDestination(isPresented: $navigateToWeightTrendView) {
-                WeightTrendView()
+        }
+        .navigationDestination(isPresented: $navigateToHealthStatTrendView, destination: {
+            if let healthStatType = self.healthStatType {
+                HealthTrendView(healthStatType: healthStatType)
             }
-            .navigationDestination(isPresented: $navigateToProfileView, destination: {
-                ProfileView()
-            })
-            .fullScreenCover(isPresented: $showLevelUpInformationView, content: {
-                LevelInfoView()
-            })
-            .navigationDestination(item: $selectedExercise) { exercise in
-                IndividualExerciseView(progression: exercise)
-            }
+        })
+        .navigationDestination(isPresented: $navigateToWeightTrendView) {
+            WeightTrendView()
+        }
+        .navigationDestination(isPresented: $navigateToProfileView, destination: {
+            ProfileView()
+        })
+        .fullScreenCover(isPresented: $showLevelUpInformationView, content: {
+            LevelInfoView()
+        })
+        .navigationDestination(item: $selectedExercise) { exercise in
+            IndividualExerciseView(progression: exercise)
         }
     }
     

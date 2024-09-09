@@ -21,30 +21,29 @@ struct FullLevelBreakdownView: View {
     ]
     
     var body: some View {
-        NavigationStack {
-            ZStack {
-                Color.white
-                    .ignoresSafeArea()
-                
-                ScrollView {
-                    VStack(spacing: 24) {
-                        HStack {
-                            Text("My Level")
-                                .font(.system(size: 28, weight: .medium, design: .default))
-                                .foregroundColor(.black)
-                            
-                            Spacer()
-                        }
+        ZStack {
+            Color.white
+                .ignoresSafeArea()
+            
+            ScrollView {
+                VStack(spacing: 24) {
+                    HStack {
+                        Text("My Level")
+                            .font(.system(size: 28, weight: .medium, design: .default))
+                            .foregroundColor(.black)
                         
-                        overallLevelSection
-                        sublevelsSection
-                        recentLevelChangesSection
-                        levelTrendsSection
+                        Spacer()
                     }
-                    .padding()
+                    
+                    overallLevelSection
+                    sublevelsSection
+                    recentLevelChangesSection
+                    levelTrendsSection
                 }
+                .padding()
             }
         }
+        .navigationBarBackButtonHidden()
         .onAppear {
             Task {
                 await updateChartData()
@@ -71,7 +70,7 @@ struct FullLevelBreakdownView: View {
                 
                 ZStack {
                     Circle()
-                        .stroke(.black, lineWidth: 10)
+                        .stroke(.gray, lineWidth: 10)
                         .frame(width: 80, height: 80)
                     
                     Circle()

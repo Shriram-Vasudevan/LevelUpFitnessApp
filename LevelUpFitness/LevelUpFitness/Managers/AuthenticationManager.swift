@@ -45,38 +45,6 @@ class AuthenticationManager: ObservableObject {
         }
     }
     
-    func signOut() async {
-        let result = await Amplify.Auth.signOut()
-        guard let signOutResult = result as? AWSCognitoSignOutResult
-        else {
-            print("Signout failed")
-            return
-        }
-
-        print("Local signout successful: \(signOutResult.signedOutLocally)")
-        switch signOutResult {
-        case .complete:
-            print("Signed out successfully")
-
-        case let .partial(revokeTokenError, globalSignOutError, hostedUIError):
-            
-            if let hostedUIError = hostedUIError {
-                print("HostedUI error  \(String(describing: hostedUIError))")
-            }
-
-            if let globalSignOutError = globalSignOutError {
-                print("GlobalSignOut error  \(String(describing: globalSignOutError))")
-            }
-
-            if let revokeTokenError = revokeTokenError {
-                print("Revoke token error  \(String(describing: revokeTokenError))")
-            }
-
-        case .failed(let error):
-            print("SignOut failed with \(error)")
-        }
-    }
-    
     func register(email: String, name: String, username: String, password: String, completion: @escaping (Bool, String?, Error?) async -> Void) async {
         let userAttributes = [
             AuthUserAttribute(.custom("username"), value: username),
@@ -122,6 +90,48 @@ class AuthenticationManager: ObservableObject {
     }
     
 
+    func signOut() async {
+        let result = await Amplify.Auth.signOut()
+        guard let signOutResult = result as? AWSCognitoSignOutResult
+        else {
+            print("Signout failed")
+            return
+        }
+
+        print("Local signout successful: \(signOutResult.signedOutLocally)")
+        switch signOutResult {
+        case .complete:
+            print("Signed out successfully")
+
+        case let .partial(revokeTokenError, globalSignOutError, hostedUIError):
+            
+            if let hostedUIError = hostedUIError {
+                print("HostedUI error  \(String(describing: hostedUIError))")
+            }
+
+            if let globalSignOutError = globalSignOutError {
+                print("GlobalSignOut error  \(String(describing: globalSignOutError))")
+            }
+
+            if let revokeTokenError = revokeTokenError {
+                print("Revoke token error  \(String(describing: revokeTokenError))")
+            }
+
+        case .failed(let error):
+            print("SignOut failed with \(error)")
+        }
+    }
+    
+    func deleteUser() async {
+        do {
+            try await Amplify.Auth.deleteUser()
+            print("Successfully deleted user")
+        } catch let error as AuthError {
+            print("Delete user failed with error \(error)")
+        } catch {
+            print("Unexpected error: \(error)")
+        }
+    }
     
     func forgotPassword(username: String) async {
         
@@ -213,7 +223,7 @@ class AuthenticationManager: ObservableObject {
             let nameAttribute = userAttributes.first(where: { $0.key == .name })
             
             self.name = nameAttribute?.value ?? ""
-            print("the username: " + self.name)
+            print("the username: " + (self.name ?? ""))
         } catch {
             print("Unexpected error: \(error)")
         }

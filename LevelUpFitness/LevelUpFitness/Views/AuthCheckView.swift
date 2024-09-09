@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct AuthCheckView: View {
-    @EnvironmentObject var authStateObserver: AuthStateObserver
+    @ObservedObject var authObserver = AuthStateObserver.shared
     
     var body: some View {
         VStack {
-            if authStateObserver.isSignedIn {
+            if authObserver.isSignedIn {
                 PagesHolderView(pageType: .home)
                     .preferredColorScheme(.light)
-            } else if !authStateObserver.hasFinishedChecking {
+            } else if !authObserver.hasFinishedChecking {
                 SplashScreenView()
                     .preferredColorScheme(.light)
             } else {
@@ -24,9 +24,9 @@ struct AuthCheckView: View {
             }
         }
         .transition(.opacity)
-        .animation(.easeInOut(duration: 0.5), value: authStateObserver.hasFinishedChecking)
+        .animation(.easeInOut(duration: 0.5), value: authObserver.hasFinishedChecking)
         .onAppear {
-            authStateObserver.checkAuthState()
+            authObserver.checkAuthState()
         }
     }
 }

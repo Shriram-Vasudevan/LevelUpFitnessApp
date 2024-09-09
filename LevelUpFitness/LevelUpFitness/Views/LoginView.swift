@@ -115,9 +115,11 @@ struct CustomTextField: View {
             if isSecure {
                 SecureField(placeholder, text: $text)
                     .textFieldStyle(CustomTextFieldStyle(error: error))
+                    .autocapitalization(.none)
             } else {
                 TextField(placeholder, text: $text)
                     .textFieldStyle(CustomTextFieldStyle(error: error))
+                    .autocapitalization(.none)
             }
             if error {
                 Text("\(placeholder) is required")

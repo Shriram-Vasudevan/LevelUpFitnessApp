@@ -14,12 +14,10 @@ import AWSAPIPlugin
 @main
 struct LevelUpFitnessApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    @StateObject private var authStateObserver = AuthStateObserver()
 
     var body: some Scene {
         WindowGroup {
             AuthCheckView()
-                .environmentObject(authStateObserver)
         }
     }
 }

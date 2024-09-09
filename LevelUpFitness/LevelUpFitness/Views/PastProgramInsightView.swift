@@ -12,24 +12,22 @@ struct PastProgramInsightView: View {
     @State private var programs: [Program]?
     
     var body: some View {
-        NavigationStack {
-            ScrollView {
-                LazyVStack(spacing: 24) {
-                    if let programs = self.programs {
-                        ForEach(Array(programs.enumerated()), id: \.offset) { index, program in
-                            WeekInsightCard(program: program, weekNumber: index + 1)
-                        }
-                    } else {
-                        ProgressView()
-                            .scaleEffect(1.5)
-                            .padding()
+        ScrollView {
+            LazyVStack(spacing: 24) {
+                if let programs = self.programs {
+                    ForEach(Array(programs.enumerated()), id: \.offset) { index, program in
+                        WeekInsightCard(program: program, weekNumber: index + 1)
                     }
+                } else {
+                    ProgressView()
+                        .scaleEffect(1.5)
+                        .padding()
                 }
-                .padding()
             }
-            .navigationTitle("Program Insights")
-            .background(Color(.systemGroupedBackground))
+            .padding()
         }
+        .navigationTitle("Program Insights")
+        .background(Color(.systemGroupedBackground))
         .onAppear {
             Task {
                 self.programs = await ProgramManager.shared.getProgramsForInsights(programS3Representation: programS3Representation)

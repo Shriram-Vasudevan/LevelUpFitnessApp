@@ -24,37 +24,35 @@ struct WorkoutView: View {
     }
     
     var body: some View {
-        NavigationStack {
-            ZStack {
-                Color(red: 248/255.0, green: 4/255.0, blue: 76/255.0)
-                    .edgesIgnoringSafeArea(.all)
-                
-                if !workoutManager.hasExercisesForToday() {
-                    Text("No exercises for today")
-                        .foregroundColor(.white)
-                } else if workoutManager.isWorkoutComplete() {
-                    Text("Workout completed!")
-                        .foregroundColor(.white)
-                        .onAppear {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                dismiss()
-                            }
+        ZStack {
+            Color(red: 248/255.0, green: 4/255.0, blue: 76/255.0)
+                .edgesIgnoringSafeArea(.all)
+            
+            if !workoutManager.hasExercisesForToday() {
+                Text("No exercises for today")
+                    .foregroundColor(.white)
+            } else if workoutManager.isWorkoutComplete() {
+                Text("Workout completed!")
+                    .foregroundColor(.white)
+                    .onAppear {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                            dismiss()
                         }
-                } else {
-                    WorkoutContent(workoutManager: workoutManager, programManager: programManager, xpManager: xpManager, navigateToExerciseVideoView: $navigateToExerciseVideoView, dismiss: dismiss)
-                }
+                    }
+            } else {
+                WorkoutContent(workoutManager: workoutManager, programManager: programManager, xpManager: xpManager, navigateToExerciseVideoView: $navigateToExerciseVideoView, dismiss: dismiss)
             }
-            .navigationDestination(isPresented: $navigateToExerciseVideoView, destination: {
-                if workoutManager.currentExerciseIndex < workoutManager.currentExercises.count {
-                    FullPageVideoView(cdnURL: workoutManager.currentExercises[workoutManager.currentExerciseIndex].cdnURL)
-                } else {
-                    Text("No video available").foregroundColor(.white)
-                }
-            })
-            .navigationBarBackButtonHidden()
-            .onAppear {
-                workoutManager.initializeExerciseData()
+        }
+        .navigationDestination(isPresented: $navigateToExerciseVideoView, destination: {
+            if workoutManager.currentExerciseIndex < workoutManager.currentExercises.count {
+                FullPageVideoView(cdnURL: workoutManager.currentExercises[workoutManager.currentExerciseIndex].cdnURL)
+            } else {
+                Text("No video available").foregroundColor(.white)
             }
+        })
+        .navigationBarBackButtonHidden()
+        .onAppear {
+            workoutManager.initializeExerciseData()
         }
     }
 }
