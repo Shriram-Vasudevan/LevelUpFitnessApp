@@ -3,86 +3,183 @@ import Charts
 
 struct WeightTrendView: View {
     @ObservedObject var trendManager = TrendManager.shared
-    @State var weight: String = ""
+    @State private var weight: String = ""
     
-    @State var maxValue: Double = 0
-    @State var minDate: Date = Date()
-    @State var maxDate: Date = Date()
+    private let accentColor = Color(hex: "40C4FC")
+    private let grayColor = Color(hex: "F5F5F5")
+    
+    @Environment (\.dismiss) var dismiss
     
     var body: some View {
         ZStack {
-            VStack {
+            Color.white.ignoresSafeArea()
+            
+            VStack(spacing: 12) {
                 HStack {
-                    Text("Weight Trend")
-                        .font(.title)
-                        .bold()
-                    
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Weight Trend")
+                            .font(.system(size: 22, weight: .bold, design: .default))
+                        Text("Latest 30 Days")
+                            .font(.system(size: 12, weight: .ultraLight, design: .default))
+                            .foregroundColor(Color.gray)
+                    }
                     Spacer()
                     
-                    Button {
-                        if let weight = Double(weight) {
-                            Task {
-                                await trendManager.addWeightToTrend(weight: weight)
-                                self.weight = ""
-                                await updateChartData()
-                                ToDoListManager.shared.weightAdded()
+                    Button(action: { dismiss() }) {
+                        Image(systemName: "xmark")
+                            .foregroundColor(.black)
+                    }
+                }
+                .padding(.top)
+                .padding(.bottom, 12)
+                
+                GeometryReader { geometry in
+                    let width = geometry.size.width
+                    let height = geometry.size.height
+                    let maxValue = (trendManager.weightTrend.map { $0.value }.max() ?? 0) * 1.1
+                    let minValue = (trendManager.weightTrend.map { $0.value }.min() ?? 0) * 0.9
+                    
+                    ZStack {
+                        VStack {
+                            ForEach(0..<6) { index in
+                                let labelValue = maxValue - CGFloat(index) * (maxValue - minValue) / 5
+                                HStack {
+                                    Text(String(format: "%.1f", labelValue))
+                                        .font(.system(size: 10, weight: .light, design: .default))
+                                        .foregroundColor(.gray)
+                                        .frame(width: 40, alignment: .leading)
+                                    Spacer()
+                                }
+                                .frame(height: height / 6)
                             }
                         }
-                    } label: {
+                        
+                        VStack {
+                            Spacer()
+                            HStack {
+                                ForEach(0..<trendManager.weightTrend.count, id: \.self) { index in
+                                    if index % 2 == 0 {
+                                        let date = trendManager.weightTrend[index].date
+                                        Text(date, style: .date)
+                                            .font(.system(size: 10, weight: .light, design: .default))
+                                            .foregroundColor(.gray)
+                                            .offset(x: index == 0 ? 10 : 0)
+                                    }
+                                    Spacer()
+                                }
+                            }
+                        }
+                        .padding(.horizontal, 16)
+                        .padding(.bottom, 16)
+                    
+                        Path { path in
+                            if let firstPoint = trendManager.weightTrend.first {
+                                let firstX = CGFloat(0) / CGFloat(trendManager.weightTrend.count - 1) * width
+                                let firstY = (1 - CGFloat((firstPoint.value - minValue) / (maxValue - minValue))) * height
+                                path.move(to: CGPoint(x: firstX, y: firstY))
+                                
+                                for (index, point) in trendManager.weightTrend.enumerated() {
+                                    let x = CGFloat(index) / CGFloat(trendManager.weightTrend.count - 1) * width
+                                    let y = (1 - CGFloat((point.value - minValue) / (maxValue - minValue))) * height
+                                    path.addLine(to: CGPoint(x: x, y: y))
+                                }
+                                path.addLine(to: CGPoint(x: width, y: height))
+                                path.addLine(to: CGPoint(x: 0, y: height))
+                                path.closeSubpath()
+                            }
+                        }
+                        .fill(accentColor.opacity(0.2))
+                        
+                        Path { path in
+                            if let firstPoint = trendManager.weightTrend.first {
+                                let firstX = CGFloat(0) / CGFloat(trendManager.weightTrend.count - 1) * width
+                                let firstY = (1 - CGFloat((firstPoint.value - minValue) / (maxValue - minValue))) * height
+                                path.move(to: CGPoint(x: firstX, y: firstY))
+                                
+                                for (index, point) in trendManager.weightTrend.enumerated() {
+                                    let x = CGFloat(index) / CGFloat(trendManager.weightTrend.count - 1) * width
+                                    let y = (1 - CGFloat((point.value - minValue) / (maxValue - minValue))) * height
+                                    path.addLine(to: CGPoint(x: x, y: y))
+                                }
+                            }
+                        }
+                        .stroke(accentColor, lineWidth: 2)
+                        
+                        ForEach(trendManager.weightTrend) { point in
+                            let index = trendManager.weightTrend.firstIndex(where: { $0.id == point.id })!
+                            let x = CGFloat(index) / CGFloat(trendManager.weightTrend.count - 1) * width
+                            let y = (1 - CGFloat((point.value - minValue) / (maxValue - minValue))) * height
+                            
+                            Circle()
+                                .fill(accentColor)
+                                .frame(width: 8, height: 8)
+                                .position(x: x, y: y)
+                        }
+                    }
+                }
+                .frame(height: 200)
+                .padding(.vertical, 16)
+                
+                HStack(spacing: 16) {
+                    TextField("Enter weight", text: $weight)
+                        .keyboardType(.decimalPad)
+                        .font(.system(size: 16, weight: .regular, design: .default))
+                        .padding()
+                        .background(grayColor)
+                        .frame(maxWidth: .infinity)
+                    
+                    Button(action: addWeight) {
                         Image(systemName: "plus.circle.fill")
                             .resizable()
-                            .frame(width: 23, height: 23)
-                            .foregroundColor(.blue)
+                            .frame(width: 30, height: 30)
+                            .foregroundColor(accentColor)
                     }
                 }
-                .padding(.horizontal)
+                .padding(.top)
                 
-                TextField("", text: $weight)
-                    .multilineTextAlignment(.center)
-                    .keyboardType(.numberPad)
-                    .font(Font.system(size: 22, design: .rounded))
-                    .padding()
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color.blue, lineWidth: 1)
-                    )
-                    .padding(.horizontal, 20)
-                
-                if trendManager.weightTrend.count > 0 {
-                    Chart(trendManager.weightTrend) { dataPoint in
-                        LineMark(
-                            x: .value("Date", dataPoint.date),
-                            y: .value("Weight", dataPoint.value)
-                        )
-                        PointMark(
-                            x: .value("Date", dataPoint.date),
-                            y: .value("Weight", dataPoint.value)
-                        )
+                VStack(alignment: .leading, spacing: 16) {
+                    Text("Latest Entries")
+                        .font(.system(size: 18, weight: .medium, design: .default))
+                    
+                    ScrollView (.vertical) {
+                        ForEach(trendManager.weightTrend.prefix(5).reversed()) { entry in
+                            HStack {
+                                Text(entry.date, style: .date)
+                                    .font(.system(size: 14, weight: .regular, design: .default))
+                                    .foregroundColor(.black)
+                                Spacer()
+                                Text(String(format: "%.1f lbs", entry.value))
+                                    .font(.system(size: 14, weight: .medium, design: .default))
+                                    .foregroundColor(accentColor)
+                            }
+                            .padding(.vertical, 8)
+                            .padding(.horizontal)
+                            .background(grayColor)
+                        }
                     }
-                    .chartXScale(domain: minDate...maxDate)
-                    .chartYScale(domain: 0...maxValue)
-                    .padding()
                 }
-                Spacer()
+                .padding(.top)
             }
+            .padding(.horizontal)
+        
         }
         .onAppear {
             Task {
-                await updateChartData()
+                if trendManager.weightTrend.count == 0 {
+                    await trendManager.getWeightTrend()
+                }
             }
         }
+        .navigationBarBackButtonHidden()
     }
-    
-    func updateChartData() async {
-        if TrendManager.shared.weightTrend.isEmpty {
-            await TrendManager.shared.getWeightTrend()
+
+
+    private func addWeight() {
+        guard let weightValue = Double(weight) else { return }
+        Task {
+            await trendManager.addWeightToTrend(weight: weightValue)
+            weight = ""
         }
-        
-        let sortedTrend = TrendManager.shared.weightTrend.sorted { $0.date < $1.date }
-        
-        maxValue = (sortedTrend.map { $0.value }.max() ?? 200) * 1.1
-        minDate = sortedTrend.first?.date ?? Date()
-        maxDate = Date()
     }
 }
 

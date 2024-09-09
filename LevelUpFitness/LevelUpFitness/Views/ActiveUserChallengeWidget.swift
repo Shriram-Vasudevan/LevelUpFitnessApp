@@ -12,67 +12,39 @@ struct ActiveUserChallengeWidget: View {
     var currentProgress: Int
     
     var body: some View {
-        RoundedRectangle(cornerRadius: 10)
-            .frame(width: UIScreen.main.bounds.width / 2, height: UIScreen.main.bounds.height / 6)
-            .overlay(
-                Image("GuyAtTheGym")
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: UIScreen.main.bounds.width / 2, height: UIScreen.main.bounds.height / 6)
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                    .overlay(
-                        Color.black.opacity(0.4)
-                            .clipShape(RoundedRectangle(cornerRadius: 10))
-                    )
-            )
-            .overlay(
-                Text(formattedChallengeName(challenge.name))
-                    .font(.system(size: 22, weight: .bold, design: .rounded))
-                    .foregroundColor(.white)
-                    .padding(7),
-                alignment: .topLeading
-            )
-            .overlay (
+        VStack(alignment: .leading, spacing: 12) {
+            Text(formattedChallengeName(challenge.name))
+                .font(.system(size: 18, weight: .bold, design: .default))
+                .foregroundColor(.black)
+                .lineLimit(2)
+                .minimumScaleFactor(0.8)
+            
+            Spacer()
+            
+            HStack {
+                ProgressView(value: Double(currentProgress), total: Double(challenge.targetValue))
+                    .progressViewStyle(CustomProgressViewStyle())
+                    .frame(height: 4)
+                
                 Text("\(currentProgress)/\(challenge.targetValue)")
-                    .foregroundColor(.white)
-                    .padding(),
-                alignment: .bottomTrailing
-            )
-
-//        
-//        VStack(alignment: .leading, spacing: 12) {
-//            HStack {
-//                VStack(alignment: .leading, spacing: 4) {
-//                    Text(formattedChallengeName(challenge.name))
-//                                            .font(.system(size: 22, weight: .bold, design: .rounded))
-//                                            .foregroundColor(.white)
-//                    
-////                    HStack {
-////                        ProgressView(value: Double(currentProgress), total: Double(challenge.targetValue))
-////                            .progressViewStyle(CustomProgressViewStyle())
-////                            .frame(height: 8)
-////                        
-////                        Text("\(currentProgress)/\(challenge.targetValue)")
-////                            .font(.system(size: 14, weight: .semibold, design: .rounded))
-////                            .foregroundColor(.white.opacity(0.9))
-////                    }
-//                }
-//
-//            }
-//        }
-//        .padding(20)
-//        .background(
-//            Image("GuyAtTheGym")
-//        )
-//        .cornerRadius(10)
-//        .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 5)
-//        .padding()
+                    .font(.system(size: 14, weight: .medium, design: .default))
+                    .foregroundColor(.gray)
+            }
+        }
+        .padding(16)
+        .frame(width: UIScreen.main.bounds.width / 2 - 20, height: 100)
+        .background(Color(hex: "F5F5F5"))
+        .overlay(
+            Rectangle()
+                .fill(Color(hex: "40C4FC"))
+                .frame(width: 4)
+                .padding(.vertical, 16),
+            alignment: .leading
+        )
     }
     
     func formattedChallengeName(_ name: String) -> String {
-        var words = name.split(separator: " ")
-        guard let lastWord = words.popLast() else { return name }
-        return words.joined(separator: " ") + "\n" + lastWord
+        return name
     }
 }
 
@@ -80,13 +52,13 @@ struct CustomProgressViewStyle: ProgressViewStyle {
     func makeBody(configuration: Configuration) -> some View {
         GeometryReader { geometry in
             ZStack(alignment: .leading) {
-                RoundedRectangle(cornerRadius: 4)
-                    .fill(Color.white.opacity(0.3))
-                    .frame(height: 8)
+                Rectangle()
+                    .fill(Color.gray.opacity(0.3))
+                    .frame(height: 4)
                 
-                RoundedRectangle(cornerRadius: 4)
-                    .fill(Color.blue)
-                    .frame(width: CGFloat(configuration.fractionCompleted ?? 0) * geometry.size.width, height: 8)
+                Rectangle()
+                    .fill(Color(hex: "40C4FC"))
+                    .frame(width: CGFloat(configuration.fractionCompleted ?? 0) * geometry.size.width, height: 4)
             }
         }
     }

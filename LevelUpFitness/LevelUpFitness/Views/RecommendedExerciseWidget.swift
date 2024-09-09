@@ -9,59 +9,56 @@ import SwiftUI
 
 struct RecommendedExerciseWidget: View {
     var exercise: Progression
-    
     var exerciseSelected: () -> Void
+    
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 16) {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(exercise.name)
-                        .font(.system(size: 22, weight: .bold, design: .rounded))
-                        .foregroundColor(.white)
+                        .font(.system(size: 20, weight: .bold, design: .default))
+                        .foregroundColor(.black)
                     
                     Text(exercise.exerciseType)
-                        .font(.system(size: 16, weight: .medium, design: .rounded))
-                        .foregroundColor(.white.opacity(0.8))
+                        .font(.system(size: 14, weight: .medium, design: .default))
+                        .foregroundColor(.gray)
                 }
                 
                 Spacer()
                 
                 Image(systemName: "dumbbell.fill")
                     .font(.system(size: 24))
-                    .foregroundColor(.white.opacity(0.7))
+                    .foregroundColor(Color(hex: "40C4FC"))
             }
             
             Button(action: {
                 exerciseSelected()
             }) {
                 Text("Let's Go")
-                    .font(.system(size: 14, weight: .semibold, design: .rounded))
-                    .foregroundColor(.blue)
+                    .font(.system(size: 14, weight: .semibold, design: .default))
+                    .foregroundColor(.white)
                     .padding(.horizontal, 16)
                     .padding(.vertical, 8)
-                    .background(Color.white)
-                    .cornerRadius(20)
+                    .frame(maxWidth: .infinity)
+                    .background(Color(hex: "40C4FC"))
             }
             
             HStack {
                 Spacer()
-                
                 Text("Recommended Exercise")
-                    .font(.caption)
-                    .foregroundColor(.white)
+                    .font(.system(size: 12, weight: .regular, design: .default))
+                    .foregroundColor(.gray)
             }
-            .padding(.top, -20)
         }
-        .padding([.horizontal, .top], 20)
-        .background(
-            LinearGradient(gradient: Gradient(colors: [
-                Color(red: 0.4, green: 0.2, blue: 0.7),
-                Color(red: 0.2, green: 0.3, blue: 0.8)
-            ]), startPoint: .topLeading, endPoint: .bottomTrailing)
+        .padding(20)
+        .background(Color(hex: "F5F5F5"))
+        .overlay(
+            Rectangle()
+                .fill(Color(hex: "40C4FC"))
+                .frame(width: 4)
+                .padding(.vertical, 20),
+            alignment: .leading
         )
-        .cornerRadius(10)
-        .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 5)
-
     }
 }
 

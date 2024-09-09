@@ -1,9 +1,6 @@
 import SwiftUI
 import Charts
 
-import SwiftUI
-import Charts
-
 struct FullLevelBreakdownView: View {
     @ObservedObject var xpManager = XPManager.shared
     @ObservedObject var levelChangeManager = LevelChangeManager.shared
@@ -21,28 +18,135 @@ struct FullLevelBreakdownView: View {
     ]
     
     var body: some View {
-        ZStack {
-            Color.white
-                .ignoresSafeArea()
-            
-            ScrollView {
-                VStack(spacing: 24) {
+        ScrollView {
+            VStack(spacing: 24) {
+                VStack(alignment: .leading, spacing: 16) {
+                    Text("My Level")
+                        .font(.system(size: 28, weight: .medium, design: .default))
+                    
                     HStack {
-                        Text("My Level")
-                            .font(.system(size: 28, weight: .medium, design: .default))
-                            .foregroundColor(.black)
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("Level \(xpManager.userXPData?.level ?? 0)")
+                                .font(.system(size: 28, weight: .bold, design: .default))
+                            
+                            Text("\(xpManager.userXPData?.xp ?? 0) / \(xpManager.userXPData?.xpNeeded ?? 0) XP")
+                                .font(.system(size: 16, weight: .regular, design: .default))
+                                .foregroundColor(.gray)
+                        }
+                        
+                        Spacer()
+                        
+                        ZStack {
+                            Circle()
+                                .stroke(Color(hex: "F5F5F5"), lineWidth: 10)
+                                .frame(width: 80, height: 80)
+                            
+                            Circle()
+                                .trim(from: 0, to: CGFloat(Float(xpManager.userXPData?.xp ?? 0) / Float(xpManager.userXPData?.xpNeeded ?? 1)))
+                                .stroke(Color(hex: "40C4FC"), style: StrokeStyle(lineWidth: 10, lineCap: .round))
+                                .frame(width: 80, height: 80)
+                                .rotationEffect(.degrees(-90))
+                        }
+                    }
+                }
+                
+                VStack(alignment: .leading, spacing: 16) {
+                    Text("Sublevels")
+                        .font(.system(size: 22, weight: .medium, design: .default))
+                    
+                    ForEach(Array(xpManager.userXPData?.subLevels.allAttributes().enumerated() ?? [].enumerated()), id: \.element.key) { index, sublevel in
+                        let (key, attribute) = sublevel
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
+                                Text(key.capitalizingFirstLetter())
+                                    .font(.system(size: 18, weight: .medium, design: .default))
+                                Spacer()
+                                Text("Level \(attribute.level)")
+                                    .font(.system(size: 16, weight: .regular, design: .default))
+                                    .foregroundColor(.gray)
+                            }
+                            
+                            ProgressView(value: Float(attribute.xp), total: Float(attribute.xpNeeded))
+                                .progressViewStyle(CustomProgressLevelViewStyle(progressColor: progressColors[index % progressColors.count]))
+                                .frame(height: 8)
+                            
+                            Text("\(attribute.xp)/\(attribute.xpNeeded) XP")
+                                .font(.system(size: 14, weight: .regular, design: .default))
+                                .foregroundColor(.gray)
+                        }
+                    }
+                }
+                
+                VStack(alignment: .leading, spacing: 16) {
+                    Text("Recent Level Changes")
+                        .font(.system(size: 22, weight: .medium, design: .default))
+                    
+                    if levelChangeManager.levelChanges.isEmpty {
+                        Text("No recent level changes")
+                            .font(.system(size: 16, weight: .regular, design: .default))
+                            .foregroundColor(.gray)
+                    } else {
+                        ForEach(levelChangeManager.levelChanges.prefix(5), id: \.id) { change in
+                            HStack {
+                                Image(systemName: iconName(for: change.keyword))
+                                    .foregroundColor(Color(hex: "40C4FC"))
+                                    .frame(width: 30)
+                                
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text(change.keyword)
+                                        .font(.system(size: 16, weight: .medium, design: .default))
+                                    Text(change.description)
+                                        .font(.system(size: 14, weight: .regular, design: .default))
+                                        .foregroundColor(.gray)
+                                }
+                                
+                                Spacer()
+                                
+                                Text("+\(change.change) XP")
+                                    .font(.system(size: 16, weight: .medium, design: .default))
+                                    .foregroundColor(Color(hex: "40C4FC"))
+                            }
+                            .padding(.vertical, 8)
+                        }
+                    }
+                }
+                
+                VStack(alignment: .leading, spacing: 16) {
+                    HStack {
+                        Text("Level Trends")
+                            .font(.system(size: 22, weight: .medium, design: .default))
                         
                         Spacer()
                     }
                     
-                    overallLevelSection
-                    sublevelsSection
-                    recentLevelChangesSection
-                    levelTrendsSection
+                    if trendManager.levelTrend.isEmpty {
+                        Text("No trend data available")
+                            .font(.system(size: 16, weight: .regular, design: .default))
+                            .foregroundColor(.gray)
+                    } else {
+                        Chart(trendManager.levelTrend) { dataPoint in
+                            LineMark(
+                                x: .value("Date", dataPoint.date),
+                                y: .value("Level", dataPoint.value)
+                            )
+                            .interpolationMethod(.catmullRom)
+                            .foregroundStyle(Color(hex: "40C4FC"))
+                            
+                            PointMark(
+                                x: .value("Date", dataPoint.date),
+                                y: .value("Level", dataPoint.value)
+                            )
+                            .foregroundStyle(Color(hex: "40C4FC"))
+                        }
+                        .chartXScale(domain: minDate...maxDate)
+                        .chartYScale(domain: 0...maxValue)
+                        .frame(height: 250)
+                    }
                 }
-                .padding()
             }
+            .padding(.horizontal)
         }
+        .background(Color.white)
         .navigationBarBackButtonHidden()
         .onAppear {
             Task {
@@ -50,137 +154,7 @@ struct FullLevelBreakdownView: View {
             }
         }
     }
-    
-    private var overallLevelSection: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("Overall Level")
-                .font(.system(size: 22, weight: .medium, design: .default))
-            
-            HStack {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Level \(xpManager.userXPData?.level ?? 0)")
-                        .font(.system(size: 28, weight: .bold, design: .default))
-                    
-                    Text("\(xpManager.userXPData?.xp ?? 0) / \(xpManager.userXPData?.xpNeeded ?? 0) XP")
-                        .font(.system(size: 16, weight: .regular, design: .default))
-                        .foregroundColor(.gray)
-                }
-                
-                Spacer()
-                
-                ZStack {
-                    Circle()
-                        .stroke(.gray, lineWidth: 10)
-                        .frame(width: 80, height: 80)
-                    
-                    Circle()
-                        .trim(from: 0, to: CGFloat(Float(xpManager.userXPData?.xp ?? 0) / Float(xpManager.userXPData?.xpNeeded ?? 1)))
-                        .stroke(Color(hex: "40C4FC"), style: StrokeStyle(lineWidth: 10, lineCap: .round))
-                        .frame(width: 80, height: 80)
-                        .rotationEffect(.degrees(-90))
-                }
-            }
-        }
-        .padding()
-        .background(Color(hex: "F5F5F5"))
-    }
-    
-    private var sublevelsSection: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("Sublevels")
-                .font(.system(size: 22, weight: .medium, design: .default))
-            
-            ForEach(Array(xpManager.userXPData?.subLevels.allAttributes().enumerated() ?? [].enumerated()), id: \.element.key) { index, sublevel in
-                let (key, attribute) = sublevel
-                VStack(alignment: .leading, spacing: 8) {
-                    HStack {
-                        Text(key.capitalizingFirstLetter())
-                            .font(.system(size: 18, weight: .medium, design: .default))
-                        Spacer()
-                        Text("Level \(attribute.level)")
-                            .font(.system(size: 16, weight: .regular, design: .default))
-                            .foregroundColor(.gray)
-                    }
-                    
-                    ProgressView(value: Float(attribute.xp), total: Float(attribute.xpNeeded))
-                        .progressViewStyle(CustomProgressLevelViewStyle(progressColor: progressColors[index % progressColors.count]))
-                        .frame(height: 8)
-                    
-                    Text("\(attribute.xp)/\(attribute.xpNeeded) XP")
-                        .font(.system(size: 14, weight: .regular, design: .default))
-                        .foregroundColor(.gray)
-                }
-            }
-        }
-    }
-    
-    private var recentLevelChangesSection: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("Recent Level Changes")
-                .font(.system(size: 22, weight: .medium, design: .default))
-            
-            if levelChangeManager.levelChanges.isEmpty {
-                Text("No recent level changes")
-                    .font(.system(size: 16, weight: .regular, design: .default))
-                    .foregroundColor(.gray)
-            } else {
-                ForEach(levelChangeManager.levelChanges.prefix(5), id: \.id) { change in
-                    HStack {
-                        Image(systemName: iconName(for: change.keyword))
-                            .foregroundColor(Color(hex: "40C4FC"))
-                            .frame(width: 30)
-                        
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(change.keyword)
-                                .font(.system(size: 16, weight: .medium, design: .default))
-                            Text(change.description)
-                                .font(.system(size: 14, weight: .regular, design: .default))
-                                .foregroundColor(.gray)
-                        }
-                        
-                        Spacer()
-                        
-                        Text("+\(change.change) XP")
-                            .font(.system(size: 16, weight: .medium, design: .default))
-                            .foregroundColor(Color(hex: "40C4FC"))
-                    }
-                    .padding()
-                    .background(Color(hex: "F5F5F5"))
-                }
-            }
-        }
-    }
-    
-    private var levelTrendsSection: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("Level Trends")
-                .font(.system(size: 22, weight: .medium, design: .default))
-            
-            if trendManager.levelTrend.isEmpty {
-                Text("No trend data available")
-                    .font(.system(size: 16, weight: .regular, design: .default))
-                    .foregroundColor(.gray)
-            } else {
-                Chart(trendManager.levelTrend) { dataPoint in
-                    LineMark(
-                        x: .value("Date", dataPoint.date),
-                        y: .value("Level", dataPoint.value)
-                    )
-                    .interpolationMethod(.catmullRom)
-                    .foregroundStyle(Color(hex: "40C4FC"))
-                    
-                    PointMark(
-                        x: .value("Date", dataPoint.date),
-                        y: .value("Level", dataPoint.value)
-                    )
-                    .foregroundStyle(Color(hex: "40C4FC"))
-                }
-                .chartXScale(domain: minDate...maxDate)
-                .chartYScale(domain: 0...maxValue)
-                .frame(height: 250)
-            }
-        }
-    }
+
     
     private func iconName(for keyword: String) -> String {
         switch keyword {
@@ -224,7 +198,6 @@ struct CustomProgressLevelViewStyle: ProgressViewStyle {
         }
     }
 }
-
 
 #Preview {
     FullLevelBreakdownView()

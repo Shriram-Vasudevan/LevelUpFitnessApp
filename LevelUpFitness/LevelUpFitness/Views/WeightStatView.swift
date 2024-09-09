@@ -9,39 +9,28 @@ import SwiftUI
 
 struct WeightStatView: View {
     var body: some View {
-        ZStack {
-            HStack {
-                VStack(alignment: .leading, spacing: 5) {
-                    HStack {
-//                        Image(systemName: imageName)
-//                            .resizable()
-//                            .aspectRatio(contentMode: .fit)
-//                            .frame(width: 20, height: 20)
-//                            .foregroundColor(.black)
-                        
-                        Text("Weight")
-                            .font(.title3)
-                            .foregroundColor(.black)
-                            .bold()
-                    }
-                   
-                    Text("See or View your Weight Trend")
-                }
+        HStack(spacing: 16) {
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Weight")
+                    .font(.system(size: 18, weight: .medium))
+                    .foregroundColor(.black)
                 
-                Spacer()
-                
-                Image("TrendBlue")
-                    .resizable()
-                    .frame(width: 40, height: 40)
+                Text("See or View your Weight Trend")
+                    .font(.system(size: 14, weight: .regular))
+                    .foregroundColor(.gray)
             }
+            
+            Spacer()
+            
+            Image("TrendBlue")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 30, height: 30)
+                .foregroundColor(Color(hex: "40C4FC"))
         }
         .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 10)
-                .fill(.white)
-                .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 5)
-        )
-        .padding()
+        .frame(maxWidth: .infinity)
+        .background(Color(hex: "F5F5F5"))
     }
 }
 

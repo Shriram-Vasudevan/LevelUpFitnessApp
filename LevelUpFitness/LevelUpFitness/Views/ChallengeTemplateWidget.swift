@@ -9,54 +9,42 @@ import SwiftUI
 
 struct ChallengeTemplateWidget: View {
     var challenge: ChallengeTemplate
-    
     var challengeSelected: () -> Void
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 16) {
             HStack {
-                VStack(alignment: .leading, spacing: 4) {
+                VStack(alignment: .leading, spacing: 8) {
                     Text(challenge.name)
-                        .font(.system(size: 22, weight: .bold, design: .rounded))
-                        .foregroundColor(.white)
+                        .font(.system(size: 18, weight: .medium))
+                        .foregroundColor(.black)
                     
                     Text(challenge.description)
-                        .font(.system(size: 12, weight: .medium, design: .rounded))
-                        .foregroundColor(.white.opacity(0.8))
+                        .font(.system(size: 14, weight: .regular))
+                        .foregroundColor(.gray)
                 }
                 
                 Spacer()
                 
                 Image(systemName: "flame.fill")
-                    .font(.system(size: 24))
-                    .foregroundColor(.white.opacity(0.7))
+                    .font(.system(size: 20))
+                    .foregroundColor(Color(hex: "40C4FC"))
             }
             
-            Button(action: {
-                challengeSelected()
-            }) {
+            Button(action: challengeSelected) {
                 Text("Start")
-                    .font(.system(size: 14, weight: .semibold, design: .rounded))
-                    .foregroundColor(.blue)
-                    .padding(.horizontal, 16)
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
                     .padding(.vertical, 8)
-                    .background(Color.white)
-                    .cornerRadius(20)
+                    .background(Color(hex: "40C4FC"))
             }
-
         }
-        .padding(20)
-        .background(
-            LinearGradient(gradient: Gradient(colors: [
-                        Color(red: 0.678, green: 0.847, blue: 0.902),
-                        Color(red: 0.565, green: 0.933, blue: 0.565)
-                    ]), startPoint: .topLeading, endPoint: .bottomTrailing)
-        )
-        .cornerRadius(10)
-        .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 5)
+        .padding()
+        .background(Color(hex: "F5F5F5"))
     }
 }
 
 #Preview {
-    ChallengeTemplateWidget(challenge: ChallengeTemplate(id: "", name: "", description: "", duration: 5, targetField: ""), challengeSelected: {})
+    ChallengeTemplateWidget(challenge: ChallengeTemplate(id: "", name: "Sample Challenge", description: "This is a sample challenge description", duration: 5, targetField: ""), challengeSelected: {})
 }

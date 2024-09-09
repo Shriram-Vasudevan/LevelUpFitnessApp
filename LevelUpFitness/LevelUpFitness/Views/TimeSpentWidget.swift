@@ -5,40 +5,38 @@ struct TimeSpentWidget: View {
     var program: Program
     
     var body: some View {
-        VStack(spacing: 0) {
+        VStack(alignment: .leading, spacing: 16) {
             HStack {
                 Image(systemName: "timer")
-                    .foregroundColor(.primary)
+                    .foregroundColor(Color(hex: "40C4FC"))
                 
                 Text("Average Program Time")
-                    .font(.headline)
-                    .foregroundColor(.primary)
+                    .font(.system(size: 18, weight: .bold, design: .default))
+                    .foregroundColor(.black)
                 
                 Spacer()
                 
                 Button(action: {
-                    
+                    // Action for "More" button
                 }) {
                     HStack {
                         Text("More")
-                            .font(.subheadline)
-                            .foregroundColor(.black)
+                            .font(.system(size: 14, weight: .medium, design: .default))
+                            .foregroundColor(Color(hex: "40C4FC"))
                         
                         Image(systemName: "chevron.right")
-                            .foregroundColor(.black)
+                            .foregroundColor(Color(hex: "40C4FC"))
                     }
                 }
             }
-            .padding(.bottom, 5)
             
-            Text(String(format: "%.1f", program.getAverageWorkoutTime() / 60))
-                .font(.system(size: 36, weight: .bold, design: .rounded))
-                + Text(" min")
-                .font(.system(size: 20, weight: .medium, design: .rounded))
-            
-            Text("Average")
-                .foregroundColor(.gray)
-                .padding(.bottom, 10)
+            HStack(alignment: .firstTextBaseline, spacing: 4) {
+                Text(String(format: "%.1f", program.getAverageWorkoutTime() / 60))
+                    .font(.system(size: 36, weight: .bold, design: .default))
+                Text("min")
+                    .font(.system(size: 18, weight: .medium, design: .default))
+                    .foregroundColor(.gray)
+            }
             
             Chart {
                 ForEach(program.program, id: \.self) { programDay in
@@ -46,21 +44,23 @@ struct TimeSpentWidget: View {
                         x: .value("Day", String(programDay.day.prefix(3))),
                         y: .value("Time", programDay.getTotalWorkoutTime() / 60)
                     )
-                    .foregroundStyle(Color.blue.gradient)
+                    .foregroundStyle(Color(hex: "40C4FC").gradient)
                     .lineStyle(StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round))
                 }
             }
             .chartXAxis(.hidden)
             .chartYAxis(.hidden)
             .chartYScale(domain: 0...60)
-            .frame(height: 70) // Reduced height from 100 to 70
-            .padding(.horizontal)
+            .frame(height: 60)
         }
-        .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 16)
-                .fill(Color(UIColor.systemBackground))
-                .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 5)
+        .padding(20)
+        .background(Color(hex: "F5F5F5"))
+        .overlay(
+            Rectangle()
+                .fill(Color(hex: "40C4FC"))
+                .frame(width: 4)
+                .padding(.vertical, 20),
+            alignment: .leading
         )
     }
 }
