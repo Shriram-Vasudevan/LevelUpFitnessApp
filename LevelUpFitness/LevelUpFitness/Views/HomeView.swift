@@ -19,7 +19,7 @@ struct HomeView: View {
     @State private var showFullLevelBreakdownView: Bool = false
     @State private var showLevelUpInformationView: Bool = false
     @State var selectedExercise: Progression?
-    @State var healthStatType: String?
+    @State var healthStatType: String = ""
     @State var navigateToHealthStatTrendView: Bool = false
     @State var navigateToWeightTrendView: Bool = false
     @State var navigateToProfileView: Bool = false
@@ -44,7 +44,7 @@ struct HomeView: View {
                             Image("Headshot")
                                 .resizable()
                                 .scaledToFill()
-                                .frame(width: 36, height: 36)
+                                .frame(width: 30, height: 30)
                                 .clipShape(Circle())
                         }
                     }
@@ -54,7 +54,7 @@ struct HomeView: View {
                         ToDoList()
                     }
                     
-                    VStack(spacing: 16) {
+                    VStack(spacing: 12) {
                         Text("Time to Start Moving!")
                             .font(.system(size: 20, weight: .medium))
                             .frame(maxWidth: .infinity, alignment: .leading)
@@ -65,7 +65,7 @@ struct HomeView: View {
                         }
                     }
                     
-                    VStack(spacing: 16) {
+                    VStack(spacing: 12) {
                         Text("Your Metrics")
                             .font(.system(size: 20, weight: .medium))
                             .frame(maxWidth: .infinity, alignment: .leading)
@@ -92,20 +92,22 @@ struct HomeView: View {
                         TimeSpentWidget(program: program)
                     }
                     
-                    HStack {
-                        Text("Our Pick for You")
-                            .font(.system(size: 20, weight: .medium))
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        
-                        Spacer()
-                    }
-                    
                     if let recommendedExercise = exerciseManager.recommendedExercise {
-                        recommendedExerciseView(recommendedExercise)
+                        VStack(spacing: 12) {
+                            HStack {
+                                Text("Our Pick for You")
+                                    .font(.system(size: 20, weight: .medium))
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                
+                                Spacer()
+                            }
+                            
+                            recommendedExerciseView(recommendedExercise)
+                        }
                     }
                 
                     
-                    VStack(spacing: 16) {
+                    VStack(spacing: 12) {
                         if challengeManager.userChallenges.count > 0 {
                             Text("My Challenges")
                                 .font(.system(size: 20, weight: .medium))
@@ -146,15 +148,8 @@ struct HomeView: View {
         }
         .navigationBarBackButtonHidden()
         .accentColor(Color(hex: "40C4FC"))
-        .navigationDestination(isPresented: $showFullLevelBreakdownView) {
-            if let userXPData = xpManager.userXPData {
-                FullLevelBreakdownView()
-            }
-        }
         .fullScreenCover(isPresented: $navigateToHealthStatTrendView) {
-            if let healthStatType = self.healthStatType {
-                HealthTrendView(healthStatType: healthStatType)
-            }
+            HealthTrendView(healthStatType: healthStatType)
         }
         .navigationDestination(isPresented: $navigateToProfileView) {
             ProfileView()

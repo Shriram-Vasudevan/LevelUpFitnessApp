@@ -315,6 +315,7 @@ struct UpNextProgramExerciseWidget: View {
 
 struct TodaysScheduleWidget: View {
     @ObservedObject var programManager: ProgramManager
+    @State private var isExpanded: Bool = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -322,16 +323,35 @@ struct TodaysScheduleWidget: View {
                 .font(.system(size: 20, weight: .medium, design: .default))
             
             if let todaysProgram = programManager.program?.program.first(where: { $0.day == DateUtility.getCurrentWeekday() }) {
-                let relevantExercises = getRelevantExercises(from: todaysProgram.exercises)
+                let exercises = todaysProgram.exercises
+                let displayedExercises = isExpanded ? exercises : Array(exercises.prefix(3))
                 
-                ForEach(relevantExercises, id: \.name) { exercise in
+                ForEach(displayedExercises, id: \.name) { exercise in
                     ExerciseRow(exercise: exercise)
                 }
                 
-                if todaysProgram.exercises.count > 3 {
-                    Text("\(todaysProgram.exercises.count - relevantExercises.count) more exercise(s) in today's program")
-                        .font(.system(size: 14, weight: .ultraLight, design: .default))
-                        .foregroundColor(.gray)
+                if exercises.count > 3 {
+                    Button(action: {
+                        withAnimation {
+                            isExpanded.toggle()
+                        }
+                    }) {
+                        HStack {
+                            Text(isExpanded ? "Show Less" : "Show All")
+                                .font(.system(size: 16, weight: .medium, design: .default))
+                                .foregroundColor(.white)
+                            
+                            Spacer()
+                            
+                            Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
+                                .foregroundColor(.white)
+                        }
+                        .padding(.vertical, 10)
+                        .padding(.horizontal, 16)
+                        .background(Color(hex: "40C4FC"))
+                        .cornerRadius(8)
+                    }
+                    .padding(.top, 8)
                 }
             } else {
                 Text("No exercises scheduled for today")
@@ -341,24 +361,9 @@ struct TodaysScheduleWidget: View {
         }
         .padding()
         .background(Color(hex: "F5F5F5"))
-    }
-    
-    private func getRelevantExercises(from exercises: [ProgramExercise]) -> [ProgramExercise] {
-        guard !exercises.isEmpty else { return [] }
-        
-        if let currentIndex = exercises.firstIndex(where: { !$0.completed }) {
-            let endIndex = min(currentIndex + 3, exercises.count)
-            if endIndex - currentIndex < 3 {
-                return Array(exercises.suffix(3))
-            } else {
-                return Array(exercises[currentIndex..<endIndex])
-            }
-        } else {
-            return Array(exercises.suffix(3))
-        }
+        .animation(.easeInOut, value: isExpanded)
     }
 }
-
 
 struct ExerciseRow: View {
     let exercise: ProgramExercise

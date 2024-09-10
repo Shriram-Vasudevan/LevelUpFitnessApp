@@ -7,44 +7,42 @@ struct ProgramStatisticsView: View {
     @State private var selectedTab = 0
     
     var body: some View {
-        NavigationStack {
-            ZStack {
-                Color.white.edgesIgnoringSafeArea(.all)
-                
-                VStack(spacing: 0) {
-                    HStack {
-                        Button(action: { dismiss() }) {
-                            Image(systemName: "xmark")
-                                .foregroundColor(.primary)
-                        }
-                        Spacer()
-                        Text("Program Insights")
-                            .font(.title2)
-                            .fontWeight(.bold)
-                        Spacer()
-                        Button(action: {
-                            
-                        }) {
-                            Image(systemName: "info.circle")
-                                .foregroundColor(.primary)
-                        }
+        ZStack {
+            Color.white.edgesIgnoringSafeArea(.all)
+            
+            VStack(spacing: 0) {
+                HStack {
+                    Button(action: { dismiss() }) {
+                        Image(systemName: "xmark")
+                            .foregroundColor(.primary)
                     }
-                    .padding()
-                    
-                    Picker("", selection: $selectedTab) {
-                        Text("Overview").tag(0)
-                        Text("Daily").tag(1)
-                        Text("Time").tag(2)
+                    Spacer()
+                    Text("Program Insights")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                    Spacer()
+                    Button(action: {
+                        
+                    }) {
+                        Image(systemName: "info.circle")
+                            .foregroundColor(.primary)
                     }
-                    .pickerStyle(SegmentedPickerStyle())
-                    .padding([.horizontal, .top])
-                    
-                    
-                    selectedTabContent
                 }
+                .padding()
+                
+                Picker("", selection: $selectedTab) {
+                    Text("Overview").tag(0)
+                    Text("Daily").tag(1)
+                    Text("Time").tag(2)
+                }
+                .pickerStyle(SegmentedPickerStyle())
+                .padding([.horizontal, .top])
+                
+                
+                selectedTabContent
             }
-            .navigationBarHidden(true)
         }
+        .navigationBarHidden(true)
     }
     
 

@@ -144,7 +144,7 @@ struct WorkoutContent: View {
                 if workoutManager.currentSetIndex < workoutManager.currentExerciseData.sets.count {
                     ProgramExerciseDataSetWidget(
                         model: $workoutManager.currentExerciseData.sets[workoutManager.currentSetIndex], exercise: workoutManager.currentExercises[workoutManager.currentExerciseIndex],
-                        setIndex: workoutManager.currentSetIndex,
+                        setIndex: workoutManager.currentSetIndex, totalSets: workoutManager.currentExerciseData.sets.count,
                         setCompleted: {
                             completeCurrentSet()
                         }

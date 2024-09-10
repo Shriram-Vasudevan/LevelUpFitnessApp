@@ -13,14 +13,21 @@ struct AuthCheckView: View {
     var body: some View {
         VStack {
             if authObserver.isSignedIn {
-                PagesHolderView(pageType: .home)
-                    .preferredColorScheme(.light)
+                NavigationStack {
+                    PagesHolderView(pageType: .home)
+                        .preferredColorScheme(.light)
+                }
+                
             } else if !authObserver.hasFinishedChecking {
-                SplashScreenView()
-                    .preferredColorScheme(.light)
+                NavigationStack {
+                    SplashScreenView()
+                        .preferredColorScheme(.light)
+                }
             } else {
-                LoginView()
-                    .preferredColorScheme(.light)
+                NavigationStack {
+                    LoginView()
+                        .preferredColorScheme(.light)
+                }
             }
         }
         .transition(.opacity)

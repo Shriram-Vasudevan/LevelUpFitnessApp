@@ -17,68 +17,66 @@ struct LoginView: View {
     private let placeholderColor = Color.gray.opacity(0.7)
     
     var body: some View {
-        NavigationStack {
-            ZStack {
-                backgroundColor.ignoresSafeArea()
+        ZStack {
+            backgroundColor.ignoresSafeArea()
+            
+            VStack(spacing: 24) {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Welcome Back")
+                        .font(.system(size: 32, weight: .bold))
+                        .foregroundColor(textColor)
+                    Text("Sign in to continue")
+                        .font(.system(size: 18, weight: .regular))
+                        .foregroundColor(placeholderColor)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
                 
-                VStack(spacing: 24) {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Welcome Back")
-                            .font(.system(size: 32, weight: .bold))
-                            .foregroundColor(textColor)
-                        Text("Sign in to continue")
-                            .font(.system(size: 18, weight: .regular))
-                            .foregroundColor(placeholderColor)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    
-                    VStack(spacing: 16) {
-                        CustomTextField(placeholder: "Email", text: $email, isSecure: false, error: emailError)
-                        CustomTextField(placeholder: "Password", text: $password, isSecure: true, error: passwordError)
-                    }
-                    
-                    Button(action: checkFieldsAndLogin) {
-                        Text("Log In")
-                            .font(.system(size: 18, weight: .semibold))
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 56)
-                            .background(accentColor)
-                            .cornerRadius(8)
-                    }
-                    
-                    Button(action: {
-                        // Handle forgot password
-                    }) {
-                        Text("Forgot Password?")
-                            .font(.system(size: 16, weight: .medium))
+                VStack(spacing: 16) {
+                    CustomTextField(placeholder: "Email", text: $email, isSecure: false, error: emailError)
+                    CustomTextField(placeholder: "Password", text: $password, isSecure: true, error: passwordError)
+                }
+                
+                Button(action: checkFieldsAndLogin) {
+                    Text("Log In")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 56)
+                        .background(accentColor)
+                        .cornerRadius(8)
+                }
+                
+                Button(action: {
+                    // Handle forgot password
+                }) {
+                    Text("Forgot Password?")
+                        .font(.system(size: 16, weight: .medium))
+                        .foregroundColor(accentColor)
+                }
+                
+                Spacer()
+                
+                HStack {
+                    Text("Don't have an account?")
+                        .font(.system(size: 16, weight: .regular))
+                        .foregroundColor(placeholderColor)
+                    Button(action: { navigateToRegister = true }) {
+                        Text("Sign Up")
+                            .font(.system(size: 16, weight: .semibold))
                             .foregroundColor(accentColor)
                     }
-                    
-                    Spacer()
-                    
-                    HStack {
-                        Text("Don't have an account?")
-                            .font(.system(size: 16, weight: .regular))
-                            .foregroundColor(placeholderColor)
-                        Button(action: { navigateToRegister = true }) {
-                            Text("Sign Up")
-                                .font(.system(size: 16, weight: .semibold))
-                                .foregroundColor(accentColor)
-                        }
-                    }
                 }
-                .padding(.horizontal, 24)
-                .padding(.top, 60)
-                .padding(.bottom, keyboardResponder.keyboardHeight)
-                .animation(.easeOut(duration: 0.16), value: keyboardResponder.keyboardHeight)
             }
-            .navigationDestination(isPresented: $navigateToRegister) {
-                RegisterView()
-            }
-            .navigationDestination(isPresented: $navigateToHomePage) {
-                PagesHolderView(pageType: .home)
-            }
+            .padding(.horizontal, 24)
+            .padding(.top, 60)
+            .padding(.bottom, keyboardResponder.keyboardHeight)
+            .animation(.easeOut(duration: 0.16), value: keyboardResponder.keyboardHeight)
+        }
+        .navigationDestination(isPresented: $navigateToRegister) {
+            RegisterView()
+        }
+        .navigationDestination(isPresented: $navigateToHomePage) {
+            PagesHolderView(pageType: .home)
         }
     }
     

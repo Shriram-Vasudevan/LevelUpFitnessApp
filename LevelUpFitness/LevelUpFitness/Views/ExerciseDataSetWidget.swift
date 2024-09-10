@@ -8,8 +8,6 @@
 import SwiftUI
 
 
-import SwiftUI
-
 struct ProgramExerciseDataSetWidget: View {
     @Binding var model: ExerciseDataSet
     let exercise: ProgramExercise
@@ -22,34 +20,36 @@ struct ProgramExerciseDataSetWidget: View {
     @State private var repText = ""
     
     let setIndex: Int
+    let totalSets: Int
     let setCompleted: () -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Set \(setIndex + 1)")
+                    Text("Set \(setIndex + 1) / \(totalSets)")
                         .font(.system(size: 24, weight: .bold, design: .rounded))
                     Text(isResting ? "Rest" : "Exercise")
                         .font(.system(size: 16, weight: .medium, design: .rounded))
                         .foregroundColor(.secondary)
                 }
                 Spacer()
-                .frame(width: 60, height: 60)
-                .cornerRadius(8)
+                Image(systemName: isResting ? "hourglass" : "figure.walk")
+                    .font(.system(size: 24))
+                    .foregroundColor(Color(hex: "40C4FC"))
             }
             
             if exercise.equipment != "none" {
                 HStack {
                     Image(systemName: "dumbbell.fill")
-                        .foregroundColor(.blue)
+                        .foregroundColor(Color(hex: "40C4FC"))
                     Text(exercise.equipment)
                         .font(.system(size: 14, weight: .medium, design: .rounded))
                         .foregroundColor(.secondary)
                 }
                 .padding(.vertical, 8)
                 .padding(.horizontal, 12)
-                .background(Color.blue.opacity(0.1))
+                .background(Color(hex: "40C4FC").opacity(0.1))
                 .cornerRadius(20)
             }
             
@@ -66,12 +66,12 @@ struct ProgramExerciseDataSetWidget: View {
                     Circle()
                         .stroke(lineWidth: 4)
                         .opacity(0.3)
-                        .foregroundColor(.blue)
+                        .foregroundColor(Color(hex: "40C4FC"))
                     
                     Circle()
                         .trim(from: 0.0, to: min(CGFloat(elapsedTime) / 60.0, 1.0))
                         .stroke(style: StrokeStyle(lineWidth: 4, lineCap: .round, lineJoin: .round))
-                        .foregroundColor(.blue)
+                        .foregroundColor(Color(hex: "40C4FC"))
                         .rotationEffect(Angle(degrees: 270.0))
                         .animation(.linear, value: elapsedTime)
                 }
@@ -99,9 +99,7 @@ struct ProgramExerciseDataSetWidget: View {
             }
         }
         .padding()
-        .background(Color(.systemBackground))
     }
-    
     
     private func inputField(title: String, text: Binding<String>, unit: String) -> some View {
         VStack(alignment: .leading, spacing: 4) {
@@ -118,7 +116,7 @@ struct ProgramExerciseDataSetWidget: View {
             }
             .padding(.vertical, 8)
             .padding(.horizontal, 12)
-            .background(Color(.systemGray6))
+            .background(Color.white)
             .cornerRadius(8)
         }
     }
@@ -175,7 +173,6 @@ struct ProgramExerciseDataSetWidget: View {
 }
 
 
-
 #Preview {
-    ProgramExerciseDataSetWidget(model: .constant(ExerciseDataSet(weight: 10, reps: 5, time: 0.0, rest: 0.0)), exercise: ProgramExercise(name: "", sets: 0, reps: 0, rpe: "", rest: 0, area: "", isWeight: true, completed: false, cdnURL: "", equipment: "", data: ExerciseData(sets: [])), setIndex: 0, setCompleted: {})
+    ProgramExerciseDataSetWidget(model: .constant(ExerciseDataSet(weight: 10, reps: 5, time: 0.0, rest: 0.0)), exercise: ProgramExercise(name: "", sets: 0, reps: 0, rpe: "", rest: 0, area: "", isWeight: true, completed: false, cdnURL: "", equipment: "", data: ExerciseData(sets: [])), setIndex: 0, totalSets: 1, setCompleted: {})
 }

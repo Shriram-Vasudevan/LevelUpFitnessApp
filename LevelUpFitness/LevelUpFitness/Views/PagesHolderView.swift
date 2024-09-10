@@ -27,173 +27,171 @@ struct PagesHolderView: View {
     @State var pageType: PageType
     
     var body: some View {
-        NavigationStack {
-            ZStack {
-                VStack {
-                    switch pageType {
-                    case .home:
-                        HomeView(
-                            programManager: programManager,
-                            databaseManager: databaseManager,
-                            healthManager: healthManager,
-                            xpManager: xpManager,
-                            exerciseManager: exerciseManager,
-                            challengeManager: challengeManager, levelChangeManager: levelChangeManager, toDoListManager: toDoListManager,
-                            pageType: $pageType
-                        )
-                        .preferredColorScheme(.light)
-                    case .levelBreakdown:
-                        FullLevelBreakdownView()
-                    case .program:
-                        ProgramView(
-                            programManager: programManager,
-                            badgeManager: badgeManager,
-                            xpManager: xpManager
-                        )
-                        .preferredColorScheme(.light)
-                    case .library:
-                        LibraryView(
-                            programManager: programManager,
-                            xpManager: xpManager,
-                            exerciseManager: exerciseManager
-                        )
-                        .preferredColorScheme(.light)
-                    }
-                    
-                    Spacer()
+        ZStack {
+            VStack {
+                switch pageType {
+                case .home:
+                    HomeView(
+                        programManager: programManager,
+                        databaseManager: databaseManager,
+                        healthManager: healthManager,
+                        xpManager: xpManager,
+                        exerciseManager: exerciseManager,
+                        challengeManager: challengeManager, levelChangeManager: levelChangeManager, toDoListManager: toDoListManager,
+                        pageType: $pageType
+                    )
+                    .preferredColorScheme(.light)
+                case .levelBreakdown:
+                    FullLevelBreakdownView()
+                case .program:
+                    ProgramView(
+                        programManager: programManager,
+                        badgeManager: badgeManager,
+                        xpManager: xpManager
+                    )
+                    .preferredColorScheme(.light)
+                case .library:
+                    LibraryView(
+                        programManager: programManager,
+                        xpManager: xpManager,
+                        exerciseManager: exerciseManager
+                    )
+                    .preferredColorScheme(.light)
+                }
+                
+                Spacer()
+                                
+                HStack {
+                    ZStack {
+                        VStack {
+                            Button(action: {
+                                pageType = .home
+                            }, label: {
+                                VStack {
+                                    Image(pageType == .home ? "HomeBlue" : "HomeGrey")
+                                        .resizable()
+                                        .frame(width: 30, height: 30)
+                                        .aspectRatio(contentMode:  .fill)
                                     
-                    HStack {
-                        ZStack {
-                            VStack {
-                                Button(action: {
-                                    pageType = .home
-                                }, label: {
-                                    VStack {
-                                        Image(pageType == .home ? "HomeBlue" : "HomeGrey")
-                                            .resizable()
-                                            .frame(width: 30, height: 30)
-                                            .aspectRatio(contentMode:  .fill)
-                                        
-    //                                    Text("Home")
-    //                                        .font(.caption)
-    //                                        .foregroundColor(pageType == .home ? .blue : .gray)
-                                    }
-                                    .padding(.bottom)
-                                })
-                            }
-                            .frame(maxWidth: .infinity, alignment: .center)
-                            
+//                                    Text("Home")
+//                                        .font(.caption)
+//                                        .foregroundColor(pageType == .home ? .blue : .gray)
+                                }
+                                .padding(.bottom)
+                            })
                         }
+                        .frame(maxWidth: .infinity, alignment: .center)
                         
-                        ZStack {
-                            VStack {
-                                Button(action: {
-                                    pageType = .levelBreakdown
-                                }, label: {
-                                    VStack {
-                                        Image(pageType == .levelBreakdown ? "LevelBlue" : "LevelGray")
-                                            .resizable()
-                                            .frame(width: 30, height: 30)
-                                            .aspectRatio(contentMode:  .fill)
-                                        
-    //                                    Text("Level")
-    //                                        .font(.caption)
-    //                                        .foregroundColor(pageType == .levelBreakdown ? .blue : .gray)
-                                    }
-                                    .padding(.bottom)
-                                })
-                            }
-                            .frame(maxWidth: .infinity, alignment: .center)
-                            
-                        }
-                        
-                        ZStack {
-                            VStack {
-                                Button(action: {
-                                    pageType = .program
-                                }, label: {
-                                    VStack {
-                                        Image(pageType == .program ? "ProgramBlue" : "ProgramGrey")
-                                            .resizable()
-                                            .frame(width: 30, height: 30)
-                                            .aspectRatio(contentMode:  .fill)
-                                        
-    //                                    Text("Program")
-    //                                        .font(.caption)
-    //                                        .foregroundColor(pageType == .program ? .blue : .gray)
-                                        
-                                    }
-                                    .padding(.bottom)
-                                })
-                            }
-                            .frame(maxWidth: .infinity, alignment: .center)
-                            
-                        }
-
-                        ZStack {
-                            VStack {
-                                Button(action: {
-                                    pageType = .library
-                                }, label: {
-                                    VStack {
-                                        Image(pageType == .library ? "LibraryBlue" : "LibraryGrey")
-                                            .resizable()
-                                            .frame(width: 30, height: 30)
-                                            .aspectRatio(contentMode:  .fill)
-                                        
-    //                                    Text("Library")
-    //                                        .font(.caption)
-    //                                        .foregroundColor(pageType == .library ? .blue : .gray)
-                                        
-                                    }
-                                    .padding(.bottom)
-                                })
-                            }
-                            .frame(maxWidth: .infinity, alignment: .center)
-                            
-                        }
                     }
-                    .padding(.horizontal)
-                    .padding(.bottom)
-                }
-            }
-            .onAppear {
-                Task {
-                    if healthManager.todaysSteps == nil {
-                        healthManager.getInitialHealthData()
-                    }
-                        
-                    async let userProgram: ()? = programManager.program == nil ? programManager.getUserProgram() : nil
-                    async let notificationManager: () = notificationManager.identifyUser()
-                    async let challengeManager: () = challengeManager.challengeManagerInitialization()
-                    async let toDoListManager: () = toDoListManager.toDoListInit()
-                    async let exerciseManager: () = exerciseManager.exerciseManagerInit()
-                    async let xpManager: () = xpManager.xpManagerInit()
                     
-    //                async let getUsername: () = AuthenticationManager.getUsername()
-    //                async let getName: () = AuthenticationManager.getName()
-    //
-                    _ = await (userProgram, notificationManager, challengeManager, toDoListManager, exerciseManager, xpManager)
+                    ZStack {
+                        VStack {
+                            Button(action: {
+                                pageType = .levelBreakdown
+                            }, label: {
+                                VStack {
+                                    Image(pageType == .levelBreakdown ? "LevelBlue" : "LevelGray")
+                                        .resizable()
+                                        .frame(width: 30, height: 30)
+                                        .aspectRatio(contentMode:  .fill)
+                                    
+//                                    Text("Level")
+//                                        .font(.caption)
+//                                        .foregroundColor(pageType == .levelBreakdown ? .blue : .gray)
+                                }
+                                .padding(.bottom)
+                            })
+                        }
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        
+                    }
+                    
+                    ZStack {
+                        VStack {
+                            Button(action: {
+                                pageType = .program
+                            }, label: {
+                                VStack {
+                                    Image(pageType == .program ? "ProgramBlue" : "ProgramGrey")
+                                        .resizable()
+                                        .frame(width: 30, height: 30)
+                                        .aspectRatio(contentMode:  .fill)
+                                    
+//                                    Text("Program")
+//                                        .font(.caption)
+//                                        .foregroundColor(pageType == .program ? .blue : .gray)
+                                    
+                                }
+                                .padding(.bottom)
+                            })
+                        }
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        
+                    }
+
+                    ZStack {
+                        VStack {
+                            Button(action: {
+                                pageType = .library
+                            }, label: {
+                                VStack {
+                                    Image(pageType == .library ? "LibraryBlue" : "LibraryGrey")
+                                        .resizable()
+                                        .frame(width: 30, height: 30)
+                                        .aspectRatio(contentMode:  .fill)
+                                    
+//                                    Text("Library")
+//                                        .font(.caption)
+//                                        .foregroundColor(pageType == .library ? .blue : .gray)
+                                    
+                                }
+                                .padding(.bottom)
+                            })
+                        }
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        
+                    }
                 }
+                .padding(.horizontal)
+                .padding(.bottom)
             }
-            .fullScreenCover(isPresented: $globalCoverManager.showProgramDayCompletionCover) {
-                ProgramCompletedForTheDayCover()
-            }
-            .fullScreenCover(isPresented: $globalCoverManager.showProgramCompletionCover) {
-                ProgramCompletedCover()
-            }
-            .fullScreenCover(isPresented: $globalCoverManager.showChallengeCompletionCover) {
-                ChallengeCompletedView()
-            }
-            .ignoresSafeArea(edges: .bottom)
-            .onChange(of: scenePhase) { oldPhase, newPhase in
-                if newPhase == .active {
-                    NotificationManager.shared.appDidBecomeActive()
-                } else if newPhase == .inactive {
-                    print("Inactive")
-                } else if newPhase == .background {
-                    NotificationManager.shared.appDidEnterBackground()
+        }
+        .onAppear {
+            Task {
+                if healthManager.todaysSteps == nil {
+                    healthManager.getInitialHealthData()
                 }
+                    
+                async let userProgram: ()? = programManager.program == nil ? programManager.getUserProgram() : nil
+                async let notificationManager: () = notificationManager.identifyUser()
+                async let challengeManager: () = challengeManager.challengeManagerInitialization()
+                async let toDoListManager: () = toDoListManager.toDoListInit()
+                async let exerciseManager: () = exerciseManager.exerciseManagerInit()
+                async let xpManager: () = xpManager.xpManagerInit()
+                
+//                async let getUsername: () = AuthenticationManager.getUsername()
+//                async let getName: () = AuthenticationManager.getName()
+//
+                _ = await (userProgram, notificationManager, challengeManager, toDoListManager, exerciseManager, xpManager)
+            }
+        }
+        .fullScreenCover(isPresented: $globalCoverManager.showProgramDayCompletionCover) {
+            ProgramCompletedForTheDayCover()
+        }
+        .fullScreenCover(isPresented: $globalCoverManager.showProgramCompletionCover) {
+            ProgramCompletedCover()
+        }
+        .fullScreenCover(isPresented: $globalCoverManager.showChallengeCompletionCover) {
+            ChallengeCompletedView()
+        }
+        .ignoresSafeArea(edges: .bottom)
+        .onChange(of: scenePhase) { oldPhase, newPhase in
+            if newPhase == .active {
+                NotificationManager.shared.appDidBecomeActive()
+            } else if newPhase == .inactive {
+                print("Inactive")
+            } else if newPhase == .background {
+                NotificationManager.shared.appDidEnterBackground()
             }
         }
     }

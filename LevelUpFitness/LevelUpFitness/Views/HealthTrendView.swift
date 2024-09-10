@@ -117,7 +117,6 @@ struct HealthTrendView: View {
                         }
                         .stroke(accentColor, lineWidth: 2)
                         
-                        // Data Points
                         ForEach(healthData) { point in
                             let index = healthData.firstIndex(where: { $0.id == point.id })!
                             let x = CGFloat(index) / CGFloat(healthData.count - 1) * width
@@ -133,22 +132,26 @@ struct HealthTrendView: View {
                 .frame(height: 200)
                 .padding(.vertical, 16)
 
-                HStack(spacing: 16) {
-                    TextField("Enter \(healthStatType.lowercased())", text: $healthValue)
-                        .keyboardType(.decimalPad)
-                        .font(.system(size: 16, weight: .regular, design: .default))
-                        .padding()
-                        .background(grayColor)
-                        .frame(maxWidth: .infinity)
-                    
-                    Button(action: addHealthValue) {
-                        Image(systemName: "plus.circle.fill")
-                            .resizable()
-                            .frame(width: 30, height: 30)
-                            .foregroundColor(accentColor)
-                    }
-                }
-                .padding(.top)
+//                HStack(spacing: 16) {
+//                    TextField("Enter \(healthStatType.lowercased())", text: $healthValue)
+//                        .keyboardType(.decimalPad)
+//                        .font(.system(size: 16, weight: .regular, design: .default))
+//                        .padding()
+//                        .background(grayColor)
+//                        .frame(maxWidth: .infinity)
+//                        .opacity(0.7)
+//                        .disabled(true)
+//                    
+//                    Button(action: addHealthValue) {
+//                        Image(systemName: "plus.circle.fill")
+//                            .resizable()
+//                            .frame(width: 30, height: 30)
+//                            .foregroundColor(accentColor)
+//                            .opacity(0.7)
+//                            .disabled(true)
+//                    }
+//                }
+//                .padding(.top)
 
                 VStack(alignment: .leading, spacing: 16) {
                     Text("Latest Entries")

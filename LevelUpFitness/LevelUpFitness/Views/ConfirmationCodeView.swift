@@ -24,63 +24,61 @@ struct ConfirmationCodeView: View {
     private let placeholderColor = Color.gray.opacity(0.7)
     
     var body: some View {
-        NavigationStack {
-            ZStack {
-                backgroundColor.ignoresSafeArea()
-                
-                VStack(spacing: 24) {
-                    VStack(alignment: .center, spacing: 8) {
-                        Text("Verify Your Email")
-                            .font(.system(size: 28, weight: .bold))
-                            .foregroundColor(textColor)
-                        Text("Enter the 6-digit code sent to \(email)")
-                            .font(.system(size: 16, weight: .regular))
-                            .foregroundColor(placeholderColor)
-                            .multilineTextAlignment(.center)
-                    }
-                    
-                    HStack(spacing: 12) {
-                        ForEach(0..<6) { index in
-                            CodeDigitInput(text: $codeDigits[index], currentlyEditingField: $currentlyEditingField, fieldIndex: index)
-                        }
-                    }
-                    
-                    Group {
-                        if codeError {
-                            Text("Invalid code. Please try again.")
-                                .font(.system(size: 14, weight: .regular))
-                                .foregroundColor(.red)
-                        }
-                    }
-                    
-                    Button(action: checkFieldsAndConfirm) {
-                        Text("Verify")
-                            .font(.system(size: 18, weight: .semibold))
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 56)
-                            .background(accentColor)
-                            .cornerRadius(8)
-                    }
-                    
-                    Button(action: resendCode) {
-                        Text("Resend Code")
-                            .font(.system(size: 16, weight: .medium))
-                            .foregroundColor(accentColor)
-                    }
-                    
-                    Spacer()
+        ZStack {
+            backgroundColor.ignoresSafeArea()
+            
+            VStack(spacing: 24) {
+                VStack(alignment: .center, spacing: 8) {
+                    Text("Verify Your Email")
+                        .font(.system(size: 28, weight: .bold))
+                        .foregroundColor(textColor)
+                    Text("Enter the 6-digit code sent to \(email)")
+                        .font(.system(size: 16, weight: .regular))
+                        .foregroundColor(placeholderColor)
+                        .multilineTextAlignment(.center)
                 }
-                .padding(.horizontal, 24)
-            }
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationBarBackButtonHidden(true)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: { dismiss() }) {
-                        Image(systemName: "chevron.left")
-                            .foregroundColor(.black)
+                
+                HStack(spacing: 12) {
+                    ForEach(0..<6) { index in
+                        CodeDigitInput(text: $codeDigits[index], currentlyEditingField: $currentlyEditingField, fieldIndex: index)
                     }
+                }
+                
+                Group {
+                    if codeError {
+                        Text("Invalid code. Please try again.")
+                            .font(.system(size: 14, weight: .regular))
+                            .foregroundColor(.red)
+                    }
+                }
+                
+                Button(action: checkFieldsAndConfirm) {
+                    Text("Verify")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 56)
+                        .background(accentColor)
+                        .cornerRadius(8)
+                }
+                
+                Button(action: resendCode) {
+                    Text("Resend Code")
+                        .font(.system(size: 16, weight: .medium))
+                        .foregroundColor(accentColor)
+                }
+                
+                Spacer()
+            }
+            .padding(.horizontal, 24)
+        }
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: { dismiss() }) {
+                    Image(systemName: "chevron.left")
+                        .foregroundColor(.black)
                 }
             }
         }
