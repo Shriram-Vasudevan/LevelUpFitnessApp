@@ -61,7 +61,7 @@ class ToDoListManager: ObservableObject {
                         LocalStorageUtility.appendDataToDocumentsDirectoryFile(at: "todoList.json", data: weightTaskData)
                     }
                     
-                    let xpTask = ToDoListTask(id: UUID().uuidString, description: "Gain 100 XP", completed: false, currentValue: 0, completionValue: 100, taskType: .xp)
+                    let xpTask = ToDoListTask(id: UUID().uuidString, description: "Gain 25 XP", completed: false, currentValue: 0, completionValue: 25, taskType: .xp)
                     DispatchQueue.main.async {
                         self.toDoList.append(xpTask)
                     }
@@ -122,9 +122,11 @@ class ToDoListManager: ObservableObject {
         if let programTaskIndex = toDoList.firstIndex(where: { toDoListTask in
             toDoListTask.taskType == .program
         }) {
-            toDoList[programTaskIndex].completed = true
-            let taskID = toDoList[programTaskIndex].id
-            LocalStorageUtility.updateTaskCompletionInFile(taskID: taskID, completed: true)
+            if toDoList[programTaskIndex].completed == false {
+                toDoList[programTaskIndex].completed = true
+                let taskID = toDoList[programTaskIndex].id
+                LocalStorageUtility.updateTaskCompletionInFile(taskID: taskID, completed: true)
+            }
             
         }
     }

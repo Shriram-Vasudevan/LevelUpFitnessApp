@@ -24,6 +24,9 @@ struct HomeView: View {
     @State var navigateToWeightTrendView: Bool = false
     @State var navigateToProfileView: Bool = false
     
+    @State private var perfectProgramChallengeStartFailed = false
+    
+    
     var body: some View {
         ZStack {
             Color.white.ignoresSafeArea(.all)
@@ -90,6 +93,9 @@ struct HomeView: View {
                     
                     if let program = programManager.program {
                         TimeSpentWidget(program: program)
+                            .onTapGesture {
+                                pageType = .program
+                            }
                     }
                     
                     if let recommendedExercise = exerciseManager.recommendedExercise {
@@ -116,8 +122,10 @@ struct HomeView: View {
                             ScrollView(.horizontal, showsIndicators: false) {
                                 HStack(spacing: 16) {
                                     ForEach(challengeManager.userChallenges, id: \.id) { challenge in
-                                        if let currentProgress = getCurrentChallengeProgress(challengeField: challenge.field) {
-                                            ActiveUserChallengeWidget(challenge: challenge, currentProgress: currentProgress)
+                                       let (progress, error) = getCurrentChallengeProgress(challengeField: challenge.field)
+                                        
+                                        if let validProgress = progress {
+                                            ActiveUserChallengeWidget(challenge: challenge, currentProgress: validProgress)
                                         }
                                     }
                                 }
@@ -136,7 +144,11 @@ struct HomeView: View {
                             }, id: \.id) { challengeTemplate in
                                 ChallengeTemplateWidget(challenge: challengeTemplate) {
                                     Task {
-                                        await challengeManager.createChallenge(challengeName: challengeTemplate.name, challengeTemplateID: challengeTemplate.id, userXPData: userXPData)
+                                        let success = await challengeManager.createChallenge(challengeName: challengeTemplate.name, challengeTemplateID: challengeTemplate.id, userXPData: userXPData)
+                                        
+                                        if !success {
+                                            perfectProgramChallengeStartFailed = true
+                                        }
                                     }
                                 }
                             }
@@ -145,6 +157,14 @@ struct HomeView: View {
                 }
                 .padding(.horizontal)
             }
+        }
+        .alert("Action Failed", isPresented: $perfectProgramChallengeStartFailed) {
+            Button("Cancel", role: .cancel) { }
+            Button("Ok", role: .destructive) {
+                
+            }
+        } message: {
+            Text("Unable to start challenge as you have not completed all previous day's programs.")
         }
         .navigationBarBackButtonHidden()
         .accentColor(Color(hex: "40C4FC"))
@@ -196,17 +216,26 @@ struct HomeView: View {
         })
     }
 
-    func getCurrentChallengeProgress(challengeField: String) -> Int? {
+    func getCurrentChallengeProgress(challengeField: String) -> (Int?, Error?) {
         switch challengeField {
         case "Level":
-            return xpManager.userXPData?.level
+            return (xpManager.userXPData?.level, nil)
         case "ProgramConsistency":
             if let program = ProgramManager.shared.program {
-                return try? program.getConsecutiveCompletionDays().get()
+                let result = try? program.getConsecutiveCompletionDays()
+                    if result == nil {
+                        return (nil, nil)
+                    }
+                    switch result! {
+                    case .success(let value):
+                        return (value, nil)
+                    case .failure(let error):
+                        return (nil, error)
+                    }
             }
-            return nil
+            return (nil, nil)
         default:
-            return nil
+            return (nil, nil)
         }
     }
 }

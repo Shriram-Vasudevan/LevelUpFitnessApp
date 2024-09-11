@@ -16,7 +16,6 @@ struct ActiveUserChallengeWidget: View {
             Text(formattedChallengeName(challenge.name))
                 .font(.system(size: 18, weight: .bold, design: .default))
                 .foregroundColor(.black)
-                .lineLimit(2)
                 .minimumScaleFactor(0.8)
             
             Spacer()

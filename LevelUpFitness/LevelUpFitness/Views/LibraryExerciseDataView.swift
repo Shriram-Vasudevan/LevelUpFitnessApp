@@ -18,7 +18,7 @@ struct LibraryExerciseDataView: View {
     
     var body: some View {
         ZStack {
-            Color(hex: "F5F5F5").ignoresSafeArea()
+            Color.white.ignoresSafeArea()
             
             VStack {
                 switch sectionType {
@@ -87,7 +87,8 @@ struct LibraryExerciseDataView: View {
                     let xpAdditionType = getExerciseTypeEnum(exerciseType: exerciseType)
                     
                     Task {
-                        await XPManager.shared.addXP(increment: 5, type: xpAdditionType)
+                        await XPManager.shared.addXP(increment: 3, type: xpAdditionType)
+                        await XPManager.shared.addXP(increment: 3, type: .total)
                         await XPManager.shared.addXPToDB()
                     }
                     

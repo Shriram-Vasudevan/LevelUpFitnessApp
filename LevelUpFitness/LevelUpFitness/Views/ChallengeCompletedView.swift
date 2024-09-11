@@ -37,7 +37,7 @@ struct ChallengeCompletedView: View {
                 Spacer()
                 
                 VStack(spacing: 8) {
-                    Text("+10 XP")
+                    Text("+7 XP")
                         .font(.system(size: 24, weight: .bold, design: .default))
                         .foregroundColor(Color(hex: "40C4FC"))
                     

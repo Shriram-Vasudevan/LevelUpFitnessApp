@@ -179,6 +179,7 @@ struct WeightTrendView: View {
         Task {
             await trendManager.addWeightToTrend(weight: weightValue)
             weight = ""
+            ToDoListManager.shared.weightAdded()
         }
     }
 }

@@ -72,28 +72,33 @@ class ChallengeManager: ObservableObject {
         
     }
     
-    func createChallenge(challengeName: String, challengeTemplateID: String, userXPData: XPData) async {
+    func createChallenge(challengeName: String, challengeTemplateID: String, userXPData: XPData) async -> Bool {
         switch challengeName {
             case "30 Day LevelUp Challenge":
                 let levelsRequired = levelsRequired(currentLevel: userXPData.level)
-                guard let dateRange = DateUtility.createDateDurationISO(duration: 30) else { return }
+                guard let dateRange = DateUtility.createDateDurationISO(duration: 30) else { return false}
             
             await updateChallenge(challengeTemplateID: challengeTemplateID, challengeName: challengeName, startDate: dateRange.0, endDate: dateRange.1, startValue: userXPData.level, targetValue: userXPData.level + levelsRequired, field: "Level")
             case "Perfect Program Week":
                 if let program = ProgramManager.shared.program {
                     let daysRequired = program.program.count
-                    guard let dateRange = DateUtility.createDateDurationISO(duration: 7) else { return }
+                    guard let dateRange = DateUtility.createDateDurationISO(duration: 7) else { return false }
                     
                     switch program.getConsecutiveCompletionDays() {
                         case .success(let consecutiveDays):
                         await updateChallenge(challengeTemplateID: challengeTemplateID, challengeName: challengeName, startDate: dateRange.0, endDate: dateRange.1, startValue: consecutiveDays, targetValue: daysRequired, field: "Level")
+                        
+                            return true
                         case .failure(let error):
                             print("Error: \(error.localizedDescription)")
+                            return false
                     }
                 }
             default:
                 break
         }
+        
+        return false
     }
     
     func updateChallenge(challengeTemplateID: String, challengeName: String, startDate: String, endDate: String, startValue: Int, targetValue: Int, field: String) async {

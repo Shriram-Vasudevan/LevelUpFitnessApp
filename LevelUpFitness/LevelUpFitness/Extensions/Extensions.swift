@@ -402,14 +402,14 @@ extension Program {
     
     func getConsecutiveCompletionDays() -> Result<Int, Error> {
         guard let startDate = DateUtility.getDateNWeeksAfterDate(dateString: self.startDate, weeks: 0) else {
-            return .failure(NSError(domain: "Invalid start date", code: 0, userInfo: nil))
+            return .failure(NSError(domain: "Incomplete program day", code: 0, userInfo: nil))
         }
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MM-dd-yyyy"
         
         guard let programStartDate = dateFormatter.date(from: startDate) else {
-            return .failure(NSError(domain: "Invalid start date format", code: 1, userInfo: nil))
+            return .failure(NSError(domain: "Incomplete program day", code: 0, userInfo: nil))
         }
         
         let calendar = Calendar.current
@@ -417,7 +417,7 @@ extension Program {
         let programStartDay = calendar.startOfDay(for: programStartDate)
         
         guard currentDate >= programStartDay else {
-            return .failure(NSError(domain: "Program hasn't started yet", code: 2, userInfo: nil))
+            return .failure(NSError(domain: "Incomplete program day", code: 0, userInfo: nil))
         }
         
         var consecutiveDays = 0
@@ -429,7 +429,7 @@ extension Program {
             
             if let programDay = program.first(where: { $0.day.lowercased() == weekdayName }) {
                 if !programDay.completed {
-                    return .failure(NSError(domain: "Incomplete program day", code: 3, userInfo: nil))
+                    return .failure(NSError(domain: "Incomplete program day", code: 0, userInfo: nil))
                 } else {
                     consecutiveDays += 1
                 }
