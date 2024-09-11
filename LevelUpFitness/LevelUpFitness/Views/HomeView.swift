@@ -43,12 +43,22 @@ struct HomeView: View {
                         }
                         Spacer()
                         
-                        Button(action: { navigateToProfileView = true }) {
-                            Image("Headshot")
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 30, height: 30)
-                                .clipShape(Circle())
+                        if let pfp = AuthenticationManager.shared.pfp, let uiImage = UIImage(data: pfp) {
+                            Button(action: { navigateToProfileView = true }) {
+                                Image(uiImage: uiImage)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 30, height: 30)
+                                    .clipShape(Circle())
+                            }
+                        } else {
+                            Button(action: { navigateToProfileView = true }) {
+                                Image("NoProfile")
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 30, height: 30)
+                                    .clipShape(Circle())
+                            }
                         }
                     }
                     

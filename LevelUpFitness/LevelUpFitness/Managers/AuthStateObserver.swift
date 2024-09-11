@@ -29,8 +29,12 @@ class AuthStateObserver: ObservableObject {
                     if self.isSignedIn {
                         Task {
                             print("signed in")
-                            await AuthenticationManager.shared.getUsername()
-                            await AuthenticationManager.shared.getName()
+
+                            async let getUsername: () = AuthenticationManager.shared.getUsername()
+                            async let getName: () = AuthenticationManager.shared.getName()
+                            async let getProfilePicture: () = AuthenticationManager.shared.getProfilePicture()
+                            
+                            let _ = await (getUsername, getName, getProfilePicture)
                         }
                     }
                 }

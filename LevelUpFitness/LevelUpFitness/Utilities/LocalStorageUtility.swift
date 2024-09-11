@@ -316,6 +316,11 @@ class LocalStorageUtility {
         }
     }
     
+    static func removeImageCache(userID: String) {
+        imageCache.removeObject(forKey: userID as AnyObject)
+    }
+
+    
     static func downloadVideoAndSaveToTempFile(url: URL, completion: @escaping (Result<URL, Error>) -> Void)
     {
         do {

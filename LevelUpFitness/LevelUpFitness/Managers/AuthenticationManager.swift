@@ -18,7 +18,7 @@ class AuthenticationManager: ObservableObject {
     
     @Published var username: String?
     @Published var name: String?
-//    static var pfp: Data?
+    @Published var pfp: Data?
     
     
     func login(username: String, password: String, completion: @escaping (Bool, String?, Error?) async -> Void) async {
@@ -30,7 +30,12 @@ class AuthenticationManager: ObservableObject {
             if signInResult.isSignedIn {
                 print("Sign in succeeded")
                 if let userID = try? await Amplify.Auth.getCurrentUser().userId {
-                    await getUsername()
+                    async let getUsername: () = getUsername()
+                    async let getName: () = getName()
+                    async let getProfilePicture: () = getProfilePicture()
+                    
+                    let _ = await (getUsername, getName, getProfilePicture)
+                    
                     await completion(true, userID, nil)
                 } else {
                     await completion(true, nil, nil)
@@ -137,56 +142,58 @@ class AuthenticationManager: ObservableObject {
         
     }
     
-    func getProfilePicture() async -> Data? {
+    func getProfilePicture() async {
         do {
             let userID = try await Amplify.Auth.getCurrentUser().userId
             
-            let downloadTask = Amplify.Storage.downloadData(key: "pfp-media/\(userID).png")
-            
-            let data = try await downloadTask.value
-            
-            return data
+            if let pfp = LocalStorageUtility.profilePictureSaved(userID: userID) {
+                
+            }
+            else {
+                let downloadTask = Amplify.Storage.downloadData(key: "pfp-media/\(userID).png")
+                
+                let data = try await downloadTask.value
+                
+                self.pfp = data
+            }
         } catch {
             print(error)
-            return nil
         }
     }
     
     func uploadProfilePicture(userID: String) async {
         print(userID)
         
-        if await pfpUploaded(userID: userID) {
-            return
+        guard let directoryUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+        let pfpUrl = directoryUrl.appendingPathComponent("pfp-\(userID).png", isDirectory: false)
+        if FileManager.default.fileExists(atPath: pfpUrl.path) {
+            guard let pfpData = FileManager.default.contents(atPath: pfpUrl.path) else { return
+            }
+            
+            let uploadTask = Amplify.Storage.uploadData(key: "pfp-media/\(userID).png", data: pfpData)
+    
+            for await progress in await uploadTask.progress {
+                print("Progress: \(progress)")
+            }
+    
+            do {
+                let value = try await uploadTask.value
+                print("Completed: \(value)")
+            } catch {
+                if let storageError = error as? StorageError {
+                    print(storageError.errorDescription)
+                }
+                else {
+                    print(error.localizedDescription)
+                }
+            }
+            
+            self.pfp = pfpData
+            LocalStorageUtility.saveProfilePicture(pfpData: pfpData, userID: userID)
+            
         }
         else {
-            guard let directoryUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
-            let pfpUrl = directoryUrl.appendingPathComponent("pfp-\(userID).png", isDirectory: false)
-            if FileManager.default.fileExists(atPath: pfpUrl.path) {
-                guard let pfpData = FileManager.default.contents(atPath: pfpUrl.path) else { return
-                }
-                
-                let uploadTask = Amplify.Storage.uploadData(key: "pfp-media/\(userID).png", data: pfpData)
-        
-                for await progress in await uploadTask.progress {
-                    print("Progress: \(progress)")
-                }
-        
-                do {
-                    let value = try await uploadTask.value
-                    print("Completed: \(value)")
-                } catch {
-                    if let storageError = error as? StorageError {
-                        print(storageError.errorDescription)
-                    }
-                    else {
-                        print(error.localizedDescription)
-                    }
-                }
-                
-            }
-            else {
-                return
-            }
+            return
         }
 
     }
@@ -199,6 +206,22 @@ class AuthenticationManager: ObservableObject {
         } catch {
             print(error.localizedDescription)
             return false
+        }
+    }
+    
+    func removeProfilePicture() async {
+        do {
+            let userID = try await Amplify.Auth.getCurrentUser().userId
+            LocalStorageUtility.removeImageCache(userID: userID)
+            
+            let removedKey = try await Amplify.Storage.remove(key: "pfp-media/\(userID).png")
+            
+            print("Deleted \(removedKey)")
+            
+            self.pfp = nil
+
+        } catch {
+            print(error.localizedDescription)
         }
     }
     
@@ -228,5 +251,6 @@ class AuthenticationManager: ObservableObject {
             print("Unexpected error: \(error)")
         }
     }
+    
 
 }

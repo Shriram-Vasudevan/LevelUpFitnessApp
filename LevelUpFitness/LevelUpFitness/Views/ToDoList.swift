@@ -39,6 +39,18 @@ struct ToDoList: View {
             }
             
         }
+        .padding()
+        .background(Color.white)
+        .cornerRadius(2)
+        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
+        .overlay(
+            Rectangle()
+                .fill(Color(hex: "40C4FC"))
+                .frame(width: 4)
+                .padding(.vertical, 4),
+            alignment: .leading
+        )
+
     }
 }
 
