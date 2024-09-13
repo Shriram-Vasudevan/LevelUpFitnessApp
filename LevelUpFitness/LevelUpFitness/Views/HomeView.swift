@@ -26,6 +26,8 @@ struct HomeView: View {
     
     @State private var perfectProgramChallengeStartFailed = false
     
+    @State var showChallengeDetailsCover: Bool = false
+    @State var userChallenge: UserChallenge?
     
     var body: some View {
         ZStack {
@@ -61,6 +63,7 @@ struct HomeView: View {
                             }
                         }
                     }
+                    .padding(.top, 15)
                     
                     
                     if toDoListManager.toDoList.count > 0 {
@@ -136,6 +139,7 @@ struct HomeView: View {
                                         
                                         if let validProgress = progress {
                                             ActiveUserChallengeWidget(challenge: challenge, currentProgress: validProgress)
+                                                .padding(.vertical, 5)
                                         }
                                     }
                                 }

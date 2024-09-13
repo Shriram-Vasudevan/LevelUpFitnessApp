@@ -23,6 +23,7 @@ struct FullLevelBreakdownView: View {
                 VStack(alignment: .leading, spacing: 16) {
                     Text("My Level")
                         .font(.system(size: 28, weight: .medium, design: .default))
+                        .padding(.top, 15)
                     
                     HStack {
                         VStack(alignment: .leading, spacing: 4) {

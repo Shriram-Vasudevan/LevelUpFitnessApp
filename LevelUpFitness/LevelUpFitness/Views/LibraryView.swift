@@ -34,6 +34,7 @@ struct LibraryView: View {
                             }
                             Spacer()
                         }
+                        .padding(.top, 15)
                         
                         HStack {
                             Image(systemName: "magnifyingglass")

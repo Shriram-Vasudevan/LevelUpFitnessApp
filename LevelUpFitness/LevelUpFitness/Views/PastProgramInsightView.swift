@@ -4,7 +4,6 @@
 //
 //  Created by Shriram Vasudevan on 8/23/24.
 //
-
 import SwiftUI
 
 struct PastProgramInsightView: View {
@@ -12,22 +11,26 @@ struct PastProgramInsightView: View {
     @State private var programs: [Program]?
     
     var body: some View {
-        ScrollView {
-            LazyVStack(spacing: 24) {
-                if let programs = self.programs {
-                    ForEach(Array(programs.enumerated()), id: \.offset) { index, program in
-                        WeekInsightCard(program: program, weekNumber: index + 1)
+        ZStack {
+            Color.white
+                .ignoresSafeArea()
+            
+            ScrollView {
+                LazyVStack(spacing: 16) {
+                    if let programs = self.programs {
+                        ForEach(Array(programs.enumerated()), id: \.offset) { index, program in
+                            WeekInsightCard(program: program, weekNumber: index + 1)
+                        }
+                    } else {
+                        ProgressView()
+                            .scaleEffect(1.5)
+                            .padding()
                     }
-                } else {
-                    ProgressView()
-                        .scaleEffect(1.5)
-                        .padding()
                 }
+                .padding(.horizontal)
             }
-            .padding()
+            .navigationTitle("Program Insights")
         }
-        .navigationTitle("Program Insights")
-        .background(Color(.systemGroupedBackground))
         .onAppear {
             Task {
                 self.programs = await ProgramManager.shared.getProgramsForInsights(programS3Representation: programS3Representation)
@@ -41,10 +44,10 @@ struct WeekInsightCard: View {
     let weekNumber: Int
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
+        VStack(alignment: .leading, spacing: 16) {
             Text("Week \(weekNumber)")
-                .font(.title2)
-                .fontWeight(.bold)
+                .font(.system(size: 18, weight: .bold, design: .default))
+                .foregroundColor(.black)
             
             HStack(spacing: 20) {
                 InsightCircle(
@@ -64,7 +67,7 @@ struct WeekInsightCard: View {
             DailyCompletionChart(dayCompletions: program.getDayCompletionPercentages())
         }
         .padding()
-        .background(Color(.systemBackground))
+        .background(Color(hex: "F5F5F5")) // Updated card background
         .cornerRadius(15)
         .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
     }
@@ -89,7 +92,7 @@ struct InsightCircle: View {
                 
                 Circle()
                     .trim(from: 0, to: CGFloat(min(value / 100, 1)))
-                    .stroke(Color.blue, style: StrokeStyle(lineWidth: 10, lineCap: .round))
+                    .stroke(Color(hex: "40C4FC"), style: StrokeStyle(lineWidth: 10, lineCap: .round)) // Light blue color
                     .frame(width: 100, height: 100)
                     .rotationEffect(.degrees(-90))
                 
@@ -112,10 +115,11 @@ struct InsightRow: View {
     var body: some View {
         HStack {
             Text(title)
-                .foregroundColor(.secondary)
+                .foregroundColor(.gray)
             Spacer()
             Text(value)
                 .fontWeight(.semibold)
+                .foregroundColor(.black)
         }
         .font(.subheadline)
     }
@@ -128,6 +132,7 @@ struct MuscleGroupBar: View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Most Targeted Muscle Groups")
                 .font(.headline)
+                .foregroundColor(.black)
             
             HStack(spacing: 0) {
                 ForEach(muscleGroups.prefix(3), id: \.self) { group in
@@ -137,7 +142,7 @@ struct MuscleGroupBar: View {
                             .foregroundColor(.white)
                             .padding(.vertical, 4)
                             .frame(maxWidth: .infinity)
-                            .background(Color.blue)
+                            .background(Color(hex: "40C4FC")) // Light blue color
                         
                         Text(group.area)
                             .font(.caption2)
@@ -157,12 +162,13 @@ struct DailyCompletionChart: View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Daily Completion")
                 .font(.headline)
+                .foregroundColor(.black)
             
             HStack(alignment: .bottom, spacing: 4) {
                 ForEach(dayCompletions) { completion in
                     VStack {
                         RoundedRectangle(cornerRadius: 4)
-                            .fill(Color.blue)
+                            .fill(Color(hex: "40C4FC")) // Light blue color
                             .frame(height: CGFloat(completion.percentage))
                         Text(completion.day.prefix(1))
                             .font(.caption2)

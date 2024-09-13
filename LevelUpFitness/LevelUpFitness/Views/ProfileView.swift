@@ -21,30 +21,37 @@ struct ProfileView: View {
         ZStack {
             Color.white.ignoresSafeArea()
             
-            ScrollView {
-                VStack(spacing: 24) {
-                    profileHeader
-                    settingsSection
-                    accountActions
+            VStack {
+                HStack {
+                    Button(action: { dismiss() }) {
+                        Image(systemName: "arrow.left")
+                            .font(.system(size: 20, weight: .medium))
+                            .foregroundColor(Color(hex: "40C4FC"))
+                            .padding()
+                            .background(Color.white)
+                            .clipShape(Circle())
+                            .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
+                    }
+                    
+                    Text("Profile")
+                        .font(.system(size: 28, weight: .medium, design: .default))
+                        .foregroundColor(.black)
+                    
+                    Spacer()
                 }
-                .padding()
+                .padding(.bottom, 10)
+                
+                ScrollView {
+                    VStack(spacing: 30) {
+                        profileHeader
+                        settingsSection
+                        accountActions
+                    }
+                    .padding(.horizontal)
+                }
             }
         }
         .navigationBarBackButtonHidden()
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button(action: { dismiss() }) {
-                    Image(systemName: "chevron.left")
-                        .foregroundColor(Color(hex: "40C4FC"))
-                }
-            }
-            ToolbarItem(placement: .principal) {
-                Text("Profile")
-                    .font(.custom("Sailec Bold", size: 20))
-                    .foregroundColor(.black)
-            }
-        }
         .alert("Delete Account", isPresented: $showDeleteConfirmation) {
             Button("Cancel", role: .cancel) { }
             Button("Delete", role: .destructive) {
@@ -70,9 +77,11 @@ struct ProfileView: View {
             }
         }
     }
+
+
     
     private var profileHeader: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 20) {
             Button(action: { showProfilePictureOptions = true }) {
                 if let pfpData = authManager.pfp, let uiImage = UIImage(data: pfpData) {
                     Image(uiImage: uiImage)
@@ -90,25 +99,28 @@ struct ProfileView: View {
                         .overlay(Circle().stroke(Color(hex: "40C4FC"), lineWidth: 3))
                 }
             }
+            .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 5)
             
-            VStack(spacing: 4) {
+            VStack(spacing: 8) {
                 Text(authManager.username ?? "Checking")
-                    .font(.system(size: 22, weight: .bold))
+                    .font(.custom("Poppins-SemiBold", size: 24))
+                    .foregroundColor(Color(hex: "333333"))
                 Text(authManager.name ?? "Checking")
-                    .font(.system(size: 16, weight: .medium))
+                    .font(.custom("Poppins-Regular", size: 18))
                     .foregroundColor(Color(hex: "666666"))
             }
         }
-        .padding(.vertical, 24)
+        .padding(.vertical, 30)
         .frame(maxWidth: .infinity)
-        .background(Color(hex: "F5F5F5"))
+        .background(Color.white)
         .cornerRadius(20)
+        .shadow(color: Color.black.opacity(0.05), radius: 10, x: 0, y: 5)
     }
     
     private var settingsSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 20) {
             Text("Settings")
-                .font(.system(size: 20, weight: .bold))
+                .font(.custom("Poppins-SemiBold", size: 22))
                 .foregroundColor(Color(hex: "333333"))
                 .padding(.leading, 8)
             
@@ -120,7 +132,7 @@ struct ProfileView: View {
                             .frame(width: 30)
                         
                         Text(option.title)
-                            .font(.system(size: 16, weight: .medium))
+                            .font(.custom("Poppins-Medium", size: 16))
                         
                         Spacer()
                         
@@ -131,21 +143,21 @@ struct ProfileView: View {
                 .foregroundColor(Color(hex: "333333"))
                 .padding()
                 .background(Color.white)
-                .cornerRadius(12)
+                .cornerRadius(15)
                 .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
             }
         }
     }
     
     private var accountActions: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 20) {
             Button(action: {
                 Task {
                     await AuthenticationManager.shared.signOut()
                 }
             }) {
                 Text("Sign Out")
-                    .font(.system(size: 18, weight: .semibold))
+                    .font(.custom("Poppins-SemiBold", size: 18))
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
@@ -157,23 +169,23 @@ struct ProfileView: View {
                 showDeleteConfirmation = true
             }) {
                 Text("Delete Account")
-                    .font(.system(size: 16, weight: .medium))
+                    .font(.custom("Poppins-Medium", size: 16))
                     .foregroundColor(.red)
             }
         }
-        .padding(.top, 16)
+        .padding(.vertical, 20)
     }
     
     private var profilePictureOptionsSheet: some View {
         VStack(spacing: 20) {
             PhotosPicker(selection: $selectedProfilePicture, matching: .images, photoLibrary: .shared()) {
                 Text("Change Profile Picture")
-                    .font(.system(size: 18, weight: .medium))
+                    .font(.custom("Poppins-Medium", size: 18))
                     .foregroundColor(Color(hex: "40C4FC"))
                     .frame(maxWidth: .infinity)
                     .padding()
                     .background(Color(hex: "40C4FC").opacity(0.1))
-                    .cornerRadius(10)
+                    .cornerRadius(15)
             }
             
             Button(action: {
@@ -183,16 +195,16 @@ struct ProfileView: View {
                 }
             }) {
                 Text("Remove Profile Picture")
-                    .font(.system(size: 18, weight: .medium))
+                    .font(.custom("Poppins-Medium", size: 18))
                     .foregroundColor(.red)
                     .frame(maxWidth: .infinity)
                     .padding()
                     .background(Color.red.opacity(0.1))
-                    .cornerRadius(10)
+                    .cornerRadius(15)
             }
         }
         .padding(24)
-        .background(Color(hex: "F5F5F5"))
+        .background(Color.white)
         .cornerRadius(20)
         .presentationDetents([.height(200)])
     }
@@ -213,11 +225,7 @@ struct ProfileView: View {
 }
 
 enum SettingsOption: CaseIterable {
-    case personalInfo
-    case notifications
-    case privacy
-    case dataUsage
-    case help
+    case personalInfo, notifications, privacy, dataUsage, help
     
     var title: String {
         switch self {
@@ -239,6 +247,8 @@ enum SettingsOption: CaseIterable {
         }
     }
 }
+
+
 #Preview {
     ProfileView()
 }
