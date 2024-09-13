@@ -21,28 +21,11 @@ struct ProfileView: View {
         ZStack {
             Color.white.ignoresSafeArea()
             
-            VStack {
-                HStack {
-                    Button(action: { dismiss() }) {
-                        Image(systemName: "arrow.left")
-                            .font(.system(size: 20, weight: .medium))
-                            .foregroundColor(Color(hex: "40C4FC"))
-                            .padding()
-                            .background(Color.white)
-                            .clipShape(Circle())
-                            .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
-                    }
-                    
-                    Text("Profile")
-                        .font(.system(size: 28, weight: .medium, design: .default))
-                        .foregroundColor(.black)
-                    
-                    Spacer()
-                }
-                .padding(.bottom, 10)
+            VStack(spacing: 10) {
+                navigationBar
                 
                 ScrollView {
-                    VStack(spacing: 30) {
+                    VStack(spacing: 16) {
                         profileHeader
                         settingsSection
                         accountActions
@@ -51,13 +34,11 @@ struct ProfileView: View {
                 }
             }
         }
-        .navigationBarBackButtonHidden()
+        .navigationBarBackButtonHidden(true)
         .alert("Delete Account", isPresented: $showDeleteConfirmation) {
             Button("Cancel", role: .cancel) { }
             Button("Delete", role: .destructive) {
-                Task {
-                    await AuthenticationManager.shared.deleteUser()
-                }
+                Task { await AuthenticationManager.shared.deleteUser() }
             }
         } message: {
             Text("Are you sure you want to delete your account? This action cannot be undone.")
@@ -78,98 +59,123 @@ struct ProfileView: View {
         }
     }
 
+    private var navigationBar: some View {
+        ZStack {
+            Text("Profile")
+                .font(.system(size: 18, weight: .semibold))
+            
+            HStack {
+                Button(action: { dismiss() }) {
+                    Image(systemName: "arrow.left")
+                        .font(.system(size: 20, weight: .medium))
+                        .foregroundColor(Color(hex: "40C4FC"))
+                }
+                Spacer()
 
-    
+            }
+        }
+        .padding(.horizontal)
+        .padding(.top, 8)
+        .padding(.bottom, 8)
+        .background(Color.white)
+        .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
+    }
+
     private var profileHeader: some View {
-        VStack(spacing: 20) {
+        HStack(spacing: 16) {
             Button(action: { showProfilePictureOptions = true }) {
                 if let pfpData = authManager.pfp, let uiImage = UIImage(data: pfpData) {
                     Image(uiImage: uiImage)
                         .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: 120, height: 120)
+                        .scaledToFill()
+                        .frame(width: 60, height: 60)
                         .clipShape(Circle())
-                        .overlay(Circle().stroke(Color(hex: "40C4FC"), lineWidth: 3))
                 } else {
                     Image("NoProfile")
                         .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: 120, height: 120)
+                        .scaledToFill()
+                        .frame(width: 60, height: 60)
                         .clipShape(Circle())
-                        .overlay(Circle().stroke(Color(hex: "40C4FC"), lineWidth: 3))
                 }
             }
-            .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 5)
             
-            VStack(spacing: 8) {
-                Text(authManager.username ?? "Checking")
-                    .font(.custom("Poppins-SemiBold", size: 24))
-                    .foregroundColor(Color(hex: "333333"))
+            VStack(alignment: .leading, spacing: 4) {
                 Text(authManager.name ?? "Checking")
-                    .font(.custom("Poppins-Regular", size: 18))
-                    .foregroundColor(Color(hex: "666666"))
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundColor(.black)
+                Text(authManager.username ?? "Checking")
+                    .font(.system(size: 14, weight: .regular))
+                    .foregroundColor(.gray)
+            }
+            
+            Spacer()
+            
+            Button(action: { }) {
+                Text("Edit")
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundColor(Color(hex: "40C4FC"))
             }
         }
-        .padding(.vertical, 30)
-        .frame(maxWidth: .infinity)
-        .background(Color.white)
-        .cornerRadius(20)
-        .shadow(color: Color.black.opacity(0.05), radius: 10, x: 0, y: 5)
+        .padding()
+        .background(Color(hex: "F5F5F5"))
+    }
+    
+    private func quickActionButton(title: String, icon: String) -> some View {
+        Button(action: { }) {
+            VStack(spacing: 8) {
+                Image(systemName: icon)
+                    .font(.system(size: 24))
+                    .foregroundColor(Color(hex: "40C4FC"))
+                Text(title)
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundColor(.black)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 12)
+            .background(Color(hex: "F5F5F5"))
+        }
     }
     
     private var settingsSection: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            Text("Settings")
-                .font(.custom("Poppins-SemiBold", size: 22))
-                .foregroundColor(Color(hex: "333333"))
-                .padding(.leading, 8)
-            
+        VStack(spacing: 1) {
             ForEach(SettingsOption.allCases, id: \.self) { option in
                 Button(action: { }) {
                     HStack {
                         Image(systemName: option.iconName)
                             .foregroundColor(Color(hex: "40C4FC"))
                             .frame(width: 30)
-                        
                         Text(option.title)
-                            .font(.custom("Poppins-Medium", size: 16))
-                        
+                            .font(.system(size: 16, weight: .regular))
                         Spacer()
-                        
                         Image(systemName: "chevron.right")
-                            .foregroundColor(Color(hex: "CCCCCC"))
+                            .foregroundColor(.gray)
                     }
+                    .padding(.vertical, 12)
+                    .padding(.horizontal)
+                    .background(Color.white)
                 }
-                .foregroundColor(Color(hex: "333333"))
-                .padding()
-                .background(Color.white)
-                .cornerRadius(15)
-                .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
+                .foregroundColor(.black)
             }
         }
+        .background(Color(hex: "F5F5F5"))
     }
     
     private var accountActions: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: 16) {
             Button(action: {
-                Task {
-                    await AuthenticationManager.shared.signOut()
-                }
+                Task { await AuthenticationManager.shared.signOut() }
             }) {
                 Text("Sign Out")
-                    .font(.custom("Poppins-SemiBold", size: 18))
+                    .font(.system(size: 16, weight: .medium))
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
                     .background(Color(hex: "40C4FC"))
-                    .cornerRadius(15)
             }
             
-            Button(action: {
-                showDeleteConfirmation = true
-            }) {
+            Button(action: { showDeleteConfirmation = true }) {
                 Text("Delete Account")
-                    .font(.custom("Poppins-Medium", size: 16))
+                    .font(.system(size: 14, weight: .regular))
                     .foregroundColor(.red)
             }
         }
@@ -180,12 +186,11 @@ struct ProfileView: View {
         VStack(spacing: 20) {
             PhotosPicker(selection: $selectedProfilePicture, matching: .images, photoLibrary: .shared()) {
                 Text("Change Profile Picture")
-                    .font(.custom("Poppins-Medium", size: 18))
+                    .font(.system(size: 16, weight: .medium))
                     .foregroundColor(Color(hex: "40C4FC"))
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color(hex: "40C4FC").opacity(0.1))
-                    .cornerRadius(15)
+                    .background(Color.white)
             }
             
             Button(action: {
@@ -195,25 +200,21 @@ struct ProfileView: View {
                 }
             }) {
                 Text("Remove Profile Picture")
-                    .font(.custom("Poppins-Medium", size: 18))
+                    .font(.system(size: 16, weight: .medium))
                     .foregroundColor(.red)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.red.opacity(0.1))
-                    .cornerRadius(15)
+                    .background(Color.white)
             }
         }
         .padding(24)
-        .background(Color.white)
-        .cornerRadius(20)
+        .background(Color(hex: "F5F5F5"))
         .presentationDetents([.height(200)])
     }
     
     func saveProfilePictureLocally(pfpData: Data, userID: String) {
         guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
-        
         let pfpURL = documentsDirectory.appendingPathComponent("pfp-\(userID).png", isDirectory: false)
-        
         if !FileManager.default.fileExists(atPath: pfpURL.path) {
             do {
                 try pfpData.write(to: pfpURL)
@@ -247,7 +248,6 @@ enum SettingsOption: CaseIterable {
         }
     }
 }
-
 
 #Preview {
     ProfileView()

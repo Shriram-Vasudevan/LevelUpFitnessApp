@@ -211,14 +211,14 @@ class AuthenticationManager: ObservableObject {
     
     func removeProfilePicture() async {
         do {
+            self.pfp = nil
+            
             let userID = try await Amplify.Auth.getCurrentUser().userId
             LocalStorageUtility.removeImageCache(userID: userID)
             
             let removedKey = try await Amplify.Storage.remove(key: "pfp-media/\(userID).png")
             
             print("Deleted \(removedKey)")
-            
-            self.pfp = nil
 
         } catch {
             print(error.localizedDescription)

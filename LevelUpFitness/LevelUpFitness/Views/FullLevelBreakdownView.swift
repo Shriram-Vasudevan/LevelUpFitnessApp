@@ -17,74 +17,68 @@ struct FullLevelBreakdownView: View {
         Color(hex: "FFEB3B")
     ]
     
+    private let accentColor = Color(hex: "40C4FC")
+    
     var body: some View {
         ScrollView {
             VStack(spacing: 24) {
-                VStack(alignment: .leading, spacing: 16) {
-                    Text("My Level")
-                        .font(.system(size: 28, weight: .medium, design: .default))
-                        .padding(.top, 15)
-                    
+                VStack (spacing: 12) {
                     HStack {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("Level \(xpManager.userXPData?.level ?? 0)")
-                                .font(.system(size: 28, weight: .bold, design: .default))
-                            
-                            Text("\(xpManager.userXPData?.xp ?? 0) / \(xpManager.userXPData?.xpNeeded ?? 0) XP")
-                                .font(.system(size: 16, weight: .regular, design: .default))
-                                .foregroundColor(.gray)
-                        }
+                        Text("My Level")
+                            .font(.system(size: 28, weight: .medium, design: .default))
+                            .foregroundColor(.black)
                         
                         Spacer()
-                        
-                        ZStack {
-                            Circle()
-                                .stroke(Color(hex: "F5F5F5"), lineWidth: 10)
-                                .frame(width: 80, height: 80)
-                            
-                            Circle()
-                                .trim(from: 0, to: CGFloat(Float(xpManager.userXPData?.xp ?? 0) / Float(xpManager.userXPData?.xpNeeded ?? 1)))
-                                .stroke(Color(hex: "40C4FC"), style: StrokeStyle(lineWidth: 10, lineCap: .round))
-                                .frame(width: 80, height: 80)
-                                .rotationEffect(.degrees(-90))
-                        }
                     }
+                    .padding(.top, 15)
+                    
+                    LevelWidget(xpManager: xpManager, levelChangeManager: levelChangeManager)
                 }
                 
                 VStack(alignment: .leading, spacing: 16) {
                     Text("Sublevels")
-                        .font(.system(size: 22, weight: .medium, design: .default))
+                        .font(.custom("Poppins-SemiBold", size: 22))
                     
-                    ForEach(Array(xpManager.userXPData?.subLevels.allAttributes().enumerated() ?? [].enumerated()), id: \.element.key) { index, sublevel in
-                        let (key, attribute) = sublevel
-                        VStack(alignment: .leading, spacing: 8) {
-                            HStack {
-                                Text(key.capitalizingFirstLetter())
-                                    .font(.system(size: 18, weight: .medium, design: .default))
-                                Spacer()
-                                Text("Level \(attribute.level)")
-                                    .font(.system(size: 16, weight: .regular, design: .default))
-                                    .foregroundColor(.gray)
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 16) {
+                            ForEach(Array(xpManager.userXPData?.subLevels.allAttributes().enumerated() ?? [].enumerated()), id: \.element.key) { index, sublevel in
+                                let (key, attribute) = sublevel
+                                
+                                VStack(alignment: .leading, spacing: 8) {
+                                    HStack {
+                                        Text(key.capitalizingFirstLetter())
+                                            .font(.custom("Poppins-SemiBold", size: 18))
+                                        Spacer()
+                                        Text("Level \(attribute.level)")
+                                            .font(.custom("Poppins-Regular", size: 14))
+                                            .foregroundColor(.gray)
+                                    }
+                                    
+                                    ProgressView(value: Float(attribute.xp), total: Float(attribute.xpNeeded))
+                                        .progressViewStyle(CustomProgressLevelViewStyle(progressColor: progressColors[index % progressColors.count]))
+                                        .frame(height: 8)
+                                    
+                                    Text("\(attribute.xp)/\(attribute.xpNeeded) XP")
+                                        .font(.custom("Poppins-Regular", size: 14))
+                                        .foregroundColor(.gray)
+                                }
+                                .padding()
+                                .background(Color(hex: "F5F5F5"))
+                                .cornerRadius(2)
+                                .frame(width: 200)
                             }
-                            
-                            ProgressView(value: Float(attribute.xp), total: Float(attribute.xpNeeded))
-                                .progressViewStyle(CustomProgressLevelViewStyle(progressColor: progressColors[index % progressColors.count]))
-                                .frame(height: 8)
-                            
-                            Text("\(attribute.xp)/\(attribute.xpNeeded) XP")
-                                .font(.system(size: 14, weight: .regular, design: .default))
-                                .foregroundColor(.gray)
                         }
+                        .padding(.horizontal, 8)
                     }
                 }
-                
+            
                 VStack(alignment: .leading, spacing: 16) {
                     Text("Recent Level Changes")
-                        .font(.system(size: 22, weight: .medium, design: .default))
+                        .font(.custom("Poppins-SemiBold", size: 22))
                     
                     if levelChangeManager.levelChanges.isEmpty {
                         Text("No recent level changes")
-                            .font(.system(size: 16, weight: .regular, design: .default))
+                            .font(.custom("Poppins-Regular", size: 16))
                             .foregroundColor(.gray)
                     } else {
                         ForEach(levelChangeManager.levelChanges.prefix(5), id: \.id) { change in
@@ -95,16 +89,16 @@ struct FullLevelBreakdownView: View {
                                 
                                 VStack(alignment: .leading, spacing: 4) {
                                     Text(change.keyword)
-                                        .font(.system(size: 16, weight: .medium, design: .default))
+                                        .font(.custom("Poppins-SemiBold", size: 16))
                                     Text(change.description)
-                                        .font(.system(size: 14, weight: .regular, design: .default))
+                                        .font(.custom("Poppins-Regular", size: 14))
                                         .foregroundColor(.gray)
                                 }
                                 
                                 Spacer()
                                 
                                 Text("+\(change.change) XP")
-                                    .font(.system(size: 16, weight: .medium, design: .default))
+                                    .font(.custom("Poppins-SemiBold", size: 16))
                                     .foregroundColor(Color(hex: "40C4FC"))
                             }
                             .padding(.vertical, 8)
@@ -115,33 +109,17 @@ struct FullLevelBreakdownView: View {
                 VStack(alignment: .leading, spacing: 16) {
                     HStack {
                         Text("Level Trends")
-                            .font(.system(size: 22, weight: .medium, design: .default))
+                            .font(.custom("Poppins-SemiBold", size: 22))
                         
                         Spacer()
                     }
                     
                     if trendManager.levelTrend.isEmpty {
                         Text("No trend data available")
-                            .font(.system(size: 16, weight: .regular, design: .default))
+                            .font(.custom("Poppins-Regular", size: 16))
                             .foregroundColor(.gray)
                     } else {
-                        Chart(trendManager.levelTrend) { dataPoint in
-                            LineMark(
-                                x: .value("Date", dataPoint.date),
-                                y: .value("Level", dataPoint.value)
-                            )
-                            .interpolationMethod(.catmullRom)
-                            .foregroundStyle(Color(hex: "40C4FC"))
-                            
-                            PointMark(
-                                x: .value("Date", dataPoint.date),
-                                y: .value("Level", dataPoint.value)
-                            )
-                            .foregroundStyle(Color(hex: "40C4FC"))
-                        }
-                        .chartXScale(domain: minDate...maxDate)
-                        .chartYScale(domain: 0...maxValue)
-                        .frame(height: 250)
+                        customTable()
                     }
                 }
             }
@@ -155,8 +133,97 @@ struct FullLevelBreakdownView: View {
             }
         }
     }
-
     
+    private func customTable() -> some View {
+        GeometryReader { geometry in
+            let width = geometry.size.width
+            let height = geometry.size.height
+            let maxValue = (trendManager.levelTrend.map { $0.value }.max() ?? 0) * 1.1
+            let minValue = (trendManager.levelTrend.map { $0.value }.min() ?? 0) * 0.9
+            
+            ZStack {
+                VStack {
+                    ForEach(0..<6) { index in
+                        let labelValue = maxValue - CGFloat(index) * (maxValue - minValue) / 5
+                        HStack {
+                            Text(String(format: "%.1f", labelValue))
+                                .font(.system(size: 10, weight: .light, design: .default))
+                                .foregroundColor(.gray)
+                                .frame(width: 40, alignment: .leading)
+                            Spacer()
+                        }
+                        .frame(height: height / 6)
+                    }
+                }
+                
+                VStack {
+                    Spacer()
+                    HStack {
+                        ForEach(0..<trendManager.levelTrend.count, id: \.self) { index in
+                            if index % 2 == 0 {
+                                let date = trendManager.levelTrend[index].date
+                                Text(date, style: .date)
+                                    .font(.system(size: 10, weight: .light, design: .default))
+                                    .foregroundColor(.gray)
+                                    .offset(x: index == 0 ? 10 : 0)
+                            }
+                            Spacer()
+                        }
+                    }
+                }
+                .padding(.horizontal, 16)
+                .padding(.bottom, 16)
+            
+                Path { path in
+                    if let firstPoint = trendManager.levelTrend.first {
+                        let firstX = CGFloat(0) / CGFloat(trendManager.levelTrend.count - 1) * width
+                        let firstY = (1 - CGFloat((firstPoint.value - minValue) / (maxValue - minValue))) * height
+                        path.move(to: CGPoint(x: firstX, y: firstY))
+                        
+                        for (index, point) in trendManager.levelTrend.enumerated() {
+                            let x = CGFloat(index) / CGFloat(trendManager.levelTrend.count - 1) * width
+                            let y = (1 - CGFloat((point.value - minValue) / (maxValue - minValue))) * height
+                            path.addLine(to: CGPoint(x: x, y: y))
+                        }
+                        path.addLine(to: CGPoint(x: width, y: height))
+                        path.addLine(to: CGPoint(x: 0, y: height))
+                        path.closeSubpath()
+                    }
+                }
+                .fill(accentColor.opacity(0.2))
+                
+                Path { path in
+                    if let firstPoint = trendManager.levelTrend.first {
+                        let firstX = CGFloat(0) / CGFloat(trendManager.levelTrend.count - 1) * width
+                        let firstY = (1 - CGFloat((firstPoint.value - minValue) / (maxValue - minValue))) * height
+                        path.move(to: CGPoint(x: firstX, y: firstY))
+                        
+                        for (index, point) in trendManager.levelTrend.enumerated() {
+                            let x = CGFloat(index) / CGFloat(trendManager.levelTrend.count - 1) * width
+                            let y = (1 - CGFloat((point.value - minValue) / (maxValue - minValue))) * height
+                            path.addLine(to: CGPoint(x: x, y: y))
+                        }
+                    }
+                }
+                .stroke(accentColor, lineWidth: 2)
+                
+                ForEach(trendManager.weightTrend) { point in
+                    let index = trendManager.levelTrend.firstIndex(where: { $0.id == point.id })!
+                    let x = CGFloat(index) / CGFloat(trendManager.levelTrend.count - 1) * width
+                    let y = (1 - CGFloat((point.value - minValue) / (maxValue - minValue))) * height
+                    
+                    Circle()
+                        .fill(accentColor)
+                        .frame(width: 8, height: 8)
+                        .position(x: x, y: y)
+                }
+            }
+        }
+        .frame(height: 200)
+        .padding(.vertical, 16)
+        
+    }
+    // MARK: - Helper Functions
     private func iconName(for keyword: String) -> String {
         switch keyword {
         case "Weight": return "scalemass.fill"
@@ -172,6 +239,10 @@ struct FullLevelBreakdownView: View {
     private func updateChartData() async {
         if TrendManager.shared.levelTrend.isEmpty {
             await TrendManager.shared.getLevelTrend()
+        }
+        
+        if let userXPData = xpManager.userXPData {
+            TrendManager.shared.levelTrend.append(HealthDataPoint(date: Date(), value: Double(userXPData.level)))
         }
         
         let sortedTrend = TrendManager.shared.levelTrend.sorted { $0.date < $1.date }
@@ -199,6 +270,81 @@ struct CustomProgressLevelViewStyle: ProgressViewStyle {
         }
     }
 }
+
+struct LevelWidget: View {
+    @ObservedObject var xpManager: XPManager
+    @ObservedObject var levelChangeManager: LevelChangeManager
+    
+    private let gradient = LinearGradient(
+        gradient: Gradient(colors: [Color(hex: "40C4FC"), Color(hex: "87CEFA")]),
+        startPoint: .topLeading,
+        endPoint: .bottomTrailing
+    )
+    
+    private var recentChangeSum: Int {
+        levelChangeManager.levelChanges.prefix(4).reduce(0) { $0 + $1.change }
+    }
+    
+    private var changeIcon: String {
+        if recentChangeSum > 0 {
+            return "arrow.up"
+        } else if recentChangeSum < 0 {
+            return "arrow.down"
+        } else {
+            return "arrow.right"
+        }
+    }
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            ZStack {
+                Rectangle()
+                    .fill(gradient)
+                    .frame(height: 160)
+                
+                VStack(spacing: 12) {
+                    HStack {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("LEVEL")
+                                .font(.system(size: 14, weight: .semibold, design: .default))
+                                .foregroundColor(.white.opacity(0.8))
+                            
+                            Text("\(xpManager.userXPData?.level ?? 0)")
+                                .font(.system(size: 48, weight: .bold, design: .default))
+                                .foregroundColor(.white)
+                        }
+                        
+                        Spacer()
+                        
+                        Image(systemName: changeIcon)
+                            .font(.system(size: 24, weight: .bold, design: .default))
+                            .foregroundColor(.white)
+                    }
+                    
+                    VStack(spacing: 8) {
+                        ProgressView(value: Float(xpManager.userXPData?.xp ?? 0), total: Float(xpManager.userXPData?.xpNeeded ?? 1))
+                            .progressViewStyle(LinearProgressViewStyle(tint: .white))
+                        
+                        HStack {
+                            Text("\(xpManager.userXPData?.xp ?? 0) / \(xpManager.userXPData?.xpNeeded ?? 0) XP")
+                                .font(.system(size: 14, weight: .medium, design: .default))
+                                .foregroundColor(.white)
+                            
+                            Spacer()
+                            
+                            Text("Next Level: \(xpManager.userXPData?.level ?? 0 + 1)")
+                                .font(.system(size: 14, weight: .medium, design: .default))
+                                .foregroundColor(.white)
+                        }
+                    }
+                }
+                .padding(.horizontal, 20)
+            }
+        }
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+    }
+}
+
 
 #Preview {
     FullLevelBreakdownView()

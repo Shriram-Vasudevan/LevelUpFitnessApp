@@ -31,7 +31,7 @@ struct HealthTrendView: View {
                     VStack(alignment: .leading, spacing: 4) {
                         Text("\(healthStatType) Trend")
                             .font(.system(size: 22, weight: .bold, design: .default))
-                        Text("Latest 7 Days")
+                        Text("Last 7 Days")
                             .font(.system(size: 12, weight: .ultraLight, design: .default))
                             .foregroundColor(Color.gray)
                     }

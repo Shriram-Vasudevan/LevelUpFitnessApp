@@ -139,9 +139,23 @@ class TrendManager: ObservableObject {
                             print("Raw Level value: \(levelValue)")
                             print("Type of Level value: \(type(of: levelValue))")
                             
-                            if let levelNumber = levelValue as? NSNumber {
+                            // Try converting to a String first, and then to a number
+                            if let levelString = levelValue as? String, let levelInt = Int(levelString) {
+                                print("Successfully converted Level to Int from String: \(levelInt)")
+                                let isoFormatter = ISO8601DateFormatter()
+                                isoFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+                                
+                                if let date = isoFormatter.date(from: timeStamp) {
+                                    print("Successfully parsed Date: \(date)")
+                                    
+                                    self.levelTrend.append(HealthDataPoint(date: date, value: Double(levelInt)))
+                                    print("Appended Level to levelTrend: \(self.levelTrend.last)")
+                                } else {
+                                    print("Failed to parse Date from Timestamp: \(timeStamp)")
+                                }
+                            } else if let levelNumber = levelValue as? NSNumber {
                                 let levelInt = levelNumber.intValue
-                                print("Successfully converted Level to Int: \(levelInt)")
+                                print("Successfully converted Level to Int from NSNumber: \(levelInt)")
                                 let isoFormatter = ISO8601DateFormatter()
                                 isoFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
                                 
@@ -154,7 +168,7 @@ class TrendManager: ObservableObject {
                                     print("Failed to parse Date from Timestamp: \(timeStamp)")
                                 }
                             } else {
-                                print("Level is neither a String nor a Int, actual type: \(type(of: levelValue))")
+                                print("Level is of an unsupported type, actual type: \(type(of: levelValue))")
                             }
                         } else {
                             print("Level key not found")
@@ -166,7 +180,6 @@ class TrendManager: ObservableObject {
             } else {
                 print("Couldn't parse response as JSON array")
             }
-            
         } catch {
             print(error)
         }

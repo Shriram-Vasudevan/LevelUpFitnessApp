@@ -19,7 +19,7 @@ struct WeightTrendView: View {
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Weight Trend")
                             .font(.system(size: 22, weight: .bold, design: .default))
-                        Text("Latest 30 Days")
+                        Text("Last 30 Days")
                             .font(.system(size: 12, weight: .ultraLight, design: .default))
                             .foregroundColor(Color.gray)
                     }
