@@ -115,6 +115,7 @@ struct ProgramView: View {
             List {
                 ForEach(programManager.program ?? [], id: \.programName) { program in
                     Button(action: {
+                        showProgramManagerOptions = false
                         ProgramManager.shared.selectedProgram = program
                         showProgramPicker = false
                     }) {
