@@ -13,7 +13,7 @@ import Amplify
 class ProgramManager: ObservableObject {
     static let shared = ProgramManager()
     
-    @Published var program: [Program]?
+    @Published var program: [Program] = []
     @Published var retrievingProgram: Bool = false
     @Published var standardProgramDBRepresentations: [StandardProgramDBRepresentation]?
     @Published var userProgramNames: [String]?
@@ -27,7 +27,7 @@ class ProgramManager: ObservableObject {
             switch result {
                 case .success(let program):
                     DispatchQueue.main.sync {
-                        self.program?.append(program)
+                        self.program.append(program)
                         print("the program is \(self.program)")
                     }
                 case .failure(let error):
@@ -49,12 +49,7 @@ class ProgramManager: ObservableObject {
     
     func uploadNewProgramStatus(programName: String, completion: @escaping (Bool) -> Void) async {
         do {
-            guard let program = self.program else {
-                completion(false)
-                return
-            }
-            
-            guard let specificProgram = self.program?.first(where: { Program in
+            guard let specificProgram = self.program.first(where: { Program in
                 Program.programName == programName
             }) else { return }
                     
@@ -67,14 +62,12 @@ class ProgramManager: ObservableObject {
     }
     
     func leaveProgram(programName: String) async {
-        if let program = self.program {
-            await ProgramS3Utility.leaveProgram(programName: programName)
-            await ProgramDynamoDBUtility.leaveProgram(programName: programName)
-            
-            self.program?.removeAll(where: { Program in
-                Program.programName == programName
-            })
-        }
+        await ProgramS3Utility.leaveProgram(programName: programName)
+        await ProgramDynamoDBUtility.leaveProgram(programName: programName)
+        
+        self.program.removeAll(where: { Program in
+            Program.programName == programName
+        })
     }
     
     func getUserProgram() async {
@@ -106,7 +99,7 @@ class ProgramManager: ObservableObject {
                             let decodedData = try decoder.decode(Program.self, from: data)
                             
                             DispatchQueue.main.async {
-                                self.program?.append(decodedData)
+                                self.program.append(decodedData)
                             }
 
                             print("the program is this \(self.program)")
@@ -123,7 +116,7 @@ class ProgramManager: ObservableObject {
                                 let decodedData = try decoder.decode(Program.self, from: data)
                                 
                                 DispatchQueue.main.async {
-                                    self.program?.append(decodedData)
+                                    self.program.append(decodedData)
                                     self.retrievingProgram = false
                                 }
                             } else {
@@ -131,6 +124,9 @@ class ProgramManager: ObservableObject {
                                     self.retrievingProgram = false
                                 }
                             }
+                            
+                            print("the program is this \(self.program)")
+                            
                             print("Program loaded from local cache")
                         }
                     }
@@ -147,7 +143,7 @@ class ProgramManager: ObservableObject {
                     await ProgramS3Utility.joinStandardProgram(programName: userProgramDBRepresentation.program, completion: { result in
                         switch result {
                             case .success(let program):
-                                self.program?.append(program)
+                                self.program.append(program)
                             case .failure(let error):
                                 print(error.localizedDescription)
                         }

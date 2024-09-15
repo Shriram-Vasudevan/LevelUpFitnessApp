@@ -158,7 +158,7 @@ struct PagesHolderView: View {
                     healthManager.getInitialHealthData()
                 }
                     
-                async let userProgram: ()? = programManager.program == nil ? programManager.getUserProgram() : nil
+                async let userProgram: ()? = programManager.program.isEmpty ? programManager.getUserProgram() : nil
                 async let notificationManager: () = notificationManager.identifyUser()
                 async let challengeManager: () = challengeManager.challengeManagerInitialization()
                 async let toDoListManager: () = toDoListManager.toDoListInit()

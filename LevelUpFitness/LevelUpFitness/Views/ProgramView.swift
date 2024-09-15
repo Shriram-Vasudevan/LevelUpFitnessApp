@@ -33,7 +33,7 @@ struct ProgramView: View {
                 VStack(spacing: 0) {
                     programHeader
                     
-                    if ProgramManager.shared.program?.isEmpty ?? true && !programManager.retrievingProgram {
+                    if ProgramManager.shared.program.isEmpty && !programManager.retrievingProgram || showProgramManagerOptions {
                         VStack(spacing: 24) {
                             segmentedControl
                             
@@ -123,6 +123,7 @@ struct ProgramView: View {
                 }
                 
                 Button(action: {
+                    showProgramManagerOptions = true
                     programPageType = .newProgram
                     ProgramManager.shared.selectedProgram = nil
                     showProgramPicker = false
@@ -132,6 +133,7 @@ struct ProgramView: View {
                 }
                 
                 Button(action: {
+                    showProgramManagerOptions = true
                     programPageType = .pastPrograms
                     ProgramManager.shared.selectedProgram = nil
                     showProgramPicker = false
