@@ -44,11 +44,7 @@ struct PagesHolderView: View {
                 case .levelBreakdown:
                     FullLevelBreakdownView()
                 case .program:
-                    ProgramView(
-                        programManager: programManager,
-                        badgeManager: badgeManager,
-                        xpManager: xpManager
-                    )
+                    ProgramView()
                     .preferredColorScheme(.light)
                 case .library:
                     LibraryView(

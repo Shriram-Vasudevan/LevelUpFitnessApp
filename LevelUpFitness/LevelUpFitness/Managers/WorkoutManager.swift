@@ -26,7 +26,7 @@ class WorkoutManager: ObservableObject {
     }
    
     func initializeExerciseData() {
-        if let todaysProgram = programManager.program?.program.first(where: { $0.day == DateUtility.getCurrentWeekday() }) {
+        if let todaysProgram = ProgramManager.shared.selectedProgram?.program.first(where: { $0.day == DateUtility.getCurrentWeekday() }) {
             self.currentExercises = todaysProgram.exercises
             
             if currentExerciseIndex == 0 {
@@ -70,7 +70,7 @@ class WorkoutManager: ObservableObject {
             print("Moving to next exercise")
             currentSetIndex = 0
             
-            if let programArray = programManager.program?.program,
+            if let programArray = ProgramManager.shared.selectedProgram?.program,
                let programIndex = programArray.firstIndex(where: { $0.day == DateUtility.getCurrentWeekday() }) {
                 var todaysProgram = programArray[programIndex]
                 todaysProgram.exercises[currentExerciseIndex].completed = true
@@ -79,16 +79,16 @@ class WorkoutManager: ObservableObject {
                 print(todaysProgram.exercises[currentExerciseIndex].name)
                 print(todaysProgram.exercises[currentExerciseIndex].completed)
                 
-                programManager.program?.program[programIndex] = todaysProgram
+                ProgramManager.shared.selectedProgram?.program[programIndex] = todaysProgram
                 
-                print(programManager.program?.program)
+                print(ProgramManager.shared.selectedProgram?.program)
             }
 
             currentExerciseIndex += 1
             initializeExerciseData()
             objectWillChange.send()
         } else {
-            if let programArray = programManager.program?.program,
+            if let programArray = ProgramManager.shared.selectedProgram?.program,
                let programIndex = programArray.firstIndex(where: { $0.day == DateUtility.getCurrentWeekday() }) {
                 var todaysProgram = programArray[programIndex]
                 todaysProgram.exercises[currentExerciseIndex].completed = true
@@ -99,9 +99,9 @@ class WorkoutManager: ObservableObject {
                 
                 todaysProgram.completed = true
                 
-                programManager.program?.program[programIndex] = todaysProgram
+                ProgramManager.shared.selectedProgram?.program[programIndex] = todaysProgram
                 
-                print(programManager.program?.program)
+                print(ProgramManager.shared.selectedProgram?.program)
             }
             objectWillChange.send()
             
@@ -122,14 +122,14 @@ class WorkoutManager: ObservableObject {
     
     func saveProgramStatus() {
         Task {
-            if let todaysProgram = programManager.program?.program.first(where: { $0.day == DateUtility.getCurrentWeekday() }) {
+            if let todaysProgram = ProgramManager.shared.selectedProgram?.program.first(where: { $0.day == DateUtility.getCurrentWeekday() }) {
                 print("uploading new status")
-                await programManager.uploadNewProgramStatus(completion: { success in
-                        if success {
-                        } else {
-                            
-                        }
-                    })
+                await programManager.uploadNewProgramStatus(programName: ProgramManager.shared.selectedProgram?.programName ?? "", completion: { success in
+                    if success {
+                    } else {
+                        
+                    }
+                })
             }
         }
     }

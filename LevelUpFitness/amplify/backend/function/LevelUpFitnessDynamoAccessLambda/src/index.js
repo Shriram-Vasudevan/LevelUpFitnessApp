@@ -109,7 +109,7 @@ exports.handler = async (event) => {
                         "Access-Control-Allow-Origin": "*",
                         "Access-Control-Allow-Headers": "*"
                     },
-                    body: JSON.stringify(data.Items[0])
+                    body: JSON.stringify(data.Items)
                 };
             } else {
                 return {

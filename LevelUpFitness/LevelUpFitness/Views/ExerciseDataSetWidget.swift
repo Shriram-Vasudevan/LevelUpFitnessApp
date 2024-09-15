@@ -39,18 +39,22 @@ struct ProgramExerciseDataSetWidget: View {
                     .foregroundColor(Color(hex: "40C4FC"))
             }
             
-            if exercise.equipment != "none" {
-                HStack {
-                    Image(systemName: "dumbbell.fill")
-                        .foregroundColor(Color(hex: "40C4FC"))
-                    Text(exercise.equipment)
-                        .font(.system(size: 14, weight: .medium, design: .rounded))
-                        .foregroundColor(.secondary)
+            if !exercise.equipment.contains("None") {
+                ScrollView (.horizontal) {
+                    ForEach(exercise.equipment, id: \.self) { equipment in
+                        HStack {
+                            Image(systemName: "dumbbell.fill")
+                                .foregroundColor(Color(hex: "40C4FC"))
+                            Text(equipment)
+                                .font(.system(size: 14, weight: .medium, design: .rounded))
+                                .foregroundColor(.secondary)
+                        }
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 12)
+                        .background(Color(hex: "40C4FC").opacity(0.1))
+                        .cornerRadius(20)
+                    }
                 }
-                .padding(.vertical, 8)
-                .padding(.horizontal, 12)
-                .background(Color(hex: "40C4FC").opacity(0.1))
-                .cornerRadius(20)
             }
             
             HStack {
@@ -174,5 +178,5 @@ struct ProgramExerciseDataSetWidget: View {
 
 
 #Preview {
-    ProgramExerciseDataSetWidget(model: .constant(ExerciseDataSet(weight: 10, reps: 5, time: 0.0, rest: 0.0)), exercise: ProgramExercise(name: "", sets: 0, reps: 0, rpe: "", rest: 0, area: "", isWeight: true, completed: false, cdnURL: "", equipment: "", data: ExerciseData(sets: [])), setIndex: 0, totalSets: 1, setCompleted: {})
+    ProgramExerciseDataSetWidget(model: .constant(ExerciseDataSet(weight: 10, reps: 5, time: 0.0, rest: 0.0)), exercise: ProgramExercise(name: "", sets: 0, reps: "0", rpe: "", rest: 0, area: "", isWeight: true, completed: false, cdnURL: "", equipment: [""], data: ExerciseData(sets: [])), setIndex: 0, totalSets: 1, setCompleted: {})
 }

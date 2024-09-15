@@ -35,14 +35,14 @@ struct ProgramDay: Codable, Hashable {
 struct ProgramExercise: Codable, Hashable {
     var name: String
     var sets: Int
-    var reps: Int
+    var reps: String
     var rpe: String
     var rest: Int
     var area: String
     var isWeight: Bool
     var completed: Bool
     var cdnURL: String
-    var equipment: String
+    var equipment: [String]
     var data: ExerciseData
 }
 

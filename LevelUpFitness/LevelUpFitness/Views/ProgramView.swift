@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct ProgramView: View {
-    @ObservedObject var programManager: ProgramManager
-    @ObservedObject var badgeManager: BadgeManager
-    @ObservedObject var xpManager: XPManager
+    @ObservedObject var programManager = ProgramManager.shared
+    @ObservedObject var badgeManager = BadgeManager.shared
+    @ObservedObject var xpManager = XPManager.shared
     
     @State var navigateToWorkoutView: Bool = false
     @State var navigateToMetricsView: Bool = false
@@ -19,6 +19,11 @@ struct ProgramView: View {
     @State var navigateToProgramInsightsView: Bool = false
     @State var programS3Representation: String = ""
     
+    @State private var isHeaderExpanded: Bool = false
+    @State private var showProgramPicker: Bool = false
+    
+    @State var showProgramManagerOptions: Bool = false
+    
     var body: some View {
         ZStack {
             Color.white
@@ -26,18 +31,9 @@ struct ProgramView: View {
             
             ScrollView {
                 VStack(spacing: 0) {
-                    HStack {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(ProgramManager.shared.program?.programName ?? "My Program")
-                                .font(.system(size: 22, weight: .bold, design: .default))
-                            Text("Week \(DateUtility.determineWeekNumber(startDateString: ProgramManager.shared.program?.startDate ?? "") ?? 1)")
-                                .font(.system(size: 12, weight: .ultraLight, design: .default))
-                                .foregroundColor(Color(hex: "F5F5F5"))
-                        }
-                        Spacer()
-                    }
+                    programHeader
                     
-                    if programManager.program == nil && !programManager.retrievingProgram {
+                    if ProgramManager.shared.program?.isEmpty ?? true && !programManager.retrievingProgram {
                         VStack(spacing: 24) {
                             segmentedControl
                             
@@ -48,31 +44,7 @@ struct ProgramView: View {
                             }
                         }
                     } else {
-                        if let todaysProgram = programManager.program?.program.first(where: { $0.day == DateUtility.getCurrentWeekday() }) {
-                            
-                            VStack(alignment: .leading, spacing: 16) {
-                                Text("Today's Required Equipment")
-                                    .font(.system(size: 20, weight: .medium, design: .default))
-                                    .foregroundColor(.black)
-                                
-                                if todaysProgram.requiredEquipment().isEmpty {
-                                    Text("No equipment required for today's workout")
-                                        .font(.system(size: 16, weight: .regular, design: .default))
-                                        .foregroundColor(.gray)
-                                } else {
-                                    ScrollView(.horizontal) {
-                                        HStack {
-                                            ForEach(todaysProgram.requiredEquipment(), id: \.self) { equipment in
-                                                EquipmentItemView(equipment: equipment)
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            .padding(.bottom)
-                            
-                            activeProgramView
-                        }
+                        programContent
                     }
                 }
                 .padding()
@@ -81,26 +53,132 @@ struct ProgramView: View {
             if showConfirmationWidget {
                 ConfirmLeaveProgramWidget(isOpen: $showConfirmationWidget, confirmed: {
                     Task {
-                        await programManager.leaveProgram()
+                        if let programName = ProgramManager.shared.selectedProgram?.programName {
+                            await programManager.leaveProgram(programName: programName)
+                            ProgramManager.shared.selectedProgram = nil
+                        }
                     }
                 })
             }
-            
         }
         .navigationBarBackButtonHidden()
         .fullScreenCover(isPresented: $navigateToWorkoutView) {
             WorkoutView(programManager: programManager, xpManager: xpManager)
         }
         .fullScreenCover(isPresented: $navigateToMetricsView) {
-            if let program = programManager.program {
-                ProgramStatisticsView(program: program)
+            if let selectedProgram = ProgramManager.shared.selectedProgram {
+                ProgramStatisticsView(program: selectedProgram)
             }
         }
         .navigationDestination(isPresented: $navigateToProgramInsightsView) {
             PastProgramInsightView(programS3Representation: programS3Representation)
         }
+        .sheet(isPresented: $showProgramPicker) {
+            programPickerView
+        }
     }
 
+    private var programHeader: some View {
+        HStack(alignment: .center, spacing: 12) {
+            Text(ProgramManager.shared.selectedProgram?.programName ?? "Program Manager")
+                .font(.system(size: 18, weight: .medium, design: .default))
+                .foregroundColor(.primary)
+            
+            Spacer()
+            
+            if let weekNumber = DateUtility.determineWeekNumber(startDateString: ProgramManager.shared.selectedProgram?.startDate ?? "") {
+                Text("Week \(weekNumber)")
+                    .font(.system(size: 14, weight: .regular, design: .default))
+                    .foregroundColor(.secondary)
+            }
+            
+            Button(action: {
+                showProgramPicker = true
+            }) {
+                Image(systemName: "chevron.down")
+                    .foregroundColor(Color(hex: "40C4FC"))
+                    .rotationEffect(.degrees(isHeaderExpanded ? 180 : 0))
+                    .frame(width: 30, height: 30)
+                    .background(Color(hex: "40C4FC").opacity(0.1))
+                    .clipShape(Circle())
+            }
+        }
+        .padding(.vertical, 8)
+    }
+    
+    private var programPickerView: some View {
+        VStack {
+            Text("Select a Program")
+                .font(.headline)
+                .padding()
+            
+            List {
+                ForEach(programManager.program ?? [], id: \.programName) { program in
+                    Button(action: {
+                        ProgramManager.shared.selectedProgram = program
+                        showProgramPicker = false
+                    }) {
+                        Text(program.programName)
+                    }
+                }
+                
+                Button(action: {
+                    programPageType = .newProgram
+                    ProgramManager.shared.selectedProgram = nil
+                    showProgramPicker = false
+                }) {
+                    Text("Join New Program")
+                        .foregroundColor(.blue)
+                }
+                
+                Button(action: {
+                    programPageType = .pastPrograms
+                    ProgramManager.shared.selectedProgram = nil
+                    showProgramPicker = false
+                }) {
+                    Text("View Past Programs")
+                        .foregroundColor(.blue)
+                }
+            }
+        }
+    }
+    
+    private var programContent: some View {
+        VStack(spacing: 16) {
+            if let todaysProgram = ProgramManager.shared.selectedProgram?.program.first(where: { $0.day == DateUtility.getCurrentWeekday() }) {
+                requiredEquipmentView(for: todaysProgram)
+                activeProgramView
+            } else {
+                Text("No program scheduled for today")
+                    .font(.system(size: 16, weight: .light, design: .default))
+                    .foregroundColor(.gray)
+            }
+        }
+    }
+    
+    private func requiredEquipmentView(for todaysProgram: ProgramDay) -> some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text("Today's Required Equipment")
+                .font(.system(size: 20, weight: .medium, design: .default))
+                .foregroundColor(.black)
+            
+            if todaysProgram.requiredEquipment().isEmpty {
+                Text("No equipment required for today's workout")
+                    .font(.system(size: 16, weight: .regular, design: .default))
+                    .foregroundColor(.gray)
+            } else {
+                ScrollView(.horizontal) {
+                    HStack {
+                        ForEach(todaysProgram.requiredEquipment(), id: \.self) { equipment in
+                            EquipmentItemView(equipment: equipment)
+                        }
+                    }
+                }
+            }
+        }
+        .padding(.bottom)
+    }
+    
     private var segmentedControl: some View {
         HStack {
             Button(action: { programPageType = .newProgram }) {
@@ -144,13 +222,12 @@ struct ProgramView: View {
         })
     }
     
-
-
+    
     private var activeProgramView: some View {
         VStack(spacing: 16) {
-            UpNextProgramExerciseWidget(programManager: programManager, navigateToWorkoutView: $navigateToWorkoutView)
+            UpNextProgramExerciseWidget(programManager: programManager, navigateToWorkoutView: $navigateToWorkoutView, selectedProgram: ProgramManager.shared.selectedProgram)
             
-            TodaysScheduleWidget(programManager: programManager)
+            TodaysScheduleWidget(programManager: programManager, selectedProgram: ProgramManager.shared.selectedProgram)
             
             GeometryReader { geometry in
                 let totalWidth = geometry.size.width
@@ -221,6 +298,43 @@ struct ProgramView: View {
     }
 }
 
+struct ProgramHeader: View {
+    let programName: String
+    let weekNumber: Int?
+    @Binding var isExpanded: Bool
+    
+    private let lightBlue = Color(hex: "40C4FC")
+    
+    var body: some View {
+        HStack(alignment: .center, spacing: 12) {
+            Text(programName)
+                .font(.system(size: 18, weight: .medium, design: .default))
+                .foregroundColor(.primary)
+            
+            Spacer()
+            
+            if let weekNumber = self.weekNumber {
+                Text("Week \(weekNumber)")
+                    .font(.system(size: 14, weight: .regular, design: .default))
+                    .foregroundColor(.secondary)
+            }
+            
+            Button(action: {
+                withAnimation {
+                    isExpanded.toggle()
+                }
+            }) {
+                Image(systemName: "chevron.down")
+                    .foregroundColor(lightBlue)
+                    .rotationEffect(.degrees(isExpanded ? 180 : 0))
+                    .frame(width: 30, height: 30)
+                    .background(lightBlue.opacity(0.1))
+                    .clipShape(Circle())
+            }
+        }
+        .padding(.vertical, 8)
+    }
+}
 struct EquipmentItemView: View {
     let equipment: String
     
@@ -245,12 +359,13 @@ struct UpNextProgramExerciseWidget: View {
     @ObservedObject var programManager: ProgramManager
     @Binding var navigateToWorkoutView: Bool
     
+    @State var selectedProgram: Program?
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Up Next")
                 .font(.system(size: 20, weight: .medium, design: .default))
             
-            if let todaysProgram = programManager.program?.program.first(where: { $0.day == DateUtility.getCurrentWeekday() }),
+            if let todaysProgram = selectedProgram?.program.first(where: { $0.day == DateUtility.getCurrentWeekday() }),
                let (_, nextExercise) = todaysProgram.exercises.enumerated().first(where: { !$0.element.completed }) {
                 exerciseDetailsView(for: nextExercise)
                     .onTapGesture {
@@ -317,12 +432,14 @@ struct TodaysScheduleWidget: View {
     @ObservedObject var programManager: ProgramManager
     @State private var isExpanded: Bool = false
     
+    @State var selectedProgram: Program?
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Today's Schedule")
                 .font(.system(size: 20, weight: .medium, design: .default))
             
-            if let todaysProgram = programManager.program?.program.first(where: { $0.day == DateUtility.getCurrentWeekday() }) {
+            if let todaysProgram = selectedProgram?.program.first(where: { $0.day == DateUtility.getCurrentWeekday() }) {
                 let exercises = todaysProgram.exercises
                 let displayedExercises = isExpanded ? exercises : Array(exercises.prefix(3))
                 
@@ -392,6 +509,6 @@ struct ExerciseRow: View {
 
 
 #Preview {
-    ProgramView(programManager: ProgramManager(), badgeManager: BadgeManager(), xpManager: XPManager())
+    ProgramView()
 }
 

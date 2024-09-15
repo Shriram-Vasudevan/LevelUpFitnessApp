@@ -68,13 +68,16 @@ struct FullLevelBreakdownView: View {
                                 .frame(width: 200)
                             }
                         }
-                        .padding(.horizontal, 8)
                     }
                 }
             
                 VStack(alignment: .leading, spacing: 16) {
-                    Text("Recent Level Changes")
-                        .font(.custom("Poppins-SemiBold", size: 22))
+                    HStack {
+                        Text("Recent Level Changes")
+                            .font(.custom("Poppins-SemiBold", size: 22))
+                        
+                        Spacer()
+                    }
                     
                     if levelChangeManager.levelChanges.isEmpty {
                         Text("No recent level changes")
@@ -207,7 +210,7 @@ struct FullLevelBreakdownView: View {
                 }
                 .stroke(accentColor, lineWidth: 2)
                 
-                ForEach(trendManager.weightTrend) { point in
+                ForEach(trendManager.levelTrend) { point in
                     let index = trendManager.levelTrend.firstIndex(where: { $0.id == point.id })!
                     let x = CGFloat(index) / CGFloat(trendManager.levelTrend.count - 1) * width
                     let y = (1 - CGFloat((point.value - minValue) / (maxValue - minValue))) * height

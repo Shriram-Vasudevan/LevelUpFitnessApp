@@ -22,34 +22,37 @@ class LevelChangeManager: ObservableObject {
         do {
             let userID = try await Amplify.Auth.getCurrentUser().userId
             
-            if let (programName, startDate) = await ProgramDynamoDBUtility.getUserProgramDBRepresentation() {
-                let endDate = DateUtility.getDateNWeeksAfterDate(dateString: startDate, weeks: 4)
-                
-                print("program name \(programName)")
-                if !LocalStorageUtility.fileModifiedInLast24Hours(at: "\(userID)-LevelChangeInfo.json") {
-                    print("current properties \(currentProperties)")
-                    let selectedPropterties = selectedProperties()
-                    print("selected properties \(selectedPropterties)")
+            if let userProgramDBRepresentations = await ProgramDynamoDBUtility.getUserProgramDBRepresentation() {
+                for userProgramDBRepresentation in userProgramDBRepresentations {
+                    let endDate = DateUtility.getDateNWeeksAfterDate(dateString: userProgramDBRepresentation.startDate, weeks: 4)
                     
-                    if let programs = LocalStorageUtility.getCachedUserPrograms(at: "Programs/\(userID)/\(programName) (\(startDate)|\(endDate))") {
-                        print("got programs")
-                        let tasks = selectedPropterties.map { selectedProperty in
-                                Task {
-                                    await performProgramLevelChange(selectedProperty: selectedProperty, programs: programs)
+                    print("program name \(userProgramDBRepresentation.program)")
+                    if !LocalStorageUtility.fileModifiedInLast24Hours(at: "\(userID)-LevelChangeInfo.json") {
+                        print("current properties \(currentProperties)")
+                        let selectedPropterties = selectedProperties()
+                        print("selected properties \(selectedPropterties)")
+                        
+                        if let programs = LocalStorageUtility.getCachedUserPrograms(at: "Programs/\(userID)/\(userProgramDBRepresentation.program) (\(userProgramDBRepresentation.startDate)|\(String(describing: endDate)))") {
+                            print("got programs")
+                            let tasks = selectedPropterties.map { selectedProperty in
+                                    Task {
+                                        await performProgramLevelChange(selectedProperty: selectedProperty, programs: programs)
+                                    }
                                 }
-                            }
-      
-                            for task in tasks {
-                                _ = await task.value
-                            }
+          
+                                for task in tasks {
+                                    _ = await task.value
+                                }
+                        }
+                        
+                        
+                        await XPManager.shared.addXPToDB()
+                        await getLevelChanges()
+                        
+                        print("level chagnes \(self.levelChanges)")
                     }
-                    
-                    
-                    await XPManager.shared.addXPToDB()
-                    await getLevelChanges()
-                    
-                    print("level chagnes \(self.levelChanges)")
                 }
+                
             }
         } catch {
             print(error)

@@ -104,7 +104,7 @@ struct HomeView: View {
                     WeightStatView()
                         .onTapGesture { navigateToWeightTrendView = true }
                     
-                    if let program = programManager.program {
+                    if let program = programManager.program?.first {
                         TimeSpentWidget(program: program)
                             .onTapGesture {
                                 pageType = .program
@@ -235,7 +235,7 @@ struct HomeView: View {
         case "Level":
             return (xpManager.userXPData?.level, nil)
         case "ProgramConsistency":
-            if let program = ProgramManager.shared.program {
+            if let program = ProgramManager.shared.program?.first {
                 let result = try? program.getConsecutiveCompletionDays()
                     if result == nil {
                         return (nil, nil)
