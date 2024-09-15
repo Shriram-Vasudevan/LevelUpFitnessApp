@@ -207,7 +207,7 @@ struct ProgramView: View {
     
     private var newProgramView: some View {
         VStack(spacing: 16) {
-            ForEach(programManager.standardProgramDBRepresentations ?? [], id: \.id) { program in
+            ForEach(programManager.standardProgramDBRepresentations, id: \.id) { program in
                 JoinProgramWidget(standardProgramDBRepresentation: program)
                     .onTapGesture {
                         Task {
@@ -216,6 +216,14 @@ struct ProgramView: View {
                     }
             }
         }
+        .onAppear {
+            if programManager.standardProgramDBRepresentations.isEmpty {
+                Task {
+                    await ProgramS3Utility.getStandardProgramDBRepresentations()
+                }
+            }
+        }
+        
     }
     
     private var pastProgramsView: some View {

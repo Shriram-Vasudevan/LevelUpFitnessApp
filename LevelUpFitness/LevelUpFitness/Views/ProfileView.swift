@@ -21,7 +21,7 @@ struct ProfileView: View {
         ZStack {
             Color.white.ignoresSafeArea()
             
-            VStack(spacing: 10) {
+            VStack(spacing: 0) {
                 navigationBar
                 
                 ScrollView {
@@ -30,7 +30,7 @@ struct ProfileView: View {
                         settingsSection
                         accountActions
                     }
-                    .padding(.horizontal)
+                    .padding()
                 }
             }
         }
@@ -71,7 +71,6 @@ struct ProfileView: View {
                         .foregroundColor(Color(hex: "40C4FC"))
                 }
                 Spacer()
-
             }
         }
         .padding(.horizontal)
@@ -118,22 +117,6 @@ struct ProfileView: View {
         }
         .padding()
         .background(Color(hex: "F5F5F5"))
-    }
-    
-    private func quickActionButton(title: String, icon: String) -> some View {
-        Button(action: { }) {
-            VStack(spacing: 8) {
-                Image(systemName: icon)
-                    .font(.system(size: 24))
-                    .foregroundColor(Color(hex: "40C4FC"))
-                Text(title)
-                    .font(.system(size: 12, weight: .medium))
-                    .foregroundColor(.black)
-            }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 12)
-            .background(Color(hex: "F5F5F5"))
-        }
     }
     
     private var settingsSection: some View {
@@ -183,32 +166,49 @@ struct ProfileView: View {
     }
     
     private var profilePictureOptionsSheet: some View {
-        VStack(spacing: 20) {
-            PhotosPicker(selection: $selectedProfilePicture, matching: .images, photoLibrary: .shared()) {
-                Text("Change Profile Picture")
-                    .font(.system(size: 16, weight: .medium))
-                    .foregroundColor(Color(hex: "40C4FC"))
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.white)
-            }
+        VStack(spacing: 0) {
+            Text("Profile Picture Options")
+                .font(.system(size: 20, weight: .medium))
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(Color(hex: "F5F5F5"))
             
-            Button(action: {
-                Task {
-                    await AuthenticationManager.shared.removeProfilePicture()
-                    showProfilePictureOptions = false
-                }
-            }) {
-                Text("Remove Profile Picture")
-                    .font(.system(size: 16, weight: .medium))
-                    .foregroundColor(.red)
-                    .frame(maxWidth: .infinity)
+            Divider()
+            
+            VStack(spacing: 1) {
+                PhotosPicker(selection: $selectedProfilePicture, matching: .images, photoLibrary: .shared()) {
+                    HStack {
+                        Text("Change Profile Picture")
+                            .font(.system(size: 16, weight: .regular))
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .foregroundColor(.gray)
+                    }
                     .padding()
                     .background(Color.white)
+                }
+                
+                Button(action: {
+                    Task {
+                        await AuthenticationManager.shared.removeProfilePicture()
+                        showProfilePictureOptions = false
+                    }
+                }) {
+                    HStack {
+                        Text("Remove Profile Picture")
+                            .font(.system(size: 16, weight: .regular))
+                            .foregroundColor(.red)
+                        Spacer()
+                        Image(systemName: "trash")
+                            .foregroundColor(.red)
+                    }
+                    .padding()
+                    .background(Color.white)
+                }
             }
+            .background(Color(hex: "F5F5F5"))
         }
-        .padding(24)
-        .background(Color(hex: "F5F5F5"))
+        .background(Color.white)
         .presentationDetents([.height(200)])
     }
     

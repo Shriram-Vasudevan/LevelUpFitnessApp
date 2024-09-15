@@ -15,7 +15,7 @@ class ProgramManager: ObservableObject {
     
     @Published var program: [Program] = []
     @Published var retrievingProgram: Bool = false
-    @Published var standardProgramDBRepresentations: [StandardProgramDBRepresentation]?
+    @Published var standardProgramDBRepresentations: [StandardProgramDBRepresentation] = []
     @Published var userProgramNames: [String]?
     
     @Published var exercises: [ExerciseLibraryExercise] = []

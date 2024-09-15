@@ -17,20 +17,18 @@ struct PastProgramWidget: View {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(programFormatted)
-                        .font(.system(size: 18, weight: .medium, design: .default))
+                        .font(.system(size: 16, weight: .regular))
                         .foregroundColor(.black)
                     Text("Tap to view details")
-                        .font(.system(size: 14, weight: .light, design: .default))
+                        .font(.system(size: 14, weight: .light))
                         .foregroundColor(.gray)
                 }
                 Spacer()
                 Image(systemName: "chevron.right")
-                    .foregroundColor(Color(hex: "40C4FC"))
+                    .foregroundColor(.gray)
             }
             .padding()
             .background(Color.white)
-            .cornerRadius(8)
-            .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
         }
     }
 }

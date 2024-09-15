@@ -148,6 +148,7 @@
 		99E0A5172C8DE63E00CC1224 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99E0A5162C8DE63E00CC1224 /* SearchView.swift */; };
 		99E0A5192C9141BC00CC1224 /* ErrorUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99E0A5182C9141BC00CC1224 /* ErrorUtility.swift */; };
 		99E0A51B2C93E1CC00CC1224 /* ChallengeDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99E0A51A2C93E1CC00CC1224 /* ChallengeDetailsView.swift */; };
+		99E0A51D2C97184900CC1224 /* CustomWorkoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99E0A51C2C97184700CC1224 /* CustomWorkoutView.swift */; };
 		99ECAD262C76C6610012F8E7 /* ProgramCompletedCover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99ECAD252C76C6610012F8E7 /* ProgramCompletedCover.swift */; };
 		99ECAD282C76E35C0012F8E7 /* GlobalCoverManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99ECAD272C76E35C0012F8E7 /* GlobalCoverManager.swift */; };
 		99ECAD2A2C76F0B30012F8E7 /* ChallengeCompletedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99ECAD292C76F0B30012F8E7 /* ChallengeCompletedView.swift */; };
@@ -289,6 +290,7 @@
 		99E0A5162C8DE63E00CC1224 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		99E0A5182C9141BC00CC1224 /* ErrorUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorUtility.swift; sourceTree = "<group>"; };
 		99E0A51A2C93E1CC00CC1224 /* ChallengeDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeDetailsView.swift; sourceTree = "<group>"; };
+		99E0A51C2C97184700CC1224 /* CustomWorkoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomWorkoutView.swift; sourceTree = "<group>"; };
 		99ECAD252C76C6610012F8E7 /* ProgramCompletedCover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramCompletedCover.swift; sourceTree = "<group>"; };
 		99ECAD272C76E35C0012F8E7 /* GlobalCoverManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalCoverManager.swift; sourceTree = "<group>"; };
 		99ECAD292C76F0B30012F8E7 /* ChallengeCompletedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeCompletedView.swift; sourceTree = "<group>"; };
@@ -460,6 +462,7 @@
 				99E0A5142C86908A00CC1224 /* ProgramStatsButtonWidget.swift */,
 				99E0A5162C8DE63E00CC1224 /* SearchView.swift */,
 				99E0A51A2C93E1CC00CC1224 /* ChallengeDetailsView.swift */,
+				99E0A51C2C97184700CC1224 /* CustomWorkoutView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -780,6 +783,7 @@
 				991F8FE42C1527A900A134A5 /* ProgramStatisticsView.swift in Sources */,
 				991F8FE22C15278500A134A5 /* Extensions.swift in Sources */,
 				99F71F9F2C023A3D00E27B60 /* UsageTimeView.swift in Sources */,
+				99E0A51D2C97184900CC1224 /* CustomWorkoutView.swift in Sources */,
 				99DD3D542C1D0871006C07B3 /* FullPageVideoView.swift in Sources */,
 				99ECAD2E2C783C2F0012F8E7 /* ToDoListManager.swift in Sources */,
 				9978CDF22C7C22F500659813 /* LibraryExerciseDataView.swift in Sources */,

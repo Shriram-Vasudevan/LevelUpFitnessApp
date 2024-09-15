@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-
 struct ProgramExerciseDataSetWidget: View {
     @Binding var model: ExerciseDataSet
     let exercise: ProgramExercise
@@ -24,104 +23,137 @@ struct ProgramExerciseDataSetWidget: View {
     let setCompleted: () -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            HStack {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Set \(setIndex + 1) / \(totalSets)")
-                        .font(.system(size: 24, weight: .bold, design: .rounded))
-                    Text(isResting ? "Rest" : "Exercise")
-                        .font(.system(size: 16, weight: .medium, design: .rounded))
-                        .foregroundColor(.secondary)
-                }
-                Spacer()
-                Image(systemName: isResting ? "hourglass" : "figure.walk")
-                    .font(.system(size: 24))
-                    .foregroundColor(Color(hex: "40C4FC"))
-            }
-            
-            if !exercise.equipment.contains("None") {
-                ScrollView (.horizontal) {
-                    ForEach(exercise.equipment, id: \.self) { equipment in
-                        HStack {
-                            Image(systemName: "dumbbell.fill")
-                                .foregroundColor(Color(hex: "40C4FC"))
-                            Text(equipment)
-                                .font(.system(size: 14, weight: .medium, design: .rounded))
-                                .foregroundColor(.secondary)
-                        }
-                        .padding(.vertical, 8)
-                        .padding(.horizontal, 12)
-                        .background(Color(hex: "40C4FC").opacity(0.1))
-                        .cornerRadius(20)
-                    }
-                }
-            }
-            
-            HStack {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Time")
-                        .font(.system(size: 14, weight: .medium, design: .rounded))
-                        .foregroundColor(.secondary)
-                    Text(String(format: "%.1f", elapsedTime))
-                        .font(.system(size: 36, weight: .bold, design: .rounded))
-                }
-                Spacer()
-                ZStack {
-                    Circle()
-                        .stroke(lineWidth: 4)
-                        .opacity(0.3)
-                        .foregroundColor(Color(hex: "40C4FC"))
-                    
-                    Circle()
-                        .trim(from: 0.0, to: min(CGFloat(elapsedTime) / 60.0, 1.0))
-                        .stroke(style: StrokeStyle(lineWidth: 4, lineCap: .round, lineJoin: .round))
-                        .foregroundColor(Color(hex: "40C4FC"))
-                        .rotationEffect(Angle(degrees: 270.0))
-                        .animation(.linear, value: elapsedTime)
-                }
-                .frame(width: 50, height: 50)
-            }
-            
-            HStack(spacing: 20) {
-                if exercise.isWeight {
-                    inputField(title: "Weight", text: $weightText, unit: "kg")
-                }
-                inputField(title: "Reps", text: $repText, unit: "reps")
-            }
-            
-            Button(action: handleSetCompletion) {
-                HStack {
-                    Spacer()
-                    Text(buttonTitle)
-                        .font(.system(size: 16, weight: .bold, design: .rounded))
-                    Spacer()
-                }
-                .padding()
-                .background(buttonColor)
-                .foregroundColor(.white)
-                .cornerRadius(8)
-            }
+        VStack(alignment: .leading, spacing: 16) {
+            headerView
+            equipmentView
+            timerView
+            inputFieldsView
+            areaAndRepsView
+            actionButton
         }
         .padding()
+        .background(Color(hex: "F5F5F5"))
+    }
+    
+    private var headerView: some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Set \(setIndex + 1) / \(totalSets)")
+                    .font(.system(size: 20, weight: .medium, design: .default))
+                Text(isResting ? "Rest" : "Exercise")
+                    .font(.system(size: 16, weight: .light, design: .default))
+                    .foregroundColor(.secondary)
+            }
+            Spacer()
+            Image(systemName: isResting ? "hourglass" : "figure.walk")
+                .font(.system(size: 24))
+                .foregroundColor(Color(hex: "40C4FC"))
+        }
+    }
+    
+    private var equipmentView: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 8) {
+                ForEach(exercise.equipment, id: \.self) { equipment in
+                    HStack(spacing: 4) {
+                        Image(systemName: "dumbbell.fill")
+                            .foregroundColor(Color(hex: "40C4FC"))
+                        Text(equipment)
+                            .font(.system(size: 14, weight: .light, design: .default))
+                            .foregroundColor(.secondary)
+                    }
+                    .padding(.vertical, 6)
+                    .padding(.horizontal, 10)
+                    .background(Color(hex: "40C4FC").opacity(0.1))
+                }
+            }
+        }
+    }
+    
+    private var timerView: some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Time")
+                    .font(.system(size: 14, weight: .light, design: .default))
+                    .foregroundColor(.secondary)
+                Text(String(format: "%.1f", elapsedTime))
+                    .font(.system(size: 24, weight: .medium, design: .default))
+            }
+            Spacer()
+            ZStack {
+                Circle()
+                    .stroke(lineWidth: 4)
+                    .opacity(0.3)
+                    .foregroundColor(Color(hex: "40C4FC"))
+                
+                Circle()
+                    .trim(from: 0.0, to: min(CGFloat(elapsedTime) / 60.0, 1.0))
+                    .stroke(style: StrokeStyle(lineWidth: 4, lineCap: .round, lineJoin: .round))
+                    .foregroundColor(Color(hex: "40C4FC"))
+                    .rotationEffect(Angle(degrees: 270.0))
+                    .animation(.linear, value: elapsedTime)
+            }
+            .frame(width: 50, height: 50)
+        }
+    }
+    
+    private var inputFieldsView: some View {
+        HStack(spacing: 16) {
+            if exercise.isWeight {
+                inputField(title: "Weight", text: $weightText, unit: "kg")
+            }
+            inputField(title: "Reps", text: $repText, unit: "reps")
+        }
     }
     
     private func inputField(title: String, text: Binding<String>, unit: String) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(title)
-                .font(.system(size: 14, weight: .medium, design: .rounded))
+                .font(.system(size: 14, weight: .light, design: .default))
                 .foregroundColor(.secondary)
             HStack {
                 TextField("0", text: text)
                     .keyboardType(.numberPad)
-                    .font(.system(size: 24, weight: .bold, design: .rounded))
+                    .font(.system(size: 18, weight: .medium, design: .default))
                 Text(unit)
-                    .font(.system(size: 14, weight: .medium, design: .rounded))
+                    .font(.system(size: 14, weight: .light, design: .default))
                     .foregroundColor(.secondary)
             }
             .padding(.vertical, 8)
             .padding(.horizontal, 12)
             .background(Color.white)
-            .cornerRadius(8)
+        }
+    }
+    
+    private var areaAndRepsView: some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Area")
+                    .font(.system(size: 14, weight: .light, design: .default))
+                    .foregroundColor(.secondary)
+                Text(exercise.area)
+                    .font(.system(size: 16, weight: .medium, design: .default))
+            }
+            Spacer()
+            VStack(alignment: .trailing, spacing: 4) {
+                Text("Recommended Reps")
+                    .font(.system(size: 14, weight: .light, design: .default))
+                    .foregroundColor(.secondary)
+                Text(exercise.reps)
+                    .font(.system(size: 16, weight: .medium, design: .default))
+            }
+        }
+        .padding(.top, 8)
+    }
+    
+    private var actionButton: some View {
+        Button(action: handleSetCompletion) {
+            Text(buttonTitle)
+                .font(.system(size: 16, weight: .medium, design: .default))
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(buttonColor)
         }
     }
     
@@ -175,7 +207,6 @@ struct ProgramExerciseDataSetWidget: View {
         model.rest = elapsedTime
     }
 }
-
 
 #Preview {
     ProgramExerciseDataSetWidget(model: .constant(ExerciseDataSet(weight: 10, reps: 5, time: 0.0, rest: 0.0)), exercise: ProgramExercise(name: "", sets: 0, reps: "0", rpe: "", rest: 0, area: "", isWeight: true, completed: false, cdnURL: "", equipment: [""], data: ExerciseData(sets: [])), setIndex: 0, totalSets: 1, setCompleted: {})

@@ -29,20 +29,22 @@ struct HomeView: View {
     @State var showChallengeDetailsCover: Bool = false
     @State var userChallenge: UserChallenge?
     
+    @State private var showToDoList = true
+    
     var body: some View {
         ZStack {
             Color.white.ignoresSafeArea(.all)
             
             ScrollView {
-                VStack(spacing: 24) {
+                VStack(spacing: 18) {
                     HStack {
-                        if let name = AuthenticationManager.shared.name {
-                            Text("Hello, \(name)")
-                                .font(.system(size: 28, weight: .medium, design: .default))
-                        } else {
-                            Text("Hey There!")
-                                .font(.system(size: 28, weight: .medium, design: .default))
-                        }
+//                        if let name = AuthenticationManager.shared.name {
+//                            Text("Hello, \(name)")
+//                                .font(.system(size: 28, weight: .medium, design: .default))
+//                        } else {
+//                            Text("Hey There!")
+//                                .font(.system(size: 28, weight: .medium, design: .default))
+//                        }
                         Spacer()
                         
                         if let pfp = AuthenticationManager.shared.pfp, let uiImage = UIImage(data: pfp) {
@@ -63,14 +65,14 @@ struct HomeView: View {
                             }
                         }
                     }
-                    .padding(.top, 15)
                     
+                    HomePageHeader(showToDoList: $showToDoList, name:  AuthenticationManager.shared.name)
                     
-                    if toDoListManager.toDoList.count > 0 {
-                        ToDoList()
-                    }
+//                    if toDoListManager.toDoList.count > 0 {
+//                        ToDoList()
+//                    }
                     
-                    VStack(spacing: 12) {
+                    VStack(spacing: 8) {
                         Text("Time to Start Moving!")
                             .font(.system(size: 20, weight: .medium))
                             .frame(maxWidth: .infinity, alignment: .leading)
@@ -81,7 +83,7 @@ struct HomeView: View {
                         }
                     }
                     
-                    VStack(spacing: 12) {
+                    VStack(spacing: 8) {
                         Text("Your Metrics")
                             .font(.system(size: 20, weight: .medium))
                             .frame(maxWidth: .infinity, alignment: .leading)
@@ -112,7 +114,7 @@ struct HomeView: View {
                     }
                     
                     if let recommendedExercise = exerciseManager.recommendedExercise {
-                        VStack(spacing: 12) {
+                        VStack(spacing: 8) {
                             HStack {
                                 Text("Our Pick for You")
                                     .font(.system(size: 20, weight: .medium))
@@ -126,7 +128,7 @@ struct HomeView: View {
                     }
                 
                     
-                    VStack(spacing: 12) {
+                    VStack(spacing: 8) {
                         if challengeManager.userChallenges.count > 0 {
                             Text("My Challenges")
                                 .font(.system(size: 20, weight: .medium))
@@ -254,9 +256,69 @@ struct HomeView: View {
     }
 }
 
-#Preview {
-    HomeView(programManager: ProgramManager(), databaseManager: DatabaseManager(), healthManager: HealthManager(), xpManager: XPManager(), exerciseManager: ExerciseManager(), challengeManager: ChallengeManager(), levelChangeManager: LevelChangeManager(), toDoListManager: ToDoListManager(), pageType: .constant(.home))
+
+struct HomePageHeader: View {
+    @Binding var showToDoList: Bool
+    let name: String?
+    let affirmations = [
+        "You've got this!",
+        "Today is your day!",
+        "Small steps, big results!",
+        "Believe in yourself!",
+        "Every day is a new opportunity!"
+    ]
+    
+    var body: some View {
+        VStack {
+            HStack {
+                VStack(alignment: .leading) {
+                    Text(greeting)
+                        .font(.system(size: 20, weight: .medium))
+                    Text(affirmations.randomElement() ?? "")
+                        .font(.system(size: 14, weight: .regular))
+                        .foregroundColor(.gray)
+                }
+                Spacer()
+                VStack {
+                    Button(action: {
+                        withAnimation {
+                            showToDoList.toggle()
+                        }
+                    }) {
+                        Text(showToDoList ? "Hide" : "Show")
+                            .font(.system(size: 14, weight: .medium))
+                        Image(systemName: showToDoList ? "chevron.up" : "chevron.down")
+                    }
+                    .foregroundColor(Color(hex: "40C4FC"))
+                }
+            }
+            .padding()
+            
+            if showToDoList {
+                ToDoList()
+                    .padding(.horizontal)
+            }
+        }
+        .background(
+            RoundedRectangle(cornerRadius: 10)
+                .fill(Color.white)
+                .shadow(color: Color.gray.opacity(0.2), radius: 10, x: 0, y: 5)
+        )
+    }
+    
+    private var greeting: String {
+        let hour = Calendar.current.component(.hour, from: Date())
+        switch hour {
+        case 0..<12:
+            return "Good Morning, \(name ?? "")"
+        case 12..<17:
+            return "Good Afternoon, \(name ?? "")"
+        default:
+            return "Good Night, \(name ?? "")"
+        }
+    }
 }
+
 #Preview {
     HomeView(programManager: ProgramManager(), databaseManager: DatabaseManager(), healthManager: HealthManager(), xpManager: XPManager(), exerciseManager: ExerciseManager(), challengeManager: ChallengeManager(), levelChangeManager: LevelChangeManager(), toDoListManager: ToDoListManager(), pageType: .constant(.home))
 }

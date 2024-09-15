@@ -9,7 +9,7 @@ import Foundation
 import Amplify
 
 class ProgramS3Utility {
-    static func getStandardProgramDBRepresentations() async -> [StandardProgramDBRepresentation]? {
+    static func getStandardProgramDBRepresentations() async -> [StandardProgramDBRepresentation] {
         do {
             let restRequest = RESTRequest(apiName: "LevelUpFitnessDynamoAccessAPI", path: "/getStandardProgramDBRepresentations")
             let response = try await Amplify.API.get(request: restRequest)
@@ -30,7 +30,7 @@ class ProgramS3Utility {
             return standardProgramDBRepresentations
         } catch {
             print("getStandardProgramDBRepresentations error \(error)")
-            return nil
+            return []
         }
     }
     

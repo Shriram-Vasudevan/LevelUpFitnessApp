@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+
 struct LibraryExerciseDataView: View {
     @State var sectionType: LibraryExerciseDataSectionType = .start
     @State var exerciseData: ExerciseData
@@ -37,20 +38,21 @@ struct LibraryExerciseDataView: View {
     var startView: some View {
         VStack(spacing: 24) {
             Text("Set up your exercise")
-                .font(.system(size: 24, weight: .bold, design: .rounded))
+                .font(.system(size: 20, weight: .medium, design: .default))
                 .multilineTextAlignment(.center)
             
             VStack(alignment: .leading, spacing: 8) {
                 Text("Number of Sets")
-                    .font(.system(size: 16, weight: .semibold, design: .rounded))
+                    .font(.system(size: 16, weight: .light, design: .default))
+                    .foregroundColor(.secondary)
                 
                 TextField("", text: $numberOfSets)
                     .keyboardType(.numberPad)
+                    .font(.system(size: 18, weight: .medium, design: .default))
                     .padding()
                     .background(Color(hex: "F5F5F5"))
-                    .cornerRadius(10)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 10)
+                        Rectangle()
                             .stroke(setsFieldNotFilledOut ? Color.red : Color.clear, lineWidth: 2)
                     )
             }
@@ -65,12 +67,11 @@ struct LibraryExerciseDataView: View {
                 }
             }) {
                 Text("Begin Sets")
-                    .font(.system(size: 18, weight: .bold, design: .rounded))
+                    .font(.system(size: 16, weight: .medium, design: .default))
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
                     .background(Color(hex: "40C4FC"))
-                    .cornerRadius(15)
             }
         }
     }
@@ -80,8 +81,9 @@ struct LibraryExerciseDataView: View {
             exerciseDataSet: $exerciseData.sets[currentExerciseDataSetIndex],
             isWeight: isWeight,
             setIndex: currentExerciseDataSetIndex,
+            totalSets: exerciseData.sets.count,
             moveToNextSet: {
-                if !(currentExerciseDataSetIndex == exerciseData.sets.count - 1) {
+                if currentExerciseDataSetIndex < exerciseData.sets.count - 1 {
                     currentExerciseDataSetIndex += 1
                 } else {
                     let xpAdditionType = getExerciseTypeEnum(exerciseType: exerciseType)
@@ -99,12 +101,12 @@ struct LibraryExerciseDataView: View {
     }
     
     var finishedView: some View {
-        VStack(spacing: 30) {
+        VStack(spacing: 24) {
             Text("Exercise Complete!")
-                .font(.system(size: 28, weight: .bold, design: .rounded))
+                .font(.system(size: 20, weight: .medium, design: .default))
             
             Text("Great job! You've finished all your sets.")
-                .font(.system(size: 18, design: .rounded))
+                .font(.system(size: 16, weight: .light, design: .default))
                 .multilineTextAlignment(.center)
                 .foregroundColor(.secondary)
             
@@ -113,12 +115,11 @@ struct LibraryExerciseDataView: View {
                 sectionType = .start
             }) {
                 Text("Start New Exercise")
-                    .font(.system(size: 18, weight: .bold, design: .rounded))
+                    .font(.system(size: 16, weight: .medium, design: .default))
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
                     .background(Color(hex: "40C4FC"))
-                    .cornerRadius(15)
             }
         }
     }
@@ -152,91 +153,99 @@ struct LibraryExerciseDataSetWidget: View {
     @State var isExercising: Bool = false
     @State var isResting: Bool = false
     var setIndex: Int
+    var totalSets: Int
     var moveToNextSet: () -> Void
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            HStack {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Set \(setIndex + 1)")
-                        .font(.system(size: 24, weight: .bold, design: .rounded))
-                    Text(isResting ? "Rest" : "Exercise")
-                        .font(.system(size: 16, weight: .medium, design: .rounded))
-                        .foregroundColor(.secondary)
-                }
-                Spacer()
-                Image(systemName: isResting ? "hourglass" : "figure.walk")
-                    .font(.system(size: 24))
-                    .foregroundColor(Color(hex: "40C4FC"))
-            }
-            
-            HStack {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Time")
-                        .font(.system(size: 14, weight: .medium, design: .rounded))
-                        .foregroundColor(.secondary)
-                    Text(String(format: "%.1f", elapsedTime))
-                        .font(.system(size: 36, weight: .bold, design: .rounded))
-                }
-                Spacer()
-                ZStack {
-                    Circle()
-                        .stroke(lineWidth: 4)
-                        .opacity(0.3)
-                        .foregroundColor(Color(hex: "40C4FC"))
-                    
-                    Circle()
-                        .trim(from: 0.0, to: min(CGFloat(elapsedTime) / 60.0, 1.0))
-                        .stroke(style: StrokeStyle(lineWidth: 4, lineCap: .round, lineJoin: .round))
-                        .foregroundColor(Color(hex: "40C4FC"))
-                        .rotationEffect(Angle(degrees: 270.0))
-                        .animation(.linear, value: elapsedTime)
-                }
-                .frame(width: 50, height: 50)
-            }
-            
-            HStack(spacing: 20) {
-                if isWeight {
-                    inputField(title: "Weight", text: $weightText, unit: "kg")
-                }
-                inputField(title: "Reps", text: $repText, unit: "reps")
-            }
-            
-            Button(action: handleSetCompletion) {
-                HStack {
-                    Spacer()
-                    Text(buttonTitle)
-                        .font(.system(size: 16, weight: .bold, design: .rounded))
-                    Spacer()
-                }
-                .padding()
-                .background(buttonColor)
-                .foregroundColor(.white)
-                .cornerRadius(8)
-            }
+        VStack(alignment: .leading, spacing: 16) {
+            headerView
+            timerView
+            inputFieldsView
+            actionButton
         }
         .padding()
         .background(Color(hex: "F5F5F5"))
-        .cornerRadius(12)
+    }
+    
+    private var headerView: some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Set \(setIndex + 1) / \(totalSets)")
+                    .font(.system(size: 20, weight: .medium, design: .default))
+                Text(isResting ? "Rest" : "Exercise")
+                    .font(.system(size: 16, weight: .light, design: .default))
+                    .foregroundColor(.secondary)
+            }
+            Spacer()
+            Image(systemName: isResting ? "hourglass" : "figure.walk")
+                .font(.system(size: 24))
+                .foregroundColor(Color(hex: "40C4FC"))
+        }
+    }
+    
+    private var timerView: some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Time")
+                    .font(.system(size: 14, weight: .light, design: .default))
+                    .foregroundColor(.secondary)
+                Text(String(format: "%.1f", elapsedTime))
+                    .font(.system(size: 24, weight: .medium, design: .default))
+            }
+            Spacer()
+            ZStack {
+                Circle()
+                    .stroke(lineWidth: 4)
+                    .opacity(0.3)
+                    .foregroundColor(Color(hex: "40C4FC"))
+                
+                Circle()
+                    .trim(from: 0.0, to: min(CGFloat(elapsedTime) / 60.0, 1.0))
+                    .stroke(style: StrokeStyle(lineWidth: 4, lineCap: .round, lineJoin: .round))
+                    .foregroundColor(Color(hex: "40C4FC"))
+                    .rotationEffect(Angle(degrees: 270.0))
+                    .animation(.linear, value: elapsedTime)
+            }
+            .frame(width: 50, height: 50)
+        }
+    }
+    
+    private var inputFieldsView: some View {
+        HStack(spacing: 16) {
+            if isWeight {
+                inputField(title: "Weight", text: $weightText, unit: "kg")
+            }
+            inputField(title: "Reps", text: $repText, unit: "reps")
+        }
     }
     
     private func inputField(title: String, text: Binding<String>, unit: String) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(title)
-                .font(.system(size: 14, weight: .medium, design: .rounded))
+                .font(.system(size: 14, weight: .light, design: .default))
                 .foregroundColor(.secondary)
             HStack {
                 TextField("0", text: text)
                     .keyboardType(.numberPad)
-                    .font(.system(size: 24, weight: .bold, design: .rounded))
+                    .font(.system(size: 18, weight: .medium, design: .default))
                 Text(unit)
-                    .font(.system(size: 14, weight: .medium, design: .rounded))
+                    .font(.system(size: 14, weight: .light, design: .default))
                     .foregroundColor(.secondary)
             }
             .padding(.vertical, 8)
             .padding(.horizontal, 12)
             .background(Color.white)
-            .cornerRadius(8)
+        }
+    }
+    
+    private var actionButton: some View {
+        Button(action: handleSetCompletion) {
+            Text(buttonTitle)
+                .font(.system(size: 16, weight: .medium, design: .default))
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(buttonColor)
         }
     }
     

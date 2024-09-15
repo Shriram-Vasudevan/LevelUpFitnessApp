@@ -2,55 +2,49 @@ import SwiftUI
 
 struct ToDoList: View {
     @ObservedObject var toDoListManager = ToDoListManager.shared
-    
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Text("Today's To Do")
-                    .font(.system(size: 22, weight: .medium, design: .default))
-                
+                Text("Today's To-Do")
+                    .font(.system(size: 16, weight: .medium))
                 Spacer()
-                
                 Text(DateUtility.getCurrentDate())
-                    .font(.system(size: 14, weight: .regular, design: .default))
+                    .font(.system(size: 12, weight: .regular))
                     .foregroundColor(.gray)
             }
             
-            if toDoListManager.toDoList.count > 0 {
-                ForEach(toDoListManager.toDoList, id: \.id) { toDoListTask in
-                    HStack(spacing: 12) {
-                        Image(systemName: toDoListTask.completed ? "checkmark.circle.fill" : "circle")
-                            .foregroundColor(toDoListTask.completed ? Color(hex: "40C4FC") : .gray)
-                            .font(.system(size: 20))
+            if toDoListManager.toDoList.isEmpty {
+                Text("No tasks for today")
+                    .font(.system(size: 14, weight: .regular))
+                    .foregroundColor(.gray)
+                    .padding(.vertical, 4)
+            } else {
+                ForEach(toDoListManager.toDoList) { task in
+                    HStack(spacing: 10) {
+                        Image(systemName: task.completed ? "checkmark.circle.fill" : "circle")
+                            .foregroundColor(task.completed ? Color(hex: "40C4FC") : .gray)
+                            .font(.system(size: 16))
                         
-                        Text(toDoListTask.description)
-                            .font(.system(size: 16, weight: .regular, design: .default))
-                            .foregroundColor(toDoListTask.completed ? .gray : .black)
+                        Text(task.description)
+                            .font(.system(size: 14, weight: .regular))
+                            .foregroundColor(task.completed ? .gray : .black)
                         
                         Spacer()
                     }
-                    .padding(.vertical, 8)
+                    .padding(.vertical, 4)
                 }
-            } else {
-                Text("No tasks for today")
-                    .font(.system(size: 16, weight: .regular, design: .default))
-                    .foregroundColor(.gray)
-                    .padding(.top, 8)
             }
-            
         }
-        .padding()
+        .padding(.horizontal, 16)
+        .padding(.bottom, 16)
         .background(Color.white)
-        .cornerRadius(2)
-        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
         .overlay(
             Rectangle()
                 .fill(Color(hex: "40C4FC"))
-                .frame(width: 4)
+                .frame(width: 3)
                 .padding(.vertical, 4),
             alignment: .leading
         )
-
     }
 }
 

@@ -335,7 +335,7 @@ struct LevelWidget: View {
                             
                             Spacer()
                             
-                            Text("Next Level: \(xpManager.userXPData?.level ?? 0 + 1)")
+                            Text("Next Level: \((xpManager.userXPData?.level ?? 0) + 1)")
                                 .font(.system(size: 14, weight: .medium, design: .default))
                                 .foregroundColor(.white)
                         }
