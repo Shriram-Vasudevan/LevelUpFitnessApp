@@ -63,7 +63,6 @@ struct CreateCustomWorkoutView: View {
                                     .frame(width: 25, height: 25)
                                     .foregroundColor(isWeight ? Color(hex: "40C4FC") : .gray)
                             }
-                            .padding(8)
                             .background(Color(hex: "F5F5F5"))
                             .clipShape(Circle())
                             .overlay(
@@ -72,9 +71,9 @@ struct CreateCustomWorkoutView: View {
                             )
                         }
                         .frame(width: 60)
+                        
+                        Spacer()
                     }
-                    .padding(.horizontal)
-
                     HStack {
                         Button(action: {
                             if !newExerciseName.isEmpty {
