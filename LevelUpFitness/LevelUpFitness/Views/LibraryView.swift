@@ -4,10 +4,11 @@ struct LibraryView: View {
     @ObservedObject var programManager: ProgramManager
     @ObservedObject var xpManager: XPManager
     @ObservedObject var exerciseManager: ExerciseManager
+    @ObservedObject var customWorkoutsManager = CustomWorkoutManager.shared
     
     @State var selectedExercise: Progression?
-    @State private var searchText = ""
     
+    @State var navigateToCustomWorkoutCreation: Bool = false
     let exerciseTypeKeys = [
         Sublevels.CodingKeys.lowerBodyCompound.rawValue,
         Sublevels.CodingKeys.lowerBodyIsolation.rawValue,
@@ -25,7 +26,7 @@ struct LibraryView: View {
                     VStack(spacing: 16) {
                         HStack {
                             VStack(alignment: .leading, spacing: 4) {
-                                Text("Exercise Library")
+                                Text("Exercise")
                                     .font(.system(size: 28, weight: .medium, design: .default))
                                     .foregroundColor(.black)
                                 Text("Discover and master new exercises.")
@@ -35,30 +36,37 @@ struct LibraryView: View {
                             Spacer()
                         }
                         .padding(.top, 15)
-                        
-                        HStack {
-                            Image(systemName: "magnifyingglass")
-                                .foregroundColor(.gray)
-                            TextField("Search exercises", text: $searchText)
-                        }
-                        .padding()
-                        .background(Color(hex: "F5F5F5"))
-                        .cornerRadius(8)
                     }
                     
-                    if let featuredProgressions = getFeaturedProgressions() {
-                        VStack(alignment: .leading, spacing: 16) {
-                            Text("Featured Exercises")
+                    VStack(alignment: .leading, spacing: 16) {
+                        HStack {
+                            Text("Custom Workouts")
                                 .font(.system(size: 22, weight: .medium, design: .default))
                                 .foregroundColor(.black)
+                            Spacer()
                             
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                HStack(spacing: 16) {
-                                    ForEach(featuredProgressions, id: \.name) { progression in
-                                        FeaturedExerciseCard(progression: progression)
-                                    }
-                                }
+                            Button {
+                                navigateToCustomWorkoutCreation = true
+                            } label: {
+                                Text("Create New")
+                                    .font(.system(size: 14, weight: .medium, design: .default))
+                                    .foregroundColor(Color(hex: "40C4FC"))
                             }
+
+                        }
+                        
+                        if customWorkoutsManager.customWorkouts.isEmpty {
+                            Text("No Custom Workouts. Create one!")
+                                .font(.system(size: 16, weight: .regular, design: .default))
+                                .foregroundColor(.gray)
+                                .padding(.vertical, 8)
+                        } else {
+                            // Display custom workouts here
+                            // This is a placeholder for where you would iterate through and display the custom workouts
+                            Text("Your custom workouts will be displayed here")
+                                .font(.system(size: 16, weight: .regular, design: .default))
+                                .foregroundColor(.gray)
+                                .padding(.vertical, 8)
                         }
                     }
 
@@ -102,65 +110,11 @@ struct LibraryView: View {
         .navigationDestination(item: $selectedExercise) { exercise in
             IndividualExerciseView(progression: exercise)
         }
-    }
-    
-    func getFeaturedProgressions() -> [Progression]? {
-        var featuredProgressions: [Progression] = []
-        
-        for key in exerciseTypeKeys {
-            if let userXPData = xpManager.userXPData, let level = userXPData.subLevels.attribute(for: key)?.level {
-                
-                let availableExercises = exerciseManager.exercises.filter { $0.exerciseType == key.capitalizingFirstLetter() }
-                
-                for exercise in availableExercises {
-                    for progression in exercise.progression {
-                        if level == progression.level {
-                            featuredProgressions.append(progression)
-                        }
-                    }
-                    
-                }
-                
-            }
-        }
-        
-        featuredProgressions = featuredProgressions.sorted(by: { $0.level > $1.level })
-        
-        return featuredProgressions.count == 0 ? nil : Array(featuredProgressions.shuffled().prefix(5))
-    }
-
-}
-
-struct FeaturedExerciseCard: View {
-    var progression: Progression
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Image("FeaturedExercise")
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 200, height: 120)
-                .clipped()
-            
-            VStack(alignment: .leading, spacing: 4) {
-                Text(progression.name)
-                    .font(.system(size: 16, weight: .medium, design: .default))
-                    .foregroundColor(.black)
-                
-                Text("Featured Exercise")
-                    .font(.system(size: 14, weight: .regular, design: .default))
-                    .foregroundColor(.gray)
-            }
-            .padding(.horizontal, 8)
-            .padding(.bottom, 8)
-        }
-        .frame(width: 200)
-        .background(Color.white)
-        .cornerRadius(4)
-        .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
+        .fullScreenCover(isPresented: $navigateToCustomWorkoutCreation, content: {
+            CreateCustomWorkoutView()
+        })
     }
 }
-
 
 #Preview {
     LibraryView(programManager: ProgramManager(), xpManager: XPManager(), exerciseManager: ExerciseManager())

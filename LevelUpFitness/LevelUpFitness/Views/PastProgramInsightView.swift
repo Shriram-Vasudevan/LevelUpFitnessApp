@@ -25,6 +25,8 @@ struct PastProgramInsightView: View {
                                 .foregroundColor(.primary)
                         }
                         
+                        Spacer()
+                        
                     }
                     .padding()
                     

@@ -1,18 +1,9 @@
 import SwiftUI
 
 struct ToDoList: View {
-    @ObservedObject var toDoListManager = ToDoListManager.shared
+    @ObservedObject var toDoListManager: ToDoListManager
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Text("Today's To-Do")
-                    .font(.system(size: 16, weight: .medium))
-                Spacer()
-                Text(DateUtility.getCurrentDate())
-                    .font(.system(size: 12, weight: .regular))
-                    .foregroundColor(.gray)
-            }
-            
             if toDoListManager.toDoList.isEmpty {
                 Text("No tasks for today")
                     .font(.system(size: 14, weight: .regular))
@@ -36,7 +27,7 @@ struct ToDoList: View {
             }
         }
         .padding(.horizontal, 16)
-        .padding(.bottom, 16)
+        .padding(.vertical, 8)
         .background(Color.white)
         .overlay(
             Rectangle()
@@ -49,5 +40,5 @@ struct ToDoList: View {
 }
 
 #Preview {
-    ToDoList()
+    ToDoList(toDoListManager: ToDoListManager())
 }

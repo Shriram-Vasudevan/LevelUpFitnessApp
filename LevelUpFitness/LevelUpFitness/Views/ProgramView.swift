@@ -76,6 +76,11 @@ struct ProgramView: View {
         .sheet(isPresented: $showProgramPicker) {
             programPickerView
         }
+        .onAppear {
+            if !programManager.program.isEmpty && programManager.selectedProgram == nil {
+                programManager.selectedProgram = programManager.program.first
+            }
+        }
     }
 
     private var programHeader: some View {
@@ -105,7 +110,7 @@ struct ProgramView: View {
         }
         .padding(.vertical, 8)
     }
-    
+
     private var programPickerView: some View {
         VStack {
             Text("Select a Program")
@@ -113,39 +118,30 @@ struct ProgramView: View {
                 .padding()
             
             List {
-                ForEach(programManager.program ?? [], id: \.programName) { program in
-                    Button(action: {
-                        showProgramManagerOptions = false
-                        ProgramManager.shared.selectedProgram = program
-                        showProgramPicker = false
-                    }) {
-                        Text(program.programName)
-                    }
-                }
-                
                 Button(action: {
                     showProgramManagerOptions = true
                     programPageType = .newProgram
                     ProgramManager.shared.selectedProgram = nil
                     showProgramPicker = false
                 }) {
-                    Text("Join New Program")
-                        .foregroundColor(.blue)
+                    Text("Program Manager")
+                        .font(.system(size: 16, weight: .medium))
                 }
                 
-                Button(action: {
-                    showProgramManagerOptions = true
-                    programPageType = .pastPrograms
-                    ProgramManager.shared.selectedProgram = nil
-                    showProgramPicker = false
-                }) {
-                    Text("View Past Programs")
-                        .foregroundColor(.blue)
+                ForEach(programManager.program, id: \.programName) { program in
+                    Button(action: {
+                        showProgramManagerOptions = false
+                        ProgramManager.shared.selectedProgram = program
+                        showProgramPicker = false
+                    }) {
+                        Text(program.programName)
+                            .font(.system(size: 16, weight: .medium))
+                    }
                 }
             }
         }
     }
-    
+
     private var programContent: some View {
         VStack(spacing: 16) {
             if let todaysProgram = ProgramManager.shared.selectedProgram?.program.first(where: { $0.day == DateUtility.getCurrentWeekday() }) {
@@ -158,7 +154,7 @@ struct ProgramView: View {
             }
         }
     }
-    
+
     private func requiredEquipmentView(for todaysProgram: ProgramDay) -> some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Today's Required Equipment")
@@ -181,7 +177,7 @@ struct ProgramView: View {
         }
         .padding(.bottom)
     }
-    
+
     private var segmentedControl: some View {
         HStack {
             Button(action: { programPageType = .newProgram }) {
@@ -204,7 +200,7 @@ struct ProgramView: View {
         }
         .background(Color(hex: "F5F5F5"))
     }
-    
+
     private var newProgramView: some View {
         VStack(spacing: 16) {
             ForEach(programManager.standardProgramDBRepresentations, id: \.id) { program in
@@ -219,21 +215,20 @@ struct ProgramView: View {
         .onAppear {
             if programManager.standardProgramDBRepresentations.isEmpty {
                 Task {
-                    await ProgramS3Utility.getStandardProgramDBRepresentations()
+                    programManager.standardProgramDBRepresentations = await ProgramS3Utility.getStandardProgramDBRepresentations()
                 }
             }
         }
-        
     }
-    
+
+
     private var pastProgramsView: some View {
         PastProgramsView(programManager: self.programManager, viewPastProgram: { programUnformatted in
             programS3Representation = programUnformatted
             navigateToProgramInsightsView = true
         })
     }
-    
-    
+
     private var activeProgramView: some View {
         VStack(spacing: 16) {
             UpNextProgramExerciseWidget(programManager: programManager, navigateToWorkoutView: $navigateToWorkoutView, selectedProgram: ProgramManager.shared.selectedProgram)
@@ -270,7 +265,7 @@ struct ProgramView: View {
                     }) {
                         VStack(alignment: .leading, spacing: 8) {
                             Text("Leave Program")
-                                .font(.system(size: 18, weight: .light, design: .default))
+                                .font(.system(size: 18, weight: .light))
                             
                             HStack {
                                 Spacer()
@@ -293,11 +288,10 @@ struct ProgramView: View {
         }
     }
     
-    
     private var achievementsView: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Achievements")
-                .font(.system(size: 20, weight: .light, design: .default))
+                .font(.system(size: 20, weight: .light))
             
             ForEach(badgeManager.badges.sorted(by: { $0.badgeCriteria.threshold < $1.badgeCriteria.threshold }), id: \.id) { badge in
                 if let userBadgeInfo = badgeManager.userBadgeInfo {

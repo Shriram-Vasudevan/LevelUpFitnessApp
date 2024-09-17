@@ -31,6 +31,15 @@ struct HomeView: View {
     
     @State private var showToDoList = true
     
+    let affirmations = [
+        "You've got this!",
+        "Today is your day!",
+        "Small steps, big results!",
+        "Believe in yourself!",
+        "Every day is a new opportunity!"
+    ]
+    
+    
     var body: some View {
         ZStack {
             Color.white.ignoresSafeArea(.all)
@@ -38,13 +47,18 @@ struct HomeView: View {
             ScrollView {
                 VStack(spacing: 18) {
                     HStack {
-//                        if let name = AuthenticationManager.shared.name {
-//                            Text("Hello, \(name)")
-//                                .font(.system(size: 28, weight: .medium, design: .default))
-//                        } else {
-//                            Text("Hey There!")
-//                                .font(.system(size: 28, weight: .medium, design: .default))
-//                        }
+                        VStack (alignment: .leading) {
+                            HStack {
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text(greeting)
+                                        .font(.system(size: 24, weight: .bold))
+                                    Text(affirmations.randomElement() ?? "")
+                                        .font(.system(size: 16, weight: .regular))
+                                        .foregroundColor(.gray)
+                                }
+                                Spacer()
+                            }
+                        }
                         Spacer()
                         
                         if let pfp = AuthenticationManager.shared.pfp, let uiImage = UIImage(data: pfp) {
@@ -66,7 +80,7 @@ struct HomeView: View {
                         }
                     }
                     
-                    HomePageHeader(showToDoList: $showToDoList, name:  AuthenticationManager.shared.name)
+                    HomePageHeader(showToDoList: $showToDoList)
                     
 //                    if toDoListManager.toDoList.count > 0 {
 //                        ToDoList()
@@ -254,32 +268,31 @@ struct HomeView: View {
             return (nil, nil)
         }
     }
+    
+    private var greeting: String {
+        let hour = Calendar.current.component(.hour, from: Date())
+        let greetingPrefix: String
+        switch hour {
+        case 0..<12: greetingPrefix = "Good Morning"
+        case 12..<17: greetingPrefix = "Good Afternoon"
+        default: greetingPrefix = "Good Evening"
+        }
+        return "\(greetingPrefix), \(AuthenticationManager.shared.name ?? "there")!"
+    }
 }
 
 
 struct HomePageHeader: View {
     @Binding var showToDoList: Bool
-    let name: String?
-    let affirmations = [
-        "You've got this!",
-        "Today is your day!",
-        "Small steps, big results!",
-        "Believe in yourself!",
-        "Every day is a new opportunity!"
-    ]
+    @ObservedObject var toDoListManager = ToDoListManager.shared
     
     var body: some View {
-        VStack {
-            HStack {
-                VStack(alignment: .leading) {
-                    Text(greeting)
-                        .font(.system(size: 20, weight: .medium))
-                    Text(affirmations.randomElement() ?? "")
-                        .font(.system(size: 14, weight: .regular))
-                        .foregroundColor(.gray)
-                }
-                Spacer()
-                VStack {
+        if !toDoListManager.toDoList.isEmpty {
+            VStack(spacing: 12) {
+                HStack {
+                    Text("Today's To-Do List")
+                        .font(.system(size: 18, weight: .semibold))
+                    Spacer()
                     Button(action: {
                         withAnimation {
                             showToDoList.toggle()
@@ -291,30 +304,15 @@ struct HomePageHeader: View {
                     }
                     .foregroundColor(Color(hex: "40C4FC"))
                 }
+                
+                if showToDoList {
+                    ToDoList(toDoListManager: toDoListManager)
+                }
             }
             .padding()
-            
-            if showToDoList {
-                ToDoList()
-                    .padding(.horizontal)
-            }
-        }
-        .background(
-            RoundedRectangle(cornerRadius: 10)
-                .fill(Color.white)
-                .shadow(color: Color.gray.opacity(0.2), radius: 10, x: 0, y: 5)
-        )
-    }
-    
-    private var greeting: String {
-        let hour = Calendar.current.component(.hour, from: Date())
-        switch hour {
-        case 0..<12:
-            return "Good Morning, \(name ?? "")"
-        case 12..<17:
-            return "Good Afternoon, \(name ?? "")"
-        default:
-            return "Good Night, \(name ?? "")"
+            .background(Color(hex: "F5F5F5"))
+            .cornerRadius(10)
+            .shadow(color: Color.black.opacity(0.05), radius: 10, x: 0, y: 5)
         }
     }
 }
