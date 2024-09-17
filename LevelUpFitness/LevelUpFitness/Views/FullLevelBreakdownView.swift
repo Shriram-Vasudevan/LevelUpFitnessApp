@@ -123,6 +123,7 @@ struct FullLevelBreakdownView: View {
                             .foregroundColor(.gray)
                     } else {
                         customTable()
+                            .padding(.bottom)
                     }
                 }
             }
