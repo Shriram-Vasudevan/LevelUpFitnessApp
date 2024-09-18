@@ -157,14 +157,23 @@ struct ProgramView: View {
 
     private func requiredEquipmentView(for todaysProgram: ProgramDay) -> some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Today's Required Equipment")
-                .font(.system(size: 20, weight: .medium, design: .default))
-                .foregroundColor(.black)
+            HStack {
+                Text("Today's Required Equipment")
+                    .font(.system(size: 20, weight: .medium, design: .default))
+                    .foregroundColor(.black)
+                
+                Spacer()
+            }
             
             if todaysProgram.requiredEquipment().isEmpty {
-                Text("No equipment required for today's workout")
-                    .font(.system(size: 16, weight: .regular, design: .default))
-                    .foregroundColor(.gray)
+                HStack {
+                    Text("No equipment required for today's workout")
+                        .font(.system(size: 16, weight: .regular, design: .default))
+                        .foregroundColor(.gray)
+                        .padding(.top, -12)
+                    
+                    Spacer()
+                }
             } else {
                 ScrollView(.horizontal) {
                     HStack {
@@ -210,6 +219,12 @@ struct ProgramView: View {
                             await programManager.joinStandardProgram(programName: program.name)
                         }
                     }
+                    .opacity(programManager.program.contains(where: { Program in
+                        Program.programName == program.name
+                    }) ? 0.7 : 1)
+                    .disabled(programManager.program.contains(where: { Program in
+                        Program.programName == program.name
+                    }))
             }
         }
         .onAppear {
@@ -283,8 +298,6 @@ struct ProgramView: View {
                 }
             }
             .frame(height: (UIScreen.main.bounds.width - 10) / 2)
-            
-            achievementsView
         }
     }
     

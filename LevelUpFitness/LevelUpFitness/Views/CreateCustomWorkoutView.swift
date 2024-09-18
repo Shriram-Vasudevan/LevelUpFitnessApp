@@ -6,27 +6,30 @@
 //
 
 import SwiftUI
-
+import PhotosUI
 struct CreateCustomWorkoutView: View {
     @State private var workoutName: String = ""
     @State private var exercises: [CustomWorkoutExercise] = []
     @State private var newExerciseName: String = ""
     @State private var isWeight: Bool = false
-
-    @Environment(\.dismiss) var dismiss
     
+    @State private var selectedWorkoutImage: PhotosPickerItem?
+    @State private var workoutImageData: Data? = nil
+    
+    @Environment(\.dismiss) var dismiss
+
     var body: some View {
         ZStack {
             Color.white.ignoresSafeArea()
-            
+
             VStack(spacing: 16) {
                 HStack {
                     Text("Create Custom Workout")
                         .font(.system(size: 18, weight: .medium, design: .default))
                         .foregroundColor(.primary)
-                    
+
                     Spacer()
-                    
+
                     Button(action: {
                         dismiss()
                     }) {
@@ -38,8 +41,39 @@ struct CreateCustomWorkoutView: View {
                     }
                 }
                 .padding(.vertical, 8)
-                
+
                 inputField(title: "Workout Name", text: $workoutName, unit: "")
+
+                VStack(spacing: 8) {
+                    HStack {
+                        Text("Workout Image")
+                            .font(.system(size: 14, weight: .light, design: .default))
+                            .foregroundColor(.secondary)
+                        
+                        Spacer()
+                    }
+
+                    HStack {
+                        PhotosPicker(selection: $selectedWorkoutImage, matching: .images, photoLibrary: .shared()) {
+                            if let imageData = workoutImageData, let uiImage = UIImage(data: imageData) {
+                                Image(uiImage: uiImage)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(height: 50)
+                                    .cornerRadius(8)
+                            } else {
+                                Image("NoImage")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(height: 50)
+                                    .cornerRadius(8)
+                            }
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                        
+                        Spacer()
+                    }
+                }
 
                 ScrollView {
                     VStack(spacing: 16) {
@@ -48,33 +82,44 @@ struct CreateCustomWorkoutView: View {
                         }
                     }
                 }
-                
+
                 VStack(spacing: 8) {
-                    HStack {
-                        inputField(title: "Exercise Name", text: $newExerciseName, unit: "")
-                        
+                    VStack(spacing: 4) {
                         HStack {
-                            Button(action: {
-                                isWeight.toggle()
-                            }) {
-                                Image(systemName: isWeight ? "dumbbell.fill" : "figure.walk")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 25, height: 25)
-                                    .foregroundColor(isWeight ? Color(hex: "40C4FC") : .gray)
-                            }
-                            .padding(8)
-                            .background(Color(hex: "F5F5F5"))
-                            .clipShape(Circle())
-                            .overlay(
-                                Circle()
-                                    .stroke(Color(hex: "40C4FC"), lineWidth: 1)
-                            )
+                            Text("Exercise Name")
+                                .font(.system(size: 14, weight: .light, design: .default))
+                                .foregroundColor(.secondary)
+
+                            Spacer()
                         }
-                        .frame(width: 60)
-                        
-                        Spacer()
+
+                        HStack {
+                            inputField(title: nil, text: $newExerciseName, unit: "")
+
+                            HStack {
+                                Button(action: {
+                                    isWeight.toggle()
+                                }) {
+                                    Image(systemName: isWeight ? "dumbbell.fill" : "figure.walk")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 25, height: 25)
+                                        .foregroundColor(isWeight ? Color(hex: "40C4FC") : .gray)
+                                }
+                                .padding(8)
+                                .background(Color(hex: "F5F5F5"))
+                                .clipShape(Circle())
+                                .overlay(
+                                    Circle()
+                                        .stroke(Color(hex: "40C4FC"), lineWidth: 1)
+                                )
+                            }
+                            .frame(width: 60)
+
+                            Spacer()
+                        }
                     }
+
                     HStack {
                         Button(action: {
                             if !newExerciseName.isEmpty {
@@ -94,16 +139,16 @@ struct CreateCustomWorkoutView: View {
                             .background(Color(hex: "40C4FC").opacity(0.1))
                             .cornerRadius(8)
                         }
-                        
+
                         Spacer()
                     }
                 }
                 .padding(.vertical, 8)
 
                 Button(action: {
-                    let customWorkout = CustomWorkout(name: workoutName, exercises: exercises)
+                    let customWorkout = CustomWorkout(name: workoutName, image: workoutImageData, exercises: exercises)
                     CustomWorkoutManager.shared.addCustomWorkout(workout: customWorkout)
-                    
+
                     dismiss()
                 }) {
                     HStack {
@@ -121,6 +166,13 @@ struct CreateCustomWorkoutView: View {
                 .padding(.top, 16)
             }
             .padding()
+        }
+        .onChange(of: selectedWorkoutImage) { _ in
+            Task {
+                if let data = try? await selectedWorkoutImage?.loadTransferable(type: Data.self) {
+                    self.workoutImageData = data
+                }
+            }
         }
     }
 
@@ -148,11 +200,13 @@ struct CreateCustomWorkoutView: View {
         .cornerRadius(8)
     }
 
-    private func inputField(title: String, text: Binding<String>, unit: String) -> some View {
+    private func inputField(title: String?, text: Binding<String>, unit: String) -> some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(title)
-                .font(.system(size: 14, weight: .light, design: .default))
-                .foregroundColor(.secondary)
+            if let title = title {
+                Text(title)
+                    .font(.system(size: 14, weight: .light, design: .default))
+                    .foregroundColor(.secondary)
+            }
             HStack {
                 TextField("Enter", text: text)
                     .keyboardType(.default)

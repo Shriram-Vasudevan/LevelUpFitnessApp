@@ -7,8 +7,9 @@ struct LibraryView: View {
     @ObservedObject var customWorkoutsManager = CustomWorkoutManager.shared
     
     @State var selectedExercise: Progression?
-    
+    @State var selectedCustomWorkout: CustomWorkout?
     @State var navigateToCustomWorkoutCreation: Bool = false
+    
     let exerciseTypeKeys = [
         Sublevels.CodingKeys.lowerBodyCompound.rawValue,
         Sublevels.CodingKeys.lowerBodyIsolation.rawValue,
@@ -61,12 +62,17 @@ struct LibraryView: View {
                                 .foregroundColor(.gray)
                                 .padding(.vertical, 8)
                         } else {
-                            // Display custom workouts here
-                            // This is a placeholder for where you would iterate through and display the custom workouts
-                            Text("Your custom workouts will be displayed here")
-                                .font(.system(size: 16, weight: .regular, design: .default))
-                                .foregroundColor(.gray)
-                                .padding(.vertical, 8)
+                            ScrollView(.horizontal, showsIndicators: false)
+                            {
+                                HStack(spacing: 16) {
+                                    ForEach(customWorkoutsManager.customWorkouts, id: \.name) { workout in
+                                        CustomWorkoutWidget(workout: workout)
+                                            .onTapGesture {
+                                                selectedCustomWorkout = workout
+                                            }
+                                    }
+                                }
+                            }
                         }
                     }
 

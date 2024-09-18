@@ -59,6 +59,8 @@ struct HomeView: View {
                                 Spacer()
                             }
                         }
+                        .padding(.top, 15)
+                        
                         Spacer()
                         
                         if let pfp = AuthenticationManager.shared.pfp, let uiImage = UIImage(data: pfp) {
@@ -92,7 +94,7 @@ struct HomeView: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
                         
                         HStack(spacing: 16) {
-                            actionCard(title: "Exercise Now", imageName: "ManRunning", action: { pageType = .library })
+                            actionCard(title: "Exercise Now", imageName: "ManRunning", action: { pageType = .exercise })
                             actionCard(title: "Do your Program", imageName: "ManExercising - PushUp - No BG", action: { pageType = .program })
                         }
                     }

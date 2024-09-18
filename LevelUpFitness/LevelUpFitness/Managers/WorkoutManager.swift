@@ -75,13 +75,12 @@ class WorkoutManager: ObservableObject {
                 var todaysProgram = programArray[programIndex]
                 todaysProgram.exercises[currentExerciseIndex].completed = true
                 todaysProgram.exercises[currentExerciseIndex].data = currentExerciseData
-                
-                print(todaysProgram.exercises[currentExerciseIndex].name)
-                print(todaysProgram.exercises[currentExerciseIndex].completed)
+
+                let xpAdditionType = getExerciseTypeEnum(exerciseType: todaysProgram.exercises[currentExerciseIndex].area)
+                XPManager.shared.addXP(increment: 2, type: xpAdditionType)
                 
                 ProgramManager.shared.selectedProgram?.program[programIndex] = todaysProgram
                 
-                print(ProgramManager.shared.selectedProgram?.program)
             }
 
             currentExerciseIndex += 1
@@ -94,14 +93,13 @@ class WorkoutManager: ObservableObject {
                 todaysProgram.exercises[currentExerciseIndex].completed = true
                 todaysProgram.exercises[currentExerciseIndex].data = currentExerciseData
                 
-                print(todaysProgram.exercises[currentExerciseIndex].name)
-                print(todaysProgram.exercises[currentExerciseIndex].completed)
-                
                 todaysProgram.completed = true
+                
+                let xpAdditionType = getExerciseTypeEnum(exerciseType: todaysProgram.exercises[currentExerciseIndex].area)
+                XPManager.shared.addXP(increment: 3, type: xpAdditionType)
                 
                 ProgramManager.shared.selectedProgram?.program[programIndex] = todaysProgram
                 
-                print(ProgramManager.shared.selectedProgram?.program)
             }
             objectWillChange.send()
             
@@ -131,6 +129,15 @@ class WorkoutManager: ObservableObject {
                     }
                 })
             }
+        }
+    }
+    
+    func getExerciseTypeEnum(exerciseType: String) -> XPAdditionType {
+        switch exerciseType {
+        case "Lower Body Compound":
+            return .lowerBodyCompound
+        default:
+            return .lowerBodyCompound
         }
     }
   

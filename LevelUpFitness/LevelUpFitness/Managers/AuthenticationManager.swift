@@ -12,7 +12,6 @@ import AWSS3StoragePlugin
 import AWSPinpoint
 import SwiftUI
 
-//Handles Sign In + Login Stuff
 class AuthenticationManager: ObservableObject {
     static let shared = AuthenticationManager()
     
@@ -24,7 +23,7 @@ class AuthenticationManager: ObservableObject {
     func login(username: String, password: String, completion: @escaping (Bool, String?, Error?) async -> Void) async {
         do {
             let signInResult = try await Amplify.Auth.signIn(
-                username: username, //can be a username or email
+                username: username,
                 password: password
                 )
             if signInResult.isSignedIn {
@@ -226,29 +225,40 @@ class AuthenticationManager: ObservableObject {
     }
     
     func getUsername() async {
-        do {
-            let userAttributes = try await Amplify.Auth.fetchUserAttributes()
-            print("User attributes - \(userAttributes)")
-            
-            let usernameAttribute = userAttributes.first(where: { $0.key == .custom("username") })
-            
-            self.username = usernameAttribute?.value ?? ""
-            print("the username: " + (self.username ?? "not existent"))
-        } catch {
-            print("Unexpected error: \(error)")
+        if let storedUsername = UserDefaults.standard.string(forKey: "username") {
+            self.username = storedUsername
+            print("Fetched username from UserDefaults: \(storedUsername)")
+        } else {
+            do {
+                let userAttributes = try await Amplify.Auth.fetchUserAttributes()
+                print("User attributes - \(userAttributes)")
+                
+                if let usernameAttribute = userAttributes.first(where: { $0.key == .custom("username") })?.value {
+                    self.username = usernameAttribute
+                    UserDefaults.standard.set(usernameAttribute, forKey: "username")
+                    print("Fetched username from Amplify and stored in UserDefaults: \(usernameAttribute)")
+                }
+            } catch {
+                print("Error fetching username: \(error)")
+            }
         }
     }
-    
+
     func getName() async {
-        do {
-            let userAttributes = try await Amplify.Auth.fetchUserAttributes()
-            
-            let nameAttribute = userAttributes.first(where: { $0.key == .name })
-            
-            self.name = nameAttribute?.value ?? ""
-            print("the username: " + (self.name ?? ""))
-        } catch {
-            print("Unexpected error: \(error)")
+        if let storedName = UserDefaults.standard.string(forKey: "name") {
+            self.name = storedName
+            print("Fetched name from UserDefaults: \(storedName)")
+        } else {
+            do {
+                let userAttributes = try await Amplify.Auth.fetchUserAttributes()
+                if let nameAttribute = userAttributes.first(where: { $0.key == .name })?.value {
+                    self.name = nameAttribute
+                    UserDefaults.standard.set(nameAttribute, forKey: "name")
+                    print("Fetched name from Amplify and stored in UserDefaults: \(nameAttribute)")
+                }
+            } catch {
+                print("Error fetching name: \(error)")
+            }
         }
     }
     

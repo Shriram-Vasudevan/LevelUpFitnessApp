@@ -9,6 +9,7 @@ import Foundation
 
 struct CustomWorkout: Codable {
     var name: String
+    var image: Data?
     var exercises: [CustomWorkoutExercise]
 }
 

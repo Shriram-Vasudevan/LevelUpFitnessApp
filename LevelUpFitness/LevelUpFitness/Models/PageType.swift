@@ -8,5 +8,5 @@
 import Foundation
 
 enum PageType {
-    case home, levelBreakdown, program, library
+    case home, levelBreakdown, program, exercise
 }

@@ -12,6 +12,10 @@ class CustomWorkoutManager: ObservableObject {
     
     @Published var customWorkouts: [CustomWorkout] = []
     
+    init() {
+        getAllCustomWorkouts()
+    }
+    
     func addCustomWorkout(workout: CustomWorkout) {
         guard let customWorkoutsDirectory = getCustomWorkoutsDirectory() else { return }
         
@@ -32,6 +36,7 @@ class CustomWorkoutManager: ObservableObject {
             
             try data.write(to: workoutFileURL)
             print("Workout saved at: \(workoutFileURL.path)")
+            self.customWorkouts.append(workout)
             
         } catch {
             print("Error saving custom workout: \(error.localizedDescription)")

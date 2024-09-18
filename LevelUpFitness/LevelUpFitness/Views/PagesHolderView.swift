@@ -46,7 +46,7 @@ struct PagesHolderView: View {
                 case .program:
                     ProgramView()
                     .preferredColorScheme(.light)
-                case .library:
+                case .exercise:
                     LibraryView(
                         programManager: programManager,
                         xpManager: xpManager,
@@ -128,17 +128,17 @@ struct PagesHolderView: View {
                     ZStack {
                         VStack {
                             Button(action: {
-                                pageType = .library
+                                pageType = .exercise
                             }, label: {
                                 VStack {
-                                    Image(pageType == .library ? "LibraryBlue" : "LibraryGrey")
+                                    Image(pageType == .exercise ? "LibraryBlue" : "LibraryGrey")
                                         .resizable()
                                         .frame(width: 30, height: 30)
                                         .aspectRatio(contentMode:  .fill)
                                     
-                                    Text("Library")
+                                    Text("Exercise")
                                         .font(.caption)
-                                        .foregroundColor(pageType == .library ? .blue : .gray)
+                                        .foregroundColor(pageType == .exercise ? .blue : .gray)
                                     
                                 }
                                 .padding(.bottom)
