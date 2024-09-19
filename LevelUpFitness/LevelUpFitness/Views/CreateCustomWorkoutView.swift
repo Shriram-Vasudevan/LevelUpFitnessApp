@@ -146,10 +146,12 @@ struct CreateCustomWorkoutView: View {
                 .padding(.vertical, 8)
 
                 Button(action: {
-                    let customWorkout = CustomWorkout(name: workoutName, image: workoutImageData, exercises: exercises)
-                    CustomWorkoutManager.shared.addCustomWorkout(workout: customWorkout)
+                    if exercises.count > 0 {
+                        let customWorkout = CustomWorkout(name: workoutName, image: workoutImageData, exercises: exercises)
+                        CustomWorkoutManager.shared.addCustomWorkout(workout: customWorkout)
 
-                    dismiss()
+                        dismiss()
+                    }
                 }) {
                     HStack {
                         Spacer()

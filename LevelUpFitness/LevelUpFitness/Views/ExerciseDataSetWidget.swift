@@ -26,13 +26,12 @@ struct ProgramExerciseDataSetWidget: View {
         VStack(alignment: .leading, spacing: 16) {
             headerView
             equipmentView
+            areaAndRepsView
             timerView
             inputFieldsView
-            areaAndRepsView
             actionButton
         }
         .padding()
-        .background(Color(hex: "F5F5F5"))
     }
     
     private var headerView: some View {

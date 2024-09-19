@@ -109,7 +109,6 @@ class WorkoutManager: ObservableObject {
             
             Task {
                 await LevelChangeManager.shared.createNewLevelChange(property: "Program", contribution: 5)
-                await XPManager.shared.addXPToDB()
             }
             
             ToDoListManager.shared.programCompleted()

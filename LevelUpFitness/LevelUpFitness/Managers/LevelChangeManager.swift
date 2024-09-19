@@ -45,8 +45,6 @@ class LevelChangeManager: ObservableObject {
                                 }
                         }
                         
-                        
-                        await XPManager.shared.addXPToDB()
                         await getLevelChanges()
                         
                         print("level chagnes \(self.levelChanges)")

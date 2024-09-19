@@ -111,7 +111,6 @@ class ToDoListManager: ObservableObject {
                     
                     Task {
                         await LevelChangeManager.shared.createNewLevelChange(property: "MetStepsGoal", contribution: 5)
-                        await XPManager.shared.addXPToDB()
                     }
                 }
             }
@@ -142,7 +141,6 @@ class ToDoListManager: ObservableObject {
             
             Task {
                 await LevelChangeManager.shared.createNewLevelChange(property: "AddedWeight", contribution: 3)
-                await XPManager.shared.addXPToDB()
             }
         }
     }
@@ -161,7 +159,6 @@ class ToDoListManager: ObservableObject {
                 
                 Task {
                     await LevelChangeManager.shared.createNewLevelChange(property: "MetXPGoal", contribution: 7)
-                    await XPManager.shared.addXPToDB()
                 }
             }
             

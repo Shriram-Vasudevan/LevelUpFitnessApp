@@ -85,7 +85,6 @@
 		994E7DBD2C028F5B00BAD9E0 /* ConfirmationCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994E7DBC2C028F5B00BAD9E0 /* ConfirmationCodeView.swift */; };
 		994E7DC12C02950000BAD9E0 /* WorkoutCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994E7DC02C02950000BAD9E0 /* WorkoutCard.swift */; };
 		994E7DC32C02955300BAD9E0 /* Workout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994E7DC22C02955300BAD9E0 /* Workout.swift */; };
-		994E7DC52C03AC3E00BAD9E0 /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994E7DC42C03AC3E00BAD9E0 /* DatabaseManager.swift */; };
 		994E7DC72C03DE5400BAD9E0 /* PascalCaseCodingKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994E7DC62C03DE5400BAD9E0 /* PascalCaseCodingKey.swift */; };
 		994E7DC92C03DF5C00BAD9E0 /* ProgramView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994E7DC82C03DF5C00BAD9E0 /* ProgramView.swift */; };
 		994E7DCB2C05289F00BAD9E0 /* Program.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994E7DCA2C05289F00BAD9E0 /* Program.swift */; };
@@ -140,6 +139,7 @@
 		99B44C002C990DAB00C0C434 /* CustomWorkout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B44BFF2C990DAB00C0C434 /* CustomWorkout.swift */; };
 		99B44C022C990F7100C0C434 /* CreateCustomWorkoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B44C012C990F7100C0C434 /* CreateCustomWorkoutView.swift */; };
 		99B44C042C9A68C600C0C434 /* CustomWorkoutWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B44C032C9A68C600C0C434 /* CustomWorkoutWidget.swift */; };
+		99B44C062C9BA6CB00C0C434 /* CustomWorkoutExerciseDataSetWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B44C052C9BA6CB00C0C434 /* CustomWorkoutExerciseDataSetWidget.swift */; };
 		99B627482C38561D00482E3B /* WorkoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B627472C38561D00482E3B /* WorkoutManager.swift */; };
 		99B6274A2C38871600482E3B /* ExerciseDataRepWidgetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B627492C38871600482E3B /* ExerciseDataRepWidgetModel.swift */; };
 		99CFAAE62BEB075500EFF67E /* LevelUpFitnessApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CFAAE52BEB075500EFF67E /* LevelUpFitnessApp.swift */; };
@@ -229,7 +229,6 @@
 		994E7DBC2C028F5B00BAD9E0 /* ConfirmationCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmationCodeView.swift; sourceTree = "<group>"; };
 		994E7DC02C02950000BAD9E0 /* WorkoutCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutCard.swift; sourceTree = "<group>"; };
 		994E7DC22C02955300BAD9E0 /* Workout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workout.swift; sourceTree = "<group>"; };
-		994E7DC42C03AC3E00BAD9E0 /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
 		994E7DC62C03DE5400BAD9E0 /* PascalCaseCodingKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PascalCaseCodingKey.swift; sourceTree = "<group>"; };
 		994E7DC82C03DF5C00BAD9E0 /* ProgramView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramView.swift; sourceTree = "<group>"; };
 		994E7DCA2C05289F00BAD9E0 /* Program.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Program.swift; sourceTree = "<group>"; };
@@ -285,6 +284,7 @@
 		99B44BFF2C990DAB00C0C434 /* CustomWorkout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomWorkout.swift; sourceTree = "<group>"; };
 		99B44C012C990F7100C0C434 /* CreateCustomWorkoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCustomWorkoutView.swift; sourceTree = "<group>"; };
 		99B44C032C9A68C600C0C434 /* CustomWorkoutWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomWorkoutWidget.swift; sourceTree = "<group>"; };
+		99B44C052C9BA6CB00C0C434 /* CustomWorkoutExerciseDataSetWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomWorkoutExerciseDataSetWidget.swift; sourceTree = "<group>"; };
 		99B627472C38561D00482E3B /* WorkoutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutManager.swift; sourceTree = "<group>"; };
 		99B627492C38871600482E3B /* ExerciseDataRepWidgetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseDataRepWidgetModel.swift; sourceTree = "<group>"; };
 		99CFAAE22BEB075500EFF67E /* LevelUpFitness.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LevelUpFitness.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -389,7 +389,6 @@
 				994E7DB22C02665300BAD9E0 /* KeyboardResponder.swift */,
 				998475172BFC18F200295C6E /* AuthenticationManager.swift */,
 				994E7DB62C026A1D00BAD9E0 /* AuthStateObserver.swift */,
-				994E7DC42C03AC3E00BAD9E0 /* DatabaseManager.swift */,
 				991F8FD92C13EB3900A134A5 /* HealthManager.swift */,
 				991F8FE92C17841300A134A5 /* BadgeManager.swift */,
 				9945E0B92C39A15E00EA19D2 /* XPManager.swift */,
@@ -467,6 +466,7 @@
 				99EEC6122C3201780044F906 /* LevelUpBar.swift */,
 				9978CDF72C7D79C700659813 /* HealthTrendView.swift */,
 				9978CDEF2C7C22E800659813 /* ExerciseDataSetWidget.swift */,
+				99B44C052C9BA6CB00C0C434 /* CustomWorkoutExerciseDataSetWidget.swift */,
 				9978CDFF2C7E69D200659813 /* ToDoList.swift */,
 				99E0A5142C86908A00CC1224 /* ProgramStatsButtonWidget.swift */,
 				99E0A5162C8DE63E00CC1224 /* SearchView.swift */,
@@ -801,6 +801,7 @@
 				99DD3D542C1D0871006C07B3 /* FullPageVideoView.swift in Sources */,
 				99ECAD2E2C783C2F0012F8E7 /* ToDoListManager.swift in Sources */,
 				9978CDF22C7C22F500659813 /* LibraryExerciseDataView.swift in Sources */,
+				99B44C062C9BA6CB00C0C434 /* CustomWorkoutExerciseDataSetWidget.swift in Sources */,
 				99FC9E482C5EC56B00DAFFAC /* RequestCustomProgramWidget.swift in Sources */,
 				991F8FEA2C17841300A134A5 /* BadgeManager.swift in Sources */,
 				99ECAD342C784ED40012F8E7 /* S3Utility.swift in Sources */,
@@ -818,7 +819,6 @@
 				9978CE022C7FC96C00659813 /* ExerciseData.swift in Sources */,
 				998DA0172C1A34840078E882 /* ChatView.swift in Sources */,
 				99FC9E462C5EC1F900DAFFAC /* AnalyticsView.swift in Sources */,
-				994E7DC52C03AC3E00BAD9E0 /* DatabaseManager.swift in Sources */,
 				991FB47F2C6D561F006B4ACE /* ActiveUserChallengeWidget.swift in Sources */,
 				991FB4692C6695EB006B4ACE /* ProgramDynamoDBUtility.swift in Sources */,
 				9945E0BA2C39A15F00EA19D2 /* XPManager.swift in Sources */,

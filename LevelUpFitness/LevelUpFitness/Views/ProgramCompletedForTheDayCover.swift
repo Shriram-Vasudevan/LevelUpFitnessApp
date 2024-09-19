@@ -53,7 +53,6 @@ struct ProgramCompletedForTheDayCover: View {
                 Button(action: {
                     Task {
                         XPManager.shared.addXP(increment: 5, type: .total)
-                        await XPManager.shared.addXPToDB()
                     }
                     dismiss()
                 }) {

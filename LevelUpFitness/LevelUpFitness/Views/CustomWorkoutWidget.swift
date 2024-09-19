@@ -18,14 +18,14 @@ struct CustomWorkoutWidget: View {
                     .aspectRatio(contentMode: .fill)
                     .frame(width: 150, height: 100)
                     .clipped()
-                    .cornerRadius(10)
+                    .cornerRadius(2)
             } else {
                 Image("NoImage")
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width: 150, height: 100)
                     .clipped()
-                    .cornerRadius(10)
+                    .cornerRadius(2)
             }
             
             VStack (spacing: 4) {
@@ -41,7 +41,6 @@ struct CustomWorkoutWidget: View {
         .frame(width: 150)
         .padding(12)
         .background(Color(hex: "F5F5F5"))
-        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
     }
 }
 

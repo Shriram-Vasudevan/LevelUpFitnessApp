@@ -313,8 +313,6 @@ struct HomePageHeader: View {
             }
             .padding()
             .background(Color(hex: "F5F5F5"))
-            .cornerRadius(10)
-            .shadow(color: Color.black.opacity(0.05), radius: 10, x: 0, y: 5)
         }
     }
 }

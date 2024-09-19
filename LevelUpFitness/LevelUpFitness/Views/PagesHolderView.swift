@@ -185,8 +185,18 @@ struct PagesHolderView: View {
             if newPhase == .active {
                 NotificationManager.shared.appDidBecomeActive()
             } else if newPhase == .inactive {
+                Task {
+                    if XPManager.shared.xpDataModified {
+                        await XPManager.shared.addXPToDB()
+                    }
+                }
                 print("Inactive")
             } else if newPhase == .background {
+                Task {
+                    if XPManager.shared.xpDataModified {
+                        await XPManager.shared.addXPToDB()
+                    }
+                }
                 NotificationManager.shared.appDidEnterBackground()
             }
         }

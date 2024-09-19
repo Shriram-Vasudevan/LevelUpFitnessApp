@@ -16,6 +16,7 @@ class XPManager: ObservableObject {
     @Published var userXPData: XPData?
     @Published var levelChanges: [LevelChangeInfo] = []
 
+    @Published var xpDataModified = false
     
     let allProperties = ["Weight", "Rest", "Endurance", "Consistency",]
     var currentProperties: [String] = []
@@ -24,7 +25,6 @@ class XPManager: ObservableObject {
         async let getUserXPData: () =  await getUserXPData()
         async let getLevelChanges: () =   await LevelChangeManager.shared.getLevelChanges()
         async let addNewProgramLevelChanges: () =  await LevelChangeManager.shared.addNewProgramLevelChanges()
-        
         _ = await(getUserXPData, getLevelChanges, addNewProgramLevelChanges)
     }
     
@@ -50,6 +50,7 @@ class XPManager: ObservableObject {
     }
     
     func addXP(increment: Int, type: XPAdditionType) {
+        xpDataModified = true
         print("add xp user xp \(String(describing: userXPData))")
         guard var userXPData = userXPData else {
             print("User XP data is not available.")
@@ -90,6 +91,7 @@ class XPManager: ObservableObject {
                 }
         }
         
+        cacheUserXP(userXPData: userXPData)
         self.userXPData = userXPData
         print("the new xp data \(String(describing: self.userXPData))")
     }
@@ -114,6 +116,26 @@ class XPManager: ObservableObject {
             print("Update XP Response: \(String(describing: String(data: restResponse, encoding: .utf8)))")
         } catch {
             print("Update XP \(error)")
+        }
+    }
+    
+    func cacheUserXP(userXPData: XPData) {
+        guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            print("Could not find documents directory")
+            return
+        }
+        
+        let fileURL = documentsDirectory.appendingPathComponent("userXPData.json")
+        
+        let encoder = JSONEncoder()
+        do {
+            let data = try encoder.encode(userXPData)
+            
+            try data.write(to: fileURL)
+            print("User XP data saved successfully at \(fileURL.path)")
+            
+        } catch {
+            print("Failed to save user XP data: \(error.localizedDescription)")
         }
     }
     

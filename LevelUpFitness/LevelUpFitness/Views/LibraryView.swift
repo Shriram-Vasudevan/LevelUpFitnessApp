@@ -8,7 +8,9 @@ struct LibraryView: View {
     
     @State var selectedExercise: Progression?
     @State var selectedCustomWorkout: CustomWorkout?
+    @State var navigateToCustomWorkout: Bool = false
     @State var navigateToCustomWorkoutCreation: Bool = false
+    
     
     let exerciseTypeKeys = [
         Sublevels.CodingKeys.lowerBodyCompound.rawValue,
@@ -69,6 +71,7 @@ struct LibraryView: View {
                                         CustomWorkoutWidget(workout: workout)
                                             .onTapGesture {
                                                 selectedCustomWorkout = workout
+                                                navigateToCustomWorkout = true
                                             }
                                     }
                                 }
@@ -119,6 +122,9 @@ struct LibraryView: View {
         .fullScreenCover(isPresented: $navigateToCustomWorkoutCreation, content: {
             CreateCustomWorkoutView()
         })
+        .fullScreenCover(isPresented: $navigateToCustomWorkout) {
+            CustomWorkoutView(workout: selectedCustomWorkout)
+        }
     }
 }
 

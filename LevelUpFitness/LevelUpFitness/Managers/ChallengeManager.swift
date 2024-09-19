@@ -61,7 +61,6 @@ class ChallengeManager: ObservableObject {
             
             if self.userChallenges.count < originalUserChallengesCount {
                 await LevelChangeManager.shared.createNewLevelChange(property: "ChallengeFailed", contribution: (originalUserChallengesCount - userChallenges.count) * -10)
-                await XPManager.shared.addXPToDB()
             }
             
             let checkChallengeExpiryRequest = RESTRequest(apiName: "LevelUpFitnessChallengeAPI", path: "/checkChallengeExpiry", queryParameters: ["UserID" : userID])
@@ -145,7 +144,6 @@ class ChallengeManager: ObservableObject {
                 let response = try await Amplify.API.put(request: request)
                 
                 await LevelChangeManager.shared.createNewLevelChange(property: "ChallengeSuccess", contribution: completedChallenges.count * 10) 
-                await XPManager.shared.addXPToDB()
                 
                 GlobalCoverManager.shared.showChallengeCompletion()
             }

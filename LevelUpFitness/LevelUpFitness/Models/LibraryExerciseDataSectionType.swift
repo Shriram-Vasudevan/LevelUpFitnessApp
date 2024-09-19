@@ -7,6 +7,6 @@
 
 import Foundation
 
-enum LibraryExerciseDataSectionType {
+enum ExerciseDataSectionType {
     case start, inProgress, finished
 }

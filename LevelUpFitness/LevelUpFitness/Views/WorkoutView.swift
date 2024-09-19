@@ -130,15 +130,6 @@ struct WorkoutContent: View {
                     }
                     .padding(.horizontal)
                     .padding(.top, 7)
-
-                    HStack {
-                        Text("Recommended Reps per Set: \(workoutManager.currentExercises[workoutManager.currentExerciseIndex].reps)")
-                            .font(.system(size: 13, weight: .light, design: .rounded))
-                            .foregroundColor(.black)
-
-                        Spacer()
-                    }
-                    .padding(.horizontal)
                 }
 
                 if workoutManager.currentSetIndex < workoutManager.currentExerciseData.sets.count {

@@ -9,7 +9,7 @@ import SwiftUI
 
 
 struct LibraryExerciseDataView: View {
-    @State var sectionType: LibraryExerciseDataSectionType = .start
+    @State var sectionType: ExerciseDataSectionType = .start
     @State var exerciseData: ExerciseData
     @State var numberOfSets: String = ""
     @State var setsFieldNotFilledOut: Bool = false
@@ -91,7 +91,6 @@ struct LibraryExerciseDataView: View {
                     Task {
                         await XPManager.shared.addXP(increment: 3, type: xpAdditionType)
                         await XPManager.shared.addXP(increment: 3, type: .total)
-                        await XPManager.shared.addXPToDB()
                     }
                     
                     sectionType = .finished
