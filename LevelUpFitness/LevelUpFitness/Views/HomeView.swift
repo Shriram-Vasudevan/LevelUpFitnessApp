@@ -4,14 +4,15 @@ import AVKit
 
 
 struct HomeView: View {
-    @ObservedObject var programManager: ProgramManager
-    @ObservedObject var databaseManager: DatabaseManager
-    @ObservedObject var healthManager: HealthManager
-    @ObservedObject var xpManager: XPManager
-    @ObservedObject var exerciseManager: ExerciseManager
-    @ObservedObject var challengeManager: ChallengeManager
-    @ObservedObject var levelChangeManager: LevelChangeManager
-    @ObservedObject var toDoListManager: ToDoListManager
+    @ObservedObject var programManager = ProgramManager.shared
+    @ObservedObject var healthManager = HealthManager.shared
+    @ObservedObject var badgeManager = BadgeManager.shared
+    @ObservedObject var xpManager = XPManager.shared
+    @ObservedObject var exerciseManager = ExerciseManager.shared
+    @ObservedObject var challengeManager = ChallengeManager.shared
+    @ObservedObject var levelChangeManager = LevelChangeManager.shared
+    @ObservedObject var toDoListManager = ToDoListManager.shared
+    
 
     @State var avPlayer = AVPlayer()
     @Binding var pageType: PageType
@@ -318,5 +319,5 @@ struct HomePageHeader: View {
 }
 
 #Preview {
-    HomeView(programManager: ProgramManager(), databaseManager: DatabaseManager(), healthManager: HealthManager(), xpManager: XPManager(), exerciseManager: ExerciseManager(), challengeManager: ChallengeManager(), levelChangeManager: LevelChangeManager(), toDoListManager: ToDoListManager(), pageType: .constant(.home))
+    HomeView(programManager: ProgramManager(), healthManager: HealthManager(), xpManager: XPManager(), exerciseManager: ExerciseManager(), challengeManager: ChallengeManager(), levelChangeManager: LevelChangeManager(), toDoListManager: ToDoListManager(), pageType: .constant(.home))
 }

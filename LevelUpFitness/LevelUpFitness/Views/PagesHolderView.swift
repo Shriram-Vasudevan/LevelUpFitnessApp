@@ -9,7 +9,6 @@ import SwiftUI
 
 struct PagesHolderView: View {
     @ObservedObject var programManager = ProgramManager.shared
-    @ObservedObject var databaseManager = DatabaseManager.shared
     @ObservedObject var healthManager = HealthManager.shared
     @ObservedObject var badgeManager = BadgeManager.shared
     @ObservedObject var xpManager = XPManager.shared
@@ -18,7 +17,6 @@ struct PagesHolderView: View {
     @ObservedObject var levelChangeManager = LevelChangeManager.shared
     @ObservedObject var toDoListManager = ToDoListManager.shared
     @ObservedObject var globalCoverManager = GlobalCoverManager.shared
-    
     
     var notificationManager = NotificationManager.shared
     
@@ -32,12 +30,6 @@ struct PagesHolderView: View {
                 switch pageType {
                 case .home:
                     HomeView(
-                        programManager: programManager,
-                        databaseManager: databaseManager,
-                        healthManager: healthManager,
-                        xpManager: xpManager,
-                        exerciseManager: exerciseManager,
-                        challengeManager: challengeManager, levelChangeManager: levelChangeManager, toDoListManager: toDoListManager,
                         pageType: $pageType
                     )
                     .preferredColorScheme(.light)
