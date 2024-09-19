@@ -79,7 +79,7 @@ struct WeekInsightCard: View {
                 VStack(alignment: .leading, spacing: 8) {
                     InsightRow(title: "Total Workout Time", value: formatTime(program.getTotalWorkoutTime()))
                     InsightRow(title: "Avg. Workout Time", value: formatTime(program.getAverageWorkoutTime()))
-                    InsightRow(title: "Total Weight Used", value: "\(program.getTotalWeightUsed()) kg")
+                    InsightRow(title: "Total Weight Used", value: "\(program.getTotalWeightUsed()) lbs")
                 }
             }
             
@@ -113,7 +113,7 @@ struct InsightCircle: View {
                 
                 Circle()
                     .trim(from: 0, to: CGFloat(min(value / 100, 1)))
-                    .stroke(Color(hex: "40C4FC"), style: StrokeStyle(lineWidth: 10, lineCap: .round)) // Light blue color
+                    .stroke(Color(hex: "40C4FC"), style: StrokeStyle(lineWidth: 10, lineCap: .round)) 
                     .frame(width: 100, height: 100)
                     .rotationEffect(.degrees(-90))
                 
