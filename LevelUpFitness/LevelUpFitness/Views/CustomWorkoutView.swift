@@ -56,7 +56,7 @@ struct CustomWorkoutView: View {
                     .padding(.bottom)
                     
                     HStack {
-                        Text(workout.name)
+                        Text(workout.exercises[currentExerciseIndex].name)
                             .font(.system(size: 20, weight: .medium, design: .default))
 
                         Spacer()
@@ -77,17 +77,21 @@ struct CustomWorkoutView: View {
                 }
             }
         } else {
-            HStack {
-                Button {
-                    dismiss()
-                } label: {
-                    Image(systemName: "xmark")
-                        .foregroundColor(.black)
+            VStack {
+                HStack {
+                    Button {
+                        dismiss()
+                    } label: {
+                        Image(systemName: "xmark")
+                            .foregroundColor(.black)
+                    }
+                    
+                    Spacer()
                 }
+                .padding(.horizontal)
                 
                 Spacer()
             }
-            .padding(.horizontal)
         }
     }
 }

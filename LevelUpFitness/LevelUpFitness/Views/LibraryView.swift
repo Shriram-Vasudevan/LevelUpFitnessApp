@@ -71,7 +71,6 @@ struct LibraryView: View {
                                         CustomWorkoutWidget(workout: workout)
                                             .onTapGesture {
                                                 selectedCustomWorkout = workout
-                                                navigateToCustomWorkout = true
                                             }
                                     }
                                 }
@@ -122,7 +121,7 @@ struct LibraryView: View {
         .fullScreenCover(isPresented: $navigateToCustomWorkoutCreation, content: {
             CreateCustomWorkoutView()
         })
-        .fullScreenCover(isPresented: $navigateToCustomWorkout) {
+        .fullScreenCover(item: $selectedCustomWorkout) { selectedCustomWorkout in
             CustomWorkoutView(workout: selectedCustomWorkout)
         }
     }

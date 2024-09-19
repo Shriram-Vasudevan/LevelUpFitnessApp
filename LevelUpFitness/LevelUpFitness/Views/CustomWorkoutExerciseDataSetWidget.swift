@@ -19,21 +19,17 @@ struct CustomWorkoutExerciseDataSetWidget: View {
     var exerciseFinished: () -> Void
     
     var body: some View {
-        ZStack {
-            Color.white.ignoresSafeArea()
-            
-            VStack {
-                switch sectionType {
-                    case .start:
-                        startView
-                    case .inProgress:
-                        inProgressView
-                    case .finished:
-                        finishedView
-                }
+        VStack {
+            switch sectionType {
+                case .start:
+                    startView
+                case .inProgress:
+                    inProgressView
+                case .finished:
+                    finishedView
             }
-            .padding()
         }
+        .padding()
     }
     
     var startView: some View {

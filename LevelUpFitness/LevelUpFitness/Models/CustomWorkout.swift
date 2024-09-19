@@ -7,7 +7,8 @@
 
 import Foundation
 
-struct CustomWorkout: Codable {
+struct CustomWorkout: Codable, Identifiable {
+    var id: String = UUID().uuidString
     var name: String
     var image: Data?
     var exercises: [CustomWorkoutExercise]
