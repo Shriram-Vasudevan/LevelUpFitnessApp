@@ -4,7 +4,6 @@
 //
 //  Created by Shriram Vasudevan on 8/6/24.
 //
-
 import SwiftUI
 import PhotosUI
 import Amplify
@@ -14,24 +13,31 @@ struct ProfileView: View {
     @StateObject private var authManager = AuthenticationManager.shared
     @State private var showDeleteConfirmation = false
     @State private var showProfilePictureOptions = false
+    @State private var showEditNameSheet = false
+    @State private var showEditUsernameSheet = false
+    @State private var showHelpAndSupportSheet = false
     @State private var selectedProfilePicture: PhotosPickerItem?
     @State private var pfpData: Data?
-    
+    @State private var newName: String = ""
+    @State private var newUsername: String = ""
+
     var body: some View {
         ZStack {
-            Color.white.ignoresSafeArea()
+            Color(hex: "F5F5F5").ignoresSafeArea()
             
             VStack(spacing: 0) {
                 navigationBar
                 
-                ScrollView {
-                    VStack(spacing: 16) {
-                        profileHeader
-                        settingsSection
-                        accountActions
-                    }
-                    .padding()
+                VStack(spacing: 16) {
+                    profileHeader
+                    supportSection
+                    accountActions
+                    
+                    Spacer()
+                    
+                    icons8Attribution
                 }
+                .padding()
             }
         }
         .navigationBarBackButtonHidden(true)
@@ -57,6 +63,12 @@ struct ProfileView: View {
                 }
             }
         }
+        .sheet(isPresented: $showEditNameSheet, content: {
+            editNameSheet
+        })
+        .sheet(isPresented: $showEditUsernameSheet, content: {
+            editUsernameSheet
+        })
     }
 
     private var navigationBar: some View {
@@ -87,62 +99,68 @@ struct ProfileView: View {
                     Image(uiImage: uiImage)
                         .resizable()
                         .scaledToFill()
-                        .frame(width: 60, height: 60)
+                        .frame(width: 80, height: 80)
                         .clipShape(Circle())
+                        .overlay(Circle().stroke(Color(hex: "40C4FC"), lineWidth: 2))
                 } else {
                     Image("NoProfile")
                         .resizable()
                         .scaledToFill()
-                        .frame(width: 60, height: 60)
+                        .frame(width: 80, height: 80)
                         .clipShape(Circle())
+                        .overlay(Circle().stroke(Color(hex: "40C4FC"), lineWidth: 2))
                 }
             }
             
             VStack(alignment: .leading, spacing: 4) {
-                Text(authManager.name ?? "Checking")
-                    .font(.system(size: 18, weight: .semibold))
+                Text(authManager.name ?? "Loading...")
+                    .font(.system(size: 20, weight: .bold))
                     .foregroundColor(.black)
-                Text(authManager.username ?? "Checking")
-                    .font(.system(size: 14, weight: .regular))
+                    .onTapGesture {
+                        showEditNameSheet = true
+                    }
+                Text(authManager.username ?? "Loading...")
+                    .font(.system(size: 16, weight: .regular))
                     .foregroundColor(.gray)
+                    .onTapGesture {
+                        showEditUsernameSheet = true
+                    }
             }
             
             Spacer()
-            
-            Button(action: { }) {
-                Text("Edit")
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(Color(hex: "40C4FC"))
-            }
         }
         .padding()
-        .background(Color(hex: "F5F5F5"))
+        .background(Color.white)
+        .cornerRadius(12)
+        .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
     }
-    
-    private var settingsSection: some View {
-        VStack(spacing: 1) {
-            ForEach(SettingsOption.allCases, id: \.self) { option in
-                Button(action: { }) {
+
+    private var supportSection: some View {
+        VStack(spacing: 16) {
+            Button(action: { showHelpAndSupportSheet = true }) {
+                VStack {
                     HStack {
-                        Image(systemName: option.iconName)
+                        Image(systemName: "questionmark.circle.fill")
                             .foregroundColor(Color(hex: "40C4FC"))
                             .frame(width: 30)
-                        Text(option.title)
+                        Text("Help & Support")
                             .font(.system(size: 16, weight: .regular))
                         Spacer()
                         Image(systemName: "chevron.right")
                             .foregroundColor(.gray)
                     }
-                    .padding(.vertical, 12)
-                    .padding(.horizontal)
+                    .padding()
                     .background(Color.white)
                 }
-                .foregroundColor(.black)
+            }
+            .foregroundColor(.black)
+            .sheet(isPresented: $showHelpAndSupportSheet) {
+                SupportView()
             }
         }
         .background(Color(hex: "F5F5F5"))
     }
-    
+
     private var accountActions: some View {
         VStack(spacing: 16) {
             Button(action: {
@@ -154,6 +172,7 @@ struct ProfileView: View {
                     .frame(maxWidth: .infinity)
                     .padding()
                     .background(Color(hex: "40C4FC"))
+                    .cornerRadius(8)
             }
             
             Button(action: { showDeleteConfirmation = true }) {
@@ -164,7 +183,7 @@ struct ProfileView: View {
         }
         .padding(.vertical, 20)
     }
-    
+
     private var profilePictureOptionsSheet: some View {
         VStack(spacing: 0) {
             Text("Profile Picture Options")
@@ -212,6 +231,67 @@ struct ProfileView: View {
         .presentationDetents([.height(200)])
     }
     
+    private var editNameSheet: some View {
+        VStack {
+            TextField("New Name", text: $newName)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .padding()
+
+            Button(action: {
+                Task {
+                    await authManager.updateName(newName: newName) { success, error in
+                        if success { showEditNameSheet = false }
+                    }
+                }
+            }) {
+                Text("Save")
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color(hex: "40C4FC"))
+                    .cornerRadius(8)
+            }
+            .padding()
+        }
+        .padding()
+    }
+
+    private var editUsernameSheet: some View {
+        VStack {
+            TextField("New Username", text: $newUsername)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .padding()
+
+            Button(action: {
+                Task {
+                    await authManager.updateUsername(newUsername: newUsername) { success, error in
+                        if success { showEditUsernameSheet = false }
+                    }
+                }
+            }) {
+                Text("Save")
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color(hex: "40C4FC"))
+                    .cornerRadius(8)
+            }
+            .padding()
+        }
+        .padding()
+    }
+    
+    private var icons8Attribution: some View {
+        VStack {
+            Text("Icons by Icons8")
+                .font(.system(size: 12, weight: .regular))
+                .foregroundColor(.gray)
+        }
+        .padding(.top, 20)
+    }
+
     func saveProfilePictureLocally(pfpData: Data, userID: String) {
         guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
         let pfpURL = documentsDirectory.appendingPathComponent("pfp-\(userID).png", isDirectory: false)
@@ -225,29 +305,26 @@ struct ProfileView: View {
     }
 }
 
-enum SettingsOption: CaseIterable {
-    case personalInfo, notifications, privacy, dataUsage, help
-    
-    var title: String {
-        switch self {
-        case .personalInfo: return "Personal Information"
-        case .notifications: return "Notifications"
-        case .privacy: return "Privacy"
-        case .dataUsage: return "Data Usage"
-        case .help: return "Help & Support"
+struct SupportView: View {
+    var body: some View {
+        VStack(spacing: 20) {
+            Text("Help & Support")
+                .font(.system(size: 20, weight: .bold))
+                .padding()
+
+            Text("For support, please contact us at:")
+                .font(.system(size: 16, weight: .regular))
+            
+            Text("levelupfitttech@gmail.com")
+                .font(.system(size: 16, weight: .bold))
+                .foregroundColor(.blue)
+            
+            Spacer()
         }
-    }
-    
-    var iconName: String {
-        switch self {
-        case .personalInfo: return "person.fill"
-        case .notifications: return "bell.fill"
-        case .privacy: return "lock.fill"
-        case .dataUsage: return "chart.bar.fill"
-        case .help: return "questionmark.circle.fill"
-        }
+        .padding()
     }
 }
+
 
 #Preview {
     ProfileView()

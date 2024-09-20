@@ -248,7 +248,7 @@ struct ProgramView: View {
         VStack(spacing: 16) {
             UpNextProgramExerciseWidget(programManager: programManager, navigateToWorkoutView: $navigateToWorkoutView, selectedProgram: ProgramManager.shared.selectedProgram)
             
-            TodaysScheduleWidget(programManager: programManager, selectedProgram: ProgramManager.shared.selectedProgram)
+            TodaysScheduleWidget(programManager: programManager, selectedProgram: programManager.selectedProgram)
             
             GeometryReader { geometry in
                 let totalWidth = geometry.size.width

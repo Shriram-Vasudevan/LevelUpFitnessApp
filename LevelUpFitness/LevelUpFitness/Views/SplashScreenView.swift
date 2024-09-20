@@ -11,7 +11,7 @@ struct SplashScreenView: View {
     var body: some View {
         ZStack {
             Color.white
-            Image("LevelUpFitnessLogo")
+            Image("LevelUpFitnessLogoSpalshScreen")
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(height: 300)

@@ -146,21 +146,7 @@ struct PagesHolderView: View {
         }
         .onAppear {
             Task {
-                if healthManager.todaysSteps == nil {
-                    healthManager.getInitialHealthData()
-                }
-                    
-                async let userProgram: ()? = programManager.program.isEmpty ? programManager.getUserProgram() : nil
-                async let notificationManager: () = notificationManager.identifyUser()
-                async let challengeManager: () = challengeManager.challengeManagerInitialization()
-                async let toDoListManager: () = toDoListManager.toDoListInit()
-                async let exerciseManager: () = exerciseManager.exerciseManagerInit()
-                async let xpManager: () = xpManager.xpManagerInit()
-                
-//                async let getUsername: () = AuthenticationManager.getUsername()
-//                async let getName: () = AuthenticationManager.getName()
-//
-                _ = await (userProgram, notificationManager, challengeManager, toDoListManager, exerciseManager, xpManager)
+                await InitializationManager.shared.initialize()
             }
         }
         .fullScreenCover(isPresented: $globalCoverManager.showProgramDayCompletionCover) {

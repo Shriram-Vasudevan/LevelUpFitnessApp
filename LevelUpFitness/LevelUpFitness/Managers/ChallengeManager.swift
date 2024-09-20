@@ -77,9 +77,9 @@ class ChallengeManager: ObservableObject {
                 let levelsRequired = levelsRequired(currentLevel: userXPData.level)
                 guard let dateRange = DateUtility.createDateDurationISO(duration: 30) else { return false}
             
-            await updateChallenge(challengeTemplateID: challengeTemplateID, challengeName: challengeName, startDate: dateRange.0, endDate: dateRange.1, startValue: userXPData.level, targetValue: userXPData.level + levelsRequired, field: "Level")
+                await updateChallenge(challengeTemplateID: challengeTemplateID, challengeName: challengeName, startDate: dateRange.0, endDate: dateRange.1, startValue: userXPData.level, targetValue: userXPData.level + levelsRequired, field: "Level")
             case "Perfect Program Week":
-            if let program = ProgramManager.shared.program.first {
+                if let program = ProgramManager.shared.program.first {
                     let daysRequired = program.program.count
                     guard let dateRange = DateUtility.createDateDurationISO(duration: 7) else { return false }
                     
@@ -93,6 +93,11 @@ class ChallengeManager: ObservableObject {
                             return false
                     }
                 }
+            case "3-in-15 Challenge":
+                let levelsRequired = 3
+                guard let dateRange = DateUtility.createDateDurationISO(duration: 15) else { return false}
+                
+                await updateChallenge(challengeTemplateID: challengeTemplateID, challengeName: challengeName, startDate: dateRange.0, endDate: dateRange.1, startValue: userXPData.level, targetValue: userXPData.level + levelsRequired, field: "Level")
             default:
                 break
         }

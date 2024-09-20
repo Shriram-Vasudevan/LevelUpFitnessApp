@@ -262,5 +262,33 @@ class AuthenticationManager: ObservableObject {
         }
     }
     
+    func updateUsername(newUsername: String, completion: @escaping (Bool, Error?) -> Void) async {
+            do {
+                let userAttributes = [AuthUserAttribute(.custom("username"), value: newUsername)]
+                let updateResult = try await Amplify.Auth.update(userAttributes: userAttributes)
+                
+                self.username = newUsername
+                UserDefaults.standard.set(newUsername, forKey: "username")
+                print("Username updated to \(newUsername)")
+                completion(true, nil)
+            } catch {
+                print("Error updating username: \(error)")
+                completion(false, error)
+            }
+        }
 
+        func updateName(newName: String, completion: @escaping (Bool, Error?) -> Void) async {
+            do {
+                let userAttributes = [AuthUserAttribute(.name, value: newName)]
+                let updateResult = try await Amplify.Auth.update(userAttributes: userAttributes)
+                
+                self.name = newName
+                UserDefaults.standard.set(newName, forKey: "name")
+                print("Name updated to \(newName)")
+                completion(true, nil)
+            } catch {
+                print("Error updating name: \(error)")
+                completion(false, error)
+            }
+        }
 }

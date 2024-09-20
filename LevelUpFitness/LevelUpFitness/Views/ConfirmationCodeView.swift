@@ -15,8 +15,8 @@ struct ConfirmationCodeView: View {
     let email: String
     
     @State private var codeDigits: [String] = Array(repeating: "", count: 6)
-    @State private var currentlyEditingField = 0
     @State private var codeError: Bool = false
+    @FocusState private var focusedField: Int?
     
     private let accentColor = Color(hex: "40C4FC")
     private let backgroundColor = Color.white
@@ -40,16 +40,30 @@ struct ConfirmationCodeView: View {
                 
                 HStack(spacing: 12) {
                     ForEach(0..<6) { index in
-                        CodeDigitInput(text: $codeDigits[index], currentlyEditingField: $currentlyEditingField, fieldIndex: index)
+                        CodeDigitInput(text: $codeDigits[index], fieldIndex: index)
+                            .focused($focusedField, equals: index)  // Bind each field to the correct index
+                            .onChange(of: codeDigits[index]) { newValue in
+                                if newValue.count == 1 {
+                                    // Move to next field if available
+                                    if index < 5 {
+                                        focusedField = index + 1
+                                    } else {
+                                        focusedField = nil
+                                    }
+                                } else if newValue.isEmpty {
+                                    // Move back if user deletes a value
+                                    if index > 0 {
+                                        focusedField = index - 1
+                                    }
+                                }
+                            }
                     }
                 }
                 
-                Group {
-                    if codeError {
-                        Text("Invalid code. Please try again.")
-                            .font(.system(size: 14, weight: .regular))
-                            .foregroundColor(.red)
-                    }
+                if codeError {
+                    Text("Invalid code. Please try again.")
+                        .font(.system(size: 14, weight: .regular))
+                        .foregroundColor(.red)
                 }
                 
                 Button(action: checkFieldsAndConfirm) {
@@ -82,8 +96,10 @@ struct ConfirmationCodeView: View {
                 }
             }
         }
+        .onAppear {
+            focusedField = 0  // Focus the first field when the view appears
+        }
     }
-
 
     private func checkFieldsAndConfirm() {
         let code = codeDigits.joined()
@@ -104,13 +120,12 @@ struct ConfirmationCodeView: View {
     }
     
     private func resendCode() {
-        
+        // Resend code logic
     }
 }
 
 struct CodeDigitInput: View {
     @Binding var text: String
-    @Binding var currentlyEditingField: Int
     let fieldIndex: Int
     
     var body: some View {
@@ -123,28 +138,17 @@ struct CodeDigitInput: View {
             .cornerRadius(8)
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color(hex: "40C4FC"), lineWidth: currentlyEditingField == fieldIndex ? 2 : 0)
+                    .stroke(Color(hex: "40C4FC"), lineWidth: 2)
             )
             .onChange(of: text) { newValue in
-                DispatchQueue.main.async {
-                    if newValue.count > 1 {
-                        text = String(newValue.prefix(1))
-                    }
-                    if !newValue.isEmpty {
-                        if fieldIndex < 5 {
-                            currentlyEditingField = fieldIndex + 1
-                        } else {
-                            currentlyEditingField = 5
-                            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                        }
-                    }
+                // Limit the input to 1 character
+                if newValue.count > 1 {
+                    text = String(newValue.prefix(1))
                 }
-            }
-            .onTapGesture {
-                currentlyEditingField = fieldIndex
             }
     }
 }
+
 
 
 #Preview {
