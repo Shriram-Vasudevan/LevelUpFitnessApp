@@ -70,17 +70,23 @@ class WorkoutManager: ObservableObject {
             print("Moving to next exercise")
             currentSetIndex = 0
             
-            if let programArray = ProgramManager.shared.selectedProgram?.program,
-               let programIndex = programArray.firstIndex(where: { $0.day == DateUtility.getCurrentWeekday() }) {
-                var todaysProgram = programArray[programIndex]
-                todaysProgram.exercises[currentExerciseIndex].completed = true
-                todaysProgram.exercises[currentExerciseIndex].data = currentExerciseData
+            if let selectedProgramIndex = ProgramManager.shared.program.firstIndex(where: { $0.programName == ProgramManager.shared.selectedProgram?.programName }) {
+                if let programDayIndex = ProgramManager.shared.selectedProgram?.program.firstIndex(where: { $0.day == DateUtility.getCurrentWeekday() }) {
+                    
+                    ProgramManager.shared.selectedProgram?.program[programDayIndex].exercises[currentExerciseIndex].completed = true
+                    ProgramManager.shared.selectedProgram?.program[programDayIndex].exercises[currentExerciseIndex].data = currentExerciseData
+                    
+                    let xpAdditionType = getExerciseTypeEnum(exerciseType: ProgramManager.shared.selectedProgram?.program[programDayIndex].exercises[currentExerciseIndex].area ?? "")
+                    XPManager.shared.addXP(increment: 2, type: xpAdditionType)
 
-                let xpAdditionType = getExerciseTypeEnum(exerciseType: todaysProgram.exercises[currentExerciseIndex].area)
-                XPManager.shared.addXP(increment: 2, type: xpAdditionType)
-                
-                ProgramManager.shared.selectedProgram?.program[programIndex] = todaysProgram
-                
+                    if let selectedProgram = ProgramManager.shared.selectedProgram {
+                        ProgramManager.shared.program[selectedProgramIndex] = selectedProgram
+                    }
+                    
+                    DispatchQueue.main.async {
+                        ProgramManager.shared.objectWillChange.send()
+                    }
+                }
             }
 
             currentExerciseIndex += 1

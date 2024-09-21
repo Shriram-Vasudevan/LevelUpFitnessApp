@@ -68,10 +68,12 @@ struct LibraryView: View {
                             {
                                 HStack(spacing: 16) {
                                     ForEach(customWorkoutsManager.customWorkouts, id: \.name) { workout in
-                                        CustomWorkoutWidget(workout: workout)
-                                            .onTapGesture {
-                                                selectedCustomWorkout = workout
-                                            }
+                                        CustomWorkoutWidget(workout: workout) { workoutToDelete in
+                                            customWorkoutsManager.deleteCustomWorkout(workout: workoutToDelete)
+                                        }
+                                        .onTapGesture {
+                                            selectedCustomWorkout = workout
+                                        }
                                     }
                                 }
                             }

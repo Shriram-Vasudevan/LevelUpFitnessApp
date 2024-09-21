@@ -246,9 +246,9 @@ struct ProgramView: View {
 
     private var activeProgramView: some View {
         VStack(spacing: 16) {
-            UpNextProgramExerciseWidget(programManager: programManager, navigateToWorkoutView: $navigateToWorkoutView, selectedProgram: ProgramManager.shared.selectedProgram)
+            UpNextProgramExerciseWidget(programManager: programManager, navigateToWorkoutView: $navigateToWorkoutView)
             
-            TodaysScheduleWidget(programManager: programManager, selectedProgram: programManager.selectedProgram)
+            TodaysScheduleWidget(programManager: programManager)
             
             GeometryReader { geometry in
                 let totalWidth = geometry.size.width
@@ -376,14 +376,13 @@ struct EquipmentItemView: View {
 struct UpNextProgramExerciseWidget: View {
     @ObservedObject var programManager: ProgramManager
     @Binding var navigateToWorkoutView: Bool
-    
-    @State var selectedProgram: Program?
+
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Up Next")
                 .font(.system(size: 20, weight: .medium, design: .default))
             
-            if let todaysProgram = selectedProgram?.program.first(where: { $0.day == DateUtility.getCurrentWeekday() }),
+            if let todaysProgram = ProgramManager.shared.selectedProgram?.program.first(where: { $0.day == DateUtility.getCurrentWeekday() }),
                let (_, nextExercise) = todaysProgram.exercises.enumerated().first(where: { !$0.element.completed }) {
                 exerciseDetailsView(for: nextExercise)
                     .onTapGesture {
@@ -449,15 +448,13 @@ struct UpNextProgramExerciseWidget: View {
 struct TodaysScheduleWidget: View {
     @ObservedObject var programManager: ProgramManager
     @State private var isExpanded: Bool = false
-    
-    @State var selectedProgram: Program?
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Today's Schedule")
                 .font(.system(size: 20, weight: .medium, design: .default))
             
-            if let todaysProgram = selectedProgram?.program.first(where: { $0.day == DateUtility.getCurrentWeekday() }) {
+            if let todaysProgram = ProgramManager.shared.selectedProgram?.program.first(where: { $0.day == DateUtility.getCurrentWeekday() }) {
                 let exercises = todaysProgram.exercises
                 let displayedExercises = isExpanded ? exercises : Array(exercises.prefix(3))
                 

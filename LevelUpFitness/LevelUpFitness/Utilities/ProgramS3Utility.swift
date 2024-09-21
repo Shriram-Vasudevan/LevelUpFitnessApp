@@ -122,6 +122,7 @@ class ProgramS3Utility {
     
     static func uploadNewProgramStatus(program: Program, completionHandler: @escaping () -> Void) async throws  {
         do {
+            print("uploadNewProgramStatus")
             let userID = try await Amplify.Auth.getCurrentUser().userId
             
             let startDate = program.startDate
@@ -138,10 +139,11 @@ class ProgramS3Utility {
                 let storageOperation = Amplify.Storage.uploadFile(key: "UserPrograms/\(userID)/\(program.programName) (\(program.startDate)|\(endDate ?? "NoEndDate"))/\(DateUtility.getLastDateForWeekday(weekday: startWeekday) ?? "NoDate").json", local: url)
                         
                 _ = try await storageOperation.value
+                print("uploaded new status")
                 completionHandler()
             }
         } catch {
-            print(error.localizedDescription)
+            print("error + \(error.localizedDescription)")
             throw GeneralError.failed
         }
     }

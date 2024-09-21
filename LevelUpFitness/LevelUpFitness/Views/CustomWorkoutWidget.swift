@@ -9,6 +9,7 @@ import SwiftUI
 
 struct CustomWorkoutWidget: View {
     let workout: CustomWorkout
+    let onDelete: (CustomWorkout) -> Void
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -28,14 +29,35 @@ struct CustomWorkoutWidget: View {
                     .cornerRadius(2)
             }
             
-            VStack (spacing: 4) {
-                Text(workout.name)
-                    .font(.system(size: 16, weight: .medium, design: .default))
-                    .foregroundColor(.black)
+            HStack {
+                VStack (spacing: 4) {
+                    HStack {
+                        Text(workout.name)
+                            .font(.system(size: 16, weight: .medium, design: .default))
+                            .foregroundColor(.black)
+                        
+                        Spacer()
+                    }
+                    
+                    HStack {
+                        Text("\(workout.exercises.count) exercises")
+                            .font(.system(size: 14, weight: .regular, design: .default))
+                            .foregroundColor(.gray)
+                        
+                        Spacer()
+                    }
+
+                }
                 
-                Text("\(workout.exercises.count) exercises")
-                    .font(.system(size: 14, weight: .regular, design: .default))
-                    .foregroundColor(.gray)
+                Spacer()
+                
+                Button(action: {
+                    onDelete(workout)
+                }) {
+                    Image(systemName: "trash")
+                        .foregroundColor(Color(hex: "40C4FC"))
+                        .padding(6)
+                }
             }
         }
         .frame(width: 150)
@@ -44,7 +66,3 @@ struct CustomWorkoutWidget: View {
     }
 }
 
-
-#Preview {
-    CustomWorkoutWidget(workout: CustomWorkout(name: "", image: nil, exercises: [CustomWorkoutExercise(name: "", isWeight: true)]))
-}

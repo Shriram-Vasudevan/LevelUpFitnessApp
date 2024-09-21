@@ -51,7 +51,10 @@ class ProgramManager: ObservableObject {
         do {
             guard let specificProgram = self.program.first(where: { Program in
                 Program.programName == programName
-            }) else { return }
+            }) else {
+                print("couldn't get program to update")
+                return
+            }
                     
             try await ProgramS3Utility.uploadNewProgramStatus(program: specificProgram, completionHandler: {
                 completion(true)

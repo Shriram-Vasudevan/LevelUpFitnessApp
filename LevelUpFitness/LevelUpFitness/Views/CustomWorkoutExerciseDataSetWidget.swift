@@ -102,6 +102,8 @@ struct CustomWorkoutExerciseDataSetWidget: View {
             Button(action: {
                 self.exerciseData = ExerciseData(sets: [])
                 exerciseFinished()
+                
+                sectionType = .start
             }) {
                 Text("Continue")
                     .font(.system(size: 16, weight: .medium, design: .default))

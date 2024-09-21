@@ -64,6 +64,21 @@ class CustomWorkoutManager: ObservableObject {
         }
     }
     
+    func deleteCustomWorkout(workout: CustomWorkout) {
+        guard let customWorkoutsDirectory = getCustomWorkoutsDirectory() else { return }
+
+        let workoutFileURL = customWorkoutsDirectory.appendingPathComponent("\(workout.name).json")
+
+        do {
+            try FileManager.default.removeItem(at: workoutFileURL)
+            self.customWorkouts.removeAll { $0.name == workout.name }
+            print("Workout \(workout.name) deleted.")
+        } catch {
+            print("Error deleting custom workout: \(error.localizedDescription)")
+        }
+    }
+
+    
     private func getCustomWorkoutsDirectory() -> URL? {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         let documentsDirectory = paths[0]
