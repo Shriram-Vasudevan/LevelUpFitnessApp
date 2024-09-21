@@ -26,7 +26,8 @@ exports.handler = async (event) => {
         }
     
         try {
-            for (const challenge of challenges) {
+            const challenges = await dynamodb.query(params).promise()
+            for (const challenge of challenges.Items) {
                 console.log(JSON.stringify(challenge))
                 const deleteParams = {
                     TableName: "user-challenges-list-db-dev",  
@@ -47,14 +48,53 @@ exports.handler = async (event) => {
                 body: JSON.stringify(error),
             };
         }
-    
-        return {
-            statusCode: 200,
-            headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Headers": "*"
-            },
-            body: JSON.stringify('Hello from Lambda!'),
-        };
     }
+    else if (event.path == "/leaveChallenge" && event.httpMethod == "DELETE") {
+        console.log("checking challenge expiry")
+        const UserID = event.queryStringParameters.UserID
+        const ChallengeTemplateID = event.queryStringParameters.ChallengeTemplateID
+
+        const params = {
+            TableName: "user-challenges-list-db-dev",
+            Key: {
+                UserID: UserID,
+                ChallengeTemplateID: ChallengeTemplateID 
+            }
+        }
+    
+        try {
+            await dynamodb.delete(params).promise();
+
+            return {
+                statusCode: 200,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "*"
+                },
+                body: JSON.stringify({
+                    message: "Challenge successfully left",
+                    UserID: UserID,
+                    ChallengeTemplateID: ChallengeTemplateID
+                }),
+            }; 
+        } catch (error) {
+            return {
+                statusCode: 500,
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "*"
+                },
+                body: JSON.stringify(error),
+            };
+        }
+    }
+
+    return {
+        statusCode: 200,
+        headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Headers": "*"
+        },
+        body: JSON.stringify('Hello from Lambda!'),
+    };
 };

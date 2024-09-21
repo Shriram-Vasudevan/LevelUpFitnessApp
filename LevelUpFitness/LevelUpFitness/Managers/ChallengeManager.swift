@@ -63,7 +63,7 @@ class ChallengeManager: ObservableObject {
                 await LevelChangeManager.shared.createNewLevelChange(property: "ChallengeFailed", contribution: (originalUserChallengesCount - userChallenges.count) * -10)
             }
             
-            let checkChallengeExpiryRequest = RESTRequest(apiName: "LevelUpFitnessChallengeAPI", path: "/checkChallengeExpiry", queryParameters: ["UserID" : userID])
+            let checkChallengeExpiryRequest = RESTRequest(apiName: "LevelUpFitnessChallengeAPI", path: "/am", queryParameters: ["UserID" : userID])
             _ = try await Amplify.API.delete(request: checkChallengeExpiryRequest)
         } catch {
             print("get active user challenges error \(error)")
@@ -108,8 +108,7 @@ class ChallengeManager: ObservableObject {
     func updateChallenge(challengeTemplateID: String, challengeName: String, startDate: String, endDate: String, startValue: Int, targetValue: Int, field: String) async {
         do {
             let userID = try await Amplify.Auth.getCurrentUser().userId
-            
-            //print("challenge template id \(challengeTemplateID)")
+
             let userChallenge = UserChallenge(userID: userID, id: UUID().uuidString, challengeTemplateID: challengeTemplateID, name: challengeName, startDate: startDate, endDate: endDate, startValue: startValue, targetValue: targetValue, field: field, isFailed: false, isActive: true)
             
             let jsonEncoder = JSONEncoder()
@@ -123,6 +122,24 @@ class ChallengeManager: ObservableObject {
           //  print("updateChallenge response: \(String(describing: String(data: response, encoding: .utf8)))")
             
             userChallenges.append(userChallenge)
+        } catch {
+            print(error)
+        }
+    }
+        
+    func leaveChallenge(challengeTemplateID: String) async {
+        do {
+            let userID = try await Amplify.Auth.getCurrentUser().userId
+
+            let request = RESTRequest(apiName: "LevelUpFitnessChallengeAPI", path: "/leaveChallenge", queryParameters: ["UserID" : userID, "ChallengeTemplateID" : challengeTemplateID])
+            
+            let response = try await Amplify.API.put(request: request)
+            
+          //  print("updateChallenge response: \(String(describing: String(data: response, encoding: .utf8)))")
+            
+            userChallenges.removeAll { UserChallenge in
+                UserChallenge.challengeTemplateID == challengeTemplateID
+            }
         } catch {
             print(error)
         }

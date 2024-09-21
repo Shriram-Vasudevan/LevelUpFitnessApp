@@ -96,7 +96,11 @@ struct ChallengeDetailsView: View {
         VStack(spacing: 16) {
             if challenge.isActive {
                 Button(action: {
-                    // Action to quit challenge
+                    Task {
+                        await ChallengeManager.shared.leaveChallenge(challengeTemplateID: challenge.challengeTemplateID)
+                        
+                        dismiss()
+                    }
                 }) {
                     Text("Quit Challenge")
                         .font(.custom("Poppins-SemiBold", size: 16))

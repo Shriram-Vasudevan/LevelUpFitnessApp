@@ -11,6 +11,17 @@
           "delete"
         ]
       }
+    },
+    "/leaveChallenge": {
+      "name": "/leaveChallenge",
+      "lambdaFunction": "LevelUpFitnessChallengeExpirationCheckLambda",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "read",
+          "delete"
+        ]
+      }
     }
   }
 }

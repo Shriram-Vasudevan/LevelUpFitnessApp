@@ -197,6 +197,50 @@ public class LEVELUPFITNESSCHALLENGEAPILevelUpFitnessChallengeAPIClient: AWSAPIG
 	    return self.invokeHTTPRequest("OPTIONS", urlString: "/checkChallengeExpiry/{proxy+}", pathParameters: pathParameters, queryParameters: queryParameters, headerParameters: headerParameters, body: nil, responseClass: nil)
 	}
 
+	
+    /*
+     
+     
+     
+     return type: 
+     */
+    public func leaveChallengeOptions() -> AWSTask<AnyObject> {
+	    let headerParameters = [
+                   "Content-Type": "application/json",
+                   "Accept": "application/json",
+                   
+	            ]
+	    
+	    let queryParameters:[String:Any] = [:]
+	    
+	    let pathParameters:[String:Any] = [:]
+	    
+	    return self.invokeHTTPRequest("OPTIONS", urlString: "/leaveChallenge", pathParameters: pathParameters, queryParameters: queryParameters, headerParameters: headerParameters, body: nil, responseClass: nil)
+	}
+
+	
+    /*
+     
+     
+     @param proxy 
+     
+     return type: 
+     */
+    public func leaveChallengeProxyOptions(proxy: String) -> AWSTask<AnyObject> {
+	    let headerParameters = [
+                   "Content-Type": "application/json",
+                   "Accept": "application/json",
+                   
+	            ]
+	    
+	    let queryParameters:[String:Any] = [:]
+	    
+	    var pathParameters:[String:Any] = [:]
+	    pathParameters["proxy"] = proxy
+	    
+	    return self.invokeHTTPRequest("OPTIONS", urlString: "/leaveChallenge/{proxy+}", pathParameters: pathParameters, queryParameters: queryParameters, headerParameters: headerParameters, body: nil, responseClass: nil)
+	}
+
 
 
 

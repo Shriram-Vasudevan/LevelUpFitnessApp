@@ -24,6 +24,8 @@ struct HomeView: View {
     @State var navigateToHealthStatTrendView: Bool = false
     @State var navigateToWeightTrendView: Bool = false
     @State var navigateToProfileView: Bool = false
+    @State var navigateToAvailableChallengesView: Bool = false
+    
     
     @State private var perfectProgramChallengeStartFailed = false
     
@@ -166,15 +168,28 @@ struct HomeView: View {
                         }
                         
                         if let userXPData = xpManager.userXPData, !challengeManager.challengeTemplates.isEmpty {
-                            Text("Available Challenges")
-                                .font(.system(size: 20, weight: .medium))
-                                .frame(maxWidth: .infinity, alignment: .leading)
+                            HStack {
+                                Text("Available Challenges")
+                                    .font(.system(size: 20, weight: .medium))
+                                Spacer()
+                                
+                                Button {
+                                    navigateToAvailableChallengesView = true
+                                } label: {
+                                    Text("See More")
+                                        .font(.system(size: 15, weight: .medium))
+                                        .foregroundColor(Color(hex: "40C4FC"))
+                                }
+
+                            }
+                            
+                            
                             
                             ForEach(challengeManager.challengeTemplates.filter { challengeTemplate in
                                 !challengeManager.userChallenges.contains { userChallenge in
                                     userChallenge.challengeTemplateID == challengeTemplate.id
                                 }
-                            }, id: \.id) { challengeTemplate in
+                            }.prefix(2), id: \.id) { challengeTemplate in
                                 ChallengeTemplateWidget(challenge: challengeTemplate) {
                                     Task {
                                         let success = await challengeManager.createChallenge(challengeName: challengeTemplate.name, challengeTemplateID: challengeTemplate.id, userXPData: userXPData)
@@ -210,6 +225,9 @@ struct HomeView: View {
         .fullScreenCover(isPresented: $showLevelUpInformationView) {
             LevelInfoView()
         }
+        .fullScreenCover(isPresented: $navigateToAvailableChallengesView, content: {
+            ActiveChallengesView()
+        })
         .fullScreenCover(isPresented: $navigateToWeightTrendView) {
             WeightTrendView()
         }
@@ -312,8 +330,6 @@ struct HomePageHeader: View {
                     ToDoList(toDoListManager: toDoListManager)
                 }
             }
-            .padding()
-            .background(Color(hex: "F5F5F5"))
         }
     }
 }

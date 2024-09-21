@@ -50,7 +50,7 @@
         },
         "LevelUpFitnessChallengeExpirationCheckLambda": {
           "deploymentBucketName": "amplify-levelupfitnessapp-dev-33cf0-deployment",
-          "s3Key": "amplify-builds/LevelUpFitnessChallengeExpirationCheckLambda-567469416e6a344a3438-build.zip"
+          "s3Key": "amplify-builds/LevelUpFitnessChallengeExpirationCheckLambda-55724236767a46464578-build.zip"
         }
       },
       "api": {
