@@ -20,6 +20,7 @@ class AuthStateObserver: ObservableObject {
     
     func checkAuthState() {
         Task {
+            hasFinishedChecking = false
             do {
                 let authResult = try await Amplify.Auth.fetchAuthSession()
                 DispatchQueue.main.async {

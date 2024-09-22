@@ -71,7 +71,7 @@ struct IndividualExerciseView: View {
                     .padding(.horizontal)
 
                     
-                    LibraryExerciseDataView(exerciseData: ExerciseData(sets: []), isWeight: progression.isWeight, exerciseType: progression.exerciseType)
+                    LibraryExerciseDataView(progression: progression, exerciseData: ExerciseData(sets: []), isWeight: progression.isWeight, exerciseType: progression.exerciseType)
                     
                 }
                 

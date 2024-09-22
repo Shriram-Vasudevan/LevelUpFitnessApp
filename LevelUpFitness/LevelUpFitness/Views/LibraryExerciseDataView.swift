@@ -10,6 +10,7 @@ import SwiftUI
 
 struct LibraryExerciseDataView: View {
     @State var sectionType: ExerciseDataSectionType = .start
+    @State var progression: Progression
     @State var exerciseData: ExerciseData
     @State var numberOfSets: String = ""
     @State var setsFieldNotFilledOut: Bool = false
@@ -87,8 +88,10 @@ struct LibraryExerciseDataView: View {
                     currentExerciseDataSetIndex += 1
                 } else {
                     let xpAdditionType = getExerciseTypeEnum(exerciseType: exerciseType)
+                
                     
                     Task {
+                        await addToGymSession()
                         await XPManager.shared.addXP(increment: 3, type: xpAdditionType)
                         await XPManager.shared.addXP(increment: 3, type: .total)
                     }
@@ -136,6 +139,24 @@ struct LibraryExerciseDataView: View {
             return .lowerBodyCompound
         }
     }
+    
+    @MainActor func addToGymSession() {
+            guard let currentSession = GymManager.shared.currentSession else {
+                print("No active gym session found.")
+                return
+            }
+
+            let exerciseRecord = ExerciseRecord(
+                exerciseInfo: .libraryExercise(progression),
+                exerciseData: exerciseData
+            )
+
+            GymManager.shared.currentSession?.addIndividualExercise(exerciseRecord: exerciseRecord)
+
+            GymManager.shared.saveGymSession(GymManager.shared.currentSession!)
+            
+            print("Exercise added to current session.")
+        }
 }
 
 struct LibraryExerciseDataSetWidget: View {
@@ -300,5 +321,5 @@ struct LibraryExerciseDataSetWidget: View {
 }
 
 #Preview {
-    LibraryExerciseDataView(exerciseData: ExerciseData(sets: []), isWeight: false, exerciseType: "LowerBody")
+    LibraryExerciseDataView(progression: Progression(name: "", description: "", level: 0, cdnURL: "", exerciseType: "", isWeight: false), exerciseData: ExerciseData(sets: []), isWeight: false, exerciseType: "LowerBody")
 }

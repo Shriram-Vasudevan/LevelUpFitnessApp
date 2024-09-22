@@ -38,6 +38,9 @@ struct PagesHolderView: View {
                 case .program:
                     ProgramView()
                     .preferredColorScheme(.light)
+                case .gymSession:
+                    GymSessionsView()
+                        .preferredColorScheme(.light)
                 case .exercise:
                     LibraryView(
                         programManager: programManager,
@@ -116,7 +119,30 @@ struct PagesHolderView: View {
                         .frame(maxWidth: .infinity, alignment: .center)
                         
                     }
-
+                    
+                    ZStack {
+                        VStack {
+                            Button(action: {
+                                pageType = .gymSession
+                            }, label: {
+                                VStack {
+                                    Image(pageType == .gymSession ? "GymBlue" : "GymGrey")
+                                        .resizable()
+                                        .frame(width: 30, height: 30)
+                                        .aspectRatio(contentMode:  .fill)
+                                    
+                                    Text("Gym")
+                                        .font(.caption)
+                                        .foregroundColor(pageType == .gymSession ? .blue : .gray)
+                                    
+                                }
+                                .padding(.bottom)
+                            })
+                        }
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        
+                    }
+                    
                     ZStack {
                         VStack {
                             Button(action: {

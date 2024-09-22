@@ -72,6 +72,7 @@ struct LoginView: View {
             .padding(.bottom, keyboardResponder.keyboardHeight)
             .animation(.easeOut(duration: 0.16), value: keyboardResponder.keyboardHeight)
         }
+        .navigationBarBackButtonHidden()
         .navigationDestination(isPresented: $navigateToRegister) {
             RegisterView()
         }

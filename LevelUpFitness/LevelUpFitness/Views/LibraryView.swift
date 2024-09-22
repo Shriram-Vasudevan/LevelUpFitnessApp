@@ -29,7 +29,7 @@ struct LibraryView: View {
                     VStack(spacing: 16) {
                         HStack {
                             VStack(alignment: .leading, spacing: 4) {
-                                Text("Exercise")
+                                Text("Exercise Library")
                                     .font(.system(size: 28, weight: .medium, design: .default))
                                     .foregroundColor(.black)
                                 Text("Discover and master new exercises.")

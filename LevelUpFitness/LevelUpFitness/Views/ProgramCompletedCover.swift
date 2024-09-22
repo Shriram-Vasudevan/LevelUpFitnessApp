@@ -50,9 +50,7 @@ struct ProgramCompletedCover: View {
                 .cornerRadius(8)
                 
                 Button(action: {
-                    Task {
-                        XPManager.shared.addXP(increment: 15, type: .total)
-                    }
+                    XPManager.shared.addXP(increment: 15, type: .total)
                     dismiss()
                 }) {
                     Text("Continue")

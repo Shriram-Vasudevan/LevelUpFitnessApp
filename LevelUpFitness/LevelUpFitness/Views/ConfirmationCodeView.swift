@@ -10,7 +10,6 @@ import Combine
 
 struct ConfirmationCodeView: View {
     @Environment(\.dismiss) var dismiss
-    @Binding var accountConfirmed: Bool
     
     let email: String
     
@@ -23,6 +22,11 @@ struct ConfirmationCodeView: View {
     private let textColor = Color.black
     private let placeholderColor = Color.gray.opacity(0.7)
     
+    @State private var resendSuccess: Bool = false
+    @State private var resendError: Error?
+    @State private var isResendingCode: Bool = false
+    
+    @State var navigateToLoginView: Bool = false
     var body: some View {
         ZStack {
             backgroundColor.ignoresSafeArea()
@@ -41,17 +45,15 @@ struct ConfirmationCodeView: View {
                 HStack(spacing: 12) {
                     ForEach(0..<6) { index in
                         CodeDigitInput(text: $codeDigits[index], fieldIndex: index)
-                            .focused($focusedField, equals: index)  // Bind each field to the correct index
+                            .focused($focusedField, equals: index)
                             .onChange(of: codeDigits[index]) { newValue in
                                 if newValue.count == 1 {
-                                    // Move to next field if available
                                     if index < 5 {
                                         focusedField = index + 1
                                     } else {
                                         focusedField = nil
                                     }
                                 } else if newValue.isEmpty {
-                                    // Move back if user deletes a value
                                     if index > 0 {
                                         focusedField = index - 1
                                     }
@@ -76,10 +78,22 @@ struct ConfirmationCodeView: View {
                         .cornerRadius(8)
                 }
                 
-                Button(action: resendCode) {
-                    Text("Resend Code")
-                        .font(.system(size: 16, weight: .medium))
-                        .foregroundColor(accentColor)
+                Button(action: resendConfirmationCode) {
+                    Text(isResendingCode ? "Resending..." : "Resend Code")
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundColor(.blue)
+                }
+                .padding()
+                .disabled(isResendingCode) 
+
+                if resendSuccess {
+                    Text("Confirmation code has been resent to your email.")
+                        .foregroundColor(.green)
+                }
+
+                if let resendError = resendError {
+                    Text("Failed to resend code: \(resendError.localizedDescription)")
+                        .foregroundColor(.red)
                 }
                 
                 Spacer()
@@ -97,7 +111,10 @@ struct ConfirmationCodeView: View {
             }
         }
         .onAppear {
-            focusedField = 0  // Focus the first field when the view appears
+            focusedField = 0
+        }
+        .navigationDestination(isPresented: $navigateToLoginView) {
+            LoginView()
         }
     }
 
@@ -109,8 +126,7 @@ struct ConfirmationCodeView: View {
             Task {
                 await AuthenticationManager.shared.confirm(email: email, code: code) { success, error in
                     if success {
-                        accountConfirmed = true
-                        dismiss()
+                        navigateToLoginView = true
                     } else {
                         codeError = true
                     }
@@ -119,8 +135,15 @@ struct ConfirmationCodeView: View {
         }
     }
     
-    private func resendCode() {
-        // Resend code logic
+    private func resendConfirmationCode() {
+        isResendingCode = true
+        Task {
+            await AuthenticationManager.shared.resendCode(email: email) { success, error in
+                isResendingCode = false
+                resendSuccess = success
+                resendError = error
+            }
+        }
     }
 }
 
@@ -152,5 +175,5 @@ struct CodeDigitInput: View {
 
 
 #Preview {
-    ConfirmationCodeView(accountConfirmed: .constant(false), email: "shriram123")
+    ConfirmationCodeView(email: "shriram123")
 }

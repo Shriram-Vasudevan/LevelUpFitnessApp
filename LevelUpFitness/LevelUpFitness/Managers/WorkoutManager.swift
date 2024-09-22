@@ -89,6 +89,8 @@ class WorkoutManager: ObservableObject {
                 }
             }
 
+            addCurrentExerciseToGymSession()
+            
             currentExerciseIndex += 1
             initializeExerciseData()
             objectWillChange.send()
@@ -122,6 +124,26 @@ class WorkoutManager: ObservableObject {
             programCompletedForDay = true
         }
     }
+    
+    func addCurrentExerciseToGymSession() {
+           guard let currentSession = GymManager.shared.currentSession,
+                 let selectedProgram = ProgramManager.shared.selectedProgram else {
+               return
+           }
+
+           let currentExercise = currentExercises[currentExerciseIndex]
+
+           let exerciseRecord = ExerciseRecord(
+               exerciseInfo: .programExercise(currentExercise),
+               exerciseData: currentExerciseData
+           )
+
+           GymManager.shared.currentSession?.addProgramExercise(
+               programName: selectedProgram.programName,
+               exerciseRecord: exerciseRecord
+           )
+           GymManager.shared.saveGymSession(GymManager.shared.currentSession!)
+       }
     
     func saveProgramStatus() {
         Task {

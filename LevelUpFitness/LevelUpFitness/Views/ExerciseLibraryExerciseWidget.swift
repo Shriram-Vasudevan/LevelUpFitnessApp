@@ -92,7 +92,7 @@ struct ExerciseLibraryExerciseWidget: View {
    private func otherProgressionView(progression: Progression) -> some View {
        VStack(spacing: 8) {
            ZStack {
-               Image("GuyAtTheGym")
+               Image("LevelUpFitnessLogo")
                    .resizable()
                    .aspectRatio(contentMode: .fill)
                    .frame(width: 80, height: 80)

@@ -55,7 +55,7 @@ struct FullLevelBreakdownView: View {
                                     }
                                     
                                     ProgressView(value: Float(attribute.xp), total: Float(attribute.xpNeeded))
-                                        .progressViewStyle(CustomProgressLevelViewStyle(progressColor: progressColors[index % progressColors.count]))
+                                        .progressViewStyle(CustomProgressLevelViewStyle(progressColor: Color(hex: "40C4FC")))
                                         .frame(height: 8)
                                     
                                     Text("\(attribute.xp)/\(attribute.xpNeeded) XP")

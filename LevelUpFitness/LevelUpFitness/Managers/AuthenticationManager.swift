@@ -49,7 +49,7 @@ class AuthenticationManager: ObservableObject {
         }
     }
     
-    func register(email: String, name: String, username: String, password: String, completion: @escaping (Bool, String?, Error?) async -> Void) async {
+    func register(email: String, name: String, username: String, password: String, completion: @escaping (Bool, String?, Error?) -> Void) async {
         let userAttributes = [
             AuthUserAttribute(.custom("username"), value: username),
             AuthUserAttribute(.name, value: name)
@@ -62,19 +62,32 @@ class AuthenticationManager: ObservableObject {
             
             if case let .confirmUser(deliveryDetails, _, userID) = signUpResult.nextStep {
                 print("Delivery details \(String(describing: deliveryDetails)) for userID: \(String(describing: userID))")
-                await completion(true, userID, nil)
+                
+                DispatchQueue.main.async {
+                    completion(true, userID, nil)
+                }
             } else {
                 print("SignUp Complete")
-                //completion(true, userId, nil)
+                
+                DispatchQueue.main.async {
+                    completion(true, nil, nil)
+                }
             }
         } catch let error as AuthError {
             print("An error occurred while registering a user \(error)")
-            await completion(false, nil, error)
+            
+            DispatchQueue.main.async {
+                completion(false, nil, error)
+            }
         } catch {
             print("Unexpected error: \(error)")
-            await completion(false, nil, error)
+            
+            DispatchQueue.main.async {
+                completion(false, nil, error)
+            }
         }
     }
+
     
     func confirm(email: String, code: String, completion: @escaping (Bool, Error?) -> Void) async {
         do {
@@ -93,6 +106,27 @@ class AuthenticationManager: ObservableObject {
         }
     }
     
+    func resendCode(email: String, completion: @escaping (Bool, Error?) -> Void) async {
+        do {
+            let result = try await Amplify.Auth.resendSignUpCode(for: email)
+            print("Resend code successful. Code sent to \(result.destination)")
+            DispatchQueue.main.async {
+                completion(true, nil)
+            }
+        } catch let error as AuthError {
+            print("An error occurred while resending the code: \(error)")
+            DispatchQueue.main.async {
+                completion(false, error)
+            }
+        } catch {
+            print("Unexpected error: \(error)")
+            DispatchQueue.main.async {
+                completion(false, error)
+            }
+        }
+    }
+
+    
 
     func signOut() async {
         let result = await Amplify.Auth.signOut()
@@ -106,7 +140,7 @@ class AuthenticationManager: ObservableObject {
         switch signOutResult {
         case .complete:
             print("Signed out successfully")
-
+            AuthStateObserver.shared.checkAuthState()
         case let .partial(revokeTokenError, globalSignOutError, hostedUIError):
             
             if let hostedUIError = hostedUIError {
@@ -120,7 +154,8 @@ class AuthenticationManager: ObservableObject {
             if let revokeTokenError = revokeTokenError {
                 print("Revoke token error  \(String(describing: revokeTokenError))")
             }
-
+            
+            AuthStateObserver.shared.checkAuthState()
         case .failed(let error):
             print("SignOut failed with \(error)")
         }
@@ -130,10 +165,12 @@ class AuthenticationManager: ObservableObject {
         do {
             try await Amplify.Auth.deleteUser()
             print("Successfully deleted user")
+            AuthStateObserver.shared.checkAuthState()
         } catch let error as AuthError {
             print("Delete user failed with error \(error)")
         } catch {
             print("Unexpected error: \(error)")
+            AuthStateObserver.shared.checkAuthState()
         }
     }
     
@@ -225,70 +262,84 @@ class AuthenticationManager: ObservableObject {
     }
     
     func getUsername() async {
-        if let storedUsername = UserDefaults.standard.string(forKey: "username") {
-            self.username = storedUsername
-            print("Fetched username from UserDefaults: \(storedUsername)")
-        } else {
-            do {
+        do {
+            let userID = try await Amplify.Auth.getCurrentUser().userId
+            let usernameKey = "username-\(userID)"
+            
+            if let storedUsername = UserDefaults.standard.string(forKey: usernameKey) {
+                self.username = storedUsername
+                print("Fetched username from UserDefaults for \(userID): \(storedUsername)")
+            } else {
                 let userAttributes = try await Amplify.Auth.fetchUserAttributes()
                 print("User attributes - \(userAttributes)")
                 
                 if let usernameAttribute = userAttributes.first(where: { $0.key == .custom("username") })?.value {
                     self.username = usernameAttribute
-                    UserDefaults.standard.set(usernameAttribute, forKey: "username")
-                    print("Fetched username from Amplify and stored in UserDefaults: \(usernameAttribute)")
+                    UserDefaults.standard.set(usernameAttribute, forKey: usernameKey)
+                    print("Fetched username from Amplify and stored in UserDefaults for \(userID): \(usernameAttribute)")
                 }
-            } catch {
-                print("Error fetching username: \(error)")
             }
+        } catch {
+            print("Error fetching username: \(error)")
         }
     }
 
+
     func getName() async {
-        if let storedName = UserDefaults.standard.string(forKey: "name") {
-            self.name = storedName
-            print("Fetched name from UserDefaults: \(storedName)")
-        } else {
-            do {
+        do {
+            let userID = try await Amplify.Auth.getCurrentUser().userId
+            let nameKey = "name-\(userID)"
+            
+            if let storedName = UserDefaults.standard.string(forKey: nameKey) {
+                self.name = storedName
+                print("Fetched name from UserDefaults for \(userID): \(storedName)")
+            } else {
                 let userAttributes = try await Amplify.Auth.fetchUserAttributes()
                 if let nameAttribute = userAttributes.first(where: { $0.key == .name })?.value {
                     self.name = nameAttribute
-                    UserDefaults.standard.set(nameAttribute, forKey: "name")
-                    print("Fetched name from Amplify and stored in UserDefaults: \(nameAttribute)")
+                    UserDefaults.standard.set(nameAttribute, forKey: nameKey)
+                    print("Fetched name from Amplify and stored in UserDefaults for \(userID): \(nameAttribute)")
                 }
-            } catch {
-                print("Error fetching name: \(error)")
             }
+        } catch {
+            print("Error fetching name: \(error)")
         }
     }
+
     
     func updateUsername(newUsername: String, completion: @escaping (Bool, Error?) -> Void) async {
-            do {
-                let userAttributes = [AuthUserAttribute(.custom("username"), value: newUsername)]
-                let updateResult = try await Amplify.Auth.update(userAttributes: userAttributes)
-                
-                self.username = newUsername
-                UserDefaults.standard.set(newUsername, forKey: "username")
-                print("Username updated to \(newUsername)")
-                completion(true, nil)
-            } catch {
-                print("Error updating username: \(error)")
-                completion(false, error)
-            }
+        do {
+            let userID = try await Amplify.Auth.getCurrentUser().userId
+            let usernameKey = "username-\(userID)"
+            
+            let userAttributes = [AuthUserAttribute(.custom("username"), value: newUsername)]
+            let updateResult = try await Amplify.Auth.update(userAttributes: userAttributes)
+            
+            self.username = newUsername
+            UserDefaults.standard.set(newUsername, forKey: usernameKey)
+            print("Username updated to \(newUsername) for \(userID)")
+            completion(true, nil)
+        } catch {
+            print("Error updating username: \(error)")
+            completion(false, error)
         }
+    }
 
-        func updateName(newName: String, completion: @escaping (Bool, Error?) -> Void) async {
-            do {
-                let userAttributes = [AuthUserAttribute(.name, value: newName)]
-                let updateResult = try await Amplify.Auth.update(userAttributes: userAttributes)
-                
-                self.name = newName
-                UserDefaults.standard.set(newName, forKey: "name")
-                print("Name updated to \(newName)")
-                completion(true, nil)
-            } catch {
-                print("Error updating name: \(error)")
-                completion(false, error)
-            }
+    func updateName(newName: String, completion: @escaping (Bool, Error?) -> Void) async {
+        do {
+            let userID = try await Amplify.Auth.getCurrentUser().userId
+            let nameKey = "name-\(userID)"
+            
+            let userAttributes = [AuthUserAttribute(.name, value: newName)]
+            let updateResult = try await Amplify.Auth.update(userAttributes: userAttributes)
+            
+            self.name = newName
+            UserDefaults.standard.set(newName, forKey: nameKey)
+            print("Name updated to \(newName) for \(userID)")
+            completion(true, nil)
+        } catch {
+            print("Error updating name: \(error)")
+            completion(false, error)
         }
+    }
 }

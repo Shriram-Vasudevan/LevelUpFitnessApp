@@ -12,11 +12,14 @@ struct RegisterView: View {
     @State private var usernameError: Bool = false
     @State private var nameError: Bool = false
     @State private var passwordError: Bool = false
+    @State private var passwordLengthError: Bool = false
     
     @State private var navigateToConfirm: Bool = false
-    @State private var accountConfirmed: Bool = false
-    
+
     @Environment(\.dismiss) var dismiss
+    
+    @State private var statusMessage: String = ""
+    @State private var isError: Bool = false
     
     private let accentColor = Color(hex: "40C4FC")
     private let textColor = Color.black
@@ -43,7 +46,17 @@ struct RegisterView: View {
                             CustomTextField(placeholder: "Email", text: $email, isSecure: false, error: emailError)
                             CustomTextField(placeholder: "Username", text: $username, isSecure: false, error: usernameError)
                             CustomTextField(placeholder: "Name", text: $name, isSecure: false, error: nameError)
-                            CustomTextField(placeholder: "Password", text: $password, isSecure: true, error: passwordError)
+                            
+                            VStack(alignment: .leading, spacing: 4) {
+                                CustomTextField(placeholder: "Password", text: $password, isSecure: true, error: passwordError)
+                                
+                                if passwordLengthError {
+                                    Text("Password must be at least 8 characters")
+                                        .font(.system(size: 12))
+                                        .foregroundColor(.red)
+                                        .padding(.leading, 16)
+                                }
+                            }
                         }
                         
                         Button(action: checkFieldsAndSignUp) {
@@ -54,6 +67,13 @@ struct RegisterView: View {
                                 .frame(height: 56)
                                 .background(accentColor)
                                 .cornerRadius(8)
+                        }
+                        
+                        if !statusMessage.isEmpty {
+                            Text(statusMessage)
+                                .font(.system(size: 16))
+                                .foregroundColor(isError ? .red : .green)
+                                .padding(.top, 8)
                         }
                     }
                     .padding(.horizontal, 24)
@@ -84,13 +104,8 @@ struct RegisterView: View {
             
             
         }
-        .onChange(of: accountConfirmed) { newValue in
-            if newValue {
-                dismiss()
-            }
-        }
         .navigationDestination(isPresented: $navigateToConfirm) {
-            ConfirmationCodeView(accountConfirmed: $accountConfirmed, email: email)
+            ConfirmationCodeView(email: email)
         }
         .navigationBarBackButtonHidden(true)
     }
@@ -103,15 +118,24 @@ struct RegisterView: View {
         usernameError = username.isEmpty
         nameError = name.isEmpty
         passwordError = password.isEmpty
+        passwordLengthError = password.count < 8
         
-        if !emailError && !usernameError && !nameError && !passwordError {
+        if !emailError && !usernameError && !nameError && !passwordError && !passwordLengthError {
             Task {
                 await AuthenticationManager.shared.register(email: email, name: name, username: username, password: password) { success, userID, failed in
                     if success {
                         navigateToConfirm = true
+                        statusMessage = "Account created successfully. Please confirm your email."
+                        isError = false
+                    } else {
+                        statusMessage = "Registration failed: \(failed?.localizedDescription ?? "Unknown error")"
+                        isError = true
                     }
                 }
             }
+        } else {
+            statusMessage = "Please fix the errors before submitting."
+            isError = true
         }
     }
 }
