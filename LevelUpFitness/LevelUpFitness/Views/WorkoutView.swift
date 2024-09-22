@@ -16,6 +16,7 @@ struct WorkoutView: View {
     @Environment(\.dismiss) var dismiss
     
     @State var navigateToExerciseVideoView: Bool = false
+    @State private var showDescriptionPopup: Bool = false
     
     init(programManager: ProgramManager, xpManager: XPManager) {
         _workoutManager = StateObject(wrappedValue: WorkoutManager(programManager: programManager, xpManager: xpManager))
@@ -40,8 +41,11 @@ struct WorkoutView: View {
                         }
                     }
             } else {
-                WorkoutContent(workoutManager: workoutManager, programManager: programManager, xpManager: xpManager, navigateToExerciseVideoView: $navigateToExerciseVideoView, dismiss: dismiss)
+                WorkoutContent(workoutManager: workoutManager, programManager: programManager, xpManager: xpManager, navigateToExerciseVideoView: $navigateToExerciseVideoView, showDescriptionPopup: $showDescriptionPopup, dismiss: dismiss)
             }
+        }
+        .sheet(isPresented: $showDescriptionPopup) {
+            ExerciseDescriptionView(description: workoutManager.currentExercises[workoutManager.currentExerciseIndex].description)
         }
         .navigationDestination(isPresented: $navigateToExerciseVideoView, destination: {
             if workoutManager.currentExerciseIndex < workoutManager.currentExercises.count {
@@ -63,6 +67,7 @@ struct WorkoutContent: View {
     @ObservedObject var xpManager: XPManager
     
     @Binding var navigateToExerciseVideoView: Bool
+    @Binding var showDescriptionPopup: Bool
     
     var dismiss: DismissAction
     
@@ -110,7 +115,7 @@ struct WorkoutContent: View {
                     }
                     .padding(.bottom)
 
-                    if let videoURL = URL(string: workoutManager.currentExercises[workoutManager.currentExerciseIndex].cdnURL) {
+                    if let videoURL = URL(string: workoutManager.currentExercises[workoutManager.currentExerciseIndex].cdnURL), !workoutManager.currentExercises[workoutManager.currentExerciseIndex].cdnURL.isEmpty {
                         VideoPlayer(player: avPlayer)
                             .aspectRatio(16/9, contentMode: .fit)
                             .onAppear {
@@ -119,7 +124,31 @@ struct WorkoutContent: View {
                             }
                             .padding(.horizontal)
                     } else {
-                        Text("Retrieving Video")
+                        VStack {
+                            Text("No video available")
+                                .font(.system(size: 16, weight: .medium))
+                                .foregroundColor(.black)
+                            Button(action: {
+                                showDescriptionPopup = true
+                            }) {
+                                Text("See Description")
+                                    .font(.system(size: 16, weight: .bold))
+                                    .foregroundColor(.white)
+                                    .padding(10)
+                                    .background(
+                                        Capsule()
+                                            .fill(
+                                                LinearGradient(
+                                                    gradient: Gradient(colors: [Color(hex: "40C4FC"), Color(hex: "0077FF")]),
+                                                    startPoint: .leading,
+                                                    endPoint: .trailing
+                                                )
+                                            )
+                                    )
+                            }
+                            .padding(.top, 10)
+                        }
+                        .padding(.horizontal)
                     }
 
                     HStack {
@@ -176,8 +205,34 @@ struct WorkoutContent: View {
     }
 }
 
-
-
+struct ExerciseDescriptionView: View {
+    var description: String
+    
+    @Environment(\.dismiss) var dismiss
+    var body: some View {
+        VStack {
+            Text("Exercise Description")
+                .font(.title2)
+                .padding()
+            
+            Text(description)
+                .font(.body)
+                .padding()
+            
+            Button("Close") {
+                dismiss()
+            }
+            .font(.headline)
+            .padding()
+            .background(Capsule().fill(Color.red))
+            .foregroundColor(.white)
+        }
+        .padding()
+        .background(Color.white)
+        .cornerRadius(12)
+        .shadow(radius: 10)
+    }
+}
 
 #Preview {
     WorkoutView(programManager: ProgramManager(), xpManager: XPManager())

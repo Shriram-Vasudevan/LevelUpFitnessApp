@@ -43,6 +43,7 @@ struct ProgramExercise: Codable, Hashable {
     var completed: Bool
     var cdnURL: String
     var equipment: [String]
+    var description: String
     var data: ExerciseData
 }
 

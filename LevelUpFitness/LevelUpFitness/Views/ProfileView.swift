@@ -13,8 +13,7 @@ struct ProfileView: View {
     @Environment(\.dismiss) private var dismiss
     @StateObject private var authManager = AuthenticationManager.shared
     @State private var showDeleteConfirmation = false
-    @State private var showEditNameSheet = false
-    @State private var showEditUsernameSheet = false
+    @State private var showEditProfileSheet = false
     @State private var showHelpAndSupportSheet = false
     @State private var selectedProfilePicture: PhotosPickerItem?
     @State private var pfpData: Data?
@@ -29,9 +28,11 @@ struct ProfileView: View {
                 navigationBar
                 
                 ScrollView {
-                    VStack(spacing: 24) {
+                    VStack(spacing: 20) {
                         profileHeader
-                        settingsSection
+                        statsSection
+                        menuSection
+                        collectionSection
                         supportSection
                         accountActions
                     }
@@ -49,15 +50,12 @@ struct ProfileView: View {
         } message: {
             Text("Are you sure you want to delete your account? This action cannot be undone.")
         }
-        .sheet(isPresented: $showEditNameSheet, content: {
-            editNameSheet
-        })
-        .sheet(isPresented: $showEditUsernameSheet, content: {
-            editUsernameSheet
-        })
-        .sheet(isPresented: $showHelpAndSupportSheet, content: {
+        .sheet(isPresented: $showEditProfileSheet) {
+            EditProfileView(authManager: authManager)
+        }
+        .sheet(isPresented: $showHelpAndSupportSheet) {
             SupportView()
-        })
+        }
         .onChange(of: selectedProfilePicture) { _ in
             Task {
                 if let data = try? await selectedProfilePicture?.loadTransferable(type: Data.self) {
@@ -100,28 +98,19 @@ struct ProfileView: View {
                 .font(.system(size: 16, weight: .regular))
                 .foregroundColor(.gray)
             
-            HStack(spacing: 16) {
-                Button(action: { showEditNameSheet = true }) {
-                    Text("Edit Name")
-                        .font(.system(size: 16, weight: .medium))
-                        .foregroundColor(.white)
-                        .frame(height: 44)
-                        .frame(maxWidth: .infinity)
-                        .background(Color(hex: "40C4FC"))
-                }
-                
-                Button(action: { showEditUsernameSheet = true }) {
-                    Text("Edit Username")
-                        .font(.system(size: 16, weight: .medium))
-                        .foregroundColor(.white)
-                        .frame(height: 44)
-                        .frame(maxWidth: .infinity)
-                        .background(Color(hex: "40C4FC"))
-                }
+            Button(action: { showEditProfileSheet = true }) {
+                Text("Edit Profile")
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundColor(.white)
+                    .frame(height: 44)
+                    .frame(maxWidth: .infinity)
+                    .background(Color(hex: "40C4FC"))
+                    .cornerRadius(22)
             }
         }
         .padding()
         .background(Color(hex: "F5F5F5"))
+        .cornerRadius(10)
     }
 
     private var profileImage: some View {
@@ -142,32 +131,87 @@ struct ProfileView: View {
         }
     }
 
-    private var settingsSection: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("Settings")
-                .font(.system(size: 20, weight: .medium))
-            
-            settingsButton(title: "Notifications", icon: "bell.fill")
-            settingsButton(title: "Privacy", icon: "lock.fill")
-            settingsButton(title: "Security", icon: "shield.fill")
+    private var statsSection: some View {
+        HStack(spacing: 30) {
+            statItem(title: "Streak", value: "1")
+            statItem(title: "Badges", value: "None", showArrow: true)
+            statItem(title: "Coins", value: "0", icon: "dollarsign.circle.fill", showArrow: true)
+        }
+        .padding()
+        .background(Color(hex: "F5F5F5"))
+        .cornerRadius(10)
+    }
+
+    private func statItem(title: String, value: String, icon: String? = nil, showArrow: Bool = false) -> some View {
+        VStack(spacing: 5) {
+            Text(title)
+                .font(.system(size: 14, weight: .medium))
+                .foregroundColor(.gray)
+            HStack(spacing: 5) {
+                if let icon = icon {
+                    Image(systemName: icon)
+                        .foregroundColor(Color(hex: "40C4FC"))
+                }
+                Text(value)
+                    .font(.system(size: 18, weight: .bold))
+                if showArrow {
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 12, weight: .bold))
+                        .foregroundColor(.gray)
+                }
+            }
         }
     }
 
-    private func settingsButton(title: String, icon: String) -> some View {
-        Button(action: {}) {
-            HStack {
-                Image(systemName: icon)
-                    .foregroundColor(Color(hex: "40C4FC"))
-                    .frame(width: 30)
-                Text(title)
-                    .font(.system(size: 16, weight: .regular))
-                Spacer()
-                Image(systemName: "chevron.right")
-                    .foregroundColor(.gray)
-            }
-            .padding()
-            .background(Color(hex: "F5F5F5"))
+    private var menuSection: some View {
+        VStack(spacing: 0) {
+            menuItem(title: "About", action: {})
+            menuItem(title: "Upvoted", action: {})
+            menuItem(title: "Hunted", action: {})
+            menuItem(title: "Collected", action: {}, isSelected: true)
         }
+        .background(Color(hex: "F5F5F5"))
+        .cornerRadius(10)
+    }
+
+    private func menuItem(title: String, action: @escaping () -> Void, isSelected: Bool = false) -> some View {
+        Button(action: action) {
+            HStack {
+                Text(title)
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundColor(isSelected ? Color(hex: "40C4FC") : .gray)
+                Spacer()
+            }
+            .padding(.vertical, 12)
+            .padding(.horizontal)
+            .background(isSelected ? Color(hex: "40C4FC").opacity(0.1) : Color.clear)
+        }
+    }
+
+    private var collectionSection: some View {
+        VStack(spacing: 16) {
+            Image(systemName: "bookmark")
+                .font(.system(size: 40))
+                .foregroundColor(.gray)
+            
+            Text("No collections here yet")
+                .font(.system(size: 18, weight: .semibold))
+            
+            Text("Looks like you don't have any collections here yet,")
+                .font(.system(size: 14, weight: .regular))
+                .foregroundColor(.gray)
+                .multilineTextAlignment(.center)
+            
+            Button(action: { /* Add action to create collection */ }) {
+                Text("create one")
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundColor(Color(hex: "40C4FC"))
+            }
+        }
+        .padding()
+        .frame(maxWidth: .infinity)
+        .background(Color(hex: "F5F5F5"))
+        .cornerRadius(10)
     }
 
     private var supportSection: some View {
@@ -188,6 +232,7 @@ struct ProfileView: View {
                 }
                 .padding()
                 .background(Color(hex: "F5F5F5"))
+                .cornerRadius(10)
             }
         }
     }
@@ -203,6 +248,7 @@ struct ProfileView: View {
                     .frame(height: 50)
                     .frame(maxWidth: .infinity)
                     .background(Color(hex: "40C4FC"))
+                    .cornerRadius(25)
             }
             
             Button(action: { showDeleteConfirmation = true }) {
@@ -212,64 +258,6 @@ struct ProfileView: View {
             }
         }
         .padding(.top, 20)
-    }
-
-    private var editNameSheet: some View {
-        VStack(spacing: 16) {
-            Text("Edit Name")
-                .font(.system(size: 18, weight: .semibold))
-            
-            TextField("New Name", text: $newName)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding(.horizontal)
-
-            Button(action: {
-                Task {
-                    await authManager.updateName(newName: newName) { success, error in
-                        if success { showEditNameSheet = false }
-                    }
-                }
-            }) {
-                Text("Save")
-                    .font(.system(size: 16, weight: .medium))
-                    .foregroundColor(.white)
-                    .frame(height: 44)
-                    .frame(maxWidth: .infinity)
-                    .background(Color(hex: "40C4FC"))
-            }
-            .padding(.horizontal)
-        }
-        .padding()
-        .background(Color.white)
-    }
-
-    private var editUsernameSheet: some View {
-        VStack(spacing: 16) {
-            Text("Edit Username")
-                .font(.system(size: 18, weight: .semibold))
-            
-            TextField("New Username", text: $newUsername)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding(.horizontal)
-
-            Button(action: {
-                Task {
-                    await authManager.updateUsername(newUsername: newUsername) { success, error in
-                        if success { showEditUsernameSheet = false }
-                    }
-                }
-            }) {
-                Text("Save")
-                    .font(.system(size: 16, weight: .medium))
-                    .foregroundColor(.white)
-                    .frame(height: 44)
-                    .frame(maxWidth: .infinity)
-                    .background(Color(hex: "40C4FC"))
-            }
-            .padding(.horizontal)
-        }
-        .padding()
-        .background(Color.white)
     }
 
     func saveProfilePictureLocally(pfpData: Data, userID: String) {
@@ -282,6 +270,36 @@ struct ProfileView: View {
                 print(error.localizedDescription)
             }
         }
+    }
+}
+
+struct EditProfileView: View {
+    @Environment(\.dismiss) private var dismiss
+    @ObservedObject var authManager: AuthenticationManager
+    @State private var newName: String = ""
+    @State private var newUsername: String = ""
+
+    var body: some View {
+        NavigationView {
+            Form {
+                Section(header: Text("Profile Information")) {
+                    TextField("Name", text: $newName)
+                    TextField("Username", text: $newUsername)
+                }
+            }
+            .navigationBarTitle("Edit Profile", displayMode: .inline)
+            .navigationBarItems(
+                leading: Button("Cancel") { dismiss() },
+                trailing: Button("Save") {
+                    Task {
+                        await authManager.updateName(newName: newName) { _, _ in }
+                        await authManager.updateUsername(newUsername: newUsername) { _, _ in }
+                        dismiss()
+                    }
+                }
+            )
+        }
+        .accentColor(Color(hex: "40C4FC"))
     }
 }
 
@@ -304,6 +322,7 @@ struct SupportView: View {
         .background(Color.white)
     }
 }
+
 
 #Preview {
     ProfileView()

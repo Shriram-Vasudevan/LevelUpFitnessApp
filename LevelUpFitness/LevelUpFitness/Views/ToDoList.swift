@@ -28,8 +28,6 @@ struct ToDoList: View {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 8)
-        .background(Color.white)
-        .shadow(radius: 2)
         .overlay(
             Rectangle()
                 .fill(Color(hex: "40C4FC"))

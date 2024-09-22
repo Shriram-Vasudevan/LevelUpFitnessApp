@@ -45,7 +45,7 @@ struct ExerciseLibraryExerciseWidget: View {
    
    private func mainProgressionView(progression: Progression) -> some View {
        HStack(spacing: 16) {
-           Image("GuyAtTheGym")
+           Image("LevelUpFitnessLogo")
                .resizable()
                .aspectRatio(contentMode: .fill)
                .frame(width: 80, height: 80)

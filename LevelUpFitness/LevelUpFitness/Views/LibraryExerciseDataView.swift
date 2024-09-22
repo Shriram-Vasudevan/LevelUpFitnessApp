@@ -212,7 +212,7 @@ struct LibraryExerciseDataSetWidget: View {
     private var inputFieldsView: some View {
         HStack(spacing: 16) {
             if isWeight {
-                inputField(title: "Weight", text: $weightText, unit: "kg")
+                inputField(title: "Weight", text: $weightText, unit: "lbs")
             }
             inputField(title: "Reps", text: $repText, unit: "reps")
         }

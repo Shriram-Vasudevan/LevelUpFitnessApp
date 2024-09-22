@@ -208,5 +208,5 @@ struct ProgramExerciseDataSetWidget: View {
 }
 
 #Preview {
-    ProgramExerciseDataSetWidget(model: .constant(ExerciseDataSet(weight: 10, reps: 5, time: 0.0, rest: 0.0)), exercise: ProgramExercise(name: "", sets: 0, reps: "0", rpe: "", rest: 0, area: "", isWeight: true, completed: false, cdnURL: "", equipment: [""], data: ExerciseData(sets: [])), setIndex: 0, totalSets: 1, setCompleted: {})
+    ProgramExerciseDataSetWidget(model: .constant(ExerciseDataSet(weight: 10, reps: 5, time: 0.0, rest: 0.0)), exercise: ProgramExercise(name: "", sets: 0, reps: "0", rpe: "", rest: 0, area: "", isWeight: true, completed: false, cdnURL: "", equipment: [""], description: "", data: ExerciseData(sets: [])), setIndex: 0, totalSets: 1, setCompleted: {})
 }

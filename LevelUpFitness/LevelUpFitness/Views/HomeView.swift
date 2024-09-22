@@ -330,6 +330,8 @@ struct HomePageHeader: View {
                     ToDoList(toDoListManager: toDoListManager)
                 }
             }
+            .padding()
+            .background(Color(hex: "F5F5F5"))
         }
     }
 }
