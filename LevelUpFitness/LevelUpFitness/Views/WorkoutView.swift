@@ -43,9 +43,12 @@ struct WorkoutView: View {
             } else {
                 WorkoutContent(workoutManager: workoutManager, programManager: programManager, xpManager: xpManager, navigateToExerciseVideoView: $navigateToExerciseVideoView, showDescriptionPopup: $showDescriptionPopup, dismiss: dismiss)
             }
-        }
-        .sheet(isPresented: $showDescriptionPopup) {
-            ExerciseDescriptionView(description: workoutManager.currentExercises[workoutManager.currentExerciseIndex].description)
+            
+            if showDescriptionPopup {
+                ExerciseDescriptionView(description: workoutManager.currentExercises[workoutManager.currentExerciseIndex].description, isOpen: $showDescriptionPopup)
+                    .transition(.move(edge: .bottom))
+                    .animation(.easeInOut, value: showDescriptionPopup)
+            }
         }
         .navigationDestination(isPresented: $navigateToExerciseVideoView, destination: {
             if workoutManager.currentExerciseIndex < workoutManager.currentExercises.count {
@@ -208,29 +211,56 @@ struct WorkoutContent: View {
 struct ExerciseDescriptionView: View {
     var description: String
     
+    @Binding var isOpen: Bool
+
+    @State private var offsetValue: CGFloat = UIScreen.main.bounds.height
+    
     @Environment(\.dismiss) var dismiss
     var body: some View {
-        VStack {
-            Text("Exercise Description")
-                .font(.title2)
-                .padding()
-            
-            Text(description)
-                .font(.body)
-                .padding()
-            
-            Button("Close") {
-                dismiss()
+        ZStack {
+            if isOpen {
+                Color.black.opacity(0.4)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        withAnimation {
+                            isOpen = false
+                        }
+                    }
             }
-            .font(.headline)
+            
+            VStack {
+                Text("Exercise Description")
+                    .font(.title2)
+                    .padding()
+                
+                Text(description)
+                    .font(.body)
+                    .padding()
+                
+                Button("Close") {
+                    isOpen = false
+                }
+                .font(.system(size: 16, weight: .medium, design: .default))
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color(hex: "40C4FC"))
+            }
             .padding()
-            .background(Capsule().fill(Color.red))
-            .foregroundColor(.white)
+            .background(Color.white)
+            .padding()
+            .offset(y: offsetValue)
+            .onAppear {
+                withAnimation(.easeInOut(duration: 0.3)) {
+                    offsetValue = 0
+                }
+            }
+            .onDisappear {
+                withAnimation {
+                    offsetValue = UIScreen.main.bounds.height
+                }
+            }
         }
-        .padding()
-        .background(Color.white)
-        .cornerRadius(12)
-        .shadow(radius: 10)
     }
 }
 

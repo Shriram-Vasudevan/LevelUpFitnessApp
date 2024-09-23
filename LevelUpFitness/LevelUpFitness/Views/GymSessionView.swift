@@ -339,7 +339,6 @@ struct EndSessionConfirmationView: View {
             }
             .padding()
             .background(Color.white)
-            .cornerRadius(2)
             .padding()
             .offset(y: offsetValue)
             .onAppear {

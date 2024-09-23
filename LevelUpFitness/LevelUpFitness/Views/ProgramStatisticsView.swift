@@ -65,7 +65,7 @@ struct ProgramStatisticsView: View {
         VStack(spacing: 20) {
             HStack(spacing: 20) {
                 statCard(title: "Program Completion", value: "\(Int(program.getProgramCompletionPercentage()))%", icon: "chart.pie.fill", color: .blue)
-                statCard(title: "Total Weight", value: "\(program.getTotalWeightUsed()) kg", icon: "dumbbell.fill", color: .green)
+                statCard(title: "Total Weight", value: "\(program.getTotalWeightUsed()) lbs", icon: "dumbbell.fill", color: .green)
             }
             
             VStack(alignment: .leading, spacing: 10) {
