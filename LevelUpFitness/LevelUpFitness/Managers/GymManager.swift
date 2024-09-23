@@ -39,6 +39,7 @@ class GymManager: ObservableObject {
         if var session = currentSession {
             session.endTime = Date()
             saveGymSession(session)
+            gymSessions.insert(session, at: 0)
             currentSession = nil
         }
         
@@ -82,7 +83,7 @@ class GymManager: ObservableObject {
                     return session
                 }
                 return nil
-            }
+            }.sorted(by: { $0.startTime > $1.startTime })
         } catch {
             print("Error loading gym sessions: \(error)")
             return []

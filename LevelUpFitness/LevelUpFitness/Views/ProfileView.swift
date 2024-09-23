@@ -167,8 +167,12 @@ struct ProfileView: View {
 
     private var accountActions: some View {
         VStack(spacing: 12) {
-            Text("Account Actions")
-                .font(.system(size: 20, weight: .medium))
+            HStack {
+                Text("Account Actions")
+                    .font(.system(size: 20, weight: .medium))
+                
+                Spacer()
+            }
             
             Button(action: {
                 Task { await AuthenticationManager.shared.signOut() }
@@ -257,8 +261,8 @@ struct SupportView: View {
             
             VStack(spacing: 30) {
                 VStack(spacing: 15) {
-                    contactInfo(title: "Email", value: "levelupfitttech@gmail.com", icon: "envelope.fill")
-                    contactInfo(title: "Website", value: "www.levelupfitness.com", icon: "globe")
+                    contactInfo(title: "Email", value: "levelupfitnesshelp@gmail.com", icon: "envelope.fill")
+                    contactInfo(title: "Website", value: "www.levelupfitness.app", icon: "globe")
                 }
                 .padding()
                 .background(Color.white)

@@ -20,6 +20,9 @@ class XPManager: ObservableObject {
     
     let allProperties = ["Weight", "Rest", "Endurance", "Consistency",]
     var currentProperties: [String] = []
+
+    private var xpCallCounter = 0
+    private var lastXPCallTimestamp: Date?
     
     func xpManagerInit() async {
         async let getUserXPData: () =  await getUserXPData()
@@ -50,6 +53,17 @@ class XPManager: ObservableObject {
     }
     
     func addXP(increment: Int, type: XPAdditionType) {
+        let now = Date()
+        if let lastCall = lastXPCallTimestamp, now.timeIntervalSince(lastCall) < 1 {
+            xpCallCounter += 1
+        } else {
+            xpCallCounter = 1
+            lastXPCallTimestamp = now
+        }
+        if xpCallCounter > 3 {
+            fatalError("addXP function called more than 3 times in a second!")
+        }
+        
         xpDataModified = true
         print("add xp user xp \(String(describing: userXPData))")
         guard var userXPData = userXPData else {

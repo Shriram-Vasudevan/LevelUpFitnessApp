@@ -115,7 +115,7 @@ struct WorkoutContent: View {
                     }
                     .padding(.bottom)
 
-                    if let videoURL = URL(string: workoutManager.currentExercises[workoutManager.currentExerciseIndex].cdnURL), !workoutManager.currentExercises[workoutManager.currentExerciseIndex].cdnURL.isEmpty {
+                    if let videoURL = URL(string: workoutManager.currentExercises[workoutManager.currentExerciseIndex].cdnURL), !workoutManager.currentExercises[workoutManager.currentExerciseIndex].cdnURL.isEmpty, workoutManager.currentExercises[workoutManager.currentExerciseIndex].cdnURL != "nil" {
                         VideoPlayer(player: avPlayer)
                             .aspectRatio(16/9, contentMode: .fit)
                             .onAppear {
