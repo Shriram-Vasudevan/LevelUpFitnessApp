@@ -12,6 +12,7 @@ import AWSCognitoAuthPlugin
 import AWSAPIPlugin
 import AWSS3StoragePlugin
 
+@MainActor
 class AuthStateObserver: ObservableObject {
     static let shared = AuthStateObserver()
     

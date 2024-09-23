@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CustomWorkoutExerciseDataSetWidget: View {
     @State var sectionType: ExerciseDataSectionType = .start
-    @State var exerciseData: ExerciseData
+    @Binding var exerciseData: ExerciseData
     
     @State var numberOfSets: String = ""
     @State var setsFieldNotFilledOut: Bool = false
@@ -132,5 +132,5 @@ struct CustomWorkoutExerciseDataSetWidget: View {
 
 
 #Preview {
-    CustomWorkoutExerciseDataSetWidget(exerciseData: ExerciseData(sets: []), isWeight: false, exerciseFinished: {})
+    CustomWorkoutExerciseDataSetWidget(exerciseData: .constant(ExerciseData(sets: [])), isWeight: false, exerciseFinished: {})
 }

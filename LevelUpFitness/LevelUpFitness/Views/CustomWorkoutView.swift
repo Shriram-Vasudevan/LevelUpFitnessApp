@@ -13,6 +13,7 @@ struct CustomWorkoutView: View {
         
     @Environment(\.dismiss) var dismiss
     
+    @State var exerciseData = ExerciseData(sets: [])
     var body: some View {
         if let workout = workout {
             ZStack {
@@ -64,11 +65,21 @@ struct CustomWorkoutView: View {
                     .padding(.horizontal)
                     .padding(.top, 7)
                     
-                    CustomWorkoutExerciseDataSetWidget(exerciseData: ExerciseData(sets: []), isWeight: workout.exercises[currentExerciseIndex].isWeight) {
+                    CustomWorkoutExerciseDataSetWidget(exerciseData: self.$exerciseData, isWeight: workout.exercises[currentExerciseIndex].isWeight) {
                         if currentExerciseIndex + 1 < workout.exercises.count {
+                            Task {
+                                addToGymSession()
+                            }
+                            
                             currentExerciseIndex += 1
+                            self.exerciseData = ExerciseData(sets: [])
                         }
                         else {
+                            Task {
+                                addToGymSession()
+                            }
+                            
+                            
                             dismiss()
                         }
                     }
@@ -93,6 +104,24 @@ struct CustomWorkoutView: View {
                 Spacer()
             }
         }
+    }
+    
+    @MainActor func addToGymSession() {
+        guard let currentSession = GymManager.shared.currentSession, let currentExercise = workout?.exercises[currentExerciseIndex]  else {
+            print("No active gym session found.")
+            return
+        }
+
+        let exerciseRecord = ExerciseRecord(
+            exerciseInfo: .libraryExercise(Progression(name: currentExercise.name, description: "", level: 0, cdnURL: "", exerciseType: "", isWeight: currentExercise.isWeight)),
+            exerciseData: exerciseData
+        )
+
+        GymManager.shared.currentSession?.addIndividualExercise(exerciseRecord: exerciseRecord)
+
+        GymManager.shared.saveGymSession(GymManager.shared.currentSession!)
+        
+        print("Exercise added to current session.")
     }
 }
 

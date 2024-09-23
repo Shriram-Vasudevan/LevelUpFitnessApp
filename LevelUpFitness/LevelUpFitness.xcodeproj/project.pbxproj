@@ -1006,10 +1006,13 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "Level Up Fitness";
 				INFOPLIST_KEY_NSHealthClinicalHealthRecordsShareUsageDescription = "We'll use this to add more data to your health metrics";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "We'll use this to tailor your experience around factors such as the number of steps you take";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "We'll use this update your Health Kit Data after using the app";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Not used";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1042,10 +1045,13 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "Level Up Fitness";
 				INFOPLIST_KEY_NSHealthClinicalHealthRecordsShareUsageDescription = "We'll use this to add more data to your health metrics";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "We'll use this to tailor your experience around factors such as the number of steps you take";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "We'll use this update your Health Kit Data after using the app";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Not used";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

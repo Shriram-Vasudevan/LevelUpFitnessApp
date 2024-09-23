@@ -140,7 +140,7 @@ class AuthenticationManager: ObservableObject {
         switch signOutResult {
         case .complete:
             print("Signed out successfully")
-            AuthStateObserver.shared.checkAuthState()
+            await AuthStateObserver.shared.checkAuthState()
         case let .partial(revokeTokenError, globalSignOutError, hostedUIError):
             
             if let hostedUIError = hostedUIError {
@@ -155,7 +155,7 @@ class AuthenticationManager: ObservableObject {
                 print("Revoke token error  \(String(describing: revokeTokenError))")
             }
             
-            AuthStateObserver.shared.checkAuthState()
+            await AuthStateObserver.shared.checkAuthState()
         case .failed(let error):
             print("SignOut failed with \(error)")
         }
@@ -165,12 +165,12 @@ class AuthenticationManager: ObservableObject {
         do {
             try await Amplify.Auth.deleteUser()
             print("Successfully deleted user")
-            AuthStateObserver.shared.checkAuthState()
+            await AuthStateObserver.shared.checkAuthState()
         } catch let error as AuthError {
             print("Delete user failed with error \(error)")
         } catch {
             print("Unexpected error: \(error)")
-            AuthStateObserver.shared.checkAuthState()
+            await AuthStateObserver.shared.checkAuthState()
         }
     }
     
