@@ -121,6 +121,8 @@
 		999F70742C0F59EA00B35A78 /* StatisticsWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999F70732C0F59EA00B35A78 /* StatisticsWidget.swift */; };
 		999F70762C0F6D9C00B35A78 /* Double.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999F70752C0F6D9C00B35A78 /* Double.swift */; };
 		999F70782C0FA57500B35A78 /* CommunityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999F70772C0FA57500B35A78 /* CommunityView.swift */; };
+		99A0C8B82CA394BF00F9281A /* TutorialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A0C8B72CA394BF00F9281A /* TutorialView.swift */; };
+		99A0C8BB2CA4D0B700F9281A /* ProgramCloudKitUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A0C8BA2CA4D0B700F9281A /* ProgramCloudKitUtility.swift */; };
 		99A67EEA2BF451F0002DC3DC /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A67EE92BF451EF002DC3DC /* HomeView.swift */; };
 		99A67EF92BF45251002DC3DC /* Sailec Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 99A67EEE2BF45250002DC3DC /* Sailec Bold.ttf */; };
 		99A67EFA2BF45251002DC3DC /* times new roman bold italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 99A67EEF2BF45250002DC3DC /* times new roman bold italic.ttf */; };
@@ -270,6 +272,9 @@
 		999F70732C0F59EA00B35A78 /* StatisticsWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsWidget.swift; sourceTree = "<group>"; };
 		999F70752C0F6D9C00B35A78 /* Double.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Double.swift; sourceTree = "<group>"; };
 		999F70772C0FA57500B35A78 /* CommunityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityView.swift; sourceTree = "<group>"; };
+		99A0C8B72CA394BF00F9281A /* TutorialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialView.swift; sourceTree = "<group>"; };
+		99A0C8B92CA4CEB800F9281A /* LevelUpFitnessDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LevelUpFitnessDebug.entitlements; sourceTree = "<group>"; };
+		99A0C8BA2CA4D0B700F9281A /* ProgramCloudKitUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramCloudKitUtility.swift; sourceTree = "<group>"; };
 		99A67EE92BF451EF002DC3DC /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		99A67EEE2BF45250002DC3DC /* Sailec Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Sailec Bold.ttf"; sourceTree = "<group>"; };
 		99A67EEF2BF45250002DC3DC /* times new roman bold italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "times new roman bold italic.ttf"; sourceTree = "<group>"; };
@@ -375,6 +380,7 @@
 				99ECAD2F2C7841BA0012F8E7 /* StringUtility.swift */,
 				99ECAD332C784ED40012F8E7 /* S3Utility.swift */,
 				99E0A5182C9141BC00CC1224 /* ErrorUtility.swift */,
+				99A0C8BA2CA4D0B700F9281A /* ProgramCloudKitUtility.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -488,6 +494,7 @@
 				99B44C012C990F7100C0C434 /* CreateCustomWorkoutView.swift */,
 				99B44C032C9A68C600C0C434 /* CustomWorkoutWidget.swift */,
 				99B44C092C9F711E00C0C434 /* ActiveChallengesView.swift */,
+				99A0C8B72CA394BF00F9281A /* TutorialView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -578,6 +585,7 @@
 		99CFAAE42BEB075500EFF67E /* LevelUpFitness */ = {
 			isa = PBXGroup;
 			children = (
+				99A0C8B92CA4CEB800F9281A /* LevelUpFitnessDebug.entitlements */,
 				992F26AC2C62747800F25400 /* LevelUpFitness.entitlements */,
 				99EEC6162C32F3690044F906 /* PreferenceKeys */,
 				999F70682C096AA600B35A78 /* ViewModels */,
@@ -795,6 +803,7 @@
 				9978CE002C7E69D200659813 /* ToDoList.swift in Sources */,
 				993DF2412C397C5C00BBC1BF /* SetCounterWidget.swift in Sources */,
 				99B44C0A2C9F711E00C0C434 /* ActiveChallengesView.swift in Sources */,
+				99A0C8B82CA394BF00F9281A /* TutorialView.swift in Sources */,
 				9978CDF02C7C22E800659813 /* ExerciseDataSetWidget.swift in Sources */,
 				993871A82C3A242700FFAF8A /* LevelCircularProgressView.swift in Sources */,
 				991FB46F2C682055006B4ACE /* ChallengeManager.swift in Sources */,
@@ -813,6 +822,7 @@
 				99E0A5172C8DE63E00CC1224 /* SearchView.swift in Sources */,
 				998475182BFC18F200295C6E /* AuthenticationManager.swift in Sources */,
 				9978CDFA2C7D83C700659813 /* WeightTrendView.swift in Sources */,
+				99A0C8BB2CA4D0B700F9281A /* ProgramCloudKitUtility.swift in Sources */,
 				991F8FE42C1527A900A134A5 /* ProgramStatisticsView.swift in Sources */,
 				991F8FE22C15278500A134A5 /* Extensions.swift in Sources */,
 				99F71F9F2C023A3D00E27B60 /* UsageTimeView.swift in Sources */,
@@ -994,7 +1004,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = LevelUpFitness/LevelUpFitness.entitlements;
+				CODE_SIGN_ENTITLEMENTS = LevelUpFitness/LevelUpFitnessDebug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;

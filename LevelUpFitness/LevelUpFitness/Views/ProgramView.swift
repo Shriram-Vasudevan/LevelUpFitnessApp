@@ -229,9 +229,15 @@ struct ProgramView: View {
         }
         .onAppear {
             if programManager.standardProgramDBRepresentations.isEmpty {
-                Task {
-                    programManager.standardProgramDBRepresentations = await ProgramS3Utility.getStandardProgramDBRepresentations()
-                }
+                ProgramCloudKitUtility.fetchStandardProgramDBRepresentations { programs, error in
+                       if let programs = programs {
+                           DispatchQueue.main.async {
+                               self.programManager.standardProgramDBRepresentations = programs
+                           }
+                       } else if let error = error {
+                           print("Error fetching standard program DB representations: \(error.localizedDescription)")
+                       }
+                   }
             }
         }
     }
