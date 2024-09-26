@@ -11,13 +11,16 @@ struct UserProgramDBRepresentation: Codable {
     var userID: String
     var program: String
     var startDate: String
+    var programID: String  
     
     enum CodingKeys: String, CodingKey {
         case userID = "UserID"
         case program = "Program"
         case startDate = "StartDate"
+        case programID = "ProgramID"
     }
 }
+
 
 struct StandardProgramDBRepresentation: Codable {
     var id: String
