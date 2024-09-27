@@ -22,15 +22,21 @@ struct PastProgramsView: View {
                 
                 ScrollView {
                     VStack(spacing: 16) {
-                        if let userProgramNames = programManager.userProgramNames {
-                            if userProgramNames.isEmpty {
-                                emptyStateView
-                            } else {
-                                programList(userProgramNames)
-                            }
+                        if programManager.userActivePrograms.isEmpty {
+                            emptyStateView
                         } else {
-                            loadingView
+                            programList(programManager.userActivePrograms.map({$0.program}))
                         }
+//                        
+//                        if let userActivePrograms = programManager.userActivePrograms {
+//                            if programManager.userActivePrograms.isEmpty {
+//                                emptyStateView
+//                            } else {
+//                                programList(programManager.userActivePrograms.map({$0.program}))
+//                            }
+//                        } else {
+//                            loadingView
+//                        }
                     }
                     .padding()
                 }
@@ -93,9 +99,9 @@ struct PastProgramsView: View {
     
     private func refreshProgramNames() {
         isRefreshing = true
-        programManager.userProgramNames = nil
+        programManager.userActivePrograms = []
         Task {
-            await programManager.getUserProgramNames()
+            await programManager.loadUserActivePrograms()
             isRefreshing = false
         }
     }

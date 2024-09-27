@@ -54,7 +54,7 @@ struct PastProgramInsightView: View {
         .navigationBarBackButtonHidden()
         .onAppear {
             Task {
-                self.programs = await ProgramManager.shared.getProgramsForInsights(programS3Representation: programS3Representation)
+//                self.programs = await ProgramManager.shared.getProgramsForInsights(programS3Representation: programS3Representation)
             }
         }
     }

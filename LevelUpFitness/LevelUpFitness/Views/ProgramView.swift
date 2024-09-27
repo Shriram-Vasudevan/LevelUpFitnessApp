@@ -33,7 +33,7 @@ struct ProgramView: View {
                 VStack(spacing: 0) {
                     programHeader
                     
-                    if ProgramManager.shared.program.isEmpty && !programManager.retrievingProgram || showProgramManagerOptions {
+                    if ProgramManager.shared.userProgramData.isEmpty && !programManager.retrievingProgram || showProgramManagerOptions {
                         VStack(spacing: 24) {
                             segmentedControl
                             
@@ -53,8 +53,11 @@ struct ProgramView: View {
             if showConfirmationWidget {
                 ConfirmLeaveProgramWidget(isOpen: $showConfirmationWidget, confirmed: {
                     Task {
-                        if let programName = ProgramManager.shared.selectedProgram?.programName {
-                            await programManager.leaveProgram(programName: programName)
+                        if let programID = ProgramManager.shared.selectedProgram?.programID
+                        {
+                            await programManager.leaveProgram(programID: programID, completion: { success in
+                                
+                            })
                             ProgramManager.shared.selectedProgram = nil
                         }
                     }
@@ -67,7 +70,7 @@ struct ProgramView: View {
         }
         .fullScreenCover(isPresented: $navigateToMetricsView) {
             if let selectedProgram = ProgramManager.shared.selectedProgram {
-                ProgramStatisticsView(program: selectedProgram)
+                ProgramStatisticsView(program: selectedProgram.program)
             }
         }
         .navigationDestination(isPresented: $navigateToProgramInsightsView) {
@@ -77,21 +80,21 @@ struct ProgramView: View {
             programPickerView
         }
         .onAppear {
-            if !programManager.program.isEmpty && programManager.selectedProgram == nil {
-                programManager.selectedProgram = programManager.program.first
+            if !programManager.userProgramData.isEmpty && programManager.selectedProgram == nil, let program = programManager.userProgramData.first?.program {
+                programManager.selectedProgram?.program = program
             }
         }
     }
 
     private var programHeader: some View {
         HStack(alignment: .center, spacing: 12) {
-            Text(ProgramManager.shared.selectedProgram?.programName ?? "Program Manager")
+            Text(ProgramManager.shared.selectedProgram?.program.programName ?? "Program Manager")
                 .font(.system(size: 18, weight: .medium, design: .default))
                 .foregroundColor(.primary)
             
             Spacer()
             
-            if let weekNumber = DateUtility.determineWeekNumber(startDateString: ProgramManager.shared.selectedProgram?.startDate ?? "") {
+            if let weekNumber = DateUtility.determineWeekNumber(startDateString: ProgramManager.shared.selectedProgram?.program.startDate ?? "") {
                 Text("Week \(weekNumber)")
                     .font(.system(size: 14, weight: .regular, design: .default))
                     .foregroundColor(.secondary)
@@ -128,13 +131,13 @@ struct ProgramView: View {
                         .font(.system(size: 16, weight: .medium))
                 }
                 
-                ForEach(programManager.program, id: \.programName) { program in
+                ForEach(programManager.userProgramData, id: \.program.programName) { program in
                     Button(action: {
                         showProgramManagerOptions = false
-                        ProgramManager.shared.selectedProgram = program
+                        ProgramManager.shared.selectedProgram?.program = program.program
                         showProgramPicker = false
                     }) {
-                        Text(program.programName)
+                        Text(program.program.programName)
                             .font(.system(size: 16, weight: .medium))
                     }
                 }
@@ -144,7 +147,7 @@ struct ProgramView: View {
 
     private var programContent: some View {
         VStack(spacing: 16) {
-            if let todaysProgram = ProgramManager.shared.selectedProgram?.program.first(where: { $0.day == DateUtility.getCurrentWeekday() }) {
+            if let todaysProgram = ProgramManager.shared.selectedProgram?.program.program.first(where: { $0.day == DateUtility.getCurrentWeekday() }) {
                 requiredEquipmentView(for: todaysProgram)
                 activeProgramView
             } else {
@@ -219,25 +222,17 @@ struct ProgramView: View {
                             await programManager.joinStandardProgram(programName: program.name)
                         }
                     }
-                    .opacity(programManager.program.contains(where: { Program in
-                        Program.programName == program.name
+                    .opacity(programManager.userProgramData.contains(where: { Program in
+                        Program.program.programName == program.name
                     }) ? 0.7 : 1)
-                    .disabled(programManager.program.contains(where: { Program in
-                        Program.programName == program.name
+                    .disabled(programManager.userProgramData.contains(where: { Program in
+                        Program.program.programName == program.name
                     }))
             }
         }
         .onAppear {
             if programManager.standardProgramDBRepresentations.isEmpty {
-                ProgramCloudKitUtility.fetchStandardProgramDBRepresentations { programs, error in
-                       if let programs = programs {
-                           DispatchQueue.main.async {
-                               self.programManager.standardProgramDBRepresentations = programs
-                           }
-                       } else if let error = error {
-                           print("Error fetching standard program DB representations: \(error.localizedDescription)")
-                       }
-                   }
+                programManager.loadStandardProgramNames()
             }
         }
     }
@@ -388,7 +383,7 @@ struct UpNextProgramExerciseWidget: View {
             Text("Up Next")
                 .font(.system(size: 20, weight: .medium, design: .default))
             
-            if let todaysProgram = ProgramManager.shared.selectedProgram?.program.first(where: { $0.day == DateUtility.getCurrentWeekday() }),
+            if let todaysProgram = ProgramManager.shared.selectedProgram?.program.program.first(where: { $0.day == DateUtility.getCurrentWeekday() }),
                let (_, nextExercise) = todaysProgram.exercises.enumerated().first(where: { !$0.element.completed }) {
                 exerciseDetailsView(for: nextExercise)
                     .onTapGesture {
@@ -460,7 +455,7 @@ struct TodaysScheduleWidget: View {
             Text("Today's Schedule")
                 .font(.system(size: 20, weight: .medium, design: .default))
             
-            if let todaysProgram = ProgramManager.shared.selectedProgram?.program.first(where: { $0.day == DateUtility.getCurrentWeekday() }) {
+            if let todaysProgram = ProgramManager.shared.selectedProgram?.program.program.first(where: { $0.day == DateUtility.getCurrentWeekday() }) {
                 let exercises = todaysProgram.exercises
                 let displayedExercises = isExpanded ? exercises : Array(exercises.prefix(3))
                 

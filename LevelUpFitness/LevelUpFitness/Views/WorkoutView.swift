@@ -196,9 +196,9 @@ struct WorkoutContent: View {
 
     func exitWorkout() {
         Task {
-            if (ProgramManager.shared.selectedProgram?.program.first(where: { $0.day == DateUtility.getCurrentWeekday() })) != nil {
+            if (ProgramManager.shared.selectedProgram?.program.program.first(where: { $0.day == DateUtility.getCurrentWeekday() })) != nil {
                 print("uploading new status")
-                await programManager.uploadNewProgramStatus(programName: ProgramManager.shared.selectedProgram?.programName ?? "" , completion: { success in
+                await programManager.uploadNewProgramStatus(completion: { success in
                     if success {
                         dismiss()
                     }

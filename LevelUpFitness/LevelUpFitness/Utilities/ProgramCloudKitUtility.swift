@@ -9,9 +9,76 @@ import CloudKit
 import Foundation
 
 class ProgramCloudKitUtility {
+
+    static func leaveProgram(programID: String, completion: @escaping (Bool, Error?) -> Void) {
+           let privateDatabase = CKContainer.default().privateCloudDatabase
+           
+           let predicate = NSPredicate(format: "ProgramID == %@", programID)
+           let query = CKQuery(recordType: "UserProgramMetadata", predicate: predicate)
+           
+           privateDatabase.perform(query, inZoneWith: nil) { records, error in
+               guard let record = records?.first else {
+                   completion(false, error)
+                   return
+               }
+    
+               privateDatabase.delete(withRecordID: record.recordID) { recordID, error in
+                   if let error = error {
+                       completion(false, error)
+                   } else {
+                       completion(true, nil)
+                   }
+               }
+           }
+       }
+
+    static func uploadNewProgramStatus(programID: String, updatedProgram: Program, completion: @escaping (Bool, Error?) -> Void) {
+        let privateDatabase = CKContainer.default().privateCloudDatabase
+        
+        let predicate = NSPredicate(format: "ProgramID == %@", programID)
+        let query = CKQuery(recordType: "UserProgramData", predicate: predicate)
+        
+        privateDatabase.perform(query, inZoneWith: nil) { records, error in
+            guard let record = records?.first else {
+                completion(false, error)
+                return
+            }
+
+            let encoder = JSONEncoder()
+            if let programData = try? encoder.encode(updatedProgram),
+               let tempFileURL = saveDataToTemporaryFile(data: programData) {
+                let updatedProgramAsset = CKAsset(fileURL: tempFileURL)
+                
+                record["ProgramAsset"] = updatedProgramAsset
+
+                privateDatabase.save(record) { savedRecord, error in
+                    if let error = error {
+                        completion(false, error)
+                    } else {
+                        completion(true, nil)
+                    }
+                }
+            } else {
+                completion(false, nil)
+            }
+        }
+    }
+    
+    static func saveDataToTemporaryFile(data: Data) -> URL? {
+        let tempDir = FileManager.default.temporaryDirectory
+        let fileURL = tempDir.appendingPathComponent(UUID().uuidString).appendingPathExtension("json")
+        do {
+            try data.write(to: fileURL)
+            return fileURL
+        } catch {
+            print("Error saving temp file: \(error.localizedDescription)")
+            return nil
+        }
+    }
+    
     static func fetchStandardProgramDBRepresentations(completion: @escaping ([StandardProgramDBRepresentation]?, Error?) -> Void) {
         let publicDatabase = CKContainer.default().publicCloudDatabase
-        let query = CKQuery(recordType: "StandardProgramMetadata", predicate: NSPredicate(value: true)) 
+        let query = CKQuery(recordType: "StandardProgramMetadata", predicate: NSPredicate(value: true))
         
         publicDatabase.perform(query, inZoneWith: nil) { records, error in
             guard let records = records else {
@@ -39,13 +106,14 @@ class ProgramCloudKitUtility {
         let query = CKQuery(recordType: "StandardProgramData", predicate: predicate)
         
         publicDatabase.perform(query, inZoneWith: nil) { records, error in
-            guard let record = records?.first, let programData = record["programData"] as? Data else {
+            guard let record = records?.first, let programAsset = record["ProgramAsset"] as? CKAsset else {
                 completion(nil, error)
                 return
             }
             
-            let decoder = JSONDecoder()
             do {
+                let programData = try Data(contentsOf: programAsset.fileURL!)
+                let decoder = JSONDecoder()
                 let program = try decoder.decode(Program.self, from: programData)
                 completion(program, nil)
             } catch {
@@ -53,29 +121,31 @@ class ProgramCloudKitUtility {
             }
         }
     }
-    
+
     static func saveUserProgram(userID: String, program: Program, startDate: String, completion: @escaping (Bool, Error?) -> Void) {
         let privateDatabase = CKContainer.default().privateCloudDatabase
         
+
         let programID = UUID().uuidString
 
         let programRecord = CKRecord(recordType: "UserProgramData")
         let metadataRecord = CKRecord(recordType: "UserProgramMetadata")
 
         programRecord["ProgramID"] = programID as CKRecordValue
-        programRecord["programName"] = program.programName as CKRecordValue
-        programRecord["startDate"] = startDate as CKRecordValue
+        programRecord["ProgramName"] = program.programName as CKRecordValue
         
         let encoder = JSONEncoder()
-        if let programData = try? encoder.encode(program.program) {
-            programRecord["workout_schedule"] = programData as CKRecordValue
+        if let programData = try? encoder.encode(program.program),
+           let tempFileURL = saveDataToTemporaryFile(data: programData) {
+            let programAsset = CKAsset(fileURL: tempFileURL)
+            programRecord["ProgramAsset"] = programAsset
         }
-        
+
         metadataRecord["UserID"] = userID as CKRecordValue
         metadataRecord["Program"] = program.programName as CKRecordValue
         metadataRecord["StartDate"] = startDate as CKRecordValue
         metadataRecord["ProgramID"] = programID as CKRecordValue
-        
+
 
         privateDatabase.save(programRecord) { programSavedRecord, error in
             if let error = error {
@@ -118,24 +188,27 @@ class ProgramCloudKitUtility {
         }
     }
 
-    static func fetchUserProgramData(programID: String, completion: @escaping (Program?, Error?) -> Void) {
+    static func fetchUserProgramData(programID: String, completion: @escaping (ProgramWithID?, Error?) -> Void) {
         let privateDatabase = CKContainer.default().privateCloudDatabase
         let predicate = NSPredicate(format: "ProgramID == %@", programID)
         let query = CKQuery(recordType: "UserProgramData", predicate: predicate)
         
         privateDatabase.perform(query, inZoneWith: nil) { records, error in
-            guard let record = records?.first, let programData = record["workout_schedule"] as? Data else {
+            guard let record = records?.first, let programAsset = record["ProgramAsset"] as? CKAsset else {
                 completion(nil, error)
                 return
             }
             
-            let decoder = JSONDecoder()
             do {
+                let programData = try Data(contentsOf: programAsset.fileURL!)
+                let decoder = JSONDecoder()
                 let program = try decoder.decode(Program.self, from: programData)
-                completion(program, nil)
+                let programWithID = ProgramWithID(programID: programID, program: program)
+                completion(programWithID, nil)
             } catch {
                 completion(nil, error)
             }
         }
     }
 }
+

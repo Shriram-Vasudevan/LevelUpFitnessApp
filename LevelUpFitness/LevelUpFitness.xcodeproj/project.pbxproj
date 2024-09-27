@@ -123,6 +123,7 @@
 		999F70782C0FA57500B35A78 /* CommunityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999F70772C0FA57500B35A78 /* CommunityView.swift */; };
 		99A0C8B82CA394BF00F9281A /* TutorialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A0C8B72CA394BF00F9281A /* TutorialView.swift */; };
 		99A0C8BB2CA4D0B700F9281A /* ProgramCloudKitUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A0C8BA2CA4D0B700F9281A /* ProgramCloudKitUtility.swift */; };
+		99A0C8BD2CA64CDF00F9281A /* ProgramWithID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A0C8BC2CA64CDF00F9281A /* ProgramWithID.swift */; };
 		99A67EEA2BF451F0002DC3DC /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A67EE92BF451EF002DC3DC /* HomeView.swift */; };
 		99A67EF92BF45251002DC3DC /* Sailec Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 99A67EEE2BF45250002DC3DC /* Sailec Bold.ttf */; };
 		99A67EFA2BF45251002DC3DC /* times new roman bold italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 99A67EEF2BF45250002DC3DC /* times new roman bold italic.ttf */; };
@@ -275,6 +276,7 @@
 		99A0C8B72CA394BF00F9281A /* TutorialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialView.swift; sourceTree = "<group>"; };
 		99A0C8B92CA4CEB800F9281A /* LevelUpFitnessDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LevelUpFitnessDebug.entitlements; sourceTree = "<group>"; };
 		99A0C8BA2CA4D0B700F9281A /* ProgramCloudKitUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramCloudKitUtility.swift; sourceTree = "<group>"; };
+		99A0C8BC2CA64CDF00F9281A /* ProgramWithID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramWithID.swift; sourceTree = "<group>"; };
 		99A67EE92BF451EF002DC3DC /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		99A67EEE2BF45250002DC3DC /* Sailec Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Sailec Bold.ttf"; sourceTree = "<group>"; };
 		99A67EEF2BF45250002DC3DC /* times new roman bold italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "times new roman bold italic.ttf"; sourceTree = "<group>"; };
@@ -560,6 +562,7 @@
 				9978CE012C7FC96C00659813 /* ExerciseData.swift */,
 				99B44BFF2C990DAB00C0C434 /* CustomWorkout.swift */,
 				99B44C0F2CA074F500C0C434 /* GymSession.swift */,
+				99A0C8BC2CA64CDF00F9281A /* ProgramWithID.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -858,6 +861,7 @@
 				992F26A52C6032A100F25400 /* FullLevelBreakdownView.swift in Sources */,
 				993871A62C3A1CBF00FFAF8A /* LevelWidget.swift in Sources */,
 				99B44C022C990F7100C0C434 /* CreateCustomWorkoutView.swift in Sources */,
+				99A0C8BD2CA64CDF00F9281A /* ProgramWithID.swift in Sources */,
 				998DA0152C1A18940078E882 /* ViewModifiers.swift in Sources */,
 				99ECAD362C7850F40012F8E7 /* PastProgramInsightView.swift in Sources */,
 				994E7DB12C02643D00BAD9E0 /* LoginView.swift in Sources */,

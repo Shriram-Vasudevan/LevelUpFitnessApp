@@ -17,7 +17,7 @@ class InitializationManager {
                 await HealthManager.shared.getInitialHealthData()
             }
                 
-            async let userProgram: ()? = ProgramManager.shared.program.isEmpty ? ProgramManager.shared.getUserProgram() : nil
+            async let userProgram: ()? = ProgramManager.shared.userProgramData.isEmpty ? ProgramManager.shared.loadUserProgramData() : nil
             async let notificationManager: () = NotificationManager.shared.identifyUser()
             async let challengeManager: () = ChallengeManager.shared.challengeManagerInitialization()
             async let toDoListManager: () = ToDoListManager.shared.toDoListInit()

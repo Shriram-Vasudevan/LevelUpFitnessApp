@@ -79,7 +79,7 @@ class ChallengeManager: ObservableObject {
             
                 await updateChallenge(challengeTemplateID: challengeTemplateID, challengeName: challengeName, startDate: dateRange.0, endDate: dateRange.1, startValue: userXPData.level, targetValue: userXPData.level + levelsRequired, field: "Level")
             case "Perfect Program Week":
-                if let program = ProgramManager.shared.program.first {
+                if let program = ProgramManager.shared.userProgramData.first?.program {
                     let daysRequired = program.program.count
                     guard let dateRange = DateUtility.createDateDurationISO(duration: 7) else { return false }
                     
