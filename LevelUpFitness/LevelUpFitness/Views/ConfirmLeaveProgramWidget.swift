@@ -25,17 +25,22 @@ struct ConfirmLeaveProgramWidget: View {
                         close()
                     }
                 }) {
-                    Text("Confirm")
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
-                        .frame(minWidth: 0, maxWidth: .infinity)
-                        .padding()
-                        .background(Color(hex: "40C4FC"))
-                        .cornerRadius(3)
-                        .shadow(radius: 3)
-                        .padding(.horizontal, 20)
-                        .padding(.top)
+                    ZStack {
+                        Rectangle() 
+                            .fill(Color(hex: "40C4FC"))
+                            .cornerRadius(3)
+                            .shadow(radius: 3)
+                        
+                        Text("Confirm")
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                    }
+                    .frame(minWidth: 0, maxWidth: .infinity)
+                    .padding()
+                    .padding(.horizontal, 20)
+                    .padding(.top)
                 }
+
                 
             }
             .padding()

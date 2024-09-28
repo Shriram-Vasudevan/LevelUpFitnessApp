@@ -14,10 +14,20 @@ import AWSAPIPlugin
 @main
 struct LevelUpFitnessApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-
+    @State private var showIntroView = FirstLaunchManager.shared.isFirstLaunch
+    
     var body: some Scene {
         WindowGroup {
-            AuthCheckView()
+            if showIntroView {
+                IntroView(onIntroCompletion: {
+                    FirstLaunchManager.shared.markAsLaunched()
+                    showIntroView = false
+                })
+            } else {
+                NavigationStack {
+                    PagesHolderView(pageType: .home)
+                }
+            }
         }
     }
 }

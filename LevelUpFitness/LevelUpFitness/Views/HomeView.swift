@@ -194,9 +194,9 @@ struct HomeView: View {
                                     Task {
                                         let success = await challengeManager.createChallenge(challengeName: challengeTemplate.name, challengeTemplateID: challengeTemplate.id, userXPData: userXPData)
                                         
-                                        if !success {
-                                            perfectProgramChallengeStartFailed = true
-                                        }
+//                                        if !success {
+//                                            perfectProgramChallengeStartFailed = false
+//                                        }
                                     }
                                 }
                             }

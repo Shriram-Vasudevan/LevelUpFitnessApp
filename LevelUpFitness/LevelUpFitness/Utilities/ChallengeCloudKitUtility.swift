@@ -13,10 +13,8 @@ import Foundation
 
 class ChallengeCloudKitUtility {
 
-    // Custom CloudKit Container
     static let customContainer = CKContainer(identifier: "iCloud.LevelUpFitnessCloudKitStorage")
 
-    // MARK: - Fetch Challenge Templates
     static func fetchChallengeTemplates(completion: @escaping ([ChallengeTemplate]?, Error?) -> Void) {
         let publicDatabase = customContainer.publicCloudDatabase
         let query = CKQuery(recordType: "ChallengeTemplate", predicate: NSPredicate(value: true))
@@ -44,7 +42,6 @@ class ChallengeCloudKitUtility {
         }
     }
 
-    // MARK: - Fetch User Challenges
     static func fetchUserChallenges(userID: String, completion: @escaping ([UserChallenge]?, Error?) -> Void) {
         let privateDatabase = customContainer.privateCloudDatabase
         let predicate = NSPredicate(format: "UserID == %@", userID)
@@ -90,7 +87,6 @@ class ChallengeCloudKitUtility {
         }
     }
 
-    // MARK: - Save User Challenge
     static func saveUserChallenge(userChallenge: UserChallenge, completion: @escaping (Bool, Error?) -> Void) {
         let privateDatabase = customContainer.privateCloudDatabase
         
@@ -116,7 +112,6 @@ class ChallengeCloudKitUtility {
         }
     }
 
-    // MARK: - Leave Challenge
     static func leaveChallenge(userID: String, challengeTemplateID: String, completion: @escaping (Bool, Error?) -> Void) {
         let privateDatabase = customContainer.privateCloudDatabase
         let predicate = NSPredicate(format: "UserID == %@ AND ChallengeTemplateID == %@", userID, challengeTemplateID)
@@ -147,7 +142,7 @@ class ChallengeCloudKitUtility {
         }
     }
 
-    // MARK: - Update Challenge Progress
+
     static func updateChallengeProgress(userID: String, field: String, newValue: Int, completion: @escaping (Bool, Error?) -> Void) {
         let privateDatabase = customContainer.privateCloudDatabase
         let predicate = NSPredicate(format: "UserID == %@ AND Field == %@", userID, field)

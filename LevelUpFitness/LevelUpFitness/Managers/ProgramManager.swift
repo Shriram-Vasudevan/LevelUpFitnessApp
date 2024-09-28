@@ -54,7 +54,7 @@ class ProgramManager: ObservableObject {
             print("trying to join standard program 1")
             let userID = try await ProgramCloudKitUtility.customContainer.userRecordID().recordName
             let startDate = DateUtility.getCurrentDate()
-            
+
             print("trying to join standard program 2")
             
             ProgramCloudKitUtility.fetchStandardProgramData(programName: programName) { program, error in
@@ -62,10 +62,13 @@ class ProgramManager: ObservableObject {
                     ProgramCloudKitUtility.saveUserProgram(userID: userID, program: program, startDate: startDate) { programID, success, error in
                         if success {
                             DispatchQueue.main.async {
-                                let newProgramWithID = ProgramWithID(programID: programID, program: program)
-                                self.selectedProgram = newProgramWithID
+                                let programWithID = ProgramWithID(programID: programID, program: program)
+                                // Set selectedProgram immediately
+                                self.selectedProgram = programWithID
+                                // Append to userProgramData
+                                self.userProgramData.append(programWithID)
+                                print("Program with ID \(programID) set as selectedProgram and added to userProgramData")
                             }
-                            print("Successfully saved program to user's private database")
                         } else {
                             print("Error saving program: \(error?.localizedDescription ?? "Unknown error")")
                         }
@@ -78,6 +81,7 @@ class ProgramManager: ObservableObject {
             print("Error getting user record: \(error.localizedDescription)")
         }
     }
+
 
 
     func loadUserActivePrograms() async -> [UserProgramDBRepresentation] {

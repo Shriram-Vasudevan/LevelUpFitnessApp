@@ -14,11 +14,9 @@ class XPCloudKitUtility {
     
     static let customContainer = CKContainer(identifier: "iCloud.LevelUpFitnessCloudKitStorage")
 
-    // Fetch or create XPData for the user
     static func fetchUserXPData(userID: String, completion: @escaping (XPData?, Error?) -> Void) {
         let privateDatabase = customContainer.privateCloudDatabase
-        
-        // Query for XPData by userID
+
         let predicate = NSPredicate(format: "UserID == %@", userID)
         let query = CKQuery(recordType: "XPData", predicate: predicate)
         
@@ -29,7 +27,6 @@ class XPCloudKitUtility {
             }
             
             guard let record = records?.first else {
-                // No data found, create new XPData for the user
                 let newXPData = XPData(
                     userID: userID,
                     level: 1,
@@ -51,8 +48,7 @@ class XPCloudKitUtility {
                 }
                 return
             }
-            
-            // Deserialize XPData from the CloudKit record
+
             guard let xpData = try? decodeXPData(from: record) else {
                 completion(nil, NSError(domain: "XPDataDecodeError", code: 1001, userInfo: nil))
                 return
@@ -61,12 +57,10 @@ class XPCloudKitUtility {
         }
     }
 
-    // Save XPData to CloudKit
     static func saveUserXPData(xpData: XPData, completion: @escaping (Bool, Error?) -> Void) {
         let privateDatabase = customContainer.privateCloudDatabase
         let record = CKRecord(recordType: "XPData")
 
-        // Encode XPData into CKRecord
         record["UserID"] = xpData.userID as CKRecordValue
         record["Level"] = xpData.level as CKRecordValue
         record["XP"] = xpData.xp as CKRecordValue
@@ -85,7 +79,6 @@ class XPCloudKitUtility {
         }
     }
 
-    // Update XPData in CloudKit
     static func updateUserXPData(xpData: XPData, completion: @escaping (Bool, Error?) -> Void) {
         let privateDatabase = customContainer.privateCloudDatabase
         

@@ -10,8 +10,7 @@ import Foundation
 
 class TrendCloudKitUtility {
     static let customContainer = CKContainer(identifier: "iCloud.LevelUpFitnessCloudKitStorage")
-    
-    // MARK: - Save Weight Entry to CloudKit
+
     static func saveWeightEntry(userID: String, weight: Double, completion: @escaping (Bool, Error?) -> Void) {
         let privateDatabase = customContainer.privateCloudDatabase
         let record = CKRecord(recordType: "WeightTrendData")
@@ -28,14 +27,12 @@ class TrendCloudKitUtility {
             }
         }
     }
-    
-    // MARK: - Fetch Weight Trend from CloudKit
+
     static func fetchWeightTrend(userID: String, days: Int, completion: @escaping ([HealthDataPoint]?, Error?) -> Void) {
         let privateDatabase = customContainer.privateCloudDatabase
         let predicate = NSPredicate(format: "UserID == %@", userID)
         let query = CKQuery(recordType: "WeightTrendData", predicate: predicate)
-        
-        // Sort by timestamp, descending order
+
         query.sortDescriptors = [NSSortDescriptor(key: "Timestamp", ascending: false)]
         
         privateDatabase.perform(query, inZoneWith: nil) { records, error in
@@ -55,8 +52,7 @@ class TrendCloudKitUtility {
             completion(trendData, nil)
         }
     }
-    
-    // MARK: - Save Level Entry to CloudKit
+
     static func saveLevelEntry(userID: String, level: Int, completion: @escaping (Bool, Error?) -> Void) {
         let privateDatabase = customContainer.privateCloudDatabase
         let record = CKRecord(recordType: "LevelTrendData")
@@ -73,14 +69,12 @@ class TrendCloudKitUtility {
             }
         }
     }
-    
-    // MARK: - Fetch Level Trend from CloudKit
+
     static func fetchLevelTrend(userID: String, days: Int, completion: @escaping ([HealthDataPoint]?, Error?) -> Void) {
         let privateDatabase = customContainer.privateCloudDatabase
         let predicate = NSPredicate(format: "UserID == %@", userID)
         let query = CKQuery(recordType: "LevelTrendData", predicate: predicate)
-        
-        // Sort by timestamp, descending order
+
         query.sortDescriptors = [NSSortDescriptor(key: "Timestamp", ascending: false)]
         
         privateDatabase.perform(query, inZoneWith: nil) { records, error in

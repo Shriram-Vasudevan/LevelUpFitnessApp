@@ -80,8 +80,8 @@ struct ProgramView: View {
             programPickerView
         }
         .onAppear {
-            if !programManager.userProgramData.isEmpty && programManager.selectedProgram == nil, let program = programManager.userProgramData.first?.program {
-                programManager.selectedProgram?.program = program
+            if programManager.selectedProgram == nil, let firstProgram = programManager.userProgramData.first {
+                programManager.selectedProgram = firstProgram
             }
         }
     }
@@ -119,7 +119,7 @@ struct ProgramView: View {
             Text("Select a Program")
                 .font(.headline)
                 .padding()
-            
+
             List {
                 Button(action: {
                     showProgramManagerOptions = true
@@ -130,20 +130,21 @@ struct ProgramView: View {
                     Text("Program Manager")
                         .font(.system(size: 16, weight: .medium))
                 }
-                
-                ForEach(programManager.userProgramData, id: \.program.programName) { program in
+
+                ForEach(programManager.userProgramData, id: \.program.programName) { programWithID in
                     Button(action: {
                         showProgramManagerOptions = false
-                        ProgramManager.shared.selectedProgram?.program = program.program
+                        ProgramManager.shared.selectedProgram = programWithID
                         showProgramPicker = false
                     }) {
-                        Text(program.program.programName)
+                        Text(programWithID.program.programName)
                             .font(.system(size: 16, weight: .medium))
                     }
                 }
             }
         }
     }
+
 
     private var programContent: some View {
         VStack(spacing: 16) {

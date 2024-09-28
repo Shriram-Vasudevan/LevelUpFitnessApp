@@ -10,10 +10,8 @@ import Foundation
 
 class ProgramCloudKitUtility {
 
-    // Custom CloudKit Container
     static let customContainer = CKContainer(identifier: "iCloud.LevelUpFitnessCloudKitStorage")
 
-    // MARK: - Leave Program
     static func leaveProgram(programID: String, completion: @escaping (Bool, Error?) -> Void) {
         print("Leaving program with ProgramID: \(programID)")
         let privateDatabase = customContainer.privateCloudDatabase
@@ -47,7 +45,6 @@ class ProgramCloudKitUtility {
         }
     }
 
-    // MARK: - Upload New Program Status
     static func uploadNewProgramStatus(programID: String, updatedProgram: Program, completion: @escaping (Bool, Error?) -> Void) {
         print("Uploading new status for ProgramID: \(programID)")
         let privateDatabase = customContainer.privateCloudDatabase
@@ -92,7 +89,6 @@ class ProgramCloudKitUtility {
         }
     }
 
-    // MARK: - Helper for CKAsset
     static func saveDataToTemporaryFile(data: Data) -> URL? {
         print("Saving data to a temporary file")
         let tempDir = FileManager.default.temporaryDirectory
@@ -107,7 +103,6 @@ class ProgramCloudKitUtility {
         }
     }
 
-    // MARK: - Fetch Standard Program Metadata (List all available programs)
     static func fetchStandardProgramDBRepresentations(completion: @escaping ([StandardProgramDBRepresentation]?, Error?) -> Void) {
         print("Fetching all standard program metadata")
         let publicDatabase = customContainer.publicCloudDatabase
@@ -190,11 +185,10 @@ class ProgramCloudKitUtility {
         }
     }
 
-    // MARK: - Save User Program Data and Metadata
     static func saveUserProgram(userID: String, program: Program, startDate: String, completion: @escaping (String, Bool, Error?) -> Void) {
         print("Saving user program for UserID: \(userID), ProgramName: \(program.programName)")
-        let privateDatabase = customContainer.privateCloudDatabase
         
+        let privateDatabase = customContainer.privateCloudDatabase
         let programID = UUID().uuidString
 
         let programRecord = CKRecord(recordType: "UserProgramData")
@@ -204,11 +198,19 @@ class ProgramCloudKitUtility {
         programRecord["ProgramName"] = program.programName as CKRecordValue
         
         let encoder = JSONEncoder()
-        if let programData = try? encoder.encode(program.program),
-           let tempFileURL = saveDataToTemporaryFile(data: programData) {
-            print("Saving program data as CKAsset")
-            let programAsset = CKAsset(fileURL: tempFileURL)
-            programRecord["ProgramAsset"] = programAsset
+
+        do {
+            let programData = try encoder.encode(program)
+            
+
+            if let tempFileURL = saveDataToTemporaryFile(data: programData) {
+                let programAsset = CKAsset(fileURL: tempFileURL)
+                programRecord["ProgramAsset"] = programAsset
+            }
+        } catch {
+            print("Error encoding program: \(error.localizedDescription)")
+            completion(programID, false, error)
+            return
         }
 
         metadataRecord["UserID"] = userID as CKRecordValue
@@ -216,15 +218,15 @@ class ProgramCloudKitUtility {
         metadataRecord["StartDate"] = startDate as CKRecordValue
         metadataRecord["ProgramID"] = programID as CKRecordValue
 
-        privateDatabase.save(programRecord) { programSavedRecord, error in
+        privateDatabase.save(programRecord) { savedProgramRecord, error in
             if let error = error {
                 print("Error saving program data: \(error.localizedDescription)")
                 completion(programID, false, error)
                 return
             }
             print("Successfully saved program data")
-            
-            privateDatabase.save(metadataRecord) { metadataSavedRecord, error in
+
+            privateDatabase.save(metadataRecord) { savedMetadataRecord, error in
                 if let error = error {
                     print("Error saving program metadata: \(error.localizedDescription)")
                     completion(programID, false, error)
@@ -236,18 +238,16 @@ class ProgramCloudKitUtility {
         }
     }
 
-    // MARK: - Fetch User Active Programs (Metadata) using async/await
+
     static func fetchUserActivePrograms(userID: String) async throws -> [UserProgramDBRepresentation] {
         print("Fetching user active programs for UserID: \(userID)")
         
         let privateDatabase = customContainer.privateCloudDatabase
         let predicate = NSPredicate(format: "UserID == %@", userID)
         let query = CKQuery(recordType: "UserProgramMetadata", predicate: predicate)
-        
-        // Perform the query asynchronously and get the result in tuples
+
         let (matchResults, _) = try await privateDatabase.records(matching: query)
-        
-        // Parse the results
+
         let activePrograms: [UserProgramDBRepresentation] = matchResults.compactMap { recordID, result in
             switch result {
             case .success(let record):
@@ -273,7 +273,6 @@ class ProgramCloudKitUtility {
 
 
 
-    // MARK: - Fetch User Program Data
     static func fetchUserProgramData(programID: String, completion: @escaping (ProgramWithID?, Error?) -> Void) {
         print("Fetching user program data for ProgramID: \(programID)")
         let privateDatabase = customContainer.privateCloudDatabase

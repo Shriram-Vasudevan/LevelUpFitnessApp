@@ -15,7 +15,6 @@ class ChallengeManager: ObservableObject {
     @Published var challengeTemplates: [ChallengeTemplate] = []
     @Published var userChallenges: [UserChallenge] = []
 
-    // MARK: - ChallengeManager Initialization
     func challengeManagerInitialization() async {
         async let getChallengeTemplates: () = await fetchChallengeTemplates()
         async let getActiveUserChallenges: () = await fetchActiveUserChallenges()
@@ -23,7 +22,6 @@ class ChallengeManager: ObservableObject {
         _ = await(getChallengeTemplates, getActiveUserChallenges)
     }
 
-    // MARK: - Fetch Challenge Templates
     func fetchChallengeTemplates() async {
         await ChallengeCloudKitUtility.fetchChallengeTemplates { templates, error in
             if let templates = templates {
@@ -36,7 +34,6 @@ class ChallengeManager: ObservableObject {
         }
     }
 
-    // MARK: - Fetch Active User Challenges
     func fetchActiveUserChallenges() async {
         do {
             let userID = try await ChallengeCloudKitUtility.customContainer.userRecordID().recordName
@@ -46,12 +43,10 @@ class ChallengeManager: ObservableObject {
                     DispatchQueue.main.async {
                         let isoFormatter = ISO8601DateFormatter()
                         
-                        // Filter out expired challenges
                         self.userChallenges = challenges.filter {
                             isoFormatter.date(from: $0.endDate) ?? Date() > Date()
                         }
-                        
-                        // Handle failed challenges
+
                         let failedChallengesCount = challenges.count - self.userChallenges.count
                         if failedChallengesCount > 0 {
                             Task {
@@ -68,7 +63,6 @@ class ChallengeManager: ObservableObject {
         }
     }
 
-    // MARK: - Create a New Challenge
     func createChallenge(challengeName: String, challengeTemplateID: String, userXPData: XPData) async -> Bool {
         let isoFormatter = ISO8601DateFormatter()
 
@@ -104,7 +98,6 @@ class ChallengeManager: ObservableObject {
         return false
     }
 
-    // MARK: - Update Challenge
     func updateChallenge(challengeTemplateID: String, challengeName: String, startDate: String, endDate: String, startValue: Int, targetValue: Int, field: String) async {
         do {
             let userID = try await ChallengeCloudKitUtility.customContainer.userRecordID().recordName
@@ -137,7 +130,6 @@ class ChallengeManager: ObservableObject {
         }
     }
 
-    // MARK: - Leave Challenge
     func leaveChallenge(challengeTemplateID: String) async {
         do {
             let userID = try await ChallengeCloudKitUtility.customContainer.userRecordID().recordName
@@ -156,7 +148,6 @@ class ChallengeManager: ObservableObject {
         }
     }
 
-    // MARK: - Check for Challenge Completion
     func checkForChallengeCompletion(challengeField: String, newValue: Int) async {
         do {
             let userID = try await ChallengeCloudKitUtility.customContainer.userRecordID().recordName

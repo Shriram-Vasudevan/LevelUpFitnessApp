@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-import SwiftUI
 
 struct GymSessionsView: View {
     @ObservedObject var gymManager = GymManager.shared
@@ -15,6 +14,7 @@ struct GymSessionsView: View {
     @State private var showEndSessionConfirmation = false
     @State private var navigateToExerciseView = false
     @State private var navigateToPastSessionDetailView = false
+    @State private var navigateToAddExerciseView = false
     @State private var selectedExerciseRecord: ExerciseRecord?
     @State private var selectedPastSession: GymSession?
 
@@ -27,13 +27,10 @@ struct GymSessionsView: View {
                         
                         if gymManager.currentSession == nil {
                             startNewSessionView
-                        } else {
-                            if let currentSession = gymManager.currentSession {
-                                activeGymSessionView(currentSession)
-                            }
+                        } else if let currentSession = gymManager.currentSession {
+                            activeGymSessionView(currentSession)
                         }
                     }
-                    
                     pastSessionsView
                 }
                 .padding(.horizontal)
@@ -58,6 +55,11 @@ struct GymSessionsView: View {
             if let pastSession = selectedPastSession {
                 PastGymSessionDetailView(session: pastSession)
             }
+        }
+        .navigationDestination(isPresented: $navigateToAddExerciseView) {
+            AddExerciseView(onAddExercise: { exerciseRecord in
+                gymManager.currentSession?.addIndividualExercise(exerciseRecord: exerciseRecord)
+            })
         }
         .navigationBarBackButtonHidden()
     }
@@ -111,7 +113,8 @@ struct GymSessionsView: View {
             
             HStack {
                 Text("Elapsed Time: \(gymManager.elapsedTime)")
-                    .font(.system(size: 16, weight: .light))
+                    .font(.system(size: 40, weight: .bold))
+                    .foregroundColor(.blue)
                 
                 Spacer()
                 
@@ -141,6 +144,18 @@ struct GymSessionsView: View {
                     exerciseWidget(for: exerciseRecord)
                 }
                 .buttonStyle(PlainButtonStyle())
+            }
+            
+            Button(action: {
+                navigateToAddExerciseView = true
+            }) {
+                Text("Add Custom Exercise")
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundColor(.white)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(Color(hex: "40C4FC"))
+                    .cornerRadius(8)
             }
         }
         .padding()
@@ -236,13 +251,16 @@ struct GymSessionsView: View {
     }
 }
 
+
+
 struct GymSessionExerciseView: View {
     let exerciseRecord: ExerciseRecord
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text(exerciseTitle)
-                .font(.system(size: 20, weight: .medium))
+                .font(.system(size: 28, weight: .bold))
+                .padding(.top, 20)
             
             ForEach(Array(exerciseRecord.exerciseData.sets.enumerated()), id: \.offset) { index, set in
                 setDetailView(for: set, setIndex: index + 1)
@@ -278,6 +296,7 @@ struct GymSessionExerciseView: View {
         .padding(.vertical, 4)
     }
 }
+
 
 struct EndSessionConfirmationView: View {
     @Binding var isOpen: Bool
@@ -357,10 +376,13 @@ struct EndSessionConfirmationView: View {
 
 
 
+import SwiftUI
+
 struct PastGymSessionDetailView: View {
     let session: GymSession
     
     @Environment(\.dismiss) var dismiss
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             ZStack {
@@ -376,6 +398,7 @@ struct PastGymSessionDetailView: View {
                 Text("Session Details")
                     .font(.system(size: 18, weight: .semibold))
             }
+            .padding(.top)
             
             Text("Past Gym Session")
                 .font(.system(size: 24, weight: .medium))
@@ -434,3 +457,143 @@ struct PastGymSessionDetailView: View {
 }
 
 
+struct AddExerciseView: View {
+    @Environment(\.dismiss) var dismiss
+    
+    @State private var exerciseName: String = ""
+    @State private var sets: [ExerciseDataSet] = [ExerciseDataSet(weight: 0, reps: 0, time: 0, rest: 0)]
+    
+    var onAddExercise: (ExerciseRecord) -> Void
+    
+    var body: some View {
+        VStack {
+            HStack {
+                Button(action: {
+                    dismiss()
+                }) {
+                    Image(systemName: "arrow.left")
+                        .font(.system(size: 20, weight: .medium))
+                        .foregroundColor(Color(hex: "40C4FC"))
+                }
+                Spacer()
+            }
+            .padding()
+            
+            Text("Add Custom Exercise")
+                .font(.system(size: 24, weight: .bold))
+                .padding(.top, 8)
+            
+            TextField("Exercise Name", text: $exerciseName)
+                .font(.system(size: 18, weight: .medium))
+                .padding()
+                .background(Color(hex: "F5F5F5"))
+                .cornerRadius(8)
+                .padding(.horizontal)
+            
+            ScrollView {
+                ForEach(sets.indices, id: \.self) { index in
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Set \(index + 1)")
+                            .font(.system(size: 18, weight: .medium))
+                            .foregroundColor(.black)
+                        
+                        inputFieldsView(for: index)
+                            .padding(.bottom, 16)
+                    }
+                    .padding(.horizontal)
+                    Divider()
+                }
+            }
+            
+            Button(action: {
+                sets.append(ExerciseDataSet(weight: 0, reps: 0, time: 0, rest: 0))
+            }) {
+                Text("Add Set")
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundColor(.white)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(Color(hex: "40C4FC"))
+                    .cornerRadius(8)
+            }
+            .padding()
+            
+            Spacer()
+            
+            Button(action: {
+                let exerciseRecord = ExerciseRecord(
+                    exerciseInfo: .libraryExercise(Progression(name: exerciseName, description: "", level: 0, cdnURL: "", exerciseType: "", isWeight: false)),
+                    exerciseData: ExerciseData(sets: sets)
+                )
+                onAddExercise(exerciseRecord)
+                dismiss()
+            }) {
+                Text("Add Exercise")
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundColor(.white)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(Color(hex: "40C4FC"))
+                    .cornerRadius(8)
+            }
+            .padding(.bottom, 30)
+        }
+    }
+
+    // Input fields for a set (weight, reps, time, rest)
+    private func inputFieldsView(for index: Int) -> some View {
+        VStack(spacing: 16) {
+            HStack(spacing: 16) {
+                inputField(title: "Weight", value: $sets[index].weight, unit: "lbs")
+                inputField(title: "Reps", value: $sets[index].reps, unit: "reps")
+            }
+            
+            HStack(spacing: 16) {
+                inputField(title: "Time", value: $sets[index].time, unit: "seconds")
+                inputField(title: "Rest", value: $sets[index].rest, unit: "seconds")
+            }
+        }
+    }
+
+    // Single input field component
+    private func inputField(title: String, value: Binding<Int>, unit: String) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(title)
+                .font(.system(size: 14, weight: .light))
+                .foregroundColor(.secondary)
+            HStack {
+                TextField("0", value: value, formatter: NumberFormatter())
+                    .keyboardType(.numberPad)
+                    .font(.system(size: 18, weight: .medium))
+                Text(unit)
+                    .font(.system(size: 14, weight: .light))
+                    .foregroundColor(.secondary)
+            }
+            .padding(.vertical, 8)
+            .padding(.horizontal, 12)
+            .background(Color.white)
+            .cornerRadius(8)
+        }
+    }
+    
+    // For double values (e.g., Time and Rest)
+    private func inputField(title: String, value: Binding<Double>, unit: String) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(title)
+                .font(.system(size: 14, weight: .light))
+                .foregroundColor(.secondary)
+            HStack {
+                TextField("0", value: value, formatter: NumberFormatter())
+                    .keyboardType(.decimalPad)
+                    .font(.system(size: 18, weight: .medium))
+                Text(unit)
+                    .font(.system(size: 14, weight: .light))
+                    .foregroundColor(.secondary)
+            }
+            .padding(.vertical, 8)
+            .padding(.horizontal, 12)
+            .background(Color.white)
+            .cornerRadius(8)
+        }
+    }
+}

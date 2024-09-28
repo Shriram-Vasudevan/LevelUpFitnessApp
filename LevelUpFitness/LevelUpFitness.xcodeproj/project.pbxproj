@@ -121,12 +121,13 @@
 		999F70742C0F59EA00B35A78 /* StatisticsWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999F70732C0F59EA00B35A78 /* StatisticsWidget.swift */; };
 		999F70762C0F6D9C00B35A78 /* Double.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999F70752C0F6D9C00B35A78 /* Double.swift */; };
 		999F70782C0FA57500B35A78 /* CommunityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999F70772C0FA57500B35A78 /* CommunityView.swift */; };
-		99A0C8B82CA394BF00F9281A /* TutorialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A0C8B72CA394BF00F9281A /* TutorialView.swift */; };
 		99A0C8BB2CA4D0B700F9281A /* ProgramCloudKitUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A0C8BA2CA4D0B700F9281A /* ProgramCloudKitUtility.swift */; };
 		99A0C8BD2CA64CDF00F9281A /* ProgramWithID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A0C8BC2CA64CDF00F9281A /* ProgramWithID.swift */; };
 		99A0C8BF2CA77A9900F9281A /* XPCloudKitUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A0C8BE2CA77A9900F9281A /* XPCloudKitUtility.swift */; };
 		99A0C8C12CA77F5000F9281A /* TrendCloudKitUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A0C8C02CA77F5000F9281A /* TrendCloudKitUtility.swift */; };
 		99A0C8C32CA7917100F9281A /* ChallengeCloudKitUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A0C8C22CA7917100F9281A /* ChallengeCloudKitUtility.swift */; };
+		99A0C8C52CA84BEE00F9281A /* IntroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A0C8C42CA84BEE00F9281A /* IntroView.swift */; };
+		99A0C8C72CA84C2500F9281A /* FirstLaunchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A0C8C62CA84C2500F9281A /* FirstLaunchManager.swift */; };
 		99A67EEA2BF451F0002DC3DC /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A67EE92BF451EF002DC3DC /* HomeView.swift */; };
 		99A67EF92BF45251002DC3DC /* Sailec Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 99A67EEE2BF45250002DC3DC /* Sailec Bold.ttf */; };
 		99A67EFA2BF45251002DC3DC /* times new roman bold italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 99A67EEF2BF45250002DC3DC /* times new roman bold italic.ttf */; };
@@ -276,13 +277,14 @@
 		999F70732C0F59EA00B35A78 /* StatisticsWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsWidget.swift; sourceTree = "<group>"; };
 		999F70752C0F6D9C00B35A78 /* Double.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Double.swift; sourceTree = "<group>"; };
 		999F70772C0FA57500B35A78 /* CommunityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityView.swift; sourceTree = "<group>"; };
-		99A0C8B72CA394BF00F9281A /* TutorialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialView.swift; sourceTree = "<group>"; };
 		99A0C8B92CA4CEB800F9281A /* LevelUpFitnessDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LevelUpFitnessDebug.entitlements; sourceTree = "<group>"; };
 		99A0C8BA2CA4D0B700F9281A /* ProgramCloudKitUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramCloudKitUtility.swift; sourceTree = "<group>"; };
 		99A0C8BC2CA64CDF00F9281A /* ProgramWithID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramWithID.swift; sourceTree = "<group>"; };
 		99A0C8BE2CA77A9900F9281A /* XPCloudKitUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XPCloudKitUtility.swift; sourceTree = "<group>"; };
 		99A0C8C02CA77F5000F9281A /* TrendCloudKitUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendCloudKitUtility.swift; sourceTree = "<group>"; };
 		99A0C8C22CA7917100F9281A /* ChallengeCloudKitUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeCloudKitUtility.swift; sourceTree = "<group>"; };
+		99A0C8C42CA84BEE00F9281A /* IntroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroView.swift; sourceTree = "<group>"; };
+		99A0C8C62CA84C2500F9281A /* FirstLaunchManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstLaunchManager.swift; sourceTree = "<group>"; };
 		99A67EE92BF451EF002DC3DC /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		99A67EEE2BF45250002DC3DC /* Sailec Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Sailec Bold.ttf"; sourceTree = "<group>"; };
 		99A67EEF2BF45250002DC3DC /* times new roman bold italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "times new roman bold italic.ttf"; sourceTree = "<group>"; };
@@ -431,6 +433,7 @@
 				99B44BFD2C990C3B00C0C434 /* CustomWorkoutManager.swift */,
 				99B44C072C9D105200C0C434 /* InitializationManager.swift */,
 				99B44C0D2CA072ED00C0C434 /* GymManager.swift */,
+				99A0C8C62CA84C2500F9281A /* FirstLaunchManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -505,7 +508,7 @@
 				99B44C012C990F7100C0C434 /* CreateCustomWorkoutView.swift */,
 				99B44C032C9A68C600C0C434 /* CustomWorkoutWidget.swift */,
 				99B44C092C9F711E00C0C434 /* ActiveChallengesView.swift */,
-				99A0C8B72CA394BF00F9281A /* TutorialView.swift */,
+				99A0C8C42CA84BEE00F9281A /* IntroView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -815,7 +818,6 @@
 				9978CE002C7E69D200659813 /* ToDoList.swift in Sources */,
 				993DF2412C397C5C00BBC1BF /* SetCounterWidget.swift in Sources */,
 				99B44C0A2C9F711E00C0C434 /* ActiveChallengesView.swift in Sources */,
-				99A0C8B82CA394BF00F9281A /* TutorialView.swift in Sources */,
 				9978CDF02C7C22E800659813 /* ExerciseDataSetWidget.swift in Sources */,
 				993871A82C3A242700FFAF8A /* LevelCircularProgressView.swift in Sources */,
 				991FB46F2C682055006B4ACE /* ChallengeManager.swift in Sources */,
@@ -867,6 +869,7 @@
 				9945E0BA2C39A15F00EA19D2 /* XPManager.swift in Sources */,
 				99DD3D522C1D0839006C07B3 /* ExerciseLibraryExerciseWidget.swift in Sources */,
 				99A0C8C32CA7917100F9281A /* ChallengeCloudKitUtility.swift in Sources */,
+				99A0C8C52CA84BEE00F9281A /* IntroView.swift in Sources */,
 				99B44BFE2C990C3B00C0C434 /* CustomWorkoutManager.swift in Sources */,
 				994E7DB52C0266A000BAD9E0 /* RegisterView.swift in Sources */,
 				9978CDFE2C7E5CE700659813 /* ToDoListTask.swift in Sources */,
@@ -888,6 +891,7 @@
 				9978CDFC2C7D8A6200659813 /* TrendManager.swift in Sources */,
 				99B44C0E2CA072ED00C0C434 /* GymManager.swift in Sources */,
 				995B94BB2C596F0B007AECF0 /* TimeData.swift in Sources */,
+				99A0C8C72CA84C2500F9281A /* FirstLaunchManager.swift in Sources */,
 				9978CE102C83DE9800659813 /* WeightStatView.swift in Sources */,
 				994E7DB92C026BE500BAD9E0 /* AuthCheckView.swift in Sources */,
 			);
