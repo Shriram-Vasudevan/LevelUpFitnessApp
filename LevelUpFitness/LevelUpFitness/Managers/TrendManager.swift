@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Amplify
+import CloudKit
 
 @MainActor
 class TrendManager: ObservableObject {
@@ -15,173 +15,75 @@ class TrendManager: ObservableObject {
     @Published var weightTrend: [HealthDataPoint] = []
     @Published var levelTrend: [HealthDataPoint] = []
     
+    // MARK: - Add Weight to Trend
     func addWeightToTrend(weight: Double) async {
         do {
-            let userID = try await Amplify.Auth.getCurrentUser().userId
-            
-            let request = RESTRequest(apiName: "LevelUpFitnessDynamoAccessAPI", path: "/addWeightEntry", queryParameters: ["UserID" : userID, "Weight": "\(weight)"])
-            let response = try await Amplify.API.put(request: request)
-            
-            let jsonString = String(data: response, encoding: .utf8)
-            
-//            let isoFormatter = ISO8601DateFormatter()
-//            isoFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-//            
-//            let date = isoFormatter.string(from: Date())
-            
-            self.weightTrend.append(HealthDataPoint(date: Date(), value: weight))
+            let userID = try await TrendCloudKitUtility.customContainer.userRecordID().recordName
+            TrendCloudKitUtility.saveWeightEntry(userID: userID, weight: weight) { success, error in
+                if success {
+                    DispatchQueue.main.async {
+                        self.weightTrend.append(HealthDataPoint(date: Date(), value: weight))
+                    }
+                } else if let error = error {
+                    print("Failed to save weight entry: \(error.localizedDescription)")
+                }
+            }
         } catch {
-            print(error)
+            print("Error getting user ID: \(error.localizedDescription)")
         }
     }
     
+    // MARK: - Get Weight Trend
     func getWeightTrend() async {
         do {
-            let userID = try await Amplify.Auth.getCurrentUser().userId
-            
-            let request = RESTRequest(apiName: "LevelUpFitnessDynamoAccessAPI", path: "/getUserWeightTrend", queryParameters: ["UserID" : userID, "Days": "\(30)"])
-            let response = try await Amplify.API.get(request: request)
-            
-            let jsonString = String(data: response, encoding: .utf8)
-            print("get weight trend string \(jsonString ?? "")")
-            
-            if let jsonArray = try JSONSerialization.jsonObject(with: response) as? [[String: Any]] {
-                print(jsonArray)
-                for jsonObject in jsonArray {
-                    print(jsonObject)
-                    
-                    for (key, value) in jsonObject {
-                        print("Key: \(key), Value: \(value)")
+            let userID = try await TrendCloudKitUtility.customContainer.userRecordID().recordName
+            await TrendCloudKitUtility.fetchWeightTrend(userID: userID, days: 30) { trendData, error in
+                if let trendData = trendData {
+                    DispatchQueue.main.async {
+                        self.weightTrend = trendData
                     }
-                    
-                    if let timeStamp = jsonObject["Timestamp"] as? String {
-                        print("Timestamp: \(timeStamp)")
-                        
-                        if let weightValue = jsonObject["Weight"] {
-                            print("Raw Weight value: \(weightValue)")
-                            print("Type of Weight value: \(type(of: weightValue))")
-                            
-                            if let weightString = weightValue as? String {
-                                if let weightDouble = Double(weightString) {
-                                    print("Successfully converted Weight to Double: \(weightDouble)")
-                                    let isoFormatter = ISO8601DateFormatter()
-                                    isoFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-                                    
-                                    if let date = isoFormatter.date(from: timeStamp) {
-                                        print("Successfully parsed Date: \(date)")
-                                        
-                                        self.weightTrend.append(HealthDataPoint(date: date, value: weightDouble))
-                                        print("Appended weight to weightTrend: \(self.weightTrend.last)")
-                                    } else {
-                                        print("Failed to parse Date from Timestamp: \(timeStamp)")
-                                    }
-                                } else {
-                                    print("Failed to convert Weight String to Double. Weight String: \(weightString)")
-                                }
-                            } else {
-                                print("Weight is neither a String nor a Double, actual type: \(type(of: weightValue))")
-                            }
-                        } else {
-                            print("Weight key not found")
-                        }
-                    } else {
-                        print("Couldn't get Timestamp as String")
-                    }
+                } else if let error = error {
+                    print("Failed to fetch weight trend: \(error.localizedDescription)")
                 }
-            } else {
-                print("Couldn't parse response as JSON array")
             }
-            
         } catch {
-            print(error)
+            print("Error getting user ID: \(error.localizedDescription)")
         }
     }
     
+    // MARK: - Add Level to Trend
     func addLevelToTrend(level: Int) async {
         do {
-            let userID = try await Amplify.Auth.getCurrentUser().userId
-            
-            let request = RESTRequest(apiName: "LevelUpFitnessDynamoAccessAPI", path: "/addLevelEntry", queryParameters: ["UserID" : userID, "Level": "\(level)"])
-            let response = try await Amplify.API.put(request: request)
-            
-            let jsonString = String(data: response, encoding: .utf8)
-            
-//            let isoFormatter = ISO8601DateFormatter()
-//            isoFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-//
-//            let date = isoFormatter.string(from: Date())
-            
-            self.levelTrend.append(HealthDataPoint(date: Date(), value: Double(level)))
+            let userID = try await TrendCloudKitUtility.customContainer.userRecordID().recordName
+            TrendCloudKitUtility.saveLevelEntry(userID: userID, level: level) { success, error in
+                if success {
+                    DispatchQueue.main.async {
+                        self.levelTrend.append(HealthDataPoint(date: Date(), value: Double(level)))
+                    }
+                } else if let error = error {
+                    print("Failed to save level entry: \(error.localizedDescription)")
+                }
+            }
         } catch {
-            print(error)
+            print("Error getting user ID: \(error.localizedDescription)")
         }
     }
     
+    // MARK: - Get Level Trend
     func getLevelTrend() async {
         do {
-            let userID = try await Amplify.Auth.getCurrentUser().userId
-            
-            let request = RESTRequest(apiName: "LevelUpFitnessDynamoAccessAPI", path: "/getUserLevelTrend", queryParameters: ["UserID" : userID, "Days": "\(30)"])
-            let response = try await Amplify.API.get(request: request)
-            
-            let jsonString = String(data: response, encoding: .utf8)
-            print("get level trend string \(jsonString ?? "")")
-            
-            if let jsonArray = try JSONSerialization.jsonObject(with: response) as? [[String: Any]] {
-                print(jsonArray)
-                for jsonObject in jsonArray {
-                    print(jsonObject)
-                    
-                    if let timeStamp = jsonObject["Timestamp"] as? String {
-                        print("Timestamp: \(timeStamp)")
-                        
-                        if let levelValue = jsonObject["Level"] {
-                            print("Raw Level value: \(levelValue)")
-                            print("Type of Level value: \(type(of: levelValue))")
-                            
-                            // Try converting to a String first, and then to a number
-                            if let levelString = levelValue as? String, let levelInt = Int(levelString) {
-                                print("Successfully converted Level to Int from String: \(levelInt)")
-                                let isoFormatter = ISO8601DateFormatter()
-                                isoFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-                                
-                                if let date = isoFormatter.date(from: timeStamp) {
-                                    print("Successfully parsed Date: \(date)")
-                                    
-                                    self.levelTrend.append(HealthDataPoint(date: date, value: Double(levelInt)))
-                                    print("Appended Level to levelTrend: \(self.levelTrend.last)")
-                                } else {
-                                    print("Failed to parse Date from Timestamp: \(timeStamp)")
-                                }
-                            } else if let levelNumber = levelValue as? NSNumber {
-                                let levelInt = levelNumber.intValue
-                                print("Successfully converted Level to Int from NSNumber: \(levelInt)")
-                                let isoFormatter = ISO8601DateFormatter()
-                                isoFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-                                
-                                if let date = isoFormatter.date(from: timeStamp) {
-                                    print("Successfully parsed Date: \(date)")
-                                    
-                                    self.levelTrend.append(HealthDataPoint(date: date, value: Double(levelInt)))
-                                    print("Appended Level to levelTrend: \(self.levelTrend.last)")
-                                } else {
-                                    print("Failed to parse Date from Timestamp: \(timeStamp)")
-                                }
-                            } else {
-                                print("Level is of an unsupported type, actual type: \(type(of: levelValue))")
-                            }
-                        } else {
-                            print("Level key not found")
-                        }
-                    } else {
-                        print("Couldn't get Timestamp as String")
+            let userID = try await TrendCloudKitUtility.customContainer.userRecordID().recordName
+            TrendCloudKitUtility.fetchLevelTrend(userID: userID, days: 30) { trendData, error in
+                if let trendData = trendData {
+                    DispatchQueue.main.async {
+                        self.levelTrend = trendData
                     }
+                } else if let error = error {
+                    print("Failed to fetch level trend: \(error.localizedDescription)")
                 }
-            } else {
-                print("Couldn't parse response as JSON array")
             }
         } catch {
-            print(error)
+            print("Error getting user ID: \(error.localizedDescription)")
         }
     }
 }

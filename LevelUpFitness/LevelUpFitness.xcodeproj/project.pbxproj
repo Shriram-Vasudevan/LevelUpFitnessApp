@@ -124,6 +124,9 @@
 		99A0C8B82CA394BF00F9281A /* TutorialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A0C8B72CA394BF00F9281A /* TutorialView.swift */; };
 		99A0C8BB2CA4D0B700F9281A /* ProgramCloudKitUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A0C8BA2CA4D0B700F9281A /* ProgramCloudKitUtility.swift */; };
 		99A0C8BD2CA64CDF00F9281A /* ProgramWithID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A0C8BC2CA64CDF00F9281A /* ProgramWithID.swift */; };
+		99A0C8BF2CA77A9900F9281A /* XPCloudKitUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A0C8BE2CA77A9900F9281A /* XPCloudKitUtility.swift */; };
+		99A0C8C12CA77F5000F9281A /* TrendCloudKitUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A0C8C02CA77F5000F9281A /* TrendCloudKitUtility.swift */; };
+		99A0C8C32CA7917100F9281A /* ChallengeCloudKitUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A0C8C22CA7917100F9281A /* ChallengeCloudKitUtility.swift */; };
 		99A67EEA2BF451F0002DC3DC /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A67EE92BF451EF002DC3DC /* HomeView.swift */; };
 		99A67EF92BF45251002DC3DC /* Sailec Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 99A67EEE2BF45250002DC3DC /* Sailec Bold.ttf */; };
 		99A67EFA2BF45251002DC3DC /* times new roman bold italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 99A67EEF2BF45250002DC3DC /* times new roman bold italic.ttf */; };
@@ -277,6 +280,9 @@
 		99A0C8B92CA4CEB800F9281A /* LevelUpFitnessDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LevelUpFitnessDebug.entitlements; sourceTree = "<group>"; };
 		99A0C8BA2CA4D0B700F9281A /* ProgramCloudKitUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramCloudKitUtility.swift; sourceTree = "<group>"; };
 		99A0C8BC2CA64CDF00F9281A /* ProgramWithID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramWithID.swift; sourceTree = "<group>"; };
+		99A0C8BE2CA77A9900F9281A /* XPCloudKitUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XPCloudKitUtility.swift; sourceTree = "<group>"; };
+		99A0C8C02CA77F5000F9281A /* TrendCloudKitUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendCloudKitUtility.swift; sourceTree = "<group>"; };
+		99A0C8C22CA7917100F9281A /* ChallengeCloudKitUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeCloudKitUtility.swift; sourceTree = "<group>"; };
 		99A67EE92BF451EF002DC3DC /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		99A67EEE2BF45250002DC3DC /* Sailec Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Sailec Bold.ttf"; sourceTree = "<group>"; };
 		99A67EEF2BF45250002DC3DC /* times new roman bold italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "times new roman bold italic.ttf"; sourceTree = "<group>"; };
@@ -383,6 +389,9 @@
 				99ECAD332C784ED40012F8E7 /* S3Utility.swift */,
 				99E0A5182C9141BC00CC1224 /* ErrorUtility.swift */,
 				99A0C8BA2CA4D0B700F9281A /* ProgramCloudKitUtility.swift */,
+				99A0C8BE2CA77A9900F9281A /* XPCloudKitUtility.swift */,
+				99A0C8C02CA77F5000F9281A /* TrendCloudKitUtility.swift */,
+				99A0C8C22CA7917100F9281A /* ChallengeCloudKitUtility.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -813,6 +822,7 @@
 				9978CDF62C7D797C00659813 /* HealthDataPoint.swift in Sources */,
 				991FB4522C66657C006B4ACE /* LevelChangeInfo.swift in Sources */,
 				991FB45D2C668A8D006B4ACE /* LocalStorageUtility.swift in Sources */,
+				99A0C8BF2CA77A9900F9281A /* XPCloudKitUtility.swift in Sources */,
 				99EEC6182C32F37A0044F906 /* SizePreferanceKey.swift in Sources */,
 				999F70722C0EB4D400B35A78 /* AchievementWidget.swift in Sources */,
 				992F26A72C61225300F25400 /* LevelInfoView.swift in Sources */,
@@ -852,9 +862,11 @@
 				998DA0172C1A34840078E882 /* ChatView.swift in Sources */,
 				99FC9E462C5EC1F900DAFFAC /* AnalyticsView.swift in Sources */,
 				991FB47F2C6D561F006B4ACE /* ActiveUserChallengeWidget.swift in Sources */,
+				99A0C8C12CA77F5000F9281A /* TrendCloudKitUtility.swift in Sources */,
 				991FB4692C6695EB006B4ACE /* ProgramDynamoDBUtility.swift in Sources */,
 				9945E0BA2C39A15F00EA19D2 /* XPManager.swift in Sources */,
 				99DD3D522C1D0839006C07B3 /* ExerciseLibraryExerciseWidget.swift in Sources */,
+				99A0C8C32CA7917100F9281A /* ChallengeCloudKitUtility.swift in Sources */,
 				99B44BFE2C990C3B00C0C434 /* CustomWorkoutManager.swift in Sources */,
 				994E7DB52C0266A000BAD9E0 /* RegisterView.swift in Sources */,
 				9978CDFE2C7E5CE700659813 /* ToDoListTask.swift in Sources */,

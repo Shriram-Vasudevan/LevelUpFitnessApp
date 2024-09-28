@@ -10,122 +10,191 @@ import Foundation
 
 class ProgramCloudKitUtility {
 
-    static func leaveProgram(programID: String, completion: @escaping (Bool, Error?) -> Void) {
-           let privateDatabase = CKContainer.default().privateCloudDatabase
-           
-           let predicate = NSPredicate(format: "ProgramID == %@", programID)
-           let query = CKQuery(recordType: "UserProgramMetadata", predicate: predicate)
-           
-           privateDatabase.perform(query, inZoneWith: nil) { records, error in
-               guard let record = records?.first else {
-                   completion(false, error)
-                   return
-               }
-    
-               privateDatabase.delete(withRecordID: record.recordID) { recordID, error in
-                   if let error = error {
-                       completion(false, error)
-                   } else {
-                       completion(true, nil)
-                   }
-               }
-           }
-       }
+    // Custom CloudKit Container
+    static let customContainer = CKContainer(identifier: "iCloud.LevelUpFitnessCloudKitStorage")
 
+    // MARK: - Leave Program
+    static func leaveProgram(programID: String, completion: @escaping (Bool, Error?) -> Void) {
+        print("Leaving program with ProgramID: \(programID)")
+        let privateDatabase = customContainer.privateCloudDatabase
+           
+        let predicate = NSPredicate(format: "ProgramID == %@", programID)
+        let query = CKQuery(recordType: "UserProgramMetadata", predicate: predicate)
+        
+        privateDatabase.perform(query, inZoneWith: nil) { records, error in
+            if let error = error {
+                print("Error querying for program metadata: \(error.localizedDescription)")
+                completion(false, error)
+                return
+            }
+            
+            guard let record = records?.first else {
+                print("No metadata found for program with ID: \(programID)")
+                completion(false, nil)
+                return
+            }
+
+            print("Deleting program metadata with recordID: \(record.recordID.recordName)")
+            privateDatabase.delete(withRecordID: record.recordID) { recordID, error in
+                if let error = error {
+                    print("Error deleting program metadata: \(error.localizedDescription)")
+                    completion(false, error)
+                } else {
+                    print("Successfully deleted program metadata with recordID: \(recordID?.recordName ?? "")")
+                    completion(true, nil)
+                }
+            }
+        }
+    }
+
+    // MARK: - Upload New Program Status
     static func uploadNewProgramStatus(programID: String, updatedProgram: Program, completion: @escaping (Bool, Error?) -> Void) {
-        let privateDatabase = CKContainer.default().privateCloudDatabase
+        print("Uploading new status for ProgramID: \(programID)")
+        let privateDatabase = customContainer.privateCloudDatabase
         
         let predicate = NSPredicate(format: "ProgramID == %@", programID)
         let query = CKQuery(recordType: "UserProgramData", predicate: predicate)
         
         privateDatabase.perform(query, inZoneWith: nil) { records, error in
-            guard let record = records?.first else {
+            if let error = error {
+                print("Error querying for program data: \(error.localizedDescription)")
                 completion(false, error)
                 return
             }
+            
+            guard let record = records?.first else {
+                print("No data found for program with ID: \(programID)")
+                completion(false, nil)
+                return
+            }
 
+            print("Converting updated program to JSON")
             let encoder = JSONEncoder()
             if let programData = try? encoder.encode(updatedProgram),
                let tempFileURL = saveDataToTemporaryFile(data: programData) {
+                print("Saving updated program data to CKAsset")
                 let updatedProgramAsset = CKAsset(fileURL: tempFileURL)
-                
                 record["ProgramAsset"] = updatedProgramAsset
 
                 privateDatabase.save(record) { savedRecord, error in
                     if let error = error {
+                        print("Error saving updated program data: \(error.localizedDescription)")
                         completion(false, error)
                     } else {
+                        print("Successfully saved updated program status")
                         completion(true, nil)
                     }
                 }
             } else {
+                print("Error encoding program data or saving to temporary file")
                 completion(false, nil)
             }
         }
     }
-    
+
+    // MARK: - Helper for CKAsset
     static func saveDataToTemporaryFile(data: Data) -> URL? {
+        print("Saving data to a temporary file")
         let tempDir = FileManager.default.temporaryDirectory
         let fileURL = tempDir.appendingPathComponent(UUID().uuidString).appendingPathExtension("json")
         do {
             try data.write(to: fileURL)
+            print("Data successfully saved to: \(fileURL.path)")
             return fileURL
         } catch {
-            print("Error saving temp file: \(error.localizedDescription)")
+            print("Error saving data to temp file: \(error.localizedDescription)")
             return nil
         }
     }
-    
+
+    // MARK: - Fetch Standard Program Metadata (List all available programs)
     static func fetchStandardProgramDBRepresentations(completion: @escaping ([StandardProgramDBRepresentation]?, Error?) -> Void) {
-        let publicDatabase = CKContainer.default().publicCloudDatabase
+        print("Fetching all standard program metadata")
+        let publicDatabase = customContainer.publicCloudDatabase
         let query = CKQuery(recordType: "StandardProgramMetadata", predicate: NSPredicate(value: true))
         
         publicDatabase.perform(query, inZoneWith: nil) { records, error in
-            guard let records = records else {
+            if let error = error {
+                print("Error fetching standard program metadata: \(error.localizedDescription)")
                 completion(nil, error)
                 return
             }
+
+            print("Query completed. Found \(records?.count ?? 0) records.")
             
-            let programs = records.compactMap { record -> StandardProgramDBRepresentation? in
+            let programs = records?.compactMap { record -> StandardProgramDBRepresentation? in
                 guard let id = record["ID"] as? String,
                       let name = record["Name"] as? String,
                       let environment = record["Environment"] as? String else {
+                    print("Record with missing fields")
                     return nil
                 }
                 
+                print("Fetched program - ID: \(id), Name: \(name)")
                 return StandardProgramDBRepresentation(id: id, name: name, environment: environment)
-            }
+            } ?? []
             
+            print("Returning \(programs.count) programs")
             completion(programs, nil)
         }
     }
 
     static func fetchStandardProgramData(programName: String, completion: @escaping (Program?, Error?) -> Void) {
-        let publicDatabase = CKContainer.default().publicCloudDatabase
-        let predicate = NSPredicate(format: "Name == %@", programName)
+        print("Fetching program data for program name: \(programName)")
+        let publicDatabase = customContainer.publicCloudDatabase
+        
+        let normalizedProgramName = programName.folding(options: .diacriticInsensitive, locale: .current)
+        print("Normalized program name: \(normalizedProgramName)")
+
+        let predicate = NSPredicate(format: "Name == %@", normalizedProgramName)
         let query = CKQuery(recordType: "StandardProgramData", predicate: predicate)
         
         publicDatabase.perform(query, inZoneWith: nil) { records, error in
-            guard let record = records?.first, let programAsset = record["ProgramAsset"] as? CKAsset else {
+            if let error = error {
+                print("Error performing query for program data: \(error.localizedDescription)")
                 completion(nil, error)
+                return
+            }
+
+            print("Query completed. Found \(records?.count ?? 0) records.")
+            
+            guard let record = records?.first else {
+                print("No records found for program: \(normalizedProgramName)")
+                completion(nil, nil)
+                return
+            }
+            
+            print("Record found: \(record.recordID.recordName)")
+
+            guard let programAsset = record["ProgramAsset"] as? CKAsset else {
+                print("No ProgramAsset found for program: \(normalizedProgramName)")
+                completion(nil, nil)
                 return
             }
             
             do {
+                print("Attempting to read program data from ProgramAsset...")
                 let programData = try Data(contentsOf: programAsset.fileURL!)
+                print("Program data read successfully.")
+                
+                print("Decoding program data...")
                 let decoder = JSONDecoder()
                 let program = try decoder.decode(Program.self, from: programData)
+                print("Program decoded successfully: \(program.programName)")
+                
                 completion(program, nil)
             } catch {
+                print("Error decoding program data: \(error.localizedDescription)")
                 completion(nil, error)
             }
         }
     }
 
-    static func saveUserProgram(userID: String, program: Program, startDate: String, completion: @escaping (Bool, Error?) -> Void) {
-        let privateDatabase = CKContainer.default().privateCloudDatabase
+    // MARK: - Save User Program Data and Metadata
+    static func saveUserProgram(userID: String, program: Program, startDate: String, completion: @escaping (String, Bool, Error?) -> Void) {
+        print("Saving user program for UserID: \(userID), ProgramName: \(program.programName)")
+        let privateDatabase = customContainer.privateCloudDatabase
         
-
         let programID = UUID().uuidString
 
         let programRecord = CKRecord(recordType: "UserProgramData")
@@ -137,6 +206,7 @@ class ProgramCloudKitUtility {
         let encoder = JSONEncoder()
         if let programData = try? encoder.encode(program.program),
            let tempFileURL = saveDataToTemporaryFile(data: programData) {
+            print("Saving program data as CKAsset")
             let programAsset = CKAsset(fileURL: tempFileURL)
             programRecord["ProgramAsset"] = programAsset
         }
@@ -146,69 +216,101 @@ class ProgramCloudKitUtility {
         metadataRecord["StartDate"] = startDate as CKRecordValue
         metadataRecord["ProgramID"] = programID as CKRecordValue
 
-
         privateDatabase.save(programRecord) { programSavedRecord, error in
             if let error = error {
-                completion(false, error)
+                print("Error saving program data: \(error.localizedDescription)")
+                completion(programID, false, error)
                 return
             }
+            print("Successfully saved program data")
+            
             privateDatabase.save(metadataRecord) { metadataSavedRecord, error in
                 if let error = error {
-                    completion(false, error)
+                    print("Error saving program metadata: \(error.localizedDescription)")
+                    completion(programID, false, error)
                     return
                 }
-                completion(true, nil)
+                print("Successfully saved program metadata")
+                completion(programID, true, nil)
             }
         }
     }
 
-    static func fetchUserActivePrograms(userID: String, completion: @escaping ([UserProgramDBRepresentation]?, Error?) -> Void) {
-        let privateDatabase = CKContainer.default().privateCloudDatabase
+    // MARK: - Fetch User Active Programs (Metadata) using async/await
+    static func fetchUserActivePrograms(userID: String) async throws -> [UserProgramDBRepresentation] {
+        print("Fetching user active programs for UserID: \(userID)")
+        
+        let privateDatabase = customContainer.privateCloudDatabase
         let predicate = NSPredicate(format: "UserID == %@", userID)
         let query = CKQuery(recordType: "UserProgramMetadata", predicate: predicate)
         
-        privateDatabase.perform(query, inZoneWith: nil) { records, error in
-            guard let records = records else {
-                completion(nil, error)
-                return
-            }
-            
-            let activePrograms = records.compactMap { record -> UserProgramDBRepresentation? in
+        // Perform the query asynchronously and get the result in tuples
+        let (matchResults, _) = try await privateDatabase.records(matching: query)
+        
+        // Parse the results
+        let activePrograms: [UserProgramDBRepresentation] = matchResults.compactMap { recordID, result in
+            switch result {
+            case .success(let record):
                 guard let userID = record["UserID"] as? String,
                       let program = record["Program"] as? String,
                       let startDate = record["StartDate"] as? String,
                       let programID = record["ProgramID"] as? String else {
+                    print("Record with missing fields: \(recordID)")
                     return nil
                 }
                 
+                print("Fetched active program - ProgramID: \(programID), ProgramName: \(program)")
                 return UserProgramDBRepresentation(userID: userID, program: program, startDate: startDate, programID: programID)
+            case .failure(let error):
+                print("Failed to fetch record for \(recordID), error: \(error.localizedDescription)")
+                return nil
             }
-            
-            completion(activePrograms, nil)
         }
+        
+        print("Returning \(activePrograms.count) active programs")
+        return activePrograms
     }
 
+
+
+    // MARK: - Fetch User Program Data
     static func fetchUserProgramData(programID: String, completion: @escaping (ProgramWithID?, Error?) -> Void) {
-        let privateDatabase = CKContainer.default().privateCloudDatabase
+        print("Fetching user program data for ProgramID: \(programID)")
+        let privateDatabase = customContainer.privateCloudDatabase
         let predicate = NSPredicate(format: "ProgramID == %@", programID)
         let query = CKQuery(recordType: "UserProgramData", predicate: predicate)
         
         privateDatabase.perform(query, inZoneWith: nil) { records, error in
-            guard let record = records?.first, let programAsset = record["ProgramAsset"] as? CKAsset else {
+            if let error = error {
+                print("Error fetching program data: \(error.localizedDescription)")
                 completion(nil, error)
+                return
+            }
+
+            print("Query completed. Found \(records?.count ?? 0) records.")
+            
+            guard let record = records?.first, let programAsset = record["ProgramAsset"] as? CKAsset else {
+                print("No program asset found for ProgramID: \(programID)")
+                completion(nil, nil)
                 return
             }
             
             do {
+                print("Attempting to read program data from ProgramAsset...")
                 let programData = try Data(contentsOf: programAsset.fileURL!)
+                print("Program data read successfully.")
+                
+                print("Decoding program data...")
                 let decoder = JSONDecoder()
                 let program = try decoder.decode(Program.self, from: programData)
+                print("Program decoded successfully: \(program.programName)")
+                
                 let programWithID = ProgramWithID(programID: programID, program: program)
                 completion(programWithID, nil)
             } catch {
+                print("Error decoding program data: \(error.localizedDescription)")
                 completion(nil, error)
             }
         }
     }
 }
-
