@@ -381,8 +381,16 @@ struct UpNextProgramExerciseWidget: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Up Next")
-                .font(.system(size: 20, weight: .medium, design: .default))
+            HStack {
+                Text("Up Next")
+                    .font(.system(size: 20, weight: .medium, design: .default))
+                
+                Spacer()
+                
+                Text("Start Now")
+                    .foregroundColor(Color(hex: "40C4FC"))
+                    .font(.system(size: 13, weight: .medium, design: .default))
+            }
             
             if let todaysProgram = ProgramManager.shared.selectedProgram?.program.program.first(where: { $0.day == DateUtility.getCurrentWeekday() }),
                let (_, nextExercise) = todaysProgram.exercises.enumerated().first(where: { !$0.element.completed }) {

@@ -19,7 +19,6 @@ class ProgramManager: ObservableObject {
     @Published var exercises: [ExerciseLibraryExercise] = []
     @Published var retrievingProgram: Bool = false
 
-    // MARK: - Leave Program
     func leaveProgram(programID: String, completion: @escaping (Bool) -> Void) async {
         await ProgramCloudKitUtility.leaveProgram(programID: programID) { success, error in
             if success {
@@ -35,7 +34,6 @@ class ProgramManager: ObservableObject {
         }
     }
 
-    // MARK: - Load Standard Program Names
     func loadStandardProgramNames() {
         ProgramCloudKitUtility.fetchStandardProgramDBRepresentations { programs, error in
             if let programs = programs {
