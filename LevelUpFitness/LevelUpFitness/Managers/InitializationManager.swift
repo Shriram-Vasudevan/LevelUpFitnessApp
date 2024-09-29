@@ -10,13 +10,22 @@ import Foundation
 class InitializationManager {
     static let shared = InitializationManager()
     
+    @Published var selectedAffirmation: String?
+    
+    let affirmations = [
+        "You've got this!",
+        "Today is your day!",
+        "Small steps, big results!",
+        "Believe in yourself!",
+        "Every day is a new opportunity!"
+    ]
+    
+    
     var initializationComplete: Bool = false
     func initialize() async {
         if !initializationComplete {
-            if await HealthManager.shared.todaysSteps == nil {
-                await HealthManager.shared.getInitialHealthData()
-            }
-                
+            self.selectedAffirmation = affirmations.randomElement()
+            
             async let userProgram: ()? = userProgramInitialization()
             async let notificationManager: () = NotificationManager.shared.identifyUser()
             async let challengeManager: () = ChallengeManager.shared.challengeManagerInitialization()

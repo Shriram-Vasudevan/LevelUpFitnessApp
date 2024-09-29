@@ -110,7 +110,7 @@ class ProgramCloudKitUtility {
         
         publicDatabase.perform(query, inZoneWith: nil) { records, error in
             if let error = error {
-                print("Error fetching standard program metadata: \(error.localizedDescription)")
+                print("Error fetching standard program metadata: \(error)")
                 completion(nil, error)
                 return
             }
@@ -179,7 +179,7 @@ class ProgramCloudKitUtility {
                 
                 completion(program, nil)
             } catch {
-                print("Error decoding program data: \(error.localizedDescription)")
+                print("Error decoding program data: \(error)")
                 completion(nil, error)
             }
         }

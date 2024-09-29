@@ -34,14 +34,6 @@ struct HomeView: View {
     
     @State private var showToDoList = true
     
-    let affirmations = [
-        "You've got this!",
-        "Today is your day!",
-        "Small steps, big results!",
-        "Believe in yourself!",
-        "Every day is a new opportunity!"
-    ]
-    
     
     var body: some View {
         ZStack {
@@ -55,7 +47,7 @@ struct HomeView: View {
                                 VStack(alignment: .leading, spacing: 4) {
                                     Text(greeting)
                                         .font(.system(size: 24, weight: .bold))
-                                    Text(affirmations.randomElement() ?? "")
+                                    Text(InitializationManager.shared.selectedAffirmation ?? "You got This!")
                                         .font(.system(size: 16, weight: .regular))
                                         .foregroundColor(.gray)
                                 }

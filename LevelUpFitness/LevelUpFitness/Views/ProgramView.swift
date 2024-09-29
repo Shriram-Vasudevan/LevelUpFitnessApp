@@ -24,6 +24,8 @@ struct ProgramView: View {
     
     @State var showProgramManagerOptions: Bool = false
     
+    @State var showPastPrograms: Bool = false
+    
     var body: some View {
         ZStack {
             Color.white
@@ -34,20 +36,44 @@ struct ProgramView: View {
                     programHeader
                     
                     if ProgramManager.shared.userProgramData.isEmpty && !programManager.retrievingProgram || showProgramManagerOptions {
-                        VStack(spacing: 24) {
-                            segmentedControl
+                        
+                        VStack(spacing: 20) {
                             
-                            if programPageType == .newProgram {
-                                newProgramView
-                            } else {
-                                pastProgramsView
+                            if programManager.userProgramData.count > 0 {
+                                userActiveProgramsScrollView
+                            }
+
+                            VStack (spacing: 8) {
+                                programSectionHeader("For Gym")
+                                gymProgramsScrollView
+                            }
+                            
+                            VStack (spacing: 8) {
+                                programSectionHeader("For Home")
+                                homeProgramsScrollView
+                            }
+
+                            Button(action: {
+                                showPastPrograms.toggle()
+                            }) {
+                                HStack {
+                                    Text(showPastPrograms ? "Show Active Programs" : "Show Past Programs")
+                                        .font(.system(size: 18, weight: .bold))
+                                        .foregroundColor(Color(hex: "40C4FC"))
+                                    
+                                    Spacer()
+                                }
+                            }
+                            
+                            if showPastPrograms {
+                                pastProgramsScrollView
                             }
                         }
                     } else {
                         programContent
                     }
                 }
-                .padding()
+                .padding(.horizontal)
             }
             
             if showConfirmationWidget {
@@ -100,15 +126,17 @@ struct ProgramView: View {
                     .foregroundColor(.secondary)
             }
             
-            Button(action: {
-                showProgramPicker = true
-            }) {
-                Image(systemName: "chevron.down")
-                    .foregroundColor(Color(hex: "40C4FC"))
-                    .rotationEffect(.degrees(isHeaderExpanded ? 180 : 0))
-                    .frame(width: 30, height: 30)
-                    .background(Color(hex: "40C4FC").opacity(0.1))
-                    .clipShape(Circle())
+            if ProgramManager.shared.selectedProgram?.program.programName != nil {
+                Button(action: {
+                    showProgramPicker = true
+                }) {
+                    Image(systemName: "chevron.down")
+                        .foregroundColor(Color(hex: "40C4FC"))
+                        .rotationEffect(.degrees(isHeaderExpanded ? 180 : 0))
+                        .frame(width: 30, height: 30)
+                        .background(Color(hex: "40C4FC").opacity(0.1))
+                        .clipShape(Circle())
+                }
             }
         }
         .padding(.vertical, 8)
@@ -127,7 +155,7 @@ struct ProgramView: View {
                     ProgramManager.shared.selectedProgram = nil
                     showProgramPicker = false
                 }) {
-                    Text("Program Manager")
+                    Text("View Programs")
                         .font(.system(size: 16, weight: .medium))
                 }
 
@@ -147,7 +175,7 @@ struct ProgramView: View {
 
 
     private var programContent: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 8) {
             if let todaysProgram = ProgramManager.shared.selectedProgram?.program.program.first(where: { $0.day == DateUtility.getCurrentWeekday() }) {
                 requiredEquipmentView(for: todaysProgram)
                 activeProgramView
@@ -220,7 +248,11 @@ struct ProgramView: View {
                 JoinProgramWidget(standardProgramDBRepresentation: program)
                     .onTapGesture {
                         Task {
-                            await programManager.joinStandardProgram(programName: program.name)
+                            await programManager.joinStandardProgram(programName: program.name, completionHandler: { programWithID in
+                                showProgramManagerOptions = false
+                                ProgramManager.shared.selectedProgram = programWithID
+                                showProgramPicker = false
+                            })
                         }
                     }
                     .opacity(programManager.userProgramData.contains(where: { Program in
@@ -316,6 +348,94 @@ struct ProgramView: View {
             }
         }
     }
+
+    private var userActiveProgramsScrollView: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Your Active Programs")
+                .font(.system(size: 20, weight: .bold))
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 16) {
+                    ForEach(programManager.userProgramData, id: \.program.programName) { programWithID in
+                        SmallProgramCardView(standardProgramDBRepresentation: StandardProgramDBRepresentation(id: UUID().uuidString, name: programWithID.program.programName, environment: programWithID.program.environment))
+                            .onTapGesture {
+                                showProgramManagerOptions = false
+                                ProgramManager.shared.selectedProgram = programWithID
+                                showProgramPicker = false
+                            }
+                    }
+                }
+            }
+        }
+    }
+
+    private var gymProgramsScrollView: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 16) {
+                ForEach(programManager.standardProgramDBRepresentations.filter { $0.environment.contains("Gym") }, id: \.id) { program in
+                    ProgramCardView(standardProgramDBRepresentation: program)
+                        .onTapGesture {
+                            Task {
+                                await programManager.joinStandardProgram(programName: program.name, completionHandler: { programWithID in
+                                    showProgramManagerOptions = false
+                                    ProgramManager.shared.selectedProgram = programWithID
+                                    showProgramPicker = false
+                                })
+                                
+//                                showProgramManagerOptions = false
+//                                ProgramManager.shared.selectedProgram = programWithID
+//                                showProgramPicker = false
+                            }
+                        }
+                }
+            }
+        }
+    }
+
+    private var homeProgramsScrollView: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 16) {
+                ForEach(programManager.standardProgramDBRepresentations.filter { $0.environment.contains("Home") }, id: \.id) { program in
+                    ProgramCardView(standardProgramDBRepresentation: program)
+                        .onTapGesture {
+                            Task {
+                                await programManager.joinStandardProgram(programName: program.name, completionHandler: { programWithID in
+                                    showProgramManagerOptions = false
+                                    ProgramManager.shared.selectedProgram = programWithID
+                                    showProgramPicker = false
+                                })
+                            }
+                        }
+                }
+            }
+        }
+    }
+    
+    private var pastProgramsScrollView: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text("Past Programs")
+                .font(.system(size: 18, weight: .bold))
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 16) {
+                    ForEach(programManager.userProgramData, id: \.program.programName) { programWithID in
+                        ProgramCardView(standardProgramDBRepresentation: StandardProgramDBRepresentation(id: UUID().uuidString, name: programWithID.program.programName, environment: programWithID.program.environment))
+                    }
+                }
+            }
+        }
+    }
+    
+    
+    private func programSectionHeader(_ title: String) -> some View {
+        HStack {
+            Text(title)
+                .font(.system(size: 18, weight: .bold))
+            
+            Spacer()
+        }
+    }
+    
 }
 
 struct ProgramHeader: View {
@@ -390,6 +510,11 @@ struct UpNextProgramExerciseWidget: View {
                 Text("Start Now")
                     .foregroundColor(Color(hex: "40C4FC"))
                     .font(.system(size: 13, weight: .medium, design: .default))
+//                    .onTapGesture {
+//                        withAnimation(.spring()) {
+//                            navigateToWorkoutView = true
+//                        }
+//                    }
             }
             
             if let todaysProgram = ProgramManager.shared.selectedProgram?.program.program.first(where: { $0.day == DateUtility.getCurrentWeekday() }),
@@ -405,6 +530,11 @@ struct UpNextProgramExerciseWidget: View {
             }
         }
         .padding()
+        .onTapGesture {
+            withAnimation(.spring()) {
+                navigateToWorkoutView = true
+            }
+        }
         .background(Color(hex: "F5F5F5"))
     }
     
@@ -532,6 +662,82 @@ struct ExerciseRow: View {
     }
 }
 
+struct SmallProgramCardView: View {
+    var standardProgramDBRepresentation: StandardProgramDBRepresentation
+
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: standardProgramDBRepresentation.environment.lowercased().contains("gym") ? "dumbbell.fill" : "house.fill")
+                .foregroundColor(Color(hex: "40C4FC"))
+                .font(.system(size: 16))
+                .frame(width: 32, height: 32)
+                .background(Color(hex: "40C4FC").opacity(0.1))
+                .cornerRadius(8)
+            
+            VStack(alignment: .leading, spacing: 2) {
+                Text(standardProgramDBRepresentation.name)
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundColor(Color(hex: "333333"))
+                    .lineLimit(1)
+                
+                Text(standardProgramDBRepresentation.environment)
+                    .font(.system(size: 12, weight: .regular))
+                    .foregroundColor(Color(hex: "666666"))
+                    .lineLimit(1)
+            }
+            
+            Spacer(minLength: 0)
+        }
+        .padding(8)
+        .frame(width: 180, height: 48)
+        .background(Color.white)
+        .overlay(
+            RoundedRectangle(cornerRadius: 8)
+                .stroke(Color(hex: "40C4FC").opacity(0.5), lineWidth: 1)
+        )
+        .cornerRadius(8)
+        .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
+    }
+}
+
+struct ProgramCardView: View {
+    var standardProgramDBRepresentation: StandardProgramDBRepresentation
+    
+    var body: some View {
+        ZStack(alignment: .bottom) {
+            LinearGradient(gradient: Gradient(colors: [Color(hex: "40C4FC"), Color(hex: "3080FF")]), startPoint: .topLeading, endPoint: .bottomTrailing)
+            
+            GeometryReader { geometry in
+                Path { path in
+                    let width = geometry.size.width
+                    let height = geometry.size.height
+                    path.move(to: CGPoint(x: 0, y: height * 0.4))
+                    path.addCurve(to: CGPoint(x: width, y: height * 0.6),
+                                  control1: CGPoint(x: width * 0.5, y: height * 0.2),
+                                  control2: CGPoint(x: width * 0.8, y: height * 0.7))
+                    path.addLine(to: CGPoint(x: width, y: height))
+                    path.addLine(to: CGPoint(x: 0, y: height))
+                }
+                .fill(Color.white.opacity(0.1))
+            }
+            
+            VStack(alignment: .leading, spacing: 4) {
+                Text(standardProgramDBRepresentation.name)
+                    .font(.system(size: 18, weight: .bold))
+                    .foregroundColor(.white)
+                Text(standardProgramDBRepresentation.environment)
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundColor(Color.white.opacity(0.8))
+            }
+            .padding()
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Color.black.opacity(0.2))
+        }
+        .frame(width: 200, height: 120)
+        .cornerRadius(15)
+        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
+    }
+}
 
 #Preview {
     ProgramView()

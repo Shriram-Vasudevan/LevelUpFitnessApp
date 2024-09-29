@@ -12,9 +12,6 @@ class HealthManager: ObservableObject {
     
     let healthStore = HKHealthStore()
     
-    init() {
-        requestAuthorization()
-    }
     
     private func requestAuthorization() {
         guard let stepsQuantityType = HKQuantityType.quantityType(forIdentifier: .stepCount),
@@ -36,6 +33,7 @@ class HealthManager: ObservableObject {
     }
     
     func getInitialHealthData() {
+        requestAuthorization()
         getTodaysSteps()
         getTodaysCalories()
         getTodaysDistance()

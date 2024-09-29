@@ -34,6 +34,9 @@ class XPManager: ObservableObject {
                     DispatchQueue.main.sync {
                         self.userXPData = xpData
                     }
+                    Task {
+                        await TrendManager.shared.addLevelToTrend(level: self.userXPData?.level ?? 0)
+                    }
                 } else if let error = error {
                     print("Error fetching XPData: \(error.localizedDescription)")
                 }

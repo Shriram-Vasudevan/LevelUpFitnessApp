@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Amplify
 
 @MainActor
 class ExerciseManager: ObservableObject {
@@ -18,19 +17,20 @@ class ExerciseManager: ObservableObject {
     @Published var recommendedExerciseType: String?
     
     func exerciseManagerInit() async {
-        await getExercises()
+        await getExercisesFromCloudKit()
         
         if let recommendedExercise = getRecommendedProgression() {
             self.recommendedExercise = recommendedExercise
         }
     }
     
-    func getExercises() async {
-        do  {
-            print("here")
-            self.exercises = try await ProgramDynamoDBUtility.getExercises()
+    func getExercisesFromCloudKit() async {
+        do {
+            print("Fetching exercises JSON from CloudKit...")
+            self.exercises = try await ExerciseCloudKitUtility.fetchExercisesJSONFromCloudKit()
+            print("Exercises successfully fetched and decoded.")
         } catch {
-            print(error.localizedDescription)
+            print("Failed to fetch exercises: \(error.localizedDescription)")
         }
     }
     
@@ -43,6 +43,4 @@ class ExerciseManager: ObservableObject {
         
         return allProgressions.randomElement()
     }
-    
-
 }

@@ -27,4 +27,5 @@ class FirstLaunchManager {
     func markAsLaunched() {
         isFirstLaunch = false
     }
+    
 }

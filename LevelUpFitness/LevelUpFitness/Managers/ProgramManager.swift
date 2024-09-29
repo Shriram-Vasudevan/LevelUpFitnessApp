@@ -46,7 +46,7 @@ class ProgramManager: ObservableObject {
         }
     }
 
-    func joinStandardProgram(programName: String) async {
+    func joinStandardProgram(programName: String, completionHandler: @escaping (ProgramWithID) -> Void) async {
         print("trying to join standard program")
         do {
             print("trying to join standard program 1")
@@ -59,14 +59,14 @@ class ProgramManager: ObservableObject {
                 if let program = program {
                     ProgramCloudKitUtility.saveUserProgram(userID: userID, program: program, startDate: startDate) { programID, success, error in
                         if success {
+                            let programWithID = ProgramWithID(programID: programID, program: program)
+                            
                             DispatchQueue.main.async {
-                                let programWithID = ProgramWithID(programID: programID, program: program)
-                                // Set selectedProgram immediately
-                                self.selectedProgram = programWithID
-                                // Append to userProgramData
                                 self.userProgramData.append(programWithID)
                                 print("Program with ID \(programID) set as selectedProgram and added to userProgramData")
                             }
+                            
+                            completionHandler(programWithID)
                         } else {
                             print("Error saving program: \(error?.localizedDescription ?? "Unknown error")")
                         }

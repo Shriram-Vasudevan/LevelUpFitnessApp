@@ -14,18 +14,38 @@ import AWSAPIPlugin
 @main
 struct LevelUpFitnessApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    @State private var showSplashScreen = true
     @State private var showIntroView = FirstLaunchManager.shared.isFirstLaunch
-    
+
     var body: some Scene {
         WindowGroup {
-            if showIntroView {
-                IntroView(onIntroCompletion: {
-                    FirstLaunchManager.shared.markAsLaunched()
-                    showIntroView = false
-                })
-            } else {
-                NavigationStack {
+            ZStack {
+                if showSplashScreen {
+                    SplashScreenView()
+                        .onAppear {
+                            // Delay for the splash screen, then hide it
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                                withAnimation {
+                                    showSplashScreen = false
+                                }
+                            }
+                        }
+                } else if showIntroView {
+                    IntroView(onIntroCompletion: {
+                        withAnimation {
+                            FirstLaunchManager.shared.markAsLaunched()
+                            showIntroView = false
+                        }
+                    })
+                } else {
                     PagesHolderView(pageType: .home)
+                        .transition(.opacity)
+                }
+            }
+            .animation(.easeInOut, value: showSplashScreen || showIntroView)
+            .onAppear {
+                Task {
+                    await InitializationManager.shared.initialize()
                 }
             }
         }

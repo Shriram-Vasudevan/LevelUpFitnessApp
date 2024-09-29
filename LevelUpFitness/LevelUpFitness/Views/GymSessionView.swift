@@ -108,16 +108,11 @@ struct GymSessionsView: View {
 
     private func activeGymSessionView(_ currentSession: GymSession) -> some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Active Gym Session")
-                .font(.system(size: 20, weight: .medium))
-            
+            Text("\(gymManager.elapsedTime)")
+                .font(.system(size: 40, weight: .bold))
+                .foregroundColor(.black)
+
             HStack {
-                Text("Elapsed Time: \(gymManager.elapsedTime)")
-                    .font(.system(size: 40, weight: .bold))
-                    .foregroundColor(.blue)
-                
-                Spacer()
-                
                 Button(action: {
                     showEndSessionConfirmation = true
                 }) {
@@ -129,6 +124,8 @@ struct GymSessionsView: View {
                         .background(Color(hex: "40C4FC"))
                         .cornerRadius(8)
                 }
+                
+                Spacer()
             }
             
             Divider()

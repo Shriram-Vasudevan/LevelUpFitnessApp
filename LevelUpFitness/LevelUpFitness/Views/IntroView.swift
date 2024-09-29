@@ -42,7 +42,7 @@ struct IntroView: View {
 //                    }
                 }
                 
-                VStack(spacing: 16) {
+                VStack(spacing: 4) {
                     Text(getTitle(for: currentStep))
                         .font(.system(size: 24, weight: .bold))
                         .foregroundColor(.black)
@@ -53,7 +53,8 @@ struct IntroView: View {
                         .multilineTextAlignment(.center)
                         .padding(.horizontal)
                 }
-                .padding(.bottom, 7)
+                
+                Spacer()
                 
                 Image("feature\(currentStep + 1)")
                     .resizable()

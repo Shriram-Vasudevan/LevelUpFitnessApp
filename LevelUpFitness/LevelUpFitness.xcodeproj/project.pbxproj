@@ -128,6 +128,7 @@
 		99A0C8C32CA7917100F9281A /* ChallengeCloudKitUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A0C8C22CA7917100F9281A /* ChallengeCloudKitUtility.swift */; };
 		99A0C8C52CA84BEE00F9281A /* IntroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A0C8C42CA84BEE00F9281A /* IntroView.swift */; };
 		99A0C8C72CA84C2500F9281A /* FirstLaunchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A0C8C62CA84C2500F9281A /* FirstLaunchManager.swift */; };
+		99A0C8E32CA9B0D900F9281A /* ExerciseCloudKitUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A0C8E22CA9B0D900F9281A /* ExerciseCloudKitUtility.swift */; };
 		99A67EEA2BF451F0002DC3DC /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A67EE92BF451EF002DC3DC /* HomeView.swift */; };
 		99A67EF92BF45251002DC3DC /* Sailec Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 99A67EEE2BF45250002DC3DC /* Sailec Bold.ttf */; };
 		99A67EFA2BF45251002DC3DC /* times new roman bold italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 99A67EEF2BF45250002DC3DC /* times new roman bold italic.ttf */; };
@@ -285,6 +286,7 @@
 		99A0C8C22CA7917100F9281A /* ChallengeCloudKitUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeCloudKitUtility.swift; sourceTree = "<group>"; };
 		99A0C8C42CA84BEE00F9281A /* IntroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroView.swift; sourceTree = "<group>"; };
 		99A0C8C62CA84C2500F9281A /* FirstLaunchManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstLaunchManager.swift; sourceTree = "<group>"; };
+		99A0C8E22CA9B0D900F9281A /* ExerciseCloudKitUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseCloudKitUtility.swift; sourceTree = "<group>"; };
 		99A67EE92BF451EF002DC3DC /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		99A67EEE2BF45250002DC3DC /* Sailec Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Sailec Bold.ttf"; sourceTree = "<group>"; };
 		99A67EEF2BF45250002DC3DC /* times new roman bold italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "times new roman bold italic.ttf"; sourceTree = "<group>"; };
@@ -394,6 +396,7 @@
 				99A0C8BE2CA77A9900F9281A /* XPCloudKitUtility.swift */,
 				99A0C8C02CA77F5000F9281A /* TrendCloudKitUtility.swift */,
 				99A0C8C22CA7917100F9281A /* ChallengeCloudKitUtility.swift */,
+				99A0C8E22CA9B0D900F9281A /* ExerciseCloudKitUtility.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -864,6 +867,7 @@
 				998DA0172C1A34840078E882 /* ChatView.swift in Sources */,
 				99FC9E462C5EC1F900DAFFAC /* AnalyticsView.swift in Sources */,
 				991FB47F2C6D561F006B4ACE /* ActiveUserChallengeWidget.swift in Sources */,
+				99A0C8E32CA9B0D900F9281A /* ExerciseCloudKitUtility.swift in Sources */,
 				99A0C8C12CA77F5000F9281A /* TrendCloudKitUtility.swift in Sources */,
 				991FB4692C6695EB006B4ACE /* ProgramDynamoDBUtility.swift in Sources */,
 				9945E0BA2C39A15F00EA19D2 /* XPManager.swift in Sources */,
