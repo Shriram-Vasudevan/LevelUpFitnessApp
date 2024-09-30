@@ -692,7 +692,6 @@ extension ExerciseRecord {
 }
 
 extension Array where Element == GymSession {
-    
     func totalVolumeOverTime() -> [StatPoint] {
         return self.map { session in
             let totalVolume = session.totalVolume

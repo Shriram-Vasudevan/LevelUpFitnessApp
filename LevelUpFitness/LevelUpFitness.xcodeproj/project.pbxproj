@@ -181,6 +181,8 @@
 		99EEC61C2C33905B0044F906 /* ProgramListHomePreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EEC61B2C33905B0044F906 /* ProgramListHomePreview.swift */; };
 		99F71F9F2C023A3D00E27B60 /* UsageTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F71F9E2C023A3D00E27B60 /* UsageTimeView.swift */; };
 		99F7F6DD2CAB41FC009858AC /* StatPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F7F6DC2CAB41FB009858AC /* StatPoint.swift */; };
+		99F7F6DF2CAB6A4F009858AC /* GymSessionsStatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F7F6DE2CAB6A4F009858AC /* GymSessionsStatView.swift */; };
+		99F7F6E12CAB6BB0009858AC /* GymSessionStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F7F6E02CAB6BB0009858AC /* GymSessionStatsView.swift */; };
 		99FC9E442C5EADC800DAFFAC /* XPAdditionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC9E432C5EADC800DAFFAC /* XPAdditionType.swift */; };
 		99FC9E462C5EC1F900DAFFAC /* AnalyticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC9E452C5EC1F900DAFFAC /* AnalyticsView.swift */; };
 		99FC9E482C5EC56B00DAFFAC /* RequestCustomProgramWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC9E472C5EC56B00DAFFAC /* RequestCustomProgramWidget.swift */; };
@@ -342,6 +344,8 @@
 		99EEC61B2C33905B0044F906 /* ProgramListHomePreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramListHomePreview.swift; sourceTree = "<group>"; };
 		99F71F9E2C023A3D00E27B60 /* UsageTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageTimeView.swift; sourceTree = "<group>"; };
 		99F7F6DC2CAB41FB009858AC /* StatPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatPoint.swift; sourceTree = "<group>"; };
+		99F7F6DE2CAB6A4F009858AC /* GymSessionsStatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GymSessionsStatView.swift; sourceTree = "<group>"; };
+		99F7F6E02CAB6BB0009858AC /* GymSessionStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GymSessionStatsView.swift; sourceTree = "<group>"; };
 		99FC9E432C5EADC800DAFFAC /* XPAdditionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XPAdditionType.swift; sourceTree = "<group>"; };
 		99FC9E452C5EC1F900DAFFAC /* AnalyticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsView.swift; sourceTree = "<group>"; };
 		99FC9E472C5EC56B00DAFFAC /* RequestCustomProgramWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestCustomProgramWidget.swift; sourceTree = "<group>"; };
@@ -514,6 +518,8 @@
 				99B44C032C9A68C600C0C434 /* CustomWorkoutWidget.swift */,
 				99B44C092C9F711E00C0C434 /* ActiveChallengesView.swift */,
 				99A0C8C42CA84BEE00F9281A /* IntroView.swift */,
+				99F7F6DE2CAB6A4F009858AC /* GymSessionsStatView.swift */,
+				99F7F6E02CAB6BB0009858AC /* GymSessionStatsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -781,6 +787,7 @@
 				992F26AB2C626FC300F25400 /* ProfileView.swift in Sources */,
 				99CFAAE82BEB075500EFF67E /* ContentView.swift in Sources */,
 				991F8FDA2C13EB3900A134A5 /* HealthManager.swift in Sources */,
+				99F7F6DF2CAB6A4F009858AC /* GymSessionsStatView.swift in Sources */,
 				994E7DC32C02955300BAD9E0 /* Workout.swift in Sources */,
 				994E7DCB2C05289F00BAD9E0 /* Program.swift in Sources */,
 				993871AC2C3A385700FFAF8A /* DailyTargetView.swift in Sources */,
@@ -806,6 +813,7 @@
 				991F8FE62C154F5200A134A5 /* DayCompletion.swift in Sources */,
 				99B6274A2C38871600482E3B /* ExerciseDataRepWidgetModel.swift in Sources */,
 				996919122C1CD12D00C0F664 /* ExerciseLibraryExercise.swift in Sources */,
+				99F7F6E12CAB6BB0009858AC /* GymSessionStatsView.swift in Sources */,
 				999F70742C0F59EA00B35A78 /* StatisticsWidget.swift in Sources */,
 				991FB47D2C6C3BCF006B4ACE /* ChallengeTemplateWidget.swift in Sources */,
 				99E0A5192C9141BC00CC1224 /* ErrorUtility.swift in Sources */,

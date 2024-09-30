@@ -20,7 +20,7 @@ struct GymSessionsView: View {
 
     var body: some View {
         ZStack {
-            Color(hex: "F5F5F5").ignoresSafeArea()
+            Color.white.ignoresSafeArea()
             
             ScrollView {
                 VStack(spacing: 24) {
@@ -33,6 +33,10 @@ struct GymSessionsView: View {
                     }
                     
                     pastSessionsView
+                    
+                    if gymManager.gymSessions.count > 0 {
+                        gymStatsView
+                    }
                 }
                 .padding(.horizontal)
             }
@@ -227,9 +231,13 @@ struct GymSessionsView: View {
 
     private var pastSessionsView: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Past Sessions")
-                .font(.system(size: 20, weight: .medium, design: .default))
-                .foregroundColor(Color(hex: "333333"))
+            HStack {
+                Text("Past Sessions")
+                    .font(.system(size: 20, weight: .medium, design: .default))
+                    .foregroundColor(Color(hex: "333333"))
+                
+                Spacer()
+            }
             
             if gymManager.gymSessions.isEmpty {
                 Text("No past sessions found.")
@@ -249,6 +257,20 @@ struct GymSessionsView: View {
         }
         .padding(24)
         .background(Color(hex: "F5F5F5"))
+    }
+    
+    private var gymStatsView: some View {
+        VStack (spacing: 16) {
+            HStack {
+                Text("Your Trends")
+                    .font(.system(size: 20, weight: .medium, design: .default))
+                    .foregroundColor(Color(hex: "333333"))
+                
+                Spacer()
+            }
+            
+            GymSessionsStatsView()
+        }
     }
 
     private func pastSessionWidget(for session: GymSession) -> some View {
@@ -351,15 +373,10 @@ struct EndSessionConfirmationView: View {
                     }) {
                         Text("Cancel")
                             .font(.system(size: 18, weight: .semibold))
-                            .foregroundColor(Color(hex: "40C4FC"))
+                            .foregroundColor(.black)
                             .frame(maxWidth: .infinity)
                             .padding()
-                            .background(Color.white)
-                            .cornerRadius(15)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 15)
-                                    .stroke(Color(hex: "40C4FC"), lineWidth: 2)
-                            )
+                            .background(Color(hex: "F5F5F5"))
                     }
                     
                     Button(action: {
@@ -373,17 +390,12 @@ struct EndSessionConfirmationView: View {
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
                             .padding()
-                            .background(
-                                LinearGradient(gradient: Gradient(colors: [Color(hex: "FF3B30"), Color(hex: "FF9500")]), startPoint: .leading, endPoint: .trailing)
-                            )
-                            .cornerRadius(15)
+                            .background(Color(hex: "40C4FC"))
                     }
                 }
             }
-            .padding(32)
+            .padding()
             .background(Color.white)
-            .cornerRadius(25)
-            .shadow(color: Color.black.opacity(0.1), radius: 20, x: 0, y: 10)
             .padding()
         }
     }
@@ -396,19 +408,25 @@ struct PastGymSessionDetailView: View {
     
     var body: some View {
         ZStack {
-            Color(hex: "F5F5F5").ignoresSafeArea()
+            Color.white.ignoresSafeArea()
             
-            ScrollView {
+            ScrollView (.vertical) {
                 VStack(spacing: 16) {
-                    headerView
+                    HStack {
+                        backButton
+                        
+                        Spacer()
+                    }
                     sessionDetailsCard
                     exercisesListView
+                    
                 }
                 .padding(.horizontal)
+                
+                GymSessionStatsView(session: session)
             }
         }
         .navigationBarBackButtonHidden(true)
-        .overlay(backButton, alignment: .topLeading)
     }
     
     private var headerView: some View {
@@ -422,8 +440,6 @@ struct PastGymSessionDetailView: View {
                 .foregroundColor(Color(hex: "666666"))
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.top, 20)
-        .padding(.bottom, 10)
     }
     
     private var sessionDetailsCard: some View {
@@ -464,7 +480,6 @@ struct PastGymSessionDetailView: View {
                 infoView(title: "Exercises", value: "\(session.programExercises.flatMap { $0.value }.count + session.individualExercises.count)")
             }
         }
-        .padding(24)
         .background(Color(hex: "F5F5F5"))
     }
     
@@ -500,7 +515,6 @@ struct PastGymSessionDetailView: View {
                 exerciseWidget(for: exerciseRecord)
             }
         }
-        .padding(24)
         .background(Color(hex: "F5F5F5"))
     }
     
@@ -704,3 +718,4 @@ struct AddExerciseView: View {
         }
     }
 }
+
