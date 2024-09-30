@@ -419,7 +419,9 @@ struct PastGymSessionDetailView: View {
                     }
                     
                     sessionDetailsCard
+                    
                     exercisesListView
+                        .padding(.top, 8)
                     
                 }
                 .padding(.horizontal)
@@ -432,6 +434,8 @@ struct PastGymSessionDetailView: View {
                         
                         Spacer()
                     }
+                    .padding(.horizontal)
+                    .padding(.top, 8)
                     
                     GymSessionStatsView(session: session)
                 }
@@ -518,7 +522,7 @@ struct PastGymSessionDetailView: View {
     }
     
     private var exercisesListView: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Text("Completed Exercises")
                     .font(.system(size: 20, weight: .medium))
