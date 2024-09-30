@@ -102,7 +102,6 @@ struct GymSessionsStatsView: View {
                 
                 Spacer()
             }
-            .padding(.horizontal)
             .onAppear {
                 updateGraphData()
             }

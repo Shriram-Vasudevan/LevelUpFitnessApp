@@ -19,7 +19,7 @@ struct GymSessionStatsView: View {
         ZStack {
             Color.white.ignoresSafeArea()
             
-            VStack {
+            VStack (spacing: 8) {
                 sessionStatsSummaryView
                 
                 graphToggleView
@@ -117,11 +117,9 @@ struct GymSessionStatsView: View {
                 statsRectangle(title: "Exercises", value: "\(session.totalExercisesCount)")
                 statsRectangle(title: "Duration", value: String(format: "%.1f mins", (session.totalDuration ?? 0) / 60))
             }
-            .padding(.horizontal, 16)
         }
         .frame(height: 80)
         .background(Color.white)
-        .padding(.vertical, 8)
     }
 
     private var graphToggleView: some View {
@@ -147,11 +145,9 @@ struct GymSessionStatsView: View {
                     }
                 }
             }
-            .padding(.horizontal, 16)
         }
         .frame(height: 60)
         .background(Color.white)
-        .padding(.vertical, 16)
     }
 
     private func statsRectangle(title: String, value: String) -> some View {
@@ -166,7 +162,6 @@ struct GymSessionStatsView: View {
         .frame(width: 100, height: 42)
         .padding()
         .background(Color(hex: "F5F5F5"))
-        .cornerRadius(0)
     }
 
     private func updateGraphData() {

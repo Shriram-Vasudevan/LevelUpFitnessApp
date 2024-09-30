@@ -417,13 +417,24 @@ struct PastGymSessionDetailView: View {
                         
                         Spacer()
                     }
+                    
                     sessionDetailsCard
                     exercisesListView
                     
                 }
                 .padding(.horizontal)
                 
-                GymSessionStatsView(session: session)
+                VStack (spacing: 6) {
+                    HStack {
+                        Text("Session Stats")
+                            .font(.system(size: 20, weight: .medium))
+                            .foregroundColor(.black)
+                        
+                        Spacer()
+                    }
+                    
+                    GymSessionStatsView(session: session)
+                }
             }
         }
         .navigationBarBackButtonHidden(true)
@@ -480,6 +491,7 @@ struct PastGymSessionDetailView: View {
                 infoView(title: "Exercises", value: "\(session.programExercises.flatMap { $0.value }.count + session.individualExercises.count)")
             }
         }
+        .padding()
         .background(Color(hex: "F5F5F5"))
     }
     
@@ -507,15 +519,19 @@ struct PastGymSessionDetailView: View {
     
     private var exercisesListView: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Completed Exercises")
-                .font(.system(size: 20, weight: .medium))
-                .foregroundColor(Color(hex: "333333"))
+            HStack {
+                Text("Completed Exercises")
+                    .font(.system(size: 20, weight: .medium))
+                    .foregroundColor(.black)
+                
+                Spacer()
+            }
             
             ForEach(session.programExercises.flatMap { $0.value } + session.individualExercises) { exerciseRecord in
                 exerciseWidget(for: exerciseRecord)
             }
         }
-        .background(Color(hex: "F5F5F5"))
+//        .background(Color(hex: "F5F5F5"))
     }
     
     private func exerciseWidget(for exerciseRecord: ExerciseRecord) -> some View {
@@ -570,10 +586,7 @@ struct PastGymSessionDetailView: View {
                 .font(.system(size: 20, weight: .medium))
                 .foregroundColor(Color(hex: "40C4FC"))
                 .frame(width: 40, height: 40)
-                .background(Color(hex: "F5F5F5"))
         }
-        .padding(.top, 60)
-        .padding(.leading, 20)
     }
 }
 
