@@ -180,6 +180,7 @@
 		99EEC6182C32F37A0044F906 /* SizePreferanceKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EEC6172C32F37A0044F906 /* SizePreferanceKey.swift */; };
 		99EEC61C2C33905B0044F906 /* ProgramListHomePreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EEC61B2C33905B0044F906 /* ProgramListHomePreview.swift */; };
 		99F71F9F2C023A3D00E27B60 /* UsageTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F71F9E2C023A3D00E27B60 /* UsageTimeView.swift */; };
+		99F7F6DD2CAB41FC009858AC /* StatPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F7F6DC2CAB41FB009858AC /* StatPoint.swift */; };
 		99FC9E442C5EADC800DAFFAC /* XPAdditionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC9E432C5EADC800DAFFAC /* XPAdditionType.swift */; };
 		99FC9E462C5EC1F900DAFFAC /* AnalyticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC9E452C5EC1F900DAFFAC /* AnalyticsView.swift */; };
 		99FC9E482C5EC56B00DAFFAC /* RequestCustomProgramWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC9E472C5EC56B00DAFFAC /* RequestCustomProgramWidget.swift */; };
@@ -340,6 +341,7 @@
 		99EEC6172C32F37A0044F906 /* SizePreferanceKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizePreferanceKey.swift; sourceTree = "<group>"; };
 		99EEC61B2C33905B0044F906 /* ProgramListHomePreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramListHomePreview.swift; sourceTree = "<group>"; };
 		99F71F9E2C023A3D00E27B60 /* UsageTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageTimeView.swift; sourceTree = "<group>"; };
+		99F7F6DC2CAB41FB009858AC /* StatPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatPoint.swift; sourceTree = "<group>"; };
 		99FC9E432C5EADC800DAFFAC /* XPAdditionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XPAdditionType.swift; sourceTree = "<group>"; };
 		99FC9E452C5EC1F900DAFFAC /* AnalyticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsView.swift; sourceTree = "<group>"; };
 		99FC9E472C5EC56B00DAFFAC /* RequestCustomProgramWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestCustomProgramWidget.swift; sourceTree = "<group>"; };
@@ -578,6 +580,7 @@
 				99B44BFF2C990DAB00C0C434 /* CustomWorkout.swift */,
 				99B44C0F2CA074F500C0C434 /* GymSession.swift */,
 				99A0C8BC2CA64CDF00F9281A /* ProgramWithID.swift */,
+				99F7F6DC2CAB41FB009858AC /* StatPoint.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -867,6 +870,7 @@
 				998DA0172C1A34840078E882 /* ChatView.swift in Sources */,
 				99FC9E462C5EC1F900DAFFAC /* AnalyticsView.swift in Sources */,
 				991FB47F2C6D561F006B4ACE /* ActiveUserChallengeWidget.swift in Sources */,
+				99F7F6DD2CAB41FC009858AC /* StatPoint.swift in Sources */,
 				99A0C8E32CA9B0D900F9281A /* ExerciseCloudKitUtility.swift in Sources */,
 				99A0C8C12CA77F5000F9281A /* TrendCloudKitUtility.swift in Sources */,
 				991FB4692C6695EB006B4ACE /* ProgramDynamoDBUtility.swift in Sources */,

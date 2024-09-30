@@ -614,6 +614,209 @@ extension View {
     }
 }
 
+extension GymSession {
+    // Total duration of the gym session in minutes
+    var totalDuration: TimeInterval? {
+        return duration
+    }
+
+    // Total number of exercises performed (both individual and program-based)
+    var totalExercisesCount: Int {
+        let programExerciseCount = programExercises.values.flatMap { $0 }.count
+        let individualExerciseCount = individualExercises.count
+        return programExerciseCount + individualExerciseCount
+    }
+
+    // Total volume lifted during the session (for exercises that involve weightlifting)
+    var totalVolume: Double {
+        let programVolume = programExercises.values.flatMap { $0 }.reduce(0.0) { $0 + $1.totalVolume }
+        let individualVolume = individualExercises.reduce(0.0) { $0 + $1.totalVolume }
+        return programVolume + individualVolume
+    }
+
+    // Breakdown of total volume by exercise type
+    var totalVolumeByExerciseType: [String: Double] {
+        var volumeByType: [String: Double] = [:]
+        
+        for (programName, exercises) in programExercises {
+            let programVolume = exercises.reduce(0.0) { $0 + $1.totalVolume }
+            volumeByType[programName] = programVolume
+        }
+        
+        for individualExercise in individualExercises {
+            let exerciseName = individualExercise.exerciseInfo.exerciseName
+            volumeByType[exerciseName, default: 0.0] += individualExercise.totalVolume
+        }
+
+        return volumeByType
+    }
+    
+    // Total reps completed during the session
+    var totalReps: Int {
+        let programReps = programExercises.values.flatMap { $0 }.reduce(0) { $0 + $1.totalReps }
+        let individualReps = individualExercises.reduce(0) { $0 + $1.totalReps }
+        return programReps + individualReps
+    }
+
+    // Breakdown of total reps by exercise type
+    var totalRepsByExerciseType: [String: Int] {
+        var repsByType: [String: Int] = [:]
+        
+        for (programName, exercises) in programExercises {
+            let programReps = exercises.reduce(0) { $0 + $1.totalReps }
+            repsByType[programName] = programReps
+        }
+        
+        for individualExercise in individualExercises {
+            let exerciseName = individualExercise.exerciseInfo.exerciseName
+            repsByType[exerciseName, default: 0] += individualExercise.totalReps
+        }
+
+        return repsByType
+    }
+}
+
+extension ExerciseRecord {
+    var totalVolume: Double {
+        var totalVolume: Double = 0
+        
+        for set in exerciseData.sets {
+            totalVolume += Double(set.reps * set.weight)
+        }
+        return totalVolume
+    }
+
+    var totalReps: Int {
+        return exerciseData.sets.reduce(into: 0) { $0 += $1.reps }
+    }
+}
+
+extension Array where Element == GymSession {
+    
+    func totalVolumeOverTime() -> [StatPoint] {
+        return self.map { session in
+            let totalVolume = session.totalVolume
+            return StatPoint(date: session.startTime, value: totalVolume)
+        }
+    }
+
+    func totalRepsOverTime() -> [StatPoint] {
+        return self.map { session in
+            let totalReps = session.totalReps
+            return StatPoint(date: session.startTime, value: Double(totalReps))
+        }
+    }
+
+    func averageDurationOverTime() -> [StatPoint] {
+        var cumulativeDuration: TimeInterval = 0
+        var count: Double = 0
+        
+        return self.map { session in
+            if let sessionDuration = session.totalDuration {
+                cumulativeDuration += sessionDuration
+                count += 1
+            }
+            let averageDuration = cumulativeDuration / count
+            return StatPoint(date: session.startTime, value: averageDuration / 60)
+        }
+    }
+
+    func totalSessionsPerWeek() -> [StatPoint] {
+        let calendar = Calendar.current
+        let groupedByWeek = Dictionary(grouping: self) { session in
+            calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: session.startTime)
+        }
+        
+        return groupedByWeek.map { (week, sessions) in
+            if let representativeDate = sessions.first?.startTime {
+                return StatPoint(date: representativeDate, value: Double(sessions.count))
+            }
+            return StatPoint(date: Date(), value: 0) // Fallback for safety
+        }
+        .sorted(by: { $0.date < $1.date })
+    }
+
+    func totalVolumePerWeek() -> [StatPoint] {
+        let calendar = Calendar.current
+        let groupedByWeek = Dictionary(grouping: self) { session in
+            calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: session.startTime)
+        }
+
+        return groupedByWeek.map { (week, sessions) in
+            let totalVolume = sessions.reduce(0.0) { $0 + $1.totalVolume }
+            if let representativeDate = sessions.first?.startTime {
+                return StatPoint(date: representativeDate, value: totalVolume)
+            }
+            return StatPoint(date: Date(), value: 0) // Fallback for safety
+        }
+        .sorted(by: { $0.date < $1.date })
+    }
+
+    func averageVolumePerSessionOverTime() -> [StatPoint] {
+        var cumulativeVolume: Double = 0
+        var count: Double = 0
+        
+        return self.map { session in
+            let sessionVolume = session.totalVolume
+            cumulativeVolume += sessionVolume
+            count += 1
+            let averageVolume = cumulativeVolume / count
+            return StatPoint(date: session.startTime, value: averageVolume)
+        }
+    }
+
+    func totalExercisesPerSessionOverTime() -> [StatPoint] {
+        return self.map { session in
+            let totalExercises = session.totalExercisesCount
+            return StatPoint(date: session.startTime, value: Double(totalExercises))
+        }
+    }
+
+    func volumeForSpecificExerciseOverTime(exerciseName: String) -> [StatPoint] {
+        return self.compactMap { session in
+            let sessionVolume = session.totalVolumeByExerciseType[exerciseName] ?? 0.0
+            return StatPoint(date: session.startTime, value: sessionVolume)
+        }
+    }
+    
+    var totalTimeSpentWorkingOut: TimeInterval {
+        return self.compactMap { $0.totalDuration }.reduce(0, +)
+    }
+
+    var averageSessionDuration: TimeInterval {
+        let totalSessions = self.count
+        guard totalSessions > 0 else { return 0 }
+        return totalTimeSpentWorkingOut / Double(totalSessions)
+    }
+
+    var totalNumberOfSessions: Int {
+        return self.count
+    }
+
+    var totalVolumeLifted: Double {
+        return self.reduce(0.0) { $0 + $1.totalVolume }
+    }
+
+    var averageVolumePerSession: Double {
+        let totalSessions = self.count
+        guard totalSessions > 0 else { return 0 }
+        return totalVolumeLifted / Double(totalSessions)
+    }
+}
+
+
+extension CodableExercise {
+    var exerciseName: String {
+        switch self {
+        case .programExercise(let programExercise):
+            return programExercise.name
+        case .libraryExercise(let progression):
+            return progression.name
+        }
+    }
+}
+
+
 extension CGPoint: VectorArithmetic {
     public mutating func scale(by rhs: Double) {
         self.x *= CGFloat(rhs)

@@ -20,17 +20,18 @@ struct GymSessionsView: View {
 
     var body: some View {
         ZStack {
+            Color(hex: "F5F5F5").ignoresSafeArea()
+            
             ScrollView {
                 VStack(spacing: 24) {
-                    VStack(spacing: 12) {
-                        headerView
-                        
-                        if gymManager.currentSession == nil {
-                            startNewSessionView
-                        } else if let currentSession = gymManager.currentSession {
-                            activeGymSessionView(currentSession)
-                        }
+                    headerView
+                    
+                    if gymManager.currentSession == nil {
+                        startNewSessionView
+                    } else if let currentSession = gymManager.currentSession {
+                        activeGymSessionView(currentSession)
                     }
+                    
                     pastSessionsView
                 }
                 .padding(.horizontal)
@@ -45,7 +46,6 @@ struct GymSessionsView: View {
                 .animation(.easeInOut, value: showEndSessionConfirmation)
             }
         }
-        .background(Color.white.ignoresSafeArea())
         .navigationDestination(isPresented: $navigateToExerciseView) {
             if let exerciseRecord = selectedExerciseRecord {
                 GymSessionExerciseView(exerciseRecord: exerciseRecord)
@@ -65,73 +65,115 @@ struct GymSessionsView: View {
     }
 
     private var headerView: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Text("Gym Sessions")
-                    .font(.system(size: 28, weight: .medium))
-                    .foregroundColor(.black)
-                
-                Spacer()
-            }
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Gym Sessions")
+                .font(.system(size: 28, weight: .bold))
+                .foregroundColor(Color(hex: "333333"))
+            
+            Text("Track your progress, crush your goals")
+                .font(.system(size: 16, weight: .medium))
+                .foregroundColor(Color(hex: "666666"))
         }
-        .padding(.top, 15)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.top, 20)
+        .padding(.bottom, 10)
     }
 
     private var startNewSessionView: some View {
-        VStack(alignment: .center, spacing: 24) {
-            Text("No Active Session")
-                .font(.system(size: 20, weight: .medium))
-                .foregroundColor(.black)
+        VStack(alignment: .leading, spacing: 16) {
+            HStack {
+                Image(systemName: "figure.walk")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 30, height: 30)
+                    .foregroundColor(Color(hex: "40C4FC"))
+                
+                Spacer()
+                
+                Text("Ready to crush it?")
+                    .font(.system(size: 20, weight: .medium, design: .default))
+                    .foregroundColor(Color(hex: "333333"))
+            }
             
-            Text("You don't have any ongoing gym session. Start one to begin tracking your workout.")
+            Text("Start a new gym session to track your workout and progress.")
                 .font(.system(size: 16, weight: .light))
-                .foregroundColor(.gray)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 32)
+                .foregroundColor(Color(hex: "666666"))
+                .multilineTextAlignment(.leading)
             
             Button(action: {
                 gymManager.startGymSession()
             }) {
-                Text("Start New Session")
-                    .font(.system(size: 16, weight: .medium))
-                    .foregroundColor(.white)
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(Color(hex: "40C4FC"))
-                    .cornerRadius(8)
+                HStack {
+                    Spacer()
+                    Text("Start New Session")
+                        .font(.system(size: 18, weight: .light))
+                        .foregroundColor(Color.white)
+                    Spacer()
+                }
+                .padding()
+                .background(Color(hex: "40C4FC"))
             }
         }
         .padding()
         .background(Color(hex: "F5F5F5"))
-        .cornerRadius(8)
     }
+
 
     private func activeGymSessionView(_ currentSession: GymSession) -> some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("\(gymManager.elapsedTime)")
-                .font(.system(size: 40, weight: .bold))
-                .foregroundColor(.black)
-
             HStack {
-                Button(action: {
-                    showEndSessionConfirmation = true
-                }) {
-                    Text("End Session")
-                        .font(.system(size: 16, weight: .medium))
-                        .foregroundColor(.white)
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 8)
-                        .background(Color(hex: "40C4FC"))
-                        .cornerRadius(8)
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Active Session")
+                        .font(.system(size: 20, weight: .medium, design: .default))
+                        .foregroundColor(Color(hex: "333333"))
+                    
+                    Text(gymManager.elapsedTime)
+                        .font(.system(size: 40, weight: .bold))
+                        .foregroundColor(Color(hex: "40C4FC"))
                 }
                 
                 Spacer()
+                
+                Button(action: {
+                    showEndSessionConfirmation = true
+                }) {
+                    Text("End")
+                        .font(.system(size: 16, weight: .medium))
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 10)
+                        .background(Color(hex: "FF3B30"))
+                }
             }
             
-            Divider()
+            exercisesListView(currentSession)
             
+            Button(action: {
+                navigateToAddExerciseView = true
+            }) {
+                HStack {
+                    Image(systemName: "plus.circle.fill")
+                    Text("Add Custom Exercise")
+                }
+                .font(.system(size: 18, weight: .medium))
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(
+                    LinearGradient(gradient: Gradient(colors: [Color(hex: "40C4FC"), Color(hex: "3080FF")]), startPoint: .leading, endPoint: .trailing)
+                )
+            }
+        }
+        .padding()
+        .background(Color(hex: "F5F5F5"))
+    }
+
+
+    private func exercisesListView(_ currentSession: GymSession) -> some View {
+        VStack(alignment: .leading, spacing: 16) {
             Text("Completed Exercises")
-                .font(.system(size: 18, weight: .light))
+                .font(.system(size: 18, weight: .semibold))
+                .foregroundColor(Color(hex: "333333"))
             
             ForEach(currentSession.programExercises.flatMap { $0.value } + currentSession.individualExercises) { exerciseRecord in
                 Button(action: {
@@ -142,74 +184,57 @@ struct GymSessionsView: View {
                 }
                 .buttonStyle(PlainButtonStyle())
             }
-            
-            Button(action: {
-                navigateToAddExerciseView = true
-            }) {
-                Text("Add Custom Exercise")
-                    .font(.system(size: 16, weight: .medium))
-                    .foregroundColor(.white)
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(Color(hex: "40C4FC"))
-                    .cornerRadius(8)
-            }
         }
-        .padding()
-        .background(Color(hex: "F5F5F5"))
-        .cornerRadius(8)
     }
 
     private func exerciseWidget(for exerciseRecord: ExerciseRecord) -> some View {
-        HStack {
+        HStack(spacing: 16) {
             Image(systemName: "figure.walk")
-                .foregroundColor(Color(hex: "40C4FC"))
-                .frame(width: 30, height: 30)
+                .font(.system(size: 24))
+                .foregroundColor(.white)
+                .frame(width: 50, height: 50)
+                .background(
+                    LinearGradient(gradient: Gradient(colors: [Color(hex: "40C4FC"), Color(hex: "3080FF")]), startPoint: .topLeading, endPoint: .bottomTrailing)
+                )
+                .cornerRadius(25)
 
             VStack(alignment: .leading, spacing: 4) {
                 switch exerciseRecord.exerciseInfo {
-                case .programExercise(let programExercise):
-                    Text(programExercise.name)
-                        .font(.system(size: 16, weight: .light))
-                case .libraryExercise(let libraryExercise):
-                    Text(libraryExercise.name)
-                        .font(.system(size: 16, weight: .light))
+                    case .programExercise(let programExercise):
+                        Text(programExercise.name)
+                            .font(.system(size: 16, weight: .light))
+                    case .libraryExercise(let libraryExercise):
+                        Text(libraryExercise.name)
+                            .font(.system(size: 16, weight: .light))
                 }
 
                 if let sets = exerciseRecord.exerciseData.sets.first {
                     Text("\(sets.reps) reps • \(sets.weight) lbs")
-                        .font(.system(size: 14, weight: .ultraLight))
-                        .foregroundColor(.gray)
+                        .font(.system(size: 14, weight: .regular))
+                        .foregroundColor(Color(hex: "666666"))
                 }
             }
 
             Spacer()
             
             Image(systemName: "chevron.right")
-                .foregroundColor(.gray)
+                .foregroundColor(Color(hex: "CCCCCC"))
         }
         .padding()
-        .background(Color.white)
-        .cornerRadius(8)
+        .background(Color(hex: "F9F9F9"))
+        .cornerRadius(15)
     }
 
     private var pastSessionsView: some View {
         VStack(alignment: .leading, spacing: 16) {
-            HStack {
-                Text("Past Gym Sessions")
-                    .font(.system(size: 20, weight: .medium))
-                
-                Spacer()
-            }
+            Text("Past Sessions")
+                .font(.system(size: 20, weight: .medium, design: .default))
+                .foregroundColor(Color(hex: "333333"))
             
             if gymManager.gymSessions.isEmpty {
-                HStack {
-                    Text("No past sessions found.")
-                        .font(.system(size: 16, weight: .light))
-                        .foregroundColor(.gray)
-                    
-                    Spacer()
-                }
+                Text("No past sessions found.")
+                    .font(.system(size: 16, weight: .light))
+                    .foregroundColor(Color(hex: "666666"))
             } else {
                 ForEach(gymManager.loadAllGymSessions()) { session in
                     Button(action: {
@@ -222,33 +247,32 @@ struct GymSessionsView: View {
                 }
             }
         }
+        .padding(24)
+        .background(Color(hex: "F5F5F5"))
     }
 
     private func pastSessionWidget(for session: GymSession) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
+        HStack {
+            VStack(alignment: .leading, spacing: 8) {
                 Text(session.startTime, style: .date)
-                    .font(.system(size: 16, weight: .light))
+                    .font(.system(size: 18, weight: .medium))
+                    .foregroundColor(Color(hex: "333333"))
                 
-                Spacer()
-                
-                Text("\((session.duration ?? 0.0) / 60, specifier: "%.1f") mins")
-                    .font(.system(size: 16, weight: .light))
+                Text("\(session.programExercises.flatMap { $0.value }.count + session.individualExercises.count) exercises • \((session.duration ?? 0.0) / 60, specifier: "%.1f") mins")
+                    .font(.system(size: 14, weight: .light))
+                    .foregroundColor(Color(hex: "666666"))
             }
             
-            Text("\(session.programExercises.flatMap { $0.value }.count + session.individualExercises.count) exercises completed")
-                .font(.system(size: 14, weight: .ultraLight))
-                .foregroundColor(.gray)
+            Spacer()
             
-            Divider()
+            Image(systemName: "chevron.right")
+                .foregroundColor(Color(hex: "CCCCCC"))
         }
         .padding()
         .background(Color(hex: "F5F5F5"))
-        .cornerRadius(8)
     }
+
 }
-
-
 
 struct GymSessionExerciseView: View {
     let exerciseRecord: ExerciseRecord
@@ -299,28 +323,25 @@ struct EndSessionConfirmationView: View {
     @Binding var isOpen: Bool
     var confirmed: () -> Void
     
-    @State private var offsetValue: CGFloat = UIScreen.main.bounds.height
-
     var body: some View {
         ZStack {
-            if isOpen {
-                Color.black.opacity(0.4)
-                    .ignoresSafeArea()
-                    .onTapGesture {
-                        withAnimation {
-                            isOpen = false
-                        }
+            Color.black.opacity(0.4)
+                .ignoresSafeArea()
+                .onTapGesture {
+                    withAnimation {
+                        isOpen = false
                     }
-            }
+                }
             
-            VStack(spacing: 20) {
+            VStack(spacing: 24) {
                 Text("End Gym Session")
-                    .font(.system(size: 20, weight: .medium))
+                    .font(.system(size: 24, weight: .bold))
+                    .foregroundColor(Color(hex: "333333"))
                 
                 Text("Are you sure you want to end your gym session?")
-                    .font(.system(size: 16, weight: .light))
+                    .font(.system(size: 18, weight: .medium))
+                    .foregroundColor(Color(hex: "666666"))
                     .multilineTextAlignment(.center)
-                    .foregroundColor(.gray)
                 
                 HStack(spacing: 16) {
                     Button(action: {
@@ -329,12 +350,16 @@ struct EndSessionConfirmationView: View {
                         }
                     }) {
                         Text("Cancel")
-                            .font(.system(size: 16, weight: .medium))
-                            .foregroundColor(.white)
-                            .padding()
+                            .font(.system(size: 18, weight: .semibold))
+                            .foregroundColor(Color(hex: "40C4FC"))
                             .frame(maxWidth: .infinity)
-                            .background(Color.gray)
-                            .cornerRadius(8)
+                            .padding()
+                            .background(Color.white)
+                            .cornerRadius(15)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 15)
+                                    .stroke(Color(hex: "40C4FC"), lineWidth: 2)
+                            )
                     }
                     
                     Button(action: {
@@ -344,36 +369,25 @@ struct EndSessionConfirmationView: View {
                         }
                     }) {
                         Text("End Session")
-                            .font(.system(size: 16, weight: .medium))
+                            .font(.system(size: 18, weight: .semibold))
                             .foregroundColor(.white)
-                            .padding()
                             .frame(maxWidth: .infinity)
-                            .background(Color.red)
-                            .cornerRadius(8)
+                            .padding()
+                            .background(
+                                LinearGradient(gradient: Gradient(colors: [Color(hex: "FF3B30"), Color(hex: "FF9500")]), startPoint: .leading, endPoint: .trailing)
+                            )
+                            .cornerRadius(15)
                     }
                 }
             }
-            .padding()
+            .padding(32)
             .background(Color.white)
+            .cornerRadius(25)
+            .shadow(color: Color.black.opacity(0.1), radius: 20, x: 0, y: 10)
             .padding()
-            .offset(y: offsetValue)
-            .onAppear {
-                withAnimation(.easeInOut(duration: 0.3)) {
-                    offsetValue = 0
-                }
-            }
-            .onDisappear {
-                withAnimation {
-                    offsetValue = UIScreen.main.bounds.height
-                }
-            }
         }
     }
 }
-
-
-
-import SwiftUI
 
 struct PastGymSessionDetailView: View {
     let session: GymSession
@@ -381,77 +395,174 @@ struct PastGymSessionDetailView: View {
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            ZStack {
-                HStack {
-                    Button(action: { dismiss() }) {
-                        Image(systemName: "arrow.left")
-                            .font(.system(size: 20, weight: .medium))
-                            .foregroundColor(Color(hex: "40C4FC"))
-                    }
-                    Spacer()
+        ZStack {
+            Color(hex: "F5F5F5").ignoresSafeArea()
+            
+            ScrollView {
+                VStack(spacing: 16) {
+                    headerView
+                    sessionDetailsCard
+                    exercisesListView
+                }
+                .padding(.horizontal)
+            }
+        }
+        .navigationBarBackButtonHidden(true)
+        .overlay(backButton, alignment: .topLeading)
+    }
+    
+    private var headerView: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Session Details")
+                .font(.system(size: 24, weight: .medium, design: .default))
+                .foregroundColor(Color(hex: "333333"))
+            
+            Text("Review your past workout")
+                .font(.system(size: 16, weight: .light))
+                .foregroundColor(Color(hex: "666666"))
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.top, 20)
+        .padding(.bottom, 10)
+    }
+    
+    private var sessionDetailsCard: some View {
+        VStack(spacing: 16) {
+            HStack {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Past Gym Session")
+                        .font(.system(size: 20, weight: .medium))
+                        .foregroundColor(Color(hex: "333333"))
+                    
+                    Text(session.startTime, style: .date)
+                        .font(.system(size: 16, weight: .light))
+                        .foregroundColor(Color(hex: "666666"))
                 }
                 
-                Text("Session Details")
-                    .font(.system(size: 18, weight: .semibold))
-            }
-            .padding(.top)
-            
-            Text("Past Gym Session")
-                .font(.system(size: 24, weight: .medium))
-            
-            HStack {
-                Text("Start: \(session.startTime, style: .time)")
-                    .font(.system(size: 16, weight: .light))
                 Spacer()
-                if let endTime = session.endTime {
-                    Text("End: \(endTime, style: .time)")
-                        .font(.system(size: 16, weight: .light))
-                }
+                
+                Image(systemName: "clock")
+                    .font(.system(size: 24))
+                    .foregroundColor(.white)
+                    .frame(width: 50, height: 50)
+                    .background(
+                        LinearGradient(gradient: Gradient(colors: [Color(hex: "40C4FC"), Color(hex: "3080FF")]), startPoint: .topLeading, endPoint: .bottomTrailing)
+                    )
             }
             
             Divider()
-
-            Text("Completed Exercises")
-                .font(.system(size: 18, weight: .light))
             
-            ForEach(session.programExercises.flatMap { $0.value } + session.individualExercises) { exerciseRecord in
-                exerciseDetailWidget(for: exerciseRecord)
+            HStack {
+                timeInfoView(title: "Start", time: session.startTime)
+                Spacer()
+                timeInfoView(title: "End", time: session.endTime ?? Date())
             }
             
-            Spacer()
+            HStack {
+                infoView(title: "Duration", value: String(format: "%.1f mins", (session.duration ?? 0.0) / 60))
+                Spacer()
+                infoView(title: "Exercises", value: "\(session.programExercises.flatMap { $0.value }.count + session.individualExercises.count)")
+            }
         }
-        .padding()
-        .background(Color.white)
-        .navigationBarBackButtonHidden()
+        .padding(24)
+        .background(Color(hex: "F5F5F5"))
     }
     
-    private func exerciseDetailWidget(for exerciseRecord: ExerciseRecord) -> some View {
+    private func timeInfoView(title: String, time: Date) -> some View {
         VStack(alignment: .leading, spacing: 4) {
-            switch exerciseRecord.exerciseInfo {
-            case .programExercise(let programExercise):
-                Text(programExercise.name)
-                    .font(.system(size: 16, weight: .light))
-            case .libraryExercise(let libraryExercise):
-                Text(libraryExercise.name)
-                    .font(.system(size: 16, weight: .light))
+            Text(title)
+                .font(.system(size: 14, weight: .light))
+                .foregroundColor(Color(hex: "666666"))
+            Text(time, style: .time)
+                .font(.system(size: 16, weight: .medium))
+                .foregroundColor(Color(hex: "333333"))
+        }
+    }
+    
+    private func infoView(title: String, value: String) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(title)
+                .font(.system(size: 14, weight: .light))
+                .foregroundColor(Color(hex: "666666"))
+            Text(value)
+                .font(.system(size: 16, weight: .medium))
+                .foregroundColor(Color(hex: "333333"))
+        }
+    }
+    
+    private var exercisesListView: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text("Completed Exercises")
+                .font(.system(size: 20, weight: .medium))
+                .foregroundColor(Color(hex: "333333"))
+            
+            ForEach(session.programExercises.flatMap { $0.value } + session.individualExercises) { exerciseRecord in
+                exerciseWidget(for: exerciseRecord)
+            }
+        }
+        .padding(24)
+        .background(Color(hex: "F5F5F5"))
+    }
+    
+    private func exerciseWidget(for exerciseRecord: ExerciseRecord) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(spacing: 16) {
+                Image(systemName: "figure.walk")
+                    .font(.system(size: 24))
+                    .foregroundColor(.white)
+                    .frame(width: 50, height: 50)
+                    .background(
+                        LinearGradient(gradient: Gradient(colors: [Color(hex: "40C4FC"), Color(hex: "3080FF")]), startPoint: .topLeading, endPoint: .bottomTrailing)
+                    )
+
+                VStack(alignment: .leading, spacing: 4) {
+                    switch exerciseRecord.exerciseInfo {
+                        case .programExercise(let programExercise):
+                            Text(programExercise.name)
+                                .font(.system(size: 18, weight: .medium))
+                        case .libraryExercise(let libraryExercise):
+                            Text(libraryExercise.name)
+                                .font(.system(size: 18, weight: .medium))
+                    }
+
+                    Text("\(exerciseRecord.exerciseData.sets.count) sets")
+                        .font(.system(size: 14, weight: .light))
+                        .foregroundColor(Color(hex: "666666"))
+                }
+
+                Spacer()
             }
             
             ForEach(Array(exerciseRecord.exerciseData.sets.enumerated()), id: \.offset) { index, set in
                 HStack {
-                    Text("Set \(index + 1):")
+                    Text("Set \(index + 1)")
+                        .font(.system(size: 14, weight: .light))
+                        .foregroundColor(Color(hex: "666666"))
                     Spacer()
                     Text("\(set.reps) reps • \(set.weight) lbs")
-                        .font(.system(size: 14, weight: .ultraLight))
-                        .foregroundColor(.gray)
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundColor(Color(hex: "333333"))
                 }
+                .padding(.vertical, 4)
             }
         }
         .padding()
         .background(Color(hex: "F5F5F5"))
-        .cornerRadius(8)
+    }
+    
+    private var backButton: some View {
+        Button(action: { dismiss() }) {
+            Image(systemName: "arrow.left")
+                .font(.system(size: 20, weight: .medium))
+                .foregroundColor(Color(hex: "40C4FC"))
+                .frame(width: 40, height: 40)
+                .background(Color(hex: "F5F5F5"))
+        }
+        .padding(.top, 60)
+        .padding(.leading, 20)
     }
 }
+
 
 
 struct AddExerciseView: View {
