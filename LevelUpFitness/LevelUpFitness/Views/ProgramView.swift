@@ -114,9 +114,12 @@ struct ProgramView: View {
 
     private var programHeader: some View {
         HStack(alignment: .center, spacing: 12) {
-            Text(ProgramManager.shared.selectedProgram?.program.programName ?? "Program Manager")
-                .font(.system(size: 18, weight: .medium, design: .default))
-                .foregroundColor(.primary)
+            Text(ProgramManager.shared.selectedProgram?.program.programName ?? "My Program")
+                .font(ProgramManager.shared.selectedProgram?.program.programName == nil
+                    ? .system(size: 28, weight: .medium, design: .default)
+                    : .system(size: 18, weight: .medium, design: .default))
+                .foregroundColor(ProgramManager.shared.selectedProgram?.program.programName == nil ? .black : .primary)
+
             
             Spacer()
             
