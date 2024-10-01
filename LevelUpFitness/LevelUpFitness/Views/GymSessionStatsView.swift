@@ -22,7 +22,7 @@ struct GymSessionStatsView: View {
             VStack (spacing: 8) {
                 sessionStatsSummaryView
                 
-                graphToggleView
+//                graphToggleView
                 
 //                if !graphData.isEmpty {
 //                    GeometryReader { geometry in

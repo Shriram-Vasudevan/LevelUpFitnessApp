@@ -15,6 +15,7 @@ struct GymSessionsView: View {
     @State private var navigateToExerciseView = false
     @State private var navigateToPastSessionDetailView = false
     @State private var navigateToAddExerciseView = false
+    @State private var navigateToAllPastSessionsView = false
     @State private var selectedExerciseRecord: ExerciseRecord?
     @State private var selectedPastSession: GymSession?
 
@@ -37,6 +38,7 @@ struct GymSessionsView: View {
                     if gymManager.gymSessions.count > 0 {
                         gymStatsView
                             .padding(.top, 4)
+                            .padding(.bottom)
                     }
                 }
                 .padding(.horizontal)
@@ -65,6 +67,9 @@ struct GymSessionsView: View {
             AddExerciseView(onAddExercise: { exerciseRecord in
                 gymManager.currentSession?.addIndividualExercise(exerciseRecord: exerciseRecord)
             })
+        }
+        .navigationDestination(isPresented: $navigateToAllPastSessionsView) {
+            AllPastGymSessionsView(gymManager: gymManager)
         }
         .navigationBarBackButtonHidden()
     }
@@ -250,6 +255,13 @@ struct GymSessionsView: View {
                     .foregroundColor(Color(hex: "333333"))
                 
                 Spacer()
+                
+                Text("See More")
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundColor(Color(hex: "40C4FC"))
+                    .onTapGesture {
+                        navigateToAllPastSessionsView = true
+                    }
             }
             
             if gymManager.gymSessions.isEmpty {
@@ -257,7 +269,7 @@ struct GymSessionsView: View {
                     .font(.system(size: 16, weight: .light))
                     .foregroundColor(Color(hex: "666666"))
             } else {
-                ForEach(gymManager.loadAllGymSessions()) { session in
+                ForEach(gymManager.loadAllGymSessions().prefix(3)) { session in
                     Button(action: {
                         selectedPastSession = session
                         navigateToPastSessionDetailView = true
@@ -607,7 +619,79 @@ struct PastGymSessionDetailView: View {
     }
 }
 
+struct AllPastGymSessionsView: View {
+    @Environment(\.dismiss) var dismiss
+    
+    @ObservedObject var gymManager: GymManager
+    @State private var navigateToPastSessionDetailView = false
+    @State private var selectedPastSession: GymSession?
+    
+    var body: some View {
+        VStack {
+            ZStack
+            {
+                HStack {
+                    Button {
+                        dismiss()
+                    } label: {
+                        Image(systemName: "chevron.left")
+                            .foregroundColor(.black)
+                    }
 
+                    
+                    Spacer()
+                }
+                .padding(.horizontal)
+                
+                Text("Past Sessions")
+                    .font(.custom("Sailec Bold", size: 20))
+                    .foregroundColor(.black)
+            }
+            .padding(.bottom)
+            
+            ForEach(gymManager.loadAllGymSessions()) { session in
+                Button(action: {
+                    selectedPastSession = session
+                    navigateToPastSessionDetailView = true
+                }) {
+                    pastSessionWidget(for: session)
+                }
+                .buttonStyle(PlainButtonStyle())
+            }
+            
+            Spacer()
+
+        }
+        .padding(.horizontal)
+        .navigationDestination(isPresented: $navigateToPastSessionDetailView) {
+            if let pastSession = selectedPastSession {
+                PastGymSessionDetailView(session: pastSession)
+            }
+        }
+        .navigationBarBackButtonHidden()
+    }
+    
+    private func pastSessionWidget(for session: GymSession) -> some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 8) {
+                Text(session.startTime, style: .date)
+                    .font(.system(size: 18, weight: .medium))
+                    .foregroundColor(Color(hex: "333333"))
+                
+                Text("\(session.programExercises.flatMap { $0.value }.count + session.individualExercises.count) exercises • \((session.duration ?? 0.0) / 60, specifier: "%.1f") mins")
+                    .font(.system(size: 14, weight: .light))
+                    .foregroundColor(Color(hex: "666666"))
+            }
+            
+            Spacer()
+            
+            Image(systemName: "chevron.right")
+                .foregroundColor(Color(hex: "CCCCCC"))
+        }
+        .padding()
+        .background(Color(hex: "F5F5F5"))
+    }
+}
 
 struct AddExerciseView: View {
     @Environment(\.dismiss) var dismiss
@@ -631,24 +715,56 @@ struct AddExerciseView: View {
             }
             .padding()
 
-            Text("Add Custom Exercise")
-                .font(.system(size: 24, weight: .bold))
-                .padding(.top, 8)
+            HStack {
+                Text("Add Exercise")
+                    .font(.system(size: 24, weight: .bold))
+                    .padding(.top, 8)
+                
+                Spacer()
+            }
+            .padding(.horizontal)
 
             TextField("Exercise Name", text: $exerciseName)
                 .font(.system(size: 18, weight: .medium))
                 .padding()
                 .background(Color(hex: "F5F5F5"))
-                .cornerRadius(8)
+//                .cornerRadius(8)
                 .padding(.horizontal)
 
             ScrollView {
                 ForEach(sets.indices, id: \.self) { index in
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("Set \(index + 1)")
-                            .font(.system(size: 18, weight: .medium))
-                            .foregroundColor(.black)
+                        HStack {
+                            Text("Set \(index + 1)")
+                                .font(.system(size: 18, weight: .medium))
+                                .foregroundColor(.black)
 
+                            
+                            Spacer()
+                            
+                            if index == 0 {
+                                Button {
+                                    sets.append(ExerciseDataSet(weight: 0, reps: 0, time: 0, rest: 0))
+                                } label: {
+                                    Image(systemName: "plus")
+                                        .foregroundColor(.black)
+                                        .font(.system(size: 20))
+                                        .padding(7)
+                                        .background(Circle().fill(Color(hex: "F5F5F5")))
+                                }
+                            } else {
+                                Button {
+                                    sets.remove(at: index)
+                                } label: {
+                                    Image(systemName: "minus")
+                                        .foregroundColor(.white)
+                                        .font(.system(size: 20))
+                                        .padding(7)
+                                        .background(Circle().fill(Color.red))
+                                }
+                            }
+
+                        }
                         inputFieldsView(for: index)
                             .padding(.bottom, 16)
                     }
@@ -656,19 +772,6 @@ struct AddExerciseView: View {
                     Divider()
                 }
             }
-
-            Button(action: {
-                sets.append(ExerciseDataSet(weight: 0, reps: 0, time: 0, rest: 0))
-            }) {
-                Text("Add Set")
-                    .font(.system(size: 16, weight: .medium))
-                    .foregroundColor(.white)
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(Color(hex: "40C4FC"))
-                    .cornerRadius(8)
-            }
-            .padding()
 
             Spacer()
 

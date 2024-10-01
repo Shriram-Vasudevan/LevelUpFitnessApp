@@ -684,11 +684,18 @@ extension ExerciseRecord {
         for set in exerciseData.sets {
             totalVolume += Double(set.reps * set.weight)
         }
+        print(totalVolume)
+        
         return totalVolume
     }
     
     var totalReps: Int {
-        return exerciseData.sets.reduce(into: 0) { $0 += $1.reps }
+        var totalReps: Int = 0
+        for set in exerciseData.sets {
+            totalReps += set.reps
+        }
+        print(totalReps)
+        return totalReps
     }
 }
 

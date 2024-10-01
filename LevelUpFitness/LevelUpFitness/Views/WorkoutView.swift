@@ -139,14 +139,9 @@ struct WorkoutContent: View {
                                     .foregroundColor(.white)
                                     .padding(10)
                                     .background(
-                                        Capsule()
-                                            .fill(
-                                                LinearGradient(
-                                                    gradient: Gradient(colors: [Color(hex: "40C4FC"), Color(hex: "0077FF")]),
-                                                    startPoint: .leading,
-                                                    endPoint: .trailing
-                                                )
-                                            )
+                                        Rectangle()
+                                            .fill(Color(hex: "40C4FC"))
+                                            
                                     )
                             }
                             .padding(.top, 10)

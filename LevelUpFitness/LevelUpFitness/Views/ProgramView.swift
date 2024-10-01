@@ -709,9 +709,10 @@ struct ActiveProgramCardView: View {
 
 struct ProgramCardView: View {
     var standardProgramDBRepresentation: StandardProgramDBRepresentation
+    @ObservedObject var programManager = ProgramManager.shared
     
     var body: some View {
-        ZStack(alignment: .bottom) {
+        ZStack(alignment: .bottomLeading) {
             LinearGradient(gradient: Gradient(colors: [Color(hex: "40C4FC"), Color(hex: "3080FF")]), startPoint: .topLeading, endPoint: .bottomTrailing)
             
             GeometryReader { geometry in
@@ -729,20 +730,42 @@ struct ProgramCardView: View {
             }
             
             VStack(alignment: .leading, spacing: 4) {
+                Spacer()
                 Text(standardProgramDBRepresentation.name)
                     .font(.system(size: 18, weight: .bold))
                     .foregroundColor(.white)
-                Text(standardProgramDBRepresentation.environment)
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(Color.white.opacity(0.8))
+//                Text(standardProgramDBRepresentation.environment)
+//                    .font(.system(size: 14, weight: .medium))
+//                    .foregroundColor(Color.white.opacity(0.8))
             }
             .padding()
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Color.black.opacity(0.2))
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
+            
+//            if !isProgramJoined() {
+//                Button(action: {
+//                    
+//                }) {
+//                    Text("Join")
+//                        .font(.system(size: 14, weight: .semibold))
+//                        .foregroundColor(.white)
+//                        .padding(.horizontal, 16)
+//                        .padding(.vertical, 8)
+//                        .background(Color.green)
+//                        .cornerRadius(20)
+//                }
+//                .padding([.top, .trailing], 12)
+//                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
+//            }
         }
         .frame(width: 200, height: 120)
         .cornerRadius(15)
         .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
+        .opacity(isProgramJoined() ? 0.5 : 1.0)
+//        .background(Color.black.opacity(0.2))
+    }
+    
+    private func isProgramJoined() -> Bool {
+        programManager.userProgramData.contains { $0.program.programName == standardProgramDBRepresentation.name }
     }
 }
 

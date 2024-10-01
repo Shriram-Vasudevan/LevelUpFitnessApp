@@ -32,7 +32,7 @@ struct HomeView: View {
     @State var showChallengeDetailsCover: Bool = false
     @State var userChallenge: UserChallenge?
     
-    @State private var showToDoList = true
+    @State private var showToDoList = false
     
     
     var body: some View {
@@ -214,37 +214,22 @@ struct HomeView: View {
     
     private func actionCard(title: String, imageName: String, action: @escaping () -> Void) -> some View {
         Button(action: action) {
-            VStack(spacing: 8) {
+            VStack {
                 Image(imageName)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(height: 80) 
-                    .padding(.top, 16)
-                    .padding(.horizontal, 8)
+                    .frame(height: 100)
+                    .padding(.top)
                 
                 Text(title)
-                    .font(.system(size: 16, weight: .semibold))
-                    .foregroundColor(.black)
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundColor(.white)
                     .padding(.vertical, 8)
-                    .frame(maxWidth: .infinity, alignment: .center)
-                
-                Divider()
-                    .background(Color.gray.opacity(0.3))
-
-                Text("Start Now")
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(Color(hex: "40C4FC"))
-                    .padding(.vertical, 10)
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .background(Color.white)
+                    .frame(maxWidth: .infinity)
+                    .background(Color(hex: "40C4FC"))
             }
-            .frame(maxWidth: .infinity, minHeight: 160)
-            .background(Color(hex: "F9F9F9"))
-            .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 2)
-            .overlay(
-                RoundedRectangle(cornerRadius: 0)
-                    .stroke(Color.gray.opacity(0.2), lineWidth: 1)
-            )
+            .frame(maxWidth: .infinity)
+            .background(Color.white)
         }
     }
 

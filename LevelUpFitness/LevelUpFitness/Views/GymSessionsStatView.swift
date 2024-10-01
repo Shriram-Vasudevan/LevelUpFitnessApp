@@ -1,10 +1,3 @@
-//
-//  GymSessionsStatView.swift
-//  LevelUpFitness
-//
-//  Created by Shriram Vasudevan on 9/30/24.
-//
-
 import SwiftUI
 
 struct GymSessionsStatsView: View {
@@ -16,97 +9,106 @@ struct GymSessionsStatsView: View {
     @State private var accentColor = Color(hex: "40C4FC")
     
     var body: some View {
-        ZStack {
-            Color.white.ignoresSafeArea()
-            
-            VStack (spacing: 8) {
-                statsSummaryView
+           ZStack {
+               Color.white.ignoresSafeArea()
+               
+               VStack(spacing: 8) {
+                   statsSummaryView
+                   graphToggleView
+                   
+                   if !graphData.isEmpty {
+                       GeometryReader { geometry in
+                           let width = geometry.size.width
+                           let height = geometry.size.height
+                           let maxValueAdjusted = maxValue * 1.1
+                           let minValueAdjusted = 0.0
+                           let yAxisWidth: CGFloat = 50 
+                           let xAxisHeight: CGFloat = 40
+                           let graphWidth = width - yAxisWidth
+                           let graphHeight = height - xAxisHeight
+                           
+                           ZStack {
+                               // Y-axis labels
+                               VStack {
+                                   ForEach(0..<6) { index in
+                                       let labelValue = maxValueAdjusted - CGFloat(index) * (maxValueAdjusted - minValueAdjusted) / 5
+                                       HStack {
+                                           Text(formatValue(labelValue, for: selectedGraphType))
+                                               .font(.system(size: 10, weight: .light))
+                                               .foregroundColor(.gray)
+                                               .frame(width: yAxisWidth - 5, alignment: .trailing) // Reduced width
+                                           Spacer()
+                                       }
+                                       .frame(height: graphHeight / 6)
+                                   }
+                               }
 
-                graphToggleView
+                               // X-axis labels
+                               VStack {
+                                   Spacer()
+                                   HStack(spacing: 0) { // Removed spacing
+                                       ForEach(0..<graphData.count, id: \.self) { index in
+                                           if index % 2 == 0 || index == graphData.count - 1 {
+                                               let date = graphData[graphData.count - 1 - index].date
+                                               Text(formatDate(date))
+                                                   .font(.system(size: 10, weight: .light))
+                                                   .foregroundColor(.gray)
+                                                   .rotationEffect(.degrees(-45))
+                                                   .offset(y: 20)
+                                           }
+                                           if index != graphData.count - 1 {
+                                               Spacer()
+                                           }
+                                       }
+                                   }
+                                   .frame(width: graphWidth)
+                               }
 
-                if !graphData.isEmpty {
-                    GeometryReader { geometry in
-                        let width = geometry.size.width
-                        let height = geometry.size.height
-                        let maxValueAdjusted = maxValue * 1.1
-                        let minValueAdjusted = 0.0
-                        
-                        ZStack {
-                            VStack {
-                                ForEach(0..<6) { index in
-                                    let labelValue = maxValueAdjusted - CGFloat(index) * (maxValueAdjusted - minValueAdjusted) / 5
-                                    HStack {
-                                        Text(String(format: "%.1f", labelValue))
-                                            .font(.system(size: 10, weight: .light))
-                                            .foregroundColor(.gray)
-                                            .frame(width: 40, alignment: .leading)
-                                        Spacer()
-                                    }
-                                    .frame(height: height / 6)
-                                }
-                            }
-
-                            VStack {
-                                Spacer()
-                                HStack {
-                                    ForEach(0..<graphData.count, id: \.self) { index in
-                                        if index % 2 == 0 {
-                                            let date = graphData[index].date
-                                            Text(date, style: .date)
-                                                .font(.system(size: 10, weight: .light))
-                                                .foregroundColor(.gray)
-                                                .offset(x: index == 0 ? 10 : 0)
-                                        }
-                                        Spacer()
-                                    }
-                                }
-                            }
-                            .padding(.horizontal, 16)
-                            .padding(.bottom, 16)
-
-                            Path { path in
-                                if let firstPoint = graphData.first {
-                                    let firstX = CGFloat(0) / CGFloat(graphData.count - 1) * width
-                                    let firstY = (1 - CGFloat((firstPoint.value - minValueAdjusted) / (maxValueAdjusted - minValueAdjusted))) * height
-                                    path.move(to: CGPoint(x: firstX, y: firstY))
-                                    
-                                    for (index, point) in graphData.enumerated() {
-                                        let x = CGFloat(index) / CGFloat(graphData.count - 1) * width
-                                        let y = (1 - CGFloat((point.value - minValueAdjusted) / (maxValueAdjusted - minValueAdjusted))) * height
-                                        path.addLine(to: CGPoint(x: x, y: y))
-                                    }
-                                }
-                            }
-                            .stroke(accentColor, lineWidth: 2)
-                            
-                            ForEach(graphData) { point in
-                                let index = graphData.firstIndex(where: { $0.id == point.id })!
-                                let x = CGFloat(index) / CGFloat(graphData.count - 1) * width
-                                let y = (1 - CGFloat((point.value - minValueAdjusted) / (maxValueAdjusted - minValueAdjusted))) * height
-                                
-                                Circle()
-                                    .fill(accentColor)
-                                    .frame(width: 8, height: 8)
-                                    .position(x: x, y: y)
-                            }
-                        }
-                    }
-                    .frame(height: 200)
-                    .padding(.vertical, 16)
-                } else {
-                    Text("No data available for this graph.")
-                        .font(.system(size: 14, weight: .medium))
-                        .foregroundColor(.gray)
-                        .padding(.top, 20)
-                }
-                
-                Spacer()
-            }
-            .onAppear {
-                updateGraphData()
-            }
-        }
-    }
+                               // Graph line
+                               Path { path in
+                                   if let firstPoint = graphData.last {
+                                       let firstX = yAxisWidth
+                                       let firstY = (1 - CGFloat((firstPoint.value - minValueAdjusted) / (maxValueAdjusted - minValueAdjusted))) * graphHeight
+                                       path.move(to: CGPoint(x: firstX, y: firstY))
+                                       
+                                       for (index, point) in graphData.enumerated().reversed() {
+                                           let x = CGFloat(graphData.count - 1 - index) / CGFloat(graphData.count - 1) * graphWidth + yAxisWidth
+                                           let y = (1 - CGFloat((point.value - minValueAdjusted) / (maxValueAdjusted - minValueAdjusted))) * graphHeight
+                                           path.addLine(to: CGPoint(x: x, y: y))
+                                       }
+                                   }
+                               }
+                               .stroke(accentColor, lineWidth: 2)
+                               
+                               // Data points
+                               ForEach(graphData.indices, id: \.self) { index in
+                                   let point = graphData[graphData.count - 1 - index]
+                                   let x = CGFloat(index) / CGFloat(graphData.count - 1) * graphWidth + yAxisWidth
+                                   let y = (1 - CGFloat((point.value - minValueAdjusted) / (maxValueAdjusted - minValueAdjusted))) * graphHeight
+                                   
+                                   Circle()
+                                       .fill(accentColor)
+                                       .frame(width: 8, height: 8)
+                                       .position(x: x, y: y)
+                               }
+                           }
+                       }
+                       .frame(height: 200)
+                       .padding(.vertical, 16)
+                   } else {
+                       Text("No data available for this graph.")
+                           .font(.system(size: 14, weight: .medium))
+                           .foregroundColor(.gray)
+                           .padding(.top, 20)
+                   }
+                   
+                   Spacer()
+               }
+               .onAppear {
+                   updateGraphData()
+               }
+           }
+       }
 
     private var statsSummaryView: some View {
         ScrollView(.horizontal, showsIndicators: false) {
@@ -135,7 +137,7 @@ struct GymSessionsStatsView: View {
                             .foregroundColor(selectedGraphType == graphType ? .white : Color(hex: "333333"))
                             .padding(.horizontal, 16)
                             .padding(.vertical, 10)
-                            .frame(height: 44) 
+                            .frame(height: 44)
                             .background(selectedGraphType == graphType ? accentColor : Color.white)
                             .cornerRadius(4)
                             .overlay(
@@ -168,22 +170,38 @@ struct GymSessionsStatsView: View {
         switch selectedGraphType {
         case .totalVolume:
             graphData = gymManager.gymSessions.totalVolumeOverTime()
-            maxValue = graphData.map { $0.value }.max() ?? 0.0
         case .totalReps:
             graphData = gymManager.gymSessions.totalRepsOverTime()
-            maxValue = graphData.map { $0.value }.max() ?? 0.0
         case .sessionCount:
             graphData = gymManager.gymSessions.totalSessionsPerWeek()
-            maxValue = graphData.map { $0.value }.max() ?? 0.0
         case .averageDuration:
             graphData = gymManager.gymSessions.averageDurationOverTime()
-            maxValue = graphData.map { $0.value }.max() ?? 0.0
+        case .averageVolumePerSession:
+            graphData = gymManager.gymSessions.averageVolumePerSessionOverTime()
         }
+        maxValue = graphData.map { $0.value }.max() ?? 0.0
     }
+    
+    private func formatDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMM. d"
+        return formatter.string(from: date)
+    }
+    
+    private func formatValue(_ value: Double, for graphType: GraphType) -> String {
+            switch graphType {
+            case .totalVolume, .averageVolumePerSession:
+                return String(format: "%.1f lbs", value)
+            case .totalReps, .sessionCount:
+                return String(format: "%.0f", value)
+            case .averageDuration:
+                return String(format: "%.1f min", value)
+            }
+        }
 }
 
 enum GraphType: CaseIterable {
-    case totalVolume, totalReps, sessionCount, averageDuration
+    case totalVolume, totalReps, sessionCount, averageDuration, averageVolumePerSession
     
     var displayName: String {
         switch self {
@@ -191,6 +209,7 @@ enum GraphType: CaseIterable {
         case .totalReps: return "Total Reps"
         case .sessionCount: return "Session Count"
         case .averageDuration: return "Avg Duration"
+        case .averageVolumePerSession: return "Avg Volume/Session"
         }
     }
 }
