@@ -15,7 +15,6 @@ struct ActiveUserChallengeWidget: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            // Challenge name and date range
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(formattedChallengeName(challenge.name))
@@ -29,7 +28,7 @@ struct ActiveUserChallengeWidget: View {
                         .foregroundColor(Color(hex: "666666"))
                 }
                 Spacer()
-                // Progress percentage circle
+ 
                 ZStack {
                     Circle()
                         .stroke(Color(hex: "E0E0E0"), lineWidth: 4)
@@ -46,8 +45,7 @@ struct ActiveUserChallengeWidget: View {
                         .foregroundColor(Color(hex: "40C4FC"))
                 }
             }
-            
-            // Progress in numbers and View button
+
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Progress")
@@ -59,8 +57,7 @@ struct ActiveUserChallengeWidget: View {
                         .foregroundColor(Color(hex: "333333"))
                 }
                 Spacer()
-                
-                // View button with more presence
+
                 Button(action: {
                     showChallengeDetailsCover = true
                 }) {
@@ -70,18 +67,13 @@ struct ActiveUserChallengeWidget: View {
                         .padding(.horizontal, 16)
                         .padding(.vertical, 8)
                         .background(Color(hex: "40C4FC"))
-                        .cornerRadius(8) // No rounded corners requested, but gives a cleaner button
+                        .cornerRadius(8)
                 }
             }
         }
         .padding(16)
         .background(Color(hex: "F9F9F9"))
         .cornerRadius(8)
-        .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 2)
-        .overlay(
-            RoundedRectangle(cornerRadius: 0)
-                .stroke(Color.gray.opacity(0.2), lineWidth: 1)
-        )
         .fullScreenCover(isPresented: $showChallengeDetailsCover, content: {
             ChallengeDetailsView(challenge: challenge, currentProgress: currentProgress)
         })

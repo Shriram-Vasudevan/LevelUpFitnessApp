@@ -13,7 +13,6 @@ struct RecommendedExerciseWidget: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            // Header with exercise name and type
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(exercise.name)
@@ -31,16 +30,14 @@ struct RecommendedExerciseWidget: View {
                     .font(.system(size: 24))
                     .foregroundColor(Color(hex: "40C4FC"))
             }
-            
-            // Description or recommended label
+
             HStack {
                 Spacer()
                 Text("Recommended Exercise")
                     .font(.system(size: 12, weight: .regular))
                     .foregroundColor(.gray)
             }
-            
-            // Call to Action button
+
             Button(action: {
                 exerciseSelected()
             }) {
@@ -48,19 +45,14 @@ struct RecommendedExerciseWidget: View {
                     .font(.system(size: 14, weight: .semibold))
                     .foregroundColor(.white)
                     .padding(.horizontal, 16)
-                    .padding(.vertical, 12) // Increased padding for more presence
+                    .padding(.vertical, 12)
                     .frame(maxWidth: .infinity)
-                    .background(Color(hex: "40C4FC")) // Keeping your accent color
+                    .background(Color(hex: "40C4FC"))
             }
         }
         .padding(16)
         .background(Color(hex: "F9F9F9"))
-        .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 2)
         .cornerRadius(8)
-        .overlay(
-            RoundedRectangle(cornerRadius: 0)
-                .stroke(Color.gray.opacity(0.2), lineWidth: 1)
-        )
     }
 }
 

@@ -35,12 +35,12 @@ struct ProgramView: View {
                 VStack(spacing: 0) {
                     programHeader
                     
-                    if ProgramManager.shared.userProgramData.isEmpty && !programManager.retrievingProgram || showProgramManagerOptions {
+                    if programManager.selectedProgram == nil {
                         
                         VStack(spacing: 20) {
                             
                             if programManager.userProgramData.count > 0 {
-                                userActiveProgramsScrollView
+                                userActiveProgramsTabView
                             }
 
                             VStack (spacing: 8) {
@@ -106,9 +106,9 @@ struct ProgramView: View {
             programPickerView
         }
         .onAppear {
-            if programManager.selectedProgram == nil, let firstProgram = programManager.userProgramData.first {
-                programManager.selectedProgram = firstProgram
-            }
+//            if programManager.selectedProgram == nil, let firstProgram = programManager.userProgramData.first {
+//                programManager.selectedProgram = firstProgram
+//            }
         }
     }
 
@@ -349,25 +349,26 @@ struct ProgramView: View {
         }
     }
 
-    private var userActiveProgramsScrollView: some View {
+    private var userActiveProgramsTabView: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Your Active Programs")
                 .font(.system(size: 20, weight: .bold))
-
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 16) {
-                    ForEach(programManager.userProgramData, id: \.program.programName) { programWithID in
-                        SmallProgramCardView(standardProgramDBRepresentation: StandardProgramDBRepresentation(id: UUID().uuidString, name: programWithID.program.programName, environment: programWithID.program.environment))
-                            .onTapGesture {
-                                showProgramManagerOptions = false
-                                ProgramManager.shared.selectedProgram = programWithID
-                                showProgramPicker = false
-                            }
-                    }
+            
+            TabView {
+                ForEach(programManager.userProgramData, id: \.program.programName) { programWithID in
+                    ActiveProgramCardView(program: programWithID.program)
+                        .onTapGesture {
+                            showProgramManagerOptions = false
+                            ProgramManager.shared.selectedProgram = programWithID
+                            showProgramPicker = false
+                        }
                 }
             }
+            .frame(height: 175)
+//            .tabViewStyle(.page(indexDisplayMode: .never)) // Hides the page indicator
         }
     }
+
 
     private var gymProgramsScrollView: some View {
         ScrollView(.horizontal, showsIndicators: false) {
@@ -662,43 +663,46 @@ struct ExerciseRow: View {
     }
 }
 
-struct SmallProgramCardView: View {
-    var standardProgramDBRepresentation: StandardProgramDBRepresentation
-
+struct ActiveProgramCardView: View {
+    var program: Program
+    
     var body: some View {
-        HStack(spacing: 12) {
-            Image(systemName: standardProgramDBRepresentation.environment.lowercased().contains("gym") ? "dumbbell.fill" : "house.fill")
-                .foregroundColor(Color(hex: "40C4FC"))
-                .font(.system(size: 16))
-                .frame(width: 32, height: 32)
-                .background(Color(hex: "40C4FC").opacity(0.1))
-                .cornerRadius(8)
+        ZStack(alignment: .bottomLeading) {
+            LinearGradient(gradient: Gradient(colors: [Color(hex: "40C4FC"), Color(hex: "3080FF")]), startPoint: .topLeading, endPoint: .bottomTrailing)
+                .cornerRadius(15)
+                .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
             
-            VStack(alignment: .leading, spacing: 2) {
-                Text(standardProgramDBRepresentation.name)
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundColor(Color(hex: "333333"))
-                    .lineLimit(1)
+            VStack(alignment: .leading, spacing: 8) {
+                Text(program.programName)
+                    .font(.system(size: 22, weight: .bold))
+                    .foregroundColor(.white)
                 
-                Text(standardProgramDBRepresentation.environment)
-                    .font(.system(size: 12, weight: .regular))
-                    .foregroundColor(Color(hex: "666666"))
-                    .lineLimit(1)
+                Text(program.environment)
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundColor(Color.white.opacity(0.8))
+                
+                Spacer()
+                
+                HStack {
+                    Text("Current Week: \(DateUtility.determineWeekNumber(startDateString: program.startDate) ?? 1)")
+                        .font(.system(size: 14, weight: .light))
+                        .foregroundColor(.white.opacity(0.8))
+                    
+                    Spacer()
+                    
+                    Image(systemName: "chevron.right")
+                        .foregroundColor(.white)
+                        .padding()
+                        .background(Color.white.opacity(0.2))
+                        .clipShape(Circle())
+                }
             }
-            
-            Spacer(minLength: 0)
+            .padding()
         }
-        .padding(8)
-        .frame(width: 180, height: 48)
-        .background(Color.white)
-        .overlay(
-            RoundedRectangle(cornerRadius: 8)
-                .stroke(Color(hex: "40C4FC").opacity(0.5), lineWidth: 1)
-        )
-        .cornerRadius(8)
-        .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
+        .frame(maxWidth: .infinity, minHeight: 175)
     }
 }
+
 
 struct ProgramCardView: View {
     var standardProgramDBRepresentation: StandardProgramDBRepresentation

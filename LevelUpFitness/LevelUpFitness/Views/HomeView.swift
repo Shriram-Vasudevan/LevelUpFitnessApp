@@ -192,7 +192,7 @@ struct HomeView: View {
                             } label: {
                                 Text("See More")
                                     .font(.system(size: 14, weight: .medium))
-                                    .foregroundColor(Color(hex: "40C4FC")) // Keep the bright blue here
+                                    .foregroundColor(Color(hex: "40C4FC")) 
                             }
                         }
                         
