@@ -627,7 +627,7 @@ struct AllPastGymSessionsView: View {
     @State private var selectedPastSession: GymSession?
     
     var body: some View {
-        VStack {
+        ScrollView (.vertical) {
             ZStack
             {
                 HStack {
@@ -662,7 +662,7 @@ struct AllPastGymSessionsView: View {
             Spacer()
 
         }
-        .padding(.horizontal)
+        .padding([.horizontal, .top])
         .navigationDestination(isPresented: $navigateToPastSessionDetailView) {
             if let pastSession = selectedPastSession {
                 PastGymSessionDetailView(session: pastSession)
