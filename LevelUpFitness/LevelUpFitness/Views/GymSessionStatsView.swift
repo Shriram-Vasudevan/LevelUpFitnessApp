@@ -24,81 +24,81 @@ struct GymSessionStatsView: View {
                 
                 graphToggleView
                 
-                if !graphData.isEmpty {
-                    GeometryReader { geometry in
-                        let width = geometry.size.width
-                        let height = geometry.size.height
-                        let maxValueAdjusted = maxValue * 1.1
-                        let minValueAdjusted = 0.0
-                        
-                        ZStack {
-                            VStack {
-                                ForEach(0..<6) { index in
-                                    let labelValue = maxValueAdjusted - CGFloat(index) * (maxValueAdjusted - minValueAdjusted) / 5
-                                    HStack {
-                                        Text(String(format: "%.1f", labelValue))
-                                            .font(.system(size: 10, weight: .light))
-                                            .foregroundColor(.gray)
-                                            .frame(width: 40, alignment: .leading)
-                                        Spacer()
-                                    }
-                                    .frame(height: height / 6)
-                                }
-                            }
-                            
-                            VStack {
-                                Spacer()
-                                HStack {
-                                    ForEach(0..<graphData.count, id: \.self) { index in
-                                        if index % 2 == 0 {
-                                            let date = graphData[index].date
-                                            Text(date, style: .date)
-                                                .font(.system(size: 10, weight: .light))
-                                                .foregroundColor(.gray)
-                                                .offset(x: index == 0 ? 10 : 0)
-                                        }
-                                        Spacer()
-                                    }
-                                }
-                            }
-                            .padding(.horizontal, 16)
-                            .padding(.bottom, 16)
-                            
-                            Path { path in
-                                if let firstPoint = graphData.first {
-                                    let firstX = CGFloat(0) / CGFloat(graphData.count - 1) * width
-                                    let firstY = (1 - CGFloat((firstPoint.value - minValueAdjusted) / (maxValueAdjusted - minValueAdjusted))) * height
-                                    path.move(to: CGPoint(x: firstX, y: firstY))
-                                    
-                                    for (index, point) in graphData.enumerated() {
-                                        let x = CGFloat(index) / CGFloat(graphData.count - 1) * width
-                                        let y = (1 - CGFloat((point.value - minValueAdjusted) / (maxValueAdjusted - minValueAdjusted))) * height
-                                        path.addLine(to: CGPoint(x: x, y: y))
-                                    }
-                                }
-                            }
-                            .stroke(accentColor, lineWidth: 2)
-                            
-                            ForEach(graphData) { point in
-                                let index = graphData.firstIndex(where: { $0.id == point.id })!
-                                let x = CGFloat(index) / CGFloat(graphData.count - 1) * width
-                                let y = (1 - CGFloat((point.value - minValueAdjusted) / (maxValueAdjusted - minValueAdjusted))) * height
-                                
-                                Circle()
-                                    .fill(accentColor)
-                                    .frame(width: 8, height: 8)
-                                    .position(x: x, y: y)
-                            }
-                        }
-                    }
-                    .frame(height: 200)
-                    .padding(.vertical, 16)
-                } else {
-                    Text("No data available for this graph.")
-                        .font(.system(size: 14, weight: .medium))
-                        .foregroundColor(.gray)
-                        .padding(.top, 20)
-                }
+//                if !graphData.isEmpty {
+//                    GeometryReader { geometry in
+//                        let width = geometry.size.width
+//                        let height = geometry.size.height
+//                        let maxValueAdjusted = maxValue * 1.1
+//                        let minValueAdjusted = 0.0
+//                        
+//                        ZStack {
+//                            VStack {
+//                                ForEach(0..<6) { index in
+//                                    let labelValue = maxValueAdjusted - CGFloat(index) * (maxValueAdjusted - minValueAdjusted) / 5
+//                                    HStack {
+//                                        Text(String(format: "%.1f", labelValue))
+//                                            .font(.system(size: 10, weight: .light))
+//                                            .foregroundColor(.gray)
+//                                            .frame(width: 40, alignment: .leading)
+//                                        Spacer()
+//                                    }
+//                                    .frame(height: height / 6)
+//                                }
+//                            }
+//                            
+//                            VStack {
+//                                Spacer()
+//                                HStack {
+//                                    ForEach(0..<graphData.count, id: \.self) { index in
+//                                        if index % 2 == 0 {
+//                                            let date = graphData[index].date
+//                                            Text(date, style: .date)
+//                                                .font(.system(size: 10, weight: .light))
+//                                                .foregroundColor(.gray)
+//                                                .offset(x: index == 0 ? 10 : 0)
+//                                        }
+//                                        Spacer()
+//                                    }
+//                                }
+//                            }
+//                            .padding(.horizontal, 16)
+//                            .padding(.bottom, 16)
+//                            
+//                            Path { path in
+//                                if let firstPoint = graphData.first {
+//                                    let firstX = CGFloat(0) / CGFloat(graphData.count - 1) * width
+//                                    let firstY = (1 - CGFloat((firstPoint.value - minValueAdjusted) / (maxValueAdjusted - minValueAdjusted))) * height
+//                                    path.move(to: CGPoint(x: firstX, y: firstY))
+//                                    
+//                                    for (index, point) in graphData.enumerated() {
+//                                        let x = CGFloat(index) / CGFloat(graphData.count - 1) * width
+//                                        let y = (1 - CGFloat((point.value - minValueAdjusted) / (maxValueAdjusted - minValueAdjusted))) * height
+//                                        path.addLine(to: CGPoint(x: x, y: y))
+//                                    }
+//                                }
+//                            }
+//                            .stroke(accentColor, lineWidth: 2)
+//                            
+//                            ForEach(graphData) { point in
+//                                let index = graphData.firstIndex(where: { $0.id == point.id })!
+//                                let x = CGFloat(index) / CGFloat(graphData.count - 1) * width
+//                                let y = (1 - CGFloat((point.value - minValueAdjusted) / (maxValueAdjusted - minValueAdjusted))) * height
+//                                
+//                                Circle()
+//                                    .fill(accentColor)
+//                                    .frame(width: 8, height: 8)
+//                                    .position(x: x, y: y)
+//                            }
+//                        }
+//                    }
+//                    .frame(height: 200)
+//                    .padding(.vertical, 16)
+//                } else {
+//                    Text("No data available for this graph.")
+//                        .font(.system(size: 14, weight: .medium))
+//                        .foregroundColor(.gray)
+//                        .padding(.top, 20)
+//                }
                 
                 Spacer()
             }

@@ -23,7 +23,7 @@ struct GymSessionsView: View {
             Color.white.ignoresSafeArea()
             
             ScrollView {
-                VStack(spacing: 24) {
+                VStack(spacing: 12) {
                     headerView
                     
                     if gymManager.currentSession == nil {
@@ -36,6 +36,7 @@ struct GymSessionsView: View {
                     
                     if gymManager.gymSessions.count > 0 {
                         gymStatsView
+                            .padding(.top, 4)
                     }
                 }
                 .padding(.horizontal)
@@ -69,18 +70,24 @@ struct GymSessionsView: View {
     }
 
     private var headerView: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Gym Sessions")
-                .font(.system(size: 28, weight: .bold))
-                .foregroundColor(Color(hex: "333333"))
+        HStack {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Gym Sessions")
+                    .font(.system(size: 28, weight: .medium, design: .default))
+                    .foregroundColor(.black)
+                
+                Text("Track your progress, crush your goals")
+                    .font(.system(size: 14, weight: .regular, design: .default))
+                    .foregroundColor(.gray)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.top, 15)
+            .padding(.bottom, 10)
             
-            Text("Track your progress, crush your goals")
-                .font(.system(size: 16, weight: .medium))
-                .foregroundColor(Color(hex: "666666"))
+            Spacer()
+            
+            
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.top, 20)
-        .padding(.bottom, 10)
     }
 
     private var startNewSessionView: some View {
@@ -192,39 +199,45 @@ struct GymSessionsView: View {
     }
 
     private func exerciseWidget(for exerciseRecord: ExerciseRecord) -> some View {
-        HStack(spacing: 16) {
-            Image(systemName: "figure.walk")
-                .font(.system(size: 24))
-                .foregroundColor(.white)
-                .frame(width: 50, height: 50)
-                .background(
-                    LinearGradient(gradient: Gradient(colors: [Color(hex: "40C4FC"), Color(hex: "3080FF")]), startPoint: .topLeading, endPoint: .bottomTrailing)
-                )
-                .cornerRadius(25)
+        VStack {
+            HStack(spacing: 16) {
+                Image(systemName: "figure.walk")
+                    .font(.system(size: 24))
+                    .foregroundColor(.white)
+                    .frame(width: 50, height: 50)
+                    .background(
+                        LinearGradient(gradient: Gradient(colors: [Color(hex: "40C4FC"), Color(hex: "3080FF")]), startPoint: .topLeading, endPoint: .bottomTrailing)
+                    )
+                    .cornerRadius(25)
 
-            VStack(alignment: .leading, spacing: 4) {
-                switch exerciseRecord.exerciseInfo {
-                    case .programExercise(let programExercise):
-                        Text(programExercise.name)
-                            .font(.system(size: 16, weight: .light))
-                    case .libraryExercise(let libraryExercise):
-                        Text(libraryExercise.name)
-                            .font(.system(size: 16, weight: .light))
+                VStack(alignment: .leading, spacing: 4) {
+                    switch exerciseRecord.exerciseInfo {
+                        case .programExercise(let programExercise):
+                            Text(programExercise.name)
+                                .font(.system(size: 16, weight: .light))
+                        case .libraryExercise(let libraryExercise):
+                            Text(libraryExercise.name)
+                                .font(.system(size: 16, weight: .light))
+                    }
+
+                    if let sets = exerciseRecord.exerciseData.sets.first {
+                        Text("\(sets.reps) reps • \(sets.weight) lbs")
+                            .font(.system(size: 14, weight: .regular))
+                            .foregroundColor(Color(hex: "666666"))
+                    }
                 }
 
-                if let sets = exerciseRecord.exerciseData.sets.first {
-                    Text("\(sets.reps) reps • \(sets.weight) lbs")
-                        .font(.system(size: 14, weight: .regular))
-                        .foregroundColor(Color(hex: "666666"))
-                }
+                Spacer()
+                
+                Image(systemName: "chevron.right")
+                    .foregroundColor(Color(hex: "CCCCCC"))
             }
-
-            Spacer()
             
-            Image(systemName: "chevron.right")
-                .foregroundColor(Color(hex: "CCCCCC"))
+            Divider()
+                .frame(width: .infinity)
+                .foregroundColor(.black)
         }
-        .padding()
+        .padding(.vertical)
         .background(Color(hex: "F9F9F9"))
         .cornerRadius(15)
     }
@@ -260,9 +273,9 @@ struct GymSessionsView: View {
     }
     
     private var gymStatsView: some View {
-        VStack (spacing: 16) {
+        VStack (spacing: 8) {
             HStack {
-                Text("Your Trends")
+                Text("My Trends")
                     .font(.system(size: 20, weight: .medium, design: .default))
                     .foregroundColor(Color(hex: "333333"))
                 

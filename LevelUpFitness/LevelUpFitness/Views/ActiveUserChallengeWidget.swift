@@ -14,22 +14,22 @@ struct ActiveUserChallengeWidget: View {
     @State var showChallengeDetailsCover = false
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .leading, spacing: 12) {
+            // Challenge name and date range
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(formattedChallengeName(challenge.name))
-                        .font(.custom("Poppins-SemiBold", size: 16))
+                        .font(.system(size: 16, weight: .semibold))
                         .foregroundColor(Color(hex: "333333"))
                         .lineLimit(2)
                         .minimumScaleFactor(0.8)
                     
                     Text("\(formatDate(challenge.startDate)) - \(formatDate(challenge.endDate))")
-                        .font(.custom("Poppins-Regular", size: 12))
+                        .font(.system(size: 12))
                         .foregroundColor(Color(hex: "666666"))
                 }
-                
                 Spacer()
-                
+                // Progress percentage circle
                 ZStack {
                     Circle()
                         .stroke(Color(hex: "E0E0E0"), lineWidth: 4)
@@ -42,45 +42,45 @@ struct ActiveUserChallengeWidget: View {
                         .rotationEffect(.degrees(-90))
                     
                     Text("\(Int((Float(currentProgress) / Float(challenge.targetValue)) * 100))%")
-                        .font(.custom("Poppins-SemiBold", size: 12))
+                        .font(.system(size: 12, weight: .bold))
                         .foregroundColor(Color(hex: "40C4FC"))
                 }
             }
             
+            // Progress in numbers and View button
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Progress")
-                        .font(.custom("Poppins-Medium", size: 14))
+                        .font(.system(size: 14))
                         .foregroundColor(Color(hex: "666666"))
                     
                     Text("\(currentProgress)/\(challenge.targetValue) \(challenge.field)s")
-                        .font(.custom("Poppins-SemiBold", size: 16))
+                        .font(.system(size: 16, weight: .semibold))
                         .foregroundColor(Color(hex: "333333"))
                 }
-                
                 Spacer()
                 
+                // View button with more presence
                 Button(action: {
                     showChallengeDetailsCover = true
                 }) {
                     Text("View")
-                        .font(.custom("Poppins-Medium", size: 14))
+                        .font(.system(size: 14, weight: .medium))
                         .foregroundColor(.white)
                         .padding(.horizontal, 16)
                         .padding(.vertical, 8)
                         .background(Color(hex: "40C4FC"))
-                        .cornerRadius(20)
+                        .cornerRadius(8) // No rounded corners requested, but gives a cleaner button
                 }
             }
         }
-        .padding(20)
-        .background(Color(hex: "F5F5F5"))
+        .padding(16)
+        .background(Color(hex: "F9F9F9"))
+        .cornerRadius(8)
+        .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 2)
         .overlay(
-            Rectangle()
-                .fill(Color(hex: "40C4FC"))
-                .frame(width: 4)
-                .padding(.vertical, 20),
-            alignment: .leading
+            RoundedRectangle(cornerRadius: 0)
+                .stroke(Color.gray.opacity(0.2), lineWidth: 1)
         )
         .fullScreenCover(isPresented: $showChallengeDetailsCover, content: {
             ChallengeDetailsView(challenge: challenge, currentProgress: currentProgress)
@@ -106,22 +106,6 @@ struct ActiveUserChallengeWidget: View {
         return outputFormatter.string(from: date)
     }
 
-}
-
-struct CustomProgressViewStyle: ProgressViewStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        GeometryReader { geometry in
-            ZStack(alignment: .leading) {
-                RoundedRectangle(cornerRadius: 2)
-                    .fill(Color(hex: "E0E0E0"))
-                    .frame(height: 4)
-                
-                RoundedRectangle(cornerRadius: 2)
-                    .fill(Color(hex: "40C4FC"))
-                    .frame(width: CGFloat(configuration.fractionCompleted ?? 0) * geometry.size.width, height: 4)
-            }
-        }
-    }
 }
 
 #Preview {

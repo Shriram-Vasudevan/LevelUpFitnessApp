@@ -19,7 +19,7 @@ struct GymSessionsStatsView: View {
         ZStack {
             Color.white.ignoresSafeArea()
             
-            VStack {
+            VStack (spacing: 8) {
                 statsSummaryView
 
                 graphToggleView
@@ -120,7 +120,6 @@ struct GymSessionsStatsView: View {
         }
         .frame(height: 80)
         .background(Color.white)
-        .padding(.vertical, 8)
     }
 
     private var graphToggleView: some View {
@@ -149,7 +148,6 @@ struct GymSessionsStatsView: View {
         }
         .frame(height: 60)
         .background(Color.white)
-        .padding(.vertical, 16)
     }
 
     private func statsRectangle(title: String, value: String) -> some View {
@@ -164,7 +162,6 @@ struct GymSessionsStatsView: View {
         .frame(width: 100, height: 42)
         .padding()
         .background(Color(hex: "F5F5F5"))
-        .cornerRadius(0)
     }
 
     private func updateGraphData() {

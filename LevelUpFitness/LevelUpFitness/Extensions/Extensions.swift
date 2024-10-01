@@ -654,7 +654,7 @@ extension GymSession {
     // Total reps completed during the session
     var totalReps: Int {
         let programReps = programExercises.values.flatMap { $0 }.reduce(0) { $0 + $1.totalReps }
-        let individualReps = individualExercises.reduce(0) { $0 + $1.totalReps }
+        let individualReps = individualExercises.reduce(into: 0) { $0 + $1.totalReps }
         return programReps + individualReps
     }
 
@@ -674,6 +674,7 @@ extension GymSession {
 
         return repsByType
     }
+    
 }
 
 extension ExerciseRecord {
@@ -685,7 +686,7 @@ extension ExerciseRecord {
         }
         return totalVolume
     }
-
+    
     var totalReps: Int {
         return exerciseData.sets.reduce(into: 0) { $0 += $1.reps }
     }
@@ -694,14 +695,14 @@ extension ExerciseRecord {
 extension Array where Element == GymSession {
     func totalVolumeOverTime() -> [StatPoint] {
         return self.map { session in
-            let totalVolume = session.totalVolume
+            let totalVolume = session.totalVolume // Uses new computed property in `GymSession`
             return StatPoint(date: session.startTime, value: totalVolume)
         }
     }
 
     func totalRepsOverTime() -> [StatPoint] {
         return self.map { session in
-            let totalReps = session.totalReps
+            let totalReps = session.totalReps // Uses new computed property in `GymSession`
             return StatPoint(date: session.startTime, value: Double(totalReps))
         }
     }
@@ -711,12 +712,12 @@ extension Array where Element == GymSession {
         var count: Double = 0
         
         return self.map { session in
-            if let sessionDuration = session.totalDuration {
+            if let sessionDuration = session.duration { // Fixed: use `session.duration`
                 cumulativeDuration += sessionDuration
                 count += 1
             }
             let averageDuration = cumulativeDuration / count
-            return StatPoint(date: session.startTime, value: averageDuration / 60)
+            return StatPoint(date: session.startTime, value: averageDuration / 60) // Duration in minutes
         }
     }
 
@@ -742,7 +743,7 @@ extension Array where Element == GymSession {
         }
 
         return groupedByWeek.map { (week, sessions) in
-            let totalVolume = sessions.reduce(0.0) { $0 + $1.totalVolume }
+            let totalVolume = sessions.reduce(0.0) { $0 + $1.totalVolume } // Uses new `totalVolume`
             if let representativeDate = sessions.first?.startTime {
                 return StatPoint(date: representativeDate, value: totalVolume)
             }
@@ -779,7 +780,7 @@ extension Array where Element == GymSession {
     }
     
     var totalTimeSpentWorkingOut: TimeInterval {
-        return self.compactMap { $0.totalDuration }.reduce(0, +)
+        return self.compactMap { $0.duration }.reduce(0, +)
     }
 
     var averageSessionDuration: TimeInterval {

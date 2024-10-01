@@ -30,7 +30,8 @@ struct WeightStatView: View {
         }
         .padding()
         .frame(maxWidth: .infinity)
-        .background(Color(hex: "F5F5F5"))
+        .background(Color(hex: "F9F9F9"))
+        .cornerRadius(8)
     }
 }
 

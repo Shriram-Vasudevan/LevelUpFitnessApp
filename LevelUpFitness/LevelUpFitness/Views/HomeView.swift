@@ -40,64 +40,23 @@ struct HomeView: View {
             Color.white.ignoresSafeArea(.all)
             
             ScrollView {
-                VStack(spacing: 18) {
-                    HStack {
-                        VStack (alignment: .leading) {
-                            HStack {
-                                VStack(alignment: .leading, spacing: 4) {
-                                    Text(greeting)
-                                        .font(.system(size: 24, weight: .bold))
-                                    Text(InitializationManager.shared.selectedAffirmation ?? "You got This!")
-                                        .font(.system(size: 16, weight: .regular))
-                                        .foregroundColor(.gray)
-                                }
-                                Spacer()
-                            }
-                        }
+                VStack(spacing: 24) {
+                    headerSection
                         .padding(.top, 15)
-                        
-                        Spacer()
-                        
-                        if let pfp = AuthenticationManager.shared.pfp, let uiImage = UIImage(data: pfp) {
-                            Button(action: { navigateToProfileView = true }) {
-                                Image(uiImage: uiImage)
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 30, height: 30)
-                                    .clipShape(Circle())
-                            }
-                        } else {
-                            Button(action: { navigateToProfileView = true }) {
-                                Image("NoProfile")
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 30, height: 30)
-                                    .clipShape(Circle())
-                            }
-                        }
-                    }
-                    
+
                     HomePageHeader(showToDoList: $showToDoList)
                     
-//                    if toDoListManager.toDoList.count > 0 {
-//                        ToDoList()
-//                    }
-                    
                     VStack(spacing: 8) {
-                        Text("Time to Start Moving!")
-                            .font(.system(size: 20, weight: .medium))
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                        sectionTitle("Time to Start Moving!")
                         
                         HStack(spacing: 16) {
                             actionCard(title: "Exercise Now", imageName: "ManRunning", action: { pageType = .exercise })
                             actionCard(title: "Do your Program", imageName: "ManExercising - PushUp - No BG", action: { pageType = .program })
                         }
                     }
-                    
-                    VStack(spacing: 8) {
-                        Text("Your Metrics")
-                            .font(.system(size: 20, weight: .medium))
-                            .frame(maxWidth: .infinity, alignment: .leading)
+
+                    VStack(spacing: 12) {
+                        sectionTitle("Your Metrics")
                         
                         if let steps = healthManager.todaysSteps, let calories = healthManager.todaysCalories {
                             HStack(spacing: 16) {
@@ -112,88 +71,19 @@ struct HomeView: View {
                                 })
                             }
                         }
+                        
+                        WeightStatView()
+                            .onTapGesture { navigateToWeightTrendView = true }
                     }
-                    
-                    WeightStatView()
-                        .onTapGesture { navigateToWeightTrendView = true }
-                    
-                    if let program = programManager.userProgramData.first?.program {
-                        TimeSpentWidget(program: program)
-                            .onTapGesture {
-                                pageType = .program
-                            }
-                    }
-                    
+
                     if let recommendedExercise = exerciseManager.recommendedExercise {
                         VStack(spacing: 8) {
-                            HStack {
-                                Text("Our Pick for You")
-                                    .font(.system(size: 20, weight: .medium))
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                
-                                Spacer()
-                            }
-                            
+                            sectionTitle("Our Pick for You")
                             recommendedExerciseView(recommendedExercise)
                         }
                     }
-                
-                    
-                    VStack(spacing: 8) {
-                        if challengeManager.userChallenges.count > 0 {
-                            Text("My Challenges")
-                                .font(.system(size: 20, weight: .medium))
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                HStack(spacing: 16) {
-                                    ForEach(challengeManager.userChallenges, id: \.id) { challenge in
-                                       let (progress, error) = getCurrentChallengeProgress(challengeField: challenge.field)
-                                        
-                                        if let validProgress = progress {
-                                            ActiveUserChallengeWidget(challenge: challenge, currentProgress: validProgress)
-                                                .padding(.vertical, 5)
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        
-                        if let userXPData = xpManager.userXPData, !challengeManager.challengeTemplates.isEmpty {
-                            HStack {
-                                Text("Available Challenges")
-                                    .font(.system(size: 20, weight: .medium))
-                                Spacer()
-                                
-                                Button {
-                                    navigateToAvailableChallengesView = true
-                                } label: {
-                                    Text("See More")
-                                        .font(.system(size: 15, weight: .medium))
-                                        .foregroundColor(Color(hex: "40C4FC"))
-                                }
 
-                            }
-                            
-                            
-                            
-                            ForEach(challengeManager.challengeTemplates.filter { challengeTemplate in
-                                !challengeManager.userChallenges.contains { userChallenge in
-                                    userChallenge.challengeTemplateID == challengeTemplate.id
-                                }
-                            }.prefix(2), id: \.id) { challengeTemplate in
-                                ChallengeTemplateWidget(challenge: challengeTemplate) {
-                                    Task {
-                                        let success = await challengeManager.createChallenge(challengeName: challengeTemplate.name, challengeTemplateID: challengeTemplate.id, userXPData: userXPData)
-                                        
-//                                        if !success {
-//                                            perfectProgramChallengeStartFailed = false
-//                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    challengeSection
                 }
                 .padding(.horizontal)
             }
@@ -228,29 +118,136 @@ struct HomeView: View {
         }
     }
 
-
-    
-    private func actionCard(title: String, imageName: String, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            VStack {
-                Image(imageName)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(height: 100)
-                    .padding(.top)
+    private var headerSection: some View {
+        HStack {
+            VStack(alignment: .leading) {
+                Text(greeting)
+                    .font(.system(size: 20, weight: .semibold))
                 
-                Text(title)
-                    .font(.system(size: 16, weight: .medium))
-                    .foregroundColor(.white)
-                    .padding(.vertical, 8)
-                    .frame(maxWidth: .infinity)
-                    .background(Color(hex: "40C4FC"))
+                Text(InitializationManager.shared.selectedAffirmation ?? "You got This!")
+                    .font(.system(size: 14, weight: .regular))
+                    .foregroundColor(.gray)
             }
-            .frame(maxWidth: .infinity)
-            .background(Color.white)
+            
+            Spacer()
+            
+            if let pfp = AuthenticationManager.shared.pfp, let uiImage = UIImage(data: pfp) {
+                Button(action: { navigateToProfileView = true }) {
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 30, height: 30)
+                        .clipShape(Circle())
+                }
+            } else {
+                Button(action: { navigateToProfileView = true }) {
+                    Image("NoProfile")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 30, height: 30)
+                        .clipShape(Circle())
+                }
+            }
         }
     }
     
+    // Section Title
+    private func sectionTitle(_ text: String) -> some View {
+        Text(text)
+            .font(.system(size: 18, weight: .medium))
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.bottom, 4)
+    }
+
+    // Challenge Section
+    private var challengeSection: some View {
+        VStack(spacing: 16) {
+            if challengeManager.userChallenges.count > 0 {
+                VStack (spacing: 8) {
+                    sectionTitle("My Challenges")
+                    
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 16) {
+                            ForEach(challengeManager.userChallenges, id: \.id) { challenge in
+                                let (progress, error) = getCurrentChallengeProgress(challengeField: challenge.field)
+                                
+                                if let validProgress = progress {
+                                    ActiveUserChallengeWidget(challenge: challenge, currentProgress: validProgress)
+//                                        .padding(.vertical, 5)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if let userXPData = xpManager.userXPData, !challengeManager.challengeTemplates.isEmpty {
+                    VStack (spacing: 8) {
+                        HStack {
+                            sectionTitle("Available Challenges")
+                            Spacer()
+                            
+                            Button {
+                                navigateToAvailableChallengesView = true
+                            } label: {
+                                Text("See More")
+                                    .font(.system(size: 14, weight: .medium))
+                                    .foregroundColor(Color(hex: "40C4FC")) // Keep the bright blue here
+                            }
+                        }
+                        
+                        ForEach(challengeManager.challengeTemplates.filter { challengeTemplate in
+                            !challengeManager.userChallenges.contains { userChallenge in
+                                userChallenge.challengeTemplateID == challengeTemplate.id
+                            }
+                        }.prefix(2), id: \.id) { challengeTemplate in
+                            ChallengeTemplateWidget(challenge: challengeTemplate) {
+                                Task {
+                                    let success = await challengeManager.createChallenge(challengeName: challengeTemplate.name, challengeTemplateID: challengeTemplate.id, userXPData: userXPData)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    
+    private func actionCard(title: String, imageName: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            VStack(spacing: 8) {
+                Image(imageName)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(height: 80) 
+                    .padding(.top, 16)
+                    .padding(.horizontal, 8)
+                
+                Text(title)
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundColor(.black)
+                    .padding(.vertical, 8)
+                    .frame(maxWidth: .infinity, alignment: .center)
+                
+                Divider()
+                    .background(Color.gray.opacity(0.3))
+
+                Text("Start Now")
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundColor(Color(hex: "40C4FC"))
+                    .padding(.vertical, 10)
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .background(Color.white)
+            }
+            .frame(maxWidth: .infinity, minHeight: 160)
+            .background(Color(hex: "F9F9F9"))
+            .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 2)
+            .overlay(
+                RoundedRectangle(cornerRadius: 0)
+                    .stroke(Color.gray.opacity(0.2), lineWidth: 1)
+            )
+        }
+    }
+
 
     
     private func recommendedExerciseView(_ exercise: Progression) -> some View {
@@ -323,7 +320,8 @@ struct HomePageHeader: View {
                 }
             }
             .padding()
-            .background(Color(hex: "F5F5F5"))
+            .background(Color(hex: "F9F9F9"))
+            .cornerRadius(8)
         }
     }
 }

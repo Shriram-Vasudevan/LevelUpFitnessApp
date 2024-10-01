@@ -183,6 +183,7 @@
 		99F7F6DD2CAB41FC009858AC /* StatPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F7F6DC2CAB41FB009858AC /* StatPoint.swift */; };
 		99F7F6DF2CAB6A4F009858AC /* GymSessionsStatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F7F6DE2CAB6A4F009858AC /* GymSessionsStatView.swift */; };
 		99F7F6E12CAB6BB0009858AC /* GymSessionStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F7F6E02CAB6BB0009858AC /* GymSessionStatsView.swift */; };
+		99F7F6E32CAC422F009858AC /* GymSessionsInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F7F6E22CAC422F009858AC /* GymSessionsInfoView.swift */; };
 		99FC9E442C5EADC800DAFFAC /* XPAdditionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC9E432C5EADC800DAFFAC /* XPAdditionType.swift */; };
 		99FC9E462C5EC1F900DAFFAC /* AnalyticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC9E452C5EC1F900DAFFAC /* AnalyticsView.swift */; };
 		99FC9E482C5EC56B00DAFFAC /* RequestCustomProgramWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC9E472C5EC56B00DAFFAC /* RequestCustomProgramWidget.swift */; };
@@ -346,6 +347,7 @@
 		99F7F6DC2CAB41FB009858AC /* StatPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatPoint.swift; sourceTree = "<group>"; };
 		99F7F6DE2CAB6A4F009858AC /* GymSessionsStatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GymSessionsStatView.swift; sourceTree = "<group>"; };
 		99F7F6E02CAB6BB0009858AC /* GymSessionStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GymSessionStatsView.swift; sourceTree = "<group>"; };
+		99F7F6E22CAC422F009858AC /* GymSessionsInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GymSessionsInfoView.swift; sourceTree = "<group>"; };
 		99FC9E432C5EADC800DAFFAC /* XPAdditionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XPAdditionType.swift; sourceTree = "<group>"; };
 		99FC9E452C5EC1F900DAFFAC /* AnalyticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsView.swift; sourceTree = "<group>"; };
 		99FC9E472C5EC56B00DAFFAC /* RequestCustomProgramWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestCustomProgramWidget.swift; sourceTree = "<group>"; };
@@ -454,10 +456,10 @@
 				992F26A42C6032A100F25400 /* FullLevelBreakdownView.swift */,
 				994E7DC82C03DF5C00BAD9E0 /* ProgramView.swift */,
 				99B44C112CA07C1F00C0C434 /* GymSessionView.swift */,
+				991F8FF12C18D0A100A134A5 /* LibraryView.swift */,
 				991FB4492C653C38006B4ACE /* IndividualExerciseView.swift */,
 				999F70642C06C80300B35A78 /* WorkoutView.swift */,
 				998ADA692C56FA28008C2795 /* ConfirmLeaveProgramWidget.swift */,
-				991F8FF12C18D0A100A134A5 /* LibraryView.swift */,
 				99DD3D512C1D0839006C07B3 /* ExerciseLibraryExerciseWidget.swift */,
 				9978CDF12C7C22F500659813 /* LibraryExerciseDataView.swift */,
 				9978CDF92C7D83C700659813 /* WeightTrendView.swift */,
@@ -520,6 +522,7 @@
 				99A0C8C42CA84BEE00F9281A /* IntroView.swift */,
 				99F7F6DE2CAB6A4F009858AC /* GymSessionsStatView.swift */,
 				99F7F6E02CAB6BB0009858AC /* GymSessionStatsView.swift */,
+				99F7F6E22CAC422F009858AC /* GymSessionsInfoView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -803,6 +806,7 @@
 				991FB4772C6A9756006B4ACE /* ExerciseManager.swift in Sources */,
 				994E7DC92C03DF5C00BAD9E0 /* ProgramView.swift in Sources */,
 				991FB4402C628084006B4ACE /* HealthStatsWidget.swift in Sources */,
+				99F7F6E32CAC422F009858AC /* GymSessionsInfoView.swift in Sources */,
 				99ECAD262C76C6610012F8E7 /* ProgramCompletedCover.swift in Sources */,
 				999F706E2C0EB08600B35A78 /* MetricsView.swift in Sources */,
 				999F70652C06C80300B35A78 /* WorkoutView.swift in Sources */,
