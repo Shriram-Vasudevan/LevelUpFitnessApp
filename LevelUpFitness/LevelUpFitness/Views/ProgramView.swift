@@ -364,8 +364,8 @@ struct ProgramView: View {
                         }
                 }
             }
-            .frame(height: 200)
-//            .tabViewStyle(.page(indexDisplayMode: .never)) // Hides the page indicator
+            .frame(height: 175)
+            .tabViewStyle(.page(indexDisplayMode: .never))
         }
     }
 
@@ -699,7 +699,7 @@ struct ActiveProgramCardView: View {
             }
             .padding()
         }
-        .frame(maxWidth: .infinity, minHeight: 200)
+        .frame(maxWidth: .infinity, minHeight: 175)
     }
 }
 
