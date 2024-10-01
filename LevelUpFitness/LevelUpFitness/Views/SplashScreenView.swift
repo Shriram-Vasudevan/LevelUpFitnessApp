@@ -10,7 +10,7 @@ import SwiftUI
 struct SplashScreenView: View {
     var body: some View {
         ZStack {
-            Color.white
+            Color.white.edgesIgnoringSafeArea(.all)
             Image("LevelUpFitnessLogoSpalshScreen")
                 .resizable()
                 .aspectRatio(contentMode: .fit)

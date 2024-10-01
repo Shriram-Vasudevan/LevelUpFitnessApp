@@ -23,7 +23,6 @@ struct LevelUpFitnessApp: App {
                 if showSplashScreen {
                     SplashScreenView()
                         .onAppear {
-                            // Delay for the splash screen, then hide it
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                                 withAnimation {
                                     showSplashScreen = false
