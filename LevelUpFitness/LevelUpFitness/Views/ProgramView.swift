@@ -142,7 +142,7 @@ struct ProgramView: View {
                 }
             }
         }
-        .padding(.vertical, 8)
+        .padding(.top, 15)
     }
 
     private var programPickerView: some View {
