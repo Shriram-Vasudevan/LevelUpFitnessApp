@@ -206,5 +206,5 @@ struct ProgramStatisticsView: View {
 }
 
 #Preview {
-    ProgramStatisticsView(program: Program(program: [ProgramDay(day: "", workout: "", completed: false, exercises: [ProgramExercise(name: "", sets: 1, reps: "1", rpe: "", rest: 1, area: "test", isWeight: false, completed: false, cdnURL: "", equipment: [""], description: "", data: ExerciseData(sets: [ExerciseDataSet(weight: 0, reps: 10, time: 0.0, rest: 0.0)]))])], programName: "", programDuration: 4, startDate: "", startWeekday: "", environment: ""))
+    ProgramStatisticsView(program: Program(program: [ProgramDay(day: "", workout: "", completed: false, exercises: [ProgramExercise(name: "", sets: 1, reps: "1", rpe: "", rest: 1, area: "test", isWeight: false, completed: false, cdnURL: "", equipment: [""], description: "", data: ExerciseData(sets: [ExerciseDataSet(weight: 0, reps: 10, time: 0.0, rest: 0.0)]))])], programName: "", programDuration: 4, startDate: "", startWeekday: "", environment: "", imageName: ""))
 }

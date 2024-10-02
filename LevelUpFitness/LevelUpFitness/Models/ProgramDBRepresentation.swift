@@ -11,7 +11,7 @@ struct UserProgramDBRepresentation: Codable {
     var userID: String
     var program: String
     var startDate: String
-    var programID: String  
+    var programID: String
     
     enum CodingKeys: String, CodingKey {
         case userID = "UserID"
@@ -26,10 +26,12 @@ struct StandardProgramDBRepresentation: Codable {
     var id: String
     var name: String
     var environment: String
+    var image: String
     
     enum CodingKeys: String, CodingKey {
         case id = "ID"
         case name = "Name"
         case environment = "Environment"
+        case image = "Image"
     }
 }

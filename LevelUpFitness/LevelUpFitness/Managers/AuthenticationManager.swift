@@ -5,341 +5,149 @@
 //  Created by Shriram Vasudevan on 5/20/24.
 //
 
-import Amplify
-import AWSCognitoAuthPlugin
-import AWSAPIPlugin
-import AWSS3StoragePlugin
-import AWSPinpoint
+import SwiftUI
+
+import CloudKit
 import SwiftUI
 
 class AuthenticationManager: ObservableObject {
     static let shared = AuthenticationManager()
-    
+
     @Published var username: String?
     @Published var name: String?
     @Published var pfp: Data?
+
+    private let privateDB = CKContainer(identifier: "iCloud.LevelUpFitnessCloudKitStorage").privateCloudDatabase
+
+    enum RecordType: String {
+        case User = "User"
+    }
     
-    
-    func login(username: String, password: String, completion: @escaping (Bool, String?, Error?) async -> Void) async {
-        do {
-            let signInResult = try await Amplify.Auth.signIn(
-                username: username,
-                password: password
-                )
-            if signInResult.isSignedIn {
-                print("Sign in succeeded")
-                if let userID = try? await Amplify.Auth.getCurrentUser().userId {
-                    async let getUsername: () = getUsername()
-                    async let getName: () = getName()
-                    async let getProfilePicture: () = getProfilePicture()
-                    
-                    let _ = await (getUsername, getName, getProfilePicture)
-                    
-                    await completion(true, userID, nil)
+    func signOut(completion: @escaping (Bool) -> Void) {
+        // Clear local user data
+        self.username = nil
+        self.name = nil
+        self.pfp = nil
+
+        // Optionally clear UserDefaults if you're caching user data
+        UserDefaults.standard.removeObject(forKey: "username-key")
+        UserDefaults.standard.removeObject(forKey: "name-key")
+
+        print("User signed out. Local data cleared.")
+        completion(true)
+    }
+
+    func deleteUserData(completion: @escaping (Bool, Error?) -> Void) {
+        let userRecordID = CKRecord.ID(recordName: "currentUser")  // Unique identifier for the user
+
+        // Delete the record from CloudKit
+        privateDB.delete(withRecordID: userRecordID) { (recordID, error) in
+            DispatchQueue.main.async {
+                if let error = error {
+                    print("Failed to delete user data: \(error.localizedDescription)")
+                    completion(false, error)
                 } else {
-                    await completion(true, nil, nil)
+                    // Clear local user data as well
+                    self.username = nil
+                    self.name = nil
+                    self.pfp = nil
+                    
+                    // Optionally clear any cached data in UserDefaults
+                    UserDefaults.standard.removeObject(forKey: "username-key")
+                    UserDefaults.standard.removeObject(forKey: "name-key")
+                    
+                    print("User data deleted successfully from iCloud and locally.")
+                    completion(true, nil)
                 }
             }
-        } catch let error as AuthError {
-            print("Sign in failed \(error)")
-            await completion(false, nil, error)
-        } catch {
-            print("Unexpected error: \(error)")
-            await completion(false, nil, error)
         }
     }
+
     
-    func register(email: String, name: String, username: String, password: String, completion: @escaping (Bool, String?, Error?) -> Void) async {
-        let userAttributes = [
-            AuthUserAttribute(.custom("username"), value: username),
-            AuthUserAttribute(.name, value: name)
-        ]
+    func saveOrUpdateUserData(username: String?, name: String?, pfp: Data?, completion: @escaping (Bool, Error?) -> Void) {
+        let userRecordID = CKRecord.ID(recordName: "currentUser")  
+        let userRecord = CKRecord(recordType: RecordType.User.rawValue, recordID: userRecordID)
+
+        if let username = username {
+            userRecord["username"] = username
+        }
         
-        let options = AuthSignUpRequest.Options(userAttributes: userAttributes)
+        if let name = name {
+            userRecord["name"] = name
+        }
         
-        do {
-            let signUpResult = try await Amplify.Auth.signUp(username: email, password: password, options: options)
-            
-            if case let .confirmUser(deliveryDetails, _, userID) = signUpResult.nextStep {
-                print("Delivery details \(String(describing: deliveryDetails)) for userID: \(String(describing: userID))")
-                
-                DispatchQueue.main.async {
-                    completion(true, userID, nil)
+        if let pfp = pfp {
+            let imageFileURL = self.saveProfilePictureLocally(pfp: pfp)
+            let imageAsset = CKAsset(fileURL: imageFileURL)
+            userRecord["profilePicture"] = imageAsset
+        }
+
+        privateDB.save(userRecord) { (record, error) in
+            DispatchQueue.main.async {
+                if let error = error {
+                    print("Error saving/updating user data: \(error.localizedDescription)")
+                    completion(false, error)
+                } else {
+                    print("User data saved/updated successfully.")
+                    completion(true, nil)
                 }
-            } else {
-                print("SignUp Complete")
-                
-                DispatchQueue.main.async {
-                    completion(true, nil, nil)
+            }
+        }
+    }
+
+    func getUserData(completion: @escaping (Bool, Error?) -> Void) {
+        let userRecordID = CKRecord.ID(recordName: "currentUser")
+        privateDB.fetch(withRecordID: userRecordID) { (record, error) in
+            DispatchQueue.main.async {
+                if let error = error {
+                    print("Error fetching user data: \(error.localizedDescription)")
+                    completion(false, error)
+                } else if let record = record {
+                    self.username = record["username"] as? String
+                    self.name = record["name"] as? String
+
+                    if let profilePictureAsset = record["profilePicture"] as? CKAsset,
+                       let imageData = try? Data(contentsOf: profilePictureAsset.fileURL!) {
+                        self.pfp = imageData
+                    }
+
+                    print("User data retrieved successfully.")
+                    completion(true, nil)
                 }
             }
-        } catch let error as AuthError {
-            print("An error occurred while registering a user \(error)")
-            
+        }
+    }
+
+    // MARK: - Delete Profile Picture
+    func removeProfilePicture(completion: @escaping (Bool, Error?) -> Void) {
+        let userRecordID = CKRecord.ID(recordName: "currentUser")
+        privateDB.fetch(withRecordID: userRecordID) { (record, error) in
             DispatchQueue.main.async {
-                completion(false, nil, error)
-            }
-        } catch {
-            print("Unexpected error: \(error)")
-            
-            DispatchQueue.main.async {
-                completion(false, nil, error)
+                if let record = record {
+                    record["profilePicture"] = nil
+                    self.privateDB.save(record) { (savedRecord, error) in
+                        if let error = error {
+                            print("Error deleting profile picture: \(error.localizedDescription)")
+                            completion(false, error)
+                        } else {
+                            self.pfp = nil
+                            print("Profile picture deleted successfully.")
+                            completion(true, nil)
+                        }
+                    }
+                } else if let error = error {
+                    print("Error fetching record for deletion: \(error.localizedDescription)")
+                    completion(false, error)
+                }
             }
         }
     }
 
-    
-    func confirm(email: String, code: String, completion: @escaping (Bool, Error?) -> Void) async {
-        do {
-            let confirmSignUpResult = try await Amplify.Auth.confirmSignUp(
-                for: email,
-                confirmationCode: code
-            )
-            print("Confirm sign up result completed: \(confirmSignUpResult.isSignUpComplete)")
-            completion(true, nil)
-        } catch let error as AuthError {
-            print("An error occurred while confirming sign up \(error)")
-            completion(false, error)
-        } catch {
-            print("Unexpected error: \(error)")
-            completion(false, error)
-        }
-    }
-    
-    func resendCode(email: String, completion: @escaping (Bool, Error?) -> Void) async {
-        do {
-            let result = try await Amplify.Auth.resendSignUpCode(for: email)
-            print("Resend code successful. Code sent to \(result.destination)")
-            DispatchQueue.main.async {
-                completion(true, nil)
-            }
-        } catch let error as AuthError {
-            print("An error occurred while resending the code: \(error)")
-            DispatchQueue.main.async {
-                completion(false, error)
-            }
-        } catch {
-            print("Unexpected error: \(error)")
-            DispatchQueue.main.async {
-                completion(false, error)
-            }
-        }
-    }
-
-    
-
-    func signOut() async {
-        let result = await Amplify.Auth.signOut()
-        guard let signOutResult = result as? AWSCognitoSignOutResult
-        else {
-            print("Signout failed")
-            return
-        }
-
-        print("Local signout successful: \(signOutResult.signedOutLocally)")
-        switch signOutResult {
-        case .complete:
-            print("Signed out successfully")
-            await AuthStateObserver.shared.checkAuthState()
-        case let .partial(revokeTokenError, globalSignOutError, hostedUIError):
-            
-            if let hostedUIError = hostedUIError {
-                print("HostedUI error  \(String(describing: hostedUIError))")
-            }
-
-            if let globalSignOutError = globalSignOutError {
-                print("GlobalSignOut error  \(String(describing: globalSignOutError))")
-            }
-
-            if let revokeTokenError = revokeTokenError {
-                print("Revoke token error  \(String(describing: revokeTokenError))")
-            }
-            
-            await AuthStateObserver.shared.checkAuthState()
-        case .failed(let error):
-            print("SignOut failed with \(error)")
-        }
-    }
-    
-    func deleteUser() async {
-        do {
-            try await Amplify.Auth.deleteUser()
-            print("Successfully deleted user")
-            await AuthStateObserver.shared.checkAuthState()
-        } catch let error as AuthError {
-            print("Delete user failed with error \(error)")
-        } catch {
-            print("Unexpected error: \(error)")
-            await AuthStateObserver.shared.checkAuthState()
-        }
-    }
-    
-    func forgotPassword(username: String) async {
+    private func saveProfilePictureLocally(pfp: Data) -> URL {
+        let directoryUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let pfpUrl = directoryUrl.appendingPathComponent("pfp-\(UUID().uuidString).png")
         
-    }
-    
-    func getProfilePicture() async {
-        do {
-            let userID = try await Amplify.Auth.getCurrentUser().userId
-            
-            if let pfp = LocalStorageUtility.profilePictureSaved(userID: userID) {
-                
-            }
-            else {
-                let downloadTask = Amplify.Storage.downloadData(key: "pfp-media/\(userID).png")
-                
-                let data = try await downloadTask.value
-                
-                self.pfp = data
-            }
-        } catch {
-            print(error)
-        }
-    }
-    
-    func uploadProfilePicture(userID: String) async {
-        print(userID)
-        
-        guard let directoryUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
-        let pfpUrl = directoryUrl.appendingPathComponent("pfp-\(userID).png", isDirectory: false)
-        if FileManager.default.fileExists(atPath: pfpUrl.path) {
-            guard let pfpData = FileManager.default.contents(atPath: pfpUrl.path) else { return
-            }
-            
-            let uploadTask = Amplify.Storage.uploadData(key: "pfp-media/\(userID).png", data: pfpData)
-    
-            for await progress in await uploadTask.progress {
-                print("Progress: \(progress)")
-            }
-    
-            do {
-                let value = try await uploadTask.value
-                print("Completed: \(value)")
-            } catch {
-                if let storageError = error as? StorageError {
-                    print(storageError.errorDescription)
-                }
-                else {
-                    print(error.localizedDescription)
-                }
-            }
-            
-            self.pfp = pfpData
-            LocalStorageUtility.saveProfilePicture(pfpData: pfpData, userID: userID)
-            
-        }
-        else {
-            return
-        }
-
-    }
-    
-    func pfpUploaded(userID: String) async -> Bool {
-        do {
-            let options = StorageListRequest.Options(path: "pfp-media/\(userID).png", pageSize: 1)
-            let listResult = try await Amplify.Storage.list(options: options)
-            return listResult.items.count > 0
-        } catch {
-            print(error.localizedDescription)
-            return false
-        }
-    }
-    
-    func removeProfilePicture() async {
-        do {
-            self.pfp = nil
-            
-            let userID = try await Amplify.Auth.getCurrentUser().userId
-            LocalStorageUtility.removeImageCache(userID: userID)
-            
-            let removedKey = try await Amplify.Storage.remove(key: "pfp-media/\(userID).png")
-            
-            print("Deleted \(removedKey)")
-
-        } catch {
-            print(error.localizedDescription)
-        }
-    }
-    
-    func getUsername() async {
-        do {
-            let userID = try await Amplify.Auth.getCurrentUser().userId
-            let usernameKey = "username-\(userID)"
-            
-            if let storedUsername = UserDefaults.standard.string(forKey: usernameKey) {
-                self.username = storedUsername
-                print("Fetched username from UserDefaults for \(userID): \(storedUsername)")
-            } else {
-                let userAttributes = try await Amplify.Auth.fetchUserAttributes()
-                print("User attributes - \(userAttributes)")
-                
-                if let usernameAttribute = userAttributes.first(where: { $0.key == .custom("username") })?.value {
-                    self.username = usernameAttribute
-                    UserDefaults.standard.set(usernameAttribute, forKey: usernameKey)
-                    print("Fetched username from Amplify and stored in UserDefaults for \(userID): \(usernameAttribute)")
-                }
-            }
-        } catch {
-            print("Error fetching username: \(error)")
-        }
-    }
-
-
-    func getName() async {
-        do {
-            let userID = try await Amplify.Auth.getCurrentUser().userId
-            let nameKey = "name-\(userID)"
-            
-            if let storedName = UserDefaults.standard.string(forKey: nameKey) {
-                self.name = storedName
-                print("Fetched name from UserDefaults for \(userID): \(storedName)")
-            } else {
-                let userAttributes = try await Amplify.Auth.fetchUserAttributes()
-                if let nameAttribute = userAttributes.first(where: { $0.key == .name })?.value {
-                    self.name = nameAttribute
-                    UserDefaults.standard.set(nameAttribute, forKey: nameKey)
-                    print("Fetched name from Amplify and stored in UserDefaults for \(userID): \(nameAttribute)")
-                }
-            }
-        } catch {
-            print("Error fetching name: \(error)")
-        }
-    }
-
-    
-    func updateUsername(newUsername: String, completion: @escaping (Bool, Error?) -> Void) async {
-        do {
-            let userID = try await Amplify.Auth.getCurrentUser().userId
-            let usernameKey = "username-\(userID)"
-            
-            let userAttributes = [AuthUserAttribute(.custom("username"), value: newUsername)]
-            let updateResult = try await Amplify.Auth.update(userAttributes: userAttributes)
-            
-            self.username = newUsername
-            UserDefaults.standard.set(newUsername, forKey: usernameKey)
-            print("Username updated to \(newUsername) for \(userID)")
-            completion(true, nil)
-        } catch {
-            print("Error updating username: \(error)")
-            completion(false, error)
-        }
-    }
-
-    func updateName(newName: String, completion: @escaping (Bool, Error?) -> Void) async {
-        do {
-            let userID = try await Amplify.Auth.getCurrentUser().userId
-            let nameKey = "name-\(userID)"
-            
-            let userAttributes = [AuthUserAttribute(.name, value: newName)]
-            let updateResult = try await Amplify.Auth.update(userAttributes: userAttributes)
-            
-            self.name = newName
-            UserDefaults.standard.set(newName, forKey: nameKey)
-            print("Name updated to \(newName) for \(userID)")
-            completion(true, nil)
-        } catch {
-            print("Error updating name: \(error)")
-            completion(false, error)
-        }
+        try? pfp.write(to: pfpUrl)
+        return pfpUrl
     }
 }

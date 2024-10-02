@@ -14,6 +14,7 @@ struct Program: Codable {
     var startDate: String
     var startWeekday: String
     var environment: String
+    var imageName: String
     
     enum CodingKeys: String, CodingKey {
         case program = "workout_schedule"
@@ -22,6 +23,7 @@ struct Program: Codable {
         case startDate = "start_date"
         case startWeekday = "start_week_day"
         case environment = "environment"
+        case imageName = "image_name"
         
     }
 }

@@ -120,13 +120,14 @@ class ProgramCloudKitUtility {
             let programs = records?.compactMap { record -> StandardProgramDBRepresentation? in
                 guard let id = record["ID"] as? String,
                       let name = record["Name"] as? String,
-                      let environment = record["Environment"] as? String else {
+                      let environment = record["Environment"] as? String,
+                      let image = record["Image"] as? String else {
                     print("Record with missing fields")
                     return nil
                 }
                 
                 print("Fetched program - ID: \(id), Name: \(name)")
-                return StandardProgramDBRepresentation(id: id, name: name, environment: environment)
+                return StandardProgramDBRepresentation(id: id, name: name, environment: environment, image: image)
             } ?? []
             
             print("Returning \(programs.count) programs")

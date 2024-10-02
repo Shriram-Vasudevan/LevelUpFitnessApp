@@ -7,7 +7,7 @@
 
 import SwiftUI
 import PhotosUI
-import Amplify
+import CloudKit
 
 struct ProfileView: View {
     @Environment(\.dismiss) private var dismiss
@@ -19,95 +19,90 @@ struct ProfileView: View {
     @State private var pfpData: Data?
 
     var body: some View {
-        ZStack {
-            Color.white.ignoresSafeArea()
-            
-            VStack(spacing: 0) {
-                navigationBar
-                
-                ScrollView {
-                    VStack(spacing: 20) {
-                        profileHeader
-                        supportSection
-                        accountActions
-                    }
-                    .padding(.horizontal)
+        ScrollView {
+            VStack(spacing: 24) {
+                profileHeader
+                supportSection
+                accountActions
+            }
+            .padding()
+        }
+        .background(Color(hex: "F5F5F5").ignoresSafeArea())
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: { dismiss() }) {
+                    Image(systemName: "chevron.left")
+                        .foregroundColor(Color(hex: "40C4FC"))
                 }
+            }
+            ToolbarItem(placement: .principal) {
+                Text("Profile")
+                    .font(.headline)
+                    .foregroundColor(.primary)
             }
         }
         .navigationBarBackButtonHidden()
         .accentColor(Color(hex: "40C4FC"))
+        .sheet(isPresented: $showEditProfileSheet) {
+            EditProfileView(authManager: authManager)
+        }
         .alert("Delete Account", isPresented: $showDeleteConfirmation) {
             Button("Cancel", role: .cancel) { }
             Button("Delete", role: .destructive) {
-                Task { await AuthenticationManager.shared.deleteUser() }
+                // Handle account deletion
             }
         } message: {
             Text("Are you sure you want to delete your account? This action cannot be undone.")
-        }
-        .fullScreenCover(isPresented: $showEditProfileSheet) {
-            EditProfileView(authManager: authManager)
-        }
-        .navigationDestination(isPresented: $navigateToShowHelpAndSupportView) {
-            SupportView()
         }
         .onChange(of: selectedProfilePicture) { _ in
             Task {
                 if let data = try? await selectedProfilePicture?.loadTransferable(type: Data.self) {
                     pfpData = data
-                    if let userID = try? await Amplify.Auth.getCurrentUser().userId {
+                    
+                    
+                    if let userID = try? await ProgramCloudKitUtility.customContainer.userRecordID().recordName {
                         saveProfilePictureLocally(pfpData: data, userID: userID)
-                        await AuthenticationManager.shared.uploadProfilePicture(userID: userID)
+                         authManager.saveOrUpdateUserData(username: nil, name: nil, pfp: data) { _, _ in }
                     }
                 }
             }
         }
-    }
-
-    private var navigationBar: some View {
-        ZStack {
-            HStack {
-                Button(action: { dismiss() }) {
-                    Image(systemName: "arrow.left")
-                        .font(.system(size: 20, weight: .medium))
-                        .foregroundColor(Color(hex: "40C4FC"))
-                }
-                Spacer()
-            }
-            
-            Text("Profile")
-                .font(.system(size: 18, weight: .semibold))
-        }
-        .padding()
-        .background(Color.white)
     }
 
     private var profileHeader: some View {
         VStack(spacing: 16) {
             PhotosPicker(selection: $selectedProfilePicture, matching: .images, photoLibrary: .shared()) {
                 profileImage
+                    .overlay(
+                        Circle()
+                            .stroke(Color(hex: "40C4FC"), lineWidth: 3)
+                    )
+                    .shadow(radius: 5)
             }
             
-            VStack(spacing: 5) {
+            VStack(spacing: 4) {
                 Text(authManager.name ?? "Loading...")
-                    .font(.system(size: 24, weight: .bold))
+                    .font(.title2.bold())
                 
                 Text("@\(authManager.username ?? "username")")
-                    .font(.system(size: 16, weight: .regular))
-                    .foregroundColor(.gray)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
             }
             
             Button(action: { showEditProfileSheet = true }) {
                 Text("Edit Profile")
-                    .font(.system(size: 16, weight: .medium))
+                    .font(.headline)
                     .foregroundColor(.white)
                     .frame(height: 44)
                     .frame(maxWidth: .infinity)
                     .background(Color(hex: "40C4FC"))
+                    .cornerRadius(10)
             }
         }
         .padding()
-        .background(Color(hex: "F5F5F5"))
+        .background(Color(hex: "F9F9F9"))
+        .cornerRadius(10)
     }
 
     private var profileImage: some View {
@@ -116,37 +111,23 @@ struct ProfileView: View {
                 Image(uiImage: uiImage)
                     .resizable()
                     .scaledToFill()
-                    .frame(width: 100, height: 100)
+                    .frame(width: 120, height: 120)
                     .clipShape(Circle())
             } else {
                 Image("NoProfile")
                     .resizable()
                     .scaledToFill()
-                    .frame(width: 100, height: 100)
+                    .frame(width: 120, height: 120)
                     .clipShape(Circle())
             }
-        }
-    }
-
-    private func menuItem(title: String, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            HStack {
-                Text(title)
-                    .font(.system(size: 16, weight: .medium))
-                    .foregroundColor(.gray)
-                Spacer()
-                Image(systemName: "chevron.right")
-                    .foregroundColor(.gray)
-            }
-            .padding(.vertical, 12)
-            .padding(.horizontal)
         }
     }
 
     private var supportSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Support")
-                .font(.system(size: 20, weight: .medium))
+                .font(.headline)
+                .padding(.horizontal)
             
             Button(action: { navigateToShowHelpAndSupportView = true }) {
                 HStack {
@@ -154,43 +135,48 @@ struct ProfileView: View {
                         .foregroundColor(Color(hex: "40C4FC"))
                         .frame(width: 30)
                     Text("Help & Support")
-                        .font(.system(size: 16, weight: .regular))
+                        .font(.subheadline)
                     Spacer()
                     Image(systemName: "chevron.right")
-                        .foregroundColor(.gray)
+                        .foregroundColor(.secondary)
                 }
                 .padding()
-                .background(Color(hex: "F5F5F5"))
+                .background(Color.white)
+                .cornerRadius(10)
             }
         }
+        .padding()
+        .background(Color(hex: "F9F9F9"))
+        .cornerRadius(10)
     }
 
     private var accountActions: some View {
-        VStack(spacing: 12) {
-            HStack {
-                Text("Account Actions")
-                    .font(.system(size: 20, weight: .medium))
-                
-                Spacer()
-            }
+        VStack(spacing: 16) {
+            Text("Account Actions")
+                .font(.headline)
+                .frame(maxWidth: .infinity, alignment: .leading)
             
             Button(action: {
-                Task { await AuthenticationManager.shared.signOut() }
+                // Handle sign out
             }) {
                 Text("Sign Out")
-                    .font(.system(size: 16, weight: .medium))
+                    .font(.headline)
                     .foregroundColor(.white)
                     .frame(height: 50)
                     .frame(maxWidth: .infinity)
                     .background(Color(hex: "40C4FC"))
+                    .cornerRadius(10)
             }
             
             Button(action: { showDeleteConfirmation = true }) {
                 Text("Delete Account")
-                    .font(.system(size: 14, weight: .regular))
+                    .font(.subheadline)
                     .foregroundColor(.red)
             }
         }
+        .padding()
+        .background(Color(hex: "F9F9F9"))
+        .cornerRadius(10)
     }
 
     func saveProfilePictureLocally(pfpData: Data, userID: String) {
@@ -214,24 +200,18 @@ struct EditProfileView: View {
 
     var body: some View {
         NavigationView {
-            VStack {
-                Form {
-                    Section(header: Text("Profile Information")) {
-                        HStack {
-                            TextField("Name", text: $newName)
-                            Image(systemName: "pencil")
-                                .foregroundColor(Color(hex: "40C4FC"))
-                        }
-                        HStack {
-                            TextField("Username", text: $newUsername)
-                            Image(systemName: "pencil")
-                                .foregroundColor(Color(hex: "40C4FC"))
-                        }
+            Form {
+                Section(header: Text("Profile Information")) {
+                    HStack {
+                        TextField("Name", text: $newName)
+                        Image(systemName: "pencil")
+                            .foregroundColor(Color(hex: "40C4FC"))
                     }
-                }
-                .onAppear {
-                    newName = authManager.name ?? ""
-                    newUsername = authManager.username ?? ""
+                    HStack {
+                        TextField("Username", text: $newUsername)
+                        Image(systemName: "pencil")
+                            .foregroundColor(Color(hex: "40C4FC"))
+                    }
                 }
             }
             .navigationBarTitle("Edit Profile", displayMode: .inline)
@@ -240,10 +220,10 @@ struct EditProfileView: View {
                 trailing: Button("Save") {
                     Task {
                         if newName != authManager.name {
-                            await authManager.updateName(newName: newName) { _, _ in }
+                            authManager.saveOrUpdateUserData(username: nil, name: newName, pfp: nil) { _, _ in }
                         }
                         if newUsername != authManager.username {
-                            await authManager.updateUsername(newUsername: newUsername) { _, _ in }
+                            authManager.saveOrUpdateUserData(username: newUsername, name: nil, pfp: nil) { _, _ in }
                         }
                         dismiss()
                     }
@@ -251,6 +231,10 @@ struct EditProfileView: View {
             )
         }
         .accentColor(Color(hex: "40C4FC"))
+        .onAppear {
+            newName = authManager.name ?? ""
+            newUsername = authManager.username ?? ""
+        }
     }
 }
 
@@ -266,12 +250,14 @@ struct SupportView: View {
                 }
                 .padding()
                 .background(Color.white)
+                .cornerRadius(15)
+                .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
                 
                 Spacer()
                 
                 Text("Icons by Icons8")
-                    .font(.system(size: 14))
-                    .foregroundColor(.gray)
+                    .font(.footnote)
+                    .foregroundColor(.secondary)
             }
             .padding()
         }
@@ -285,10 +271,10 @@ struct SupportView: View {
                 .frame(width: 30)
             VStack(alignment: .leading) {
                 Text(title)
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(.gray)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
                 Text(value)
-                    .font(.system(size: 16, weight: .semibold))
+                    .font(.headline)
                     .foregroundColor(Color(hex: "40C4FC"))
             }
             Spacer()

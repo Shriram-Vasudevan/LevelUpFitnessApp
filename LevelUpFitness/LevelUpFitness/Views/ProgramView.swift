@@ -44,12 +44,12 @@ struct ProgramView: View {
                             }
 
                             VStack (spacing: 8) {
-                                programSectionHeader("For Gym")
+                                programSectionHeader("Try these at the Gym!")
                                 gymProgramsScrollView
                             }
                             
                             VStack (spacing: 8) {
-                                programSectionHeader("For Home")
+                                programSectionHeader("Spice up your Home Fitness!")
                                 homeProgramsScrollView
                             }
 
@@ -69,6 +69,7 @@ struct ProgramView: View {
                                 pastProgramsScrollView
                             }
                         }
+                        .padding(.top, 8)
                     } else {
                         programContent
                     }
@@ -183,7 +184,7 @@ struct ProgramView: View {
                 requiredEquipmentView(for: todaysProgram)
                 activeProgramView
             } else {
-                Text("No program scheduled for today")
+                Text("Nothing scheduled for today!")
                     .font(.system(size: 16, weight: .light, design: .default))
                     .foregroundColor(.gray)
             }
@@ -382,7 +383,9 @@ struct ProgramView: View {
                             Task {
                                 await programManager.joinStandardProgram(programName: program.name, completionHandler: { programWithID in
                                     showProgramManagerOptions = false
-                                    ProgramManager.shared.selectedProgram = programWithID
+                                    DispatchQueue.main.async {
+                                        ProgramManager.shared.selectedProgram = programWithID
+                                    }
                                     showProgramPicker = false
                                 })
                                 
@@ -423,7 +426,7 @@ struct ProgramView: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 16) {
                     ForEach(programManager.userProgramData, id: \.program.programName) { programWithID in
-                        ProgramCardView(standardProgramDBRepresentation: StandardProgramDBRepresentation(id: UUID().uuidString, name: programWithID.program.programName, environment: programWithID.program.environment))
+                        ProgramCardView(standardProgramDBRepresentation: StandardProgramDBRepresentation(id: UUID().uuidString, name: programWithID.program.programName, environment: programWithID.program.environment, image: programWithID.program.imageName))
                     }
                 }
             }
@@ -434,7 +437,7 @@ struct ProgramView: View {
     private func programSectionHeader(_ title: String) -> some View {
         HStack {
             Text(title)
-                .font(.system(size: 18, weight: .bold))
+                .font(.system(size: 24, weight: .bold))
             
             Spacer()
         }
@@ -713,27 +716,34 @@ struct ProgramCardView: View {
     
     var body: some View {
         ZStack(alignment: .bottomLeading) {
-            LinearGradient(gradient: Gradient(colors: [Color(hex: "40C4FC"), Color(hex: "3080FF")]), startPoint: .topLeading, endPoint: .bottomTrailing)
+//            LinearGradient(gradient: Gradient(colors: [Color(hex: "40C4FC"), Color(hex: "3080FF")]), startPoint: .topLeading, endPoint: .bottomTrailing)
+//            
+//            GeometryReader { geometry in
+//                Path { path in
+//                    let width = geometry.size.width
+//                    let height = geometry.size.height
+//                    path.move(to: CGPoint(x: 0, y: height * 0.4))
+//                    path.addCurve(to: CGPoint(x: width, y: height * 0.6),
+//                                  control1: CGPoint(x: width * 0.5, y: height * 0.2),
+//                                  control2: CGPoint(x: width * 0.8, y: height * 0.7))
+//                    path.addLine(to: CGPoint(x: width, y: height))
+//                    path.addLine(to: CGPoint(x: 0, y: height))
+//                }
+//                .fill(Color.white.opacity(0.1))
+//            }
             
-            GeometryReader { geometry in
-                Path { path in
-                    let width = geometry.size.width
-                    let height = geometry.size.height
-                    path.move(to: CGPoint(x: 0, y: height * 0.4))
-                    path.addCurve(to: CGPoint(x: width, y: height * 0.6),
-                                  control1: CGPoint(x: width * 0.5, y: height * 0.2),
-                                  control2: CGPoint(x: width * 0.8, y: height * 0.7))
-                    path.addLine(to: CGPoint(x: width, y: height))
-                    path.addLine(to: CGPoint(x: 0, y: height))
-                }
-                .fill(Color.white.opacity(0.1))
-            }
+            Image(standardProgramDBRepresentation.image)
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(width: 200, height: 120)
+                .clipped()
             
             VStack(alignment: .leading, spacing: 4) {
                 Spacer()
                 Text(standardProgramDBRepresentation.name)
                     .font(.system(size: 18, weight: .bold))
                     .foregroundColor(.white)
+                    .lineLimit(2)
 //                Text(standardProgramDBRepresentation.environment)
 //                    .font(.system(size: 14, weight: .medium))
 //                    .foregroundColor(Color.white.opacity(0.8))
@@ -741,26 +751,23 @@ struct ProgramCardView: View {
             .padding()
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
             
-//            if !isProgramJoined() {
-//                Button(action: {
-//                    
-//                }) {
-//                    Text("Join")
-//                        .font(.system(size: 14, weight: .semibold))
-//                        .foregroundColor(.white)
-//                        .padding(.horizontal, 16)
-//                        .padding(.vertical, 8)
-//                        .background(Color.green)
-//                        .cornerRadius(20)
-//                }
-//                .padding([.top, .trailing], 12)
-//                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
-//            }
+            if !isProgramJoined() {
+                Text("Join")
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundColor(Color(hex: "40C4FC"))
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
+                    .background(Color.white)
+                    .cornerRadius(20)
+                    .padding([.top, .trailing], 12)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
+            }
         }
         .frame(width: 200, height: 120)
         .cornerRadius(15)
         .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
         .opacity(isProgramJoined() ? 0.5 : 1.0)
+        .disabled(isProgramJoined())
 //        .background(Color.black.opacity(0.2))
     }
     
