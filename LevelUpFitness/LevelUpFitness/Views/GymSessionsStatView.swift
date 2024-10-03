@@ -28,7 +28,6 @@ struct GymSessionsStatsView: View {
                            let graphHeight = height - xAxisHeight
                            
                            ZStack {
-                               // Y-axis labels
                                VStack {
                                    ForEach(0..<6) { index in
                                        let labelValue = maxValueAdjusted - CGFloat(index) * (maxValueAdjusted - minValueAdjusted) / 5
@@ -43,7 +42,6 @@ struct GymSessionsStatsView: View {
                                    }
                                }
 
-                               // X-axis labels
                                VStack {
                                    Spacer()
                                    HStack(spacing: 0) { // Removed spacing
@@ -64,7 +62,6 @@ struct GymSessionsStatsView: View {
                                    .frame(width: graphWidth)
                                }
 
-                               // Graph line
                                Path { path in
                                    if let firstPoint = graphData.last {
                                        let firstX = yAxisWidth
@@ -79,8 +76,7 @@ struct GymSessionsStatsView: View {
                                    }
                                }
                                .stroke(accentColor, lineWidth: 2)
-                               
-                               // Data points
+    
                                ForEach(graphData.indices, id: \.self) { index in
                                    let point = graphData[graphData.count - 1 - index]
                                    let x = CGFloat(index) / CGFloat(graphData.count - 1) * graphWidth + yAxisWidth

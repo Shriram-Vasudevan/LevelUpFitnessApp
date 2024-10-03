@@ -127,7 +127,7 @@ struct WorkoutContent: View {
                             }
                             .padding(.horizontal)
                     } else {
-                        VStack {
+                        VStack (spacing: 6) {
                             Text("No video available")
                                 .font(.system(size: 16, weight: .medium))
                                 .foregroundColor(.black)
@@ -156,7 +156,7 @@ struct WorkoutContent: View {
                         Spacer()
                     }
                     .padding(.horizontal)
-                    .padding(.top, 7)
+                    .padding(.top, 10)
                 }
 
                 if workoutManager.currentSetIndex < workoutManager.currentExerciseData.sets.count {

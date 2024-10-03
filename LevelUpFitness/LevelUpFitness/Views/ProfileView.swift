@@ -18,22 +18,27 @@ struct ProfileView: View {
     @State private var selectedProfilePicture: PhotosPickerItem?
     @State private var pfpData: Data?
 
+    @State var goBackToIntroView: Bool = false
+    
     var body: some View {
         ScrollView {
-            VStack(spacing: 24) {
+            VStack(spacing: 20) {
                 profileHeader
+                Divider()
                 supportSection
+                Divider()
                 accountActions
             }
             .padding()
         }
-        .background(Color(hex: "F5F5F5").ignoresSafeArea())
+        .background(Color.white)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: { dismiss() }) {
                     Image(systemName: "chevron.left")
                         .foregroundColor(Color(hex: "40C4FC"))
+                        .imageScale(.large)
                 }
             }
             ToolbarItem(placement: .principal) {
@@ -43,30 +48,35 @@ struct ProfileView: View {
             }
         }
         .navigationBarBackButtonHidden()
-        .accentColor(Color(hex: "40C4FC"))
         .sheet(isPresented: $showEditProfileSheet) {
             EditProfileView(authManager: authManager)
         }
         .alert("Delete Account", isPresented: $showDeleteConfirmation) {
             Button("Cancel", role: .cancel) { }
             Button("Delete", role: .destructive) {
-                // Handle account deletion
+                AuthenticationManager.shared.deleteUserData { success, error in
+                    if success {
+                        FirstLaunchManager.shared.isFirstLaunch = true
+                        goBackToIntroView = true
+                    }
+                }
             }
         } message: {
-            Text("Are you sure you want to delete your account? This action cannot be undone.")
+            Text("Are you sure you want to wipe your data? You will still be able to use this iCloud account for future use, but all existing data will be wiped. This action cannot be undone.")
         }
         .onChange(of: selectedProfilePicture) { _ in
             Task {
                 if let data = try? await selectedProfilePicture?.loadTransferable(type: Data.self) {
                     pfpData = data
-                    
-                    
                     if let userID = try? await ProgramCloudKitUtility.customContainer.userRecordID().recordName {
                         saveProfilePictureLocally(pfpData: data, userID: userID)
-                         authManager.saveOrUpdateUserData(username: nil, name: nil, pfp: data) { _, _ in }
+                        authManager.saveOrUpdateUserData(username: nil, name: nil, pfp: data) { _, _ in }
                     }
                 }
             }
+        }
+        .navigationDestination(isPresented: $goBackToIntroView) {
+            OpeningViewsContainer()
         }
     }
 
@@ -76,33 +86,30 @@ struct ProfileView: View {
                 profileImage
                     .overlay(
                         Circle()
-                            .stroke(Color(hex: "40C4FC"), lineWidth: 3)
+                            .stroke(Color(hex: "40C4FC"), lineWidth: 2)
                     )
-                    .shadow(radius: 5)
+                    .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
             }
             
             VStack(spacing: 4) {
-                Text(authManager.name ?? "Loading...")
-                    .font(.title2.bold())
+                Text(authManager.name ?? "...")
+                    .font(.title3.bold())
                 
-                Text("@\(authManager.username ?? "username")")
+                Text("@\(authManager.username ?? "...")")
                     .font(.subheadline)
                     .foregroundColor(.secondary)
             }
             
             Button(action: { showEditProfileSheet = true }) {
                 Text("Edit Profile")
-                    .font(.headline)
+                    .font(.subheadline.weight(.medium))
                     .foregroundColor(.white)
-                    .frame(height: 44)
+                    .frame(height: 36)
                     .frame(maxWidth: .infinity)
                     .background(Color(hex: "40C4FC"))
                     .cornerRadius(10)
             }
         }
-        .padding()
-        .background(Color(hex: "F9F9F9"))
-        .cornerRadius(10)
     }
 
     private var profileImage: some View {
@@ -111,13 +118,13 @@ struct ProfileView: View {
                 Image(uiImage: uiImage)
                     .resizable()
                     .scaledToFill()
-                    .frame(width: 120, height: 120)
+                    .frame(width: 100, height: 100)
                     .clipShape(Circle())
             } else {
                 Image("NoProfile")
                     .resizable()
                     .scaledToFill()
-                    .frame(width: 120, height: 120)
+                    .frame(width: 100, height: 100)
                     .clipShape(Circle())
             }
         }
@@ -127,56 +134,54 @@ struct ProfileView: View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Support")
                 .font(.headline)
-                .padding(.horizontal)
+                .foregroundColor(.secondary)
             
             Button(action: { navigateToShowHelpAndSupportView = true }) {
                 HStack {
                     Image(systemName: "questionmark.circle.fill")
                         .foregroundColor(Color(hex: "40C4FC"))
-                        .frame(width: 30)
                     Text("Help & Support")
                         .font(.subheadline)
                     Spacer()
                     Image(systemName: "chevron.right")
                         .foregroundColor(.secondary)
+                        .font(.caption)
                 }
-                .padding()
-                .background(Color.white)
-                .cornerRadius(10)
             }
+            .foregroundColor(.primary)
         }
-        .padding()
-        .background(Color(hex: "F9F9F9"))
-        .cornerRadius(10)
     }
 
     private var accountActions: some View {
         VStack(spacing: 16) {
             Text("Account Actions")
                 .font(.headline)
+                .foregroundColor(.secondary)
                 .frame(maxWidth: .infinity, alignment: .leading)
             
             Button(action: {
-                // Handle sign out
+                AuthenticationManager.shared.signOut { success in
+                    if success {
+                        FirstLaunchManager.shared.isFirstLaunch = true
+                        goBackToIntroView = true
+                    }
+                }
             }) {
                 Text("Sign Out")
-                    .font(.headline)
+                    .font(.subheadline.weight(.medium))
                     .foregroundColor(.white)
-                    .frame(height: 50)
+                    .frame(height: 44)
                     .frame(maxWidth: .infinity)
                     .background(Color(hex: "40C4FC"))
                     .cornerRadius(10)
             }
             
             Button(action: { showDeleteConfirmation = true }) {
-                Text("Delete Account")
-                    .font(.subheadline)
+                Text("Wipe Data")
+                    .font(.footnote)
                     .foregroundColor(.red)
             }
         }
-        .padding()
-        .background(Color(hex: "F9F9F9"))
-        .cornerRadius(10)
     }
 
     func saveProfilePictureLocally(pfpData: Data, userID: String) {
@@ -201,16 +206,18 @@ struct EditProfileView: View {
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text("Profile Information")) {
+                Section(header: Text("Profile Information").textCase(.uppercase).font(.footnote).foregroundColor(.secondary)) {
                     HStack {
                         TextField("Name", text: $newName)
                         Image(systemName: "pencil")
                             .foregroundColor(Color(hex: "40C4FC"))
+                            .font(.caption)
                     }
                     HStack {
                         TextField("Username", text: $newUsername)
                         Image(systemName: "pencil")
                             .foregroundColor(Color(hex: "40C4FC"))
+                            .font(.caption)
                     }
                 }
             }
@@ -240,47 +247,35 @@ struct EditProfileView: View {
 
 struct SupportView: View {
     var body: some View {
-        ZStack {
-            Color(hex: "F5F5F5").ignoresSafeArea()
-            
-            VStack(spacing: 30) {
-                VStack(spacing: 15) {
-                    contactInfo(title: "Email", value: "levelupfitnesshelp@gmail.com", icon: "envelope.fill")
-                    contactInfo(title: "Website", value: "www.levelupfitness.app", icon: "globe")
-                }
-                .padding()
-                .background(Color.white)
-                .cornerRadius(15)
-                .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
-                
-                Spacer()
-                
-                Text("Icons by Icons8")
-                    .font(.footnote)
-                    .foregroundColor(.secondary)
+        List {
+            Section {
+                contactInfo(title: "Email", value: "levelupfitnesshelp@gmail.com", icon: "envelope.fill")
+                contactInfo(title: "Website", value: "www.levelupfitness.app", icon: "globe")
             }
-            .padding()
         }
+        .listStyle(InsetGroupedListStyle())
         .navigationBarTitle("Help & Support", displayMode: .inline)
+        .background(Color(hex: "F5F5F5").ignoresSafeArea())
     }
     
     private func contactInfo(title: String, value: String, icon: String) -> some View {
-        HStack {
+        HStack(spacing: 12) {
             Image(systemName: icon)
                 .foregroundColor(Color(hex: "40C4FC"))
-                .frame(width: 30)
-            VStack(alignment: .leading) {
+                .frame(width: 24)
+            VStack(alignment: .leading, spacing: 2) {
                 Text(title)
-                    .font(.subheadline)
+                    .font(.caption)
                     .foregroundColor(.secondary)
                 Text(value)
-                    .font(.headline)
-                    .foregroundColor(Color(hex: "40C4FC"))
+                    .font(.subheadline)
+                    .foregroundColor(.primary)
             }
-            Spacer()
         }
+        .padding(.vertical, 8)
     }
 }
+
 #Preview {
     ProfileView()
 }

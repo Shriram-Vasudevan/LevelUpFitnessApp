@@ -184,6 +184,7 @@
 		99F7F6DF2CAB6A4F009858AC /* GymSessionsStatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F7F6DE2CAB6A4F009858AC /* GymSessionsStatView.swift */; };
 		99F7F6E12CAB6BB0009858AC /* GymSessionStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F7F6E02CAB6BB0009858AC /* GymSessionStatsView.swift */; };
 		99F7F6E32CAC422F009858AC /* GymSessionsInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F7F6E22CAC422F009858AC /* GymSessionsInfoView.swift */; };
+		99F7F6F92CAE3CEA009858AC /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F7F6F82CAE3CE9009858AC /* WebView.swift */; };
 		99FC9E442C5EADC800DAFFAC /* XPAdditionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC9E432C5EADC800DAFFAC /* XPAdditionType.swift */; };
 		99FC9E462C5EC1F900DAFFAC /* AnalyticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC9E452C5EC1F900DAFFAC /* AnalyticsView.swift */; };
 		99FC9E482C5EC56B00DAFFAC /* RequestCustomProgramWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC9E472C5EC56B00DAFFAC /* RequestCustomProgramWidget.swift */; };
@@ -348,6 +349,7 @@
 		99F7F6DE2CAB6A4F009858AC /* GymSessionsStatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GymSessionsStatView.swift; sourceTree = "<group>"; };
 		99F7F6E02CAB6BB0009858AC /* GymSessionStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GymSessionStatsView.swift; sourceTree = "<group>"; };
 		99F7F6E22CAC422F009858AC /* GymSessionsInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GymSessionsInfoView.swift; sourceTree = "<group>"; };
+		99F7F6F82CAE3CE9009858AC /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
 		99FC9E432C5EADC800DAFFAC /* XPAdditionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XPAdditionType.swift; sourceTree = "<group>"; };
 		99FC9E452C5EC1F900DAFFAC /* AnalyticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsView.swift; sourceTree = "<group>"; };
 		99FC9E472C5EC56B00DAFFAC /* RequestCustomProgramWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestCustomProgramWidget.swift; sourceTree = "<group>"; };
@@ -523,6 +525,7 @@
 				99F7F6DE2CAB6A4F009858AC /* GymSessionsStatView.swift */,
 				99F7F6E02CAB6BB0009858AC /* GymSessionStatsView.swift */,
 				99F7F6E22CAC422F009858AC /* GymSessionsInfoView.swift */,
+				99F7F6F82CAE3CE9009858AC /* WebView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -870,6 +873,7 @@
 				991F8FF22C18D0A100A134A5 /* LibraryView.swift in Sources */,
 				99CFAAE62BEB075500EFF67E /* LevelUpFitnessApp.swift in Sources */,
 				99ECAD2C2C78208F0012F8E7 /* ProgramCompletedForTheDayCover.swift in Sources */,
+				99F7F6F92CAE3CEA009858AC /* WebView.swift in Sources */,
 				99ECAD322C7844080012F8E7 /* PastProgramWidget.swift in Sources */,
 				993871AA2C3A25D600FFAF8A /* SubLevelCircularWidget.swift in Sources */,
 				99ECAD302C7841BA0012F8E7 /* StringUtility.swift in Sources */,
@@ -1068,7 +1072,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.LevelUpFitnessApplication;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1107,7 +1111,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.LevelUpFitnessApplication;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

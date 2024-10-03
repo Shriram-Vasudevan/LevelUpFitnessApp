@@ -24,7 +24,6 @@ struct ProgramView: View {
     
     @State var showProgramManagerOptions: Bool = false
     
-    @State var showPastPrograms: Bool = false
     
     var body: some View {
         ZStack {
@@ -53,25 +52,15 @@ struct ProgramView: View {
                                 homeProgramsScrollView
                             }
 
-                            Button(action: {
-                                showPastPrograms.toggle()
-                            }) {
-                                HStack {
-                                    Text(showPastPrograms ? "Show Active Programs" : "Show Past Programs")
-                                        .font(.system(size: 18, weight: .bold))
-                                        .foregroundColor(Color(hex: "40C4FC"))
-                                    
-                                    Spacer()
-                                }
-                            }
-                            
-                            if showPastPrograms {
-                                pastProgramsScrollView
-                            }
+//                            VStack (spacing: 8) {
+//                                programSectionHeader("Past Programs")
+//                                pastProgramsScrollView
+//                            }
                         }
                         .padding(.top, 8)
                     } else {
                         programContent
+                            .padding(.top, 5)
                     }
                 }
                 .padding(.horizontal)
@@ -368,8 +357,8 @@ struct ProgramView: View {
                         }
                 }
             }
+            .tabViewStyle(.page(indexDisplayMode: .always))
             .frame(height: 175)
-            .tabViewStyle(.page(indexDisplayMode: .never))
         }
     }
 
@@ -420,9 +409,6 @@ struct ProgramView: View {
     
     private var pastProgramsScrollView: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Past Programs")
-                .font(.system(size: 18, weight: .bold))
-
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 16) {
                     ForEach(programManager.userProgramData, id: \.program.programName) { programWithID in

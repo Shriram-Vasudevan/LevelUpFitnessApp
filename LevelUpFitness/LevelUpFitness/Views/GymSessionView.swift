@@ -169,7 +169,7 @@ struct GymSessionsView: View {
             }) {
                 HStack {
                     Image(systemName: "plus.circle.fill")
-                    Text("Add Custom Exercise")
+                    Text("Add Exercise")
                 }
                 .font(.system(size: 18, weight: .medium))
                 .foregroundColor(.white)
@@ -239,7 +239,6 @@ struct GymSessionsView: View {
             }
             
             Divider()
-                .frame(width: .infinity)
                 .foregroundColor(.black)
         }
         .padding(.vertical)
@@ -294,7 +293,18 @@ struct GymSessionsView: View {
                 Spacer()
             }
             
-            GymSessionsStatsView()
+            if gymManager.gymSessions.totalNumberOfSessions >= 2{
+                GymSessionsStatsView()
+            }
+            else {
+                HStack {
+                    Text("Trends will appear once 2 sessions have been completed")
+                        .font(.system(size: 13, weight: .medium, design: .default))
+                        .foregroundColor(Color(hex: "F5F5F5"))
+                    
+                    Spacer()
+                }
+            }
         }
     }
 

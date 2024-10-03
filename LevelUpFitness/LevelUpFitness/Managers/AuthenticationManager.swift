@@ -24,12 +24,10 @@ class AuthenticationManager: ObservableObject {
     }
     
     func signOut(completion: @escaping (Bool) -> Void) {
-        // Clear local user data
         self.username = nil
         self.name = nil
         self.pfp = nil
 
-        // Optionally clear UserDefaults if you're caching user data
         UserDefaults.standard.removeObject(forKey: "username-key")
         UserDefaults.standard.removeObject(forKey: "name-key")
 
@@ -38,21 +36,18 @@ class AuthenticationManager: ObservableObject {
     }
 
     func deleteUserData(completion: @escaping (Bool, Error?) -> Void) {
-        let userRecordID = CKRecord.ID(recordName: "currentUser")  // Unique identifier for the user
+        let userRecordID = CKRecord.ID(recordName: "UserRecord")
 
-        // Delete the record from CloudKit
         privateDB.delete(withRecordID: userRecordID) { (recordID, error) in
             DispatchQueue.main.async {
                 if let error = error {
                     print("Failed to delete user data: \(error.localizedDescription)")
                     completion(false, error)
                 } else {
-                    // Clear local user data as well
                     self.username = nil
                     self.name = nil
                     self.pfp = nil
                     
-                    // Optionally clear any cached data in UserDefaults
                     UserDefaults.standard.removeObject(forKey: "username-key")
                     UserDefaults.standard.removeObject(forKey: "name-key")
                     
@@ -65,23 +60,46 @@ class AuthenticationManager: ObservableObject {
 
     
     func saveOrUpdateUserData(username: String?, name: String?, pfp: Data?, completion: @escaping (Bool, Error?) -> Void) {
-        let userRecordID = CKRecord.ID(recordName: "currentUser")  
-        let userRecord = CKRecord(recordType: RecordType.User.rawValue, recordID: userRecordID)
+        let userRecordID = CKRecord.ID(recordName: "UserRecord")
+        privateDB.fetch(withRecordID: userRecordID) { (existingRecord, fetchError) in
+            DispatchQueue.main.async {
+                if let fetchError = fetchError as? CKError {
+                    if fetchError.code == .unknownItem {
+                        let newUserRecord = CKRecord(recordType: RecordType.User.rawValue, recordID: userRecordID)
+                        self.configureUserRecord(newUserRecord, username: username, name: name, pfp: pfp)
+                        self.saveRecord(newUserRecord, completion: completion)
+                    } else {
+                        print("Error fetching record: \(fetchError.localizedDescription)")
+                        completion(false, fetchError)
+                    }
+                } else if let existingRecord = existingRecord {
+                    self.configureUserRecord(existingRecord, username: username, name: name, pfp: pfp)
+                    self.saveRecord(existingRecord, completion: completion)
+                }
+            }
+        }
+    }
 
+    private func configureUserRecord(_ userRecord: CKRecord, username: String?, name: String?, pfp: Data?) {
         if let username = username {
             userRecord["username"] = username
+            self.username = username
         }
         
         if let name = name {
             userRecord["name"] = name
+            self.name = name
         }
         
         if let pfp = pfp {
             let imageFileURL = self.saveProfilePictureLocally(pfp: pfp)
             let imageAsset = CKAsset(fileURL: imageFileURL)
             userRecord["profilePicture"] = imageAsset
+            self.pfp = pfp
         }
+    }
 
+    private func saveRecord(_ userRecord: CKRecord, completion: @escaping (Bool, Error?) -> Void) {
         privateDB.save(userRecord) { (record, error) in
             DispatchQueue.main.async {
                 if let error = error {
@@ -95,8 +113,9 @@ class AuthenticationManager: ObservableObject {
         }
     }
 
+
     func getUserData(completion: @escaping (Bool, Error?) -> Void) {
-        let userRecordID = CKRecord.ID(recordName: "currentUser")
+        let userRecordID = CKRecord.ID(recordName: "UserRecord")
         privateDB.fetch(withRecordID: userRecordID) { (record, error) in
             DispatchQueue.main.async {
                 if let error = error {
@@ -120,7 +139,7 @@ class AuthenticationManager: ObservableObject {
 
     // MARK: - Delete Profile Picture
     func removeProfilePicture(completion: @escaping (Bool, Error?) -> Void) {
-        let userRecordID = CKRecord.ID(recordName: "currentUser")
+        let userRecordID = CKRecord.ID(recordName: "UserRecord")
         privateDB.fetch(withRecordID: userRecordID) { (record, error) in
             DispatchQueue.main.async {
                 if let record = record {

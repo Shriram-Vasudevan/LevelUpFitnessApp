@@ -32,11 +32,11 @@ class InitializationManager {
             async let toDoListManager: () = ToDoListManager.shared.toDoListInit()
             async let exerciseManager: () = ExerciseManager.shared.exerciseManagerInit()
             async let xpManager: () = XPManager.shared.xpManagerInit()
-            
-    //                async let getUsername: () = AuthenticationManager.getUsername()
-    //                async let getName: () = AuthenticationManager.getName()
-    //
-            _ = await (userProgram, notificationManager, challengeManager, toDoListManager, exerciseManager, xpManager)
+            async let authenticationManager: () = AuthenticationManager.shared.getUserData(completion: { success, error in
+                print("done")
+            })
+
+            _ = await (authenticationManager, userProgram, notificationManager, challengeManager, toDoListManager, exerciseManager, xpManager)
             
             initializationComplete = true
         }

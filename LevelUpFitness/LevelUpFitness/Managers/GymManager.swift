@@ -45,6 +45,8 @@ class GymManager: ObservableObject {
         
         timer?.cancel()
         timer = nil
+        
+        XPManager.shared.addXP(increment: 5, type: .total)
     }
     
     private func updateElapsedTime() {

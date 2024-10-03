@@ -14,42 +14,52 @@ import AWSAPIPlugin
 @main
 struct LevelUpFitnessApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    @State private var showSplashScreen = true
-    @State private var showIntroView = FirstLaunchManager.shared.isFirstLaunch
-
+    
     var body: some Scene {
         WindowGroup {
-            ZStack {
-                if showSplashScreen {
-                    SplashScreenView()
-                        .onAppear {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                                withAnimation {
-                                    showSplashScreen = false
-                                }
-                            }
-                        }
-                } else if showIntroView {
-                    IntroView(onIntroCompletion: {
-                        withAnimation {
-                            FirstLaunchManager.shared.markAsLaunched()
-                            showIntroView = false
-                        }
-                    })
-                } else {
-                    PagesHolderView(pageType: .home)
-                        .transition(.opacity)
-                }
-            }
-            .animation(.easeInOut, value: showSplashScreen || showIntroView)
-            .onAppear {
-                Task {
-                    await InitializationManager.shared.initialize()
-                }
-            }
+            OpeningViewsContainer()
         }
     }
 }
+
+struct OpeningViewsContainer: View {
+    @State private var showSplashScreen = true
+    @State private var showIntroView = FirstLaunchManager.shared.isFirstLaunch
+    
+    var body: some View {
+        ZStack {
+            if showSplashScreen {
+                SplashScreenView()
+                    .onAppear {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                            withAnimation {
+                                showSplashScreen = false
+                            }
+                        }
+                    }
+            } else if showIntroView {
+                IntroView(onIntroCompletion: {
+                    withAnimation {
+                        FirstLaunchManager.shared.markAsLaunched()
+                        showIntroView = false
+                    }
+                })
+            } else {
+                PagesHolderView(pageType: .home)
+                    .transition(.opacity)
+            }
+        }
+        .animation(.easeInOut, value: showSplashScreen || showIntroView)
+        .onAppear {
+            Task {
+                await InitializationManager.shared.initialize()
+            }
+        }
+        .navigationBarBackButtonHidden()    
+    }
+    
+}
+
 
 import UIKit
 import UserNotifications
