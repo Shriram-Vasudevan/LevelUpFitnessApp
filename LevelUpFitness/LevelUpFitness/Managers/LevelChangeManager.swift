@@ -20,7 +20,7 @@ class LevelChangeManager: ObservableObject {
 
     func addNewProgramLevelChanges() async {
         do {
-            let userID = try await Amplify.Auth.getCurrentUser().userId
+            let userID = try await ProgramCloudKitUtility.customContainer.userRecordID().recordName
             
             if let userProgramDBRepresentations = await ProgramDynamoDBUtility.getUserProgramDBRepresentation() {
                 for userProgramDBRepresentation in userProgramDBRepresentations {
@@ -59,7 +59,7 @@ class LevelChangeManager: ObservableObject {
     
     func getLevelChanges() async {
         do {
-            let userID = try await Amplify.Auth.getCurrentUser().userId
+            let userID = try await ProgramCloudKitUtility.customContainer.userRecordID().recordName
             let filePath = "\(userID)-LevelChangeInfo.json"
             guard let documentsDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
             let fileURL = documentsDirectoryURL.appendingPathComponent(filePath)
@@ -151,7 +151,7 @@ class LevelChangeManager: ObservableObject {
     
     func addProgramWeightTrendContribution(programs: [Program]) async {
         do {
-            let userID = try await Amplify.Auth.getCurrentUser().userId
+            let userID = try await ProgramCloudKitUtility.customContainer.userRecordID().recordName
             
             let contribution = programs.getWeightTrendContribution()
             
@@ -165,7 +165,7 @@ class LevelChangeManager: ObservableObject {
     
     func addProgramRestDifferentialTrendContribution(programs: [Program]) async {
         do {
-            let userID = try await Amplify.Auth.getCurrentUser().userId
+            let userID = try await ProgramCloudKitUtility.customContainer.userRecordID().recordName
             
             let contribution = programs.getRestDifferentialTrendContribution()
             
@@ -179,7 +179,7 @@ class LevelChangeManager: ObservableObject {
     
     func addProgramConsistencyTrendContribution(programs: [Program]) async {
         do {
-            let userID = try await Amplify.Auth.getCurrentUser().userId
+            let userID = try await ProgramCloudKitUtility.customContainer.userRecordID().recordName
             
             let contribution = programs.getConsistencyTrendContribution()
             
@@ -196,7 +196,7 @@ class LevelChangeManager: ObservableObject {
     
     func addProgramRestTimeTrendContribution(programs: [Program]) async {
         do {
-            let userID = try await Amplify.Auth.getCurrentUser().userId
+            let userID = try await ProgramCloudKitUtility.customContainer.userRecordID().recordName
             
             let contribution = programs.getRestTimeTrendContribution()
             

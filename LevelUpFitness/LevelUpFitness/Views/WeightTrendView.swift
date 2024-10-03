@@ -57,7 +57,7 @@ struct WeightTrendView: View {
                         VStack {
                             Spacer()
                             HStack {
-                                ForEach(0..<trendManager.weightTrend.count, id: \.self) { index in
+                                ForEach(trendManager.weightTrend.indices, id: \.self) { index in
                                     if index % 2 == 0 {
                                         let date = trendManager.weightTrend[index].date
                                         Text(date, style: .date)
@@ -142,7 +142,7 @@ struct WeightTrendView: View {
                         .font(.system(size: 18, weight: .medium, design: .default))
                     
                     ScrollView (.vertical) {
-                        ForEach(trendManager.weightTrend.prefix(5).reversed()) { entry in
+                        ForEach(trendManager.weightTrend.prefix(10)) { entry in
                             HStack {
                                 Text(entry.date, style: .date)
                                     .font(.system(size: 14, weight: .regular, design: .default))
@@ -172,7 +172,6 @@ struct WeightTrendView: View {
         }
         .navigationBarBackButtonHidden()
     }
-
 
     private func addWeight() {
         guard let weightValue = Double(weight) else { return }

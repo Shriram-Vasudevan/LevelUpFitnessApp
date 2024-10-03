@@ -508,7 +508,7 @@ struct PastGymSessionDetailView: View {
         VStack(spacing: 16) {
             HStack {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Past Gym Session")
+                    Text("Gym Session")
                         .font(.system(size: 20, weight: .medium))
                         .foregroundColor(Color(hex: "333333"))
                     
