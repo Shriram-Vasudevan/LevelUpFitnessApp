@@ -85,10 +85,8 @@ class ProgramManager: ObservableObject {
     func loadUserActivePrograms() async -> [UserProgramDBRepresentation] {
         var userActivePrograms: [UserProgramDBRepresentation] = []
         do {
-            // Get the current user's ID
             let userID = try await ProgramCloudKitUtility.customContainer.userRecordID().recordName
             
-            // Fetch the active programs and await the result
             userActivePrograms = try await ProgramCloudKitUtility.fetchUserActivePrograms(userID: userID)
             
             print("Successfully fetched active programs")
@@ -96,7 +94,6 @@ class ProgramManager: ObservableObject {
             print("Error fetching user record ID or programs: \(error.localizedDescription)")
         }
         
-        // Return the fetched or empty array
         return userActivePrograms
     }
 
@@ -119,7 +116,6 @@ class ProgramManager: ObservableObject {
         }
     }
 
-    // MARK: - Upload New Program Status
     func uploadNewProgramStatus(completion: @escaping (Bool) -> Void) async {
         guard let selectedProgram = self.selectedProgram else {
             print("No selected program to update")

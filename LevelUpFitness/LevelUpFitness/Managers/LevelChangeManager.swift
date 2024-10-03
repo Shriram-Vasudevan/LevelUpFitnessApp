@@ -120,6 +120,10 @@ class LevelChangeManager: ObservableObject {
                 await addLevelChange(contribution: contribution, keyword: "Met XP Goal", description: "You're on top of your XP!")
             case "ChallengeFailed":
                 await addLevelChange(contribution: contribution, keyword: "Challenge Failed", description: "You failed to complete your challenge.")
+            case "GymSessionCompleted":
+                await addLevelChange(contribution: contribution, keyword: "Gym Session Completed", description: "You tracked your gym session!")
+            case "JoinedLevelUp":
+                await addLevelChange(contribution: contribution, keyword: "Welcome to Level Up!", description: "We're happy to have you!")
             default:
                 break
         }
@@ -207,8 +211,7 @@ class LevelChangeManager: ObservableObject {
     func addLevelChange(contribution: Int, keyword: String, description: String) async {
         do {
             print("adding level change")
-            let userID = try await Amplify.Auth.getCurrentUser().userId
-            
+            let userID = try await ProgramCloudKitUtility.customContainer.userRecordID().recordName
             let levelChangeInfo = LevelChangeInfo(keyword: keyword, description: description, change: contribution, timestamp: Date().ISO8601Format())
             
             print("level change info \(levelChangeInfo)")

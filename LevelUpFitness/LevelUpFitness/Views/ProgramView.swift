@@ -24,6 +24,8 @@ struct ProgramView: View {
     
     @State var showProgramManagerOptions: Bool = false
     
+    @State var showJoinPopup: Bool = false
+    @State var selectedStandardProgramDBRepresentation: StandardProgramDBRepresentation?
     
     var body: some View {
         ZStack {
@@ -78,6 +80,17 @@ struct ProgramView: View {
                         }
                     }
                 })
+            }
+            
+            if showJoinPopup, let selectedStandardProgramDBRepresentation = self.selectedStandardProgramDBRepresentation {
+                ProgramJoinPopupView(isPresented: $showJoinPopup, program: selectedStandardProgramDBRepresentation) {
+                    Task {
+                        await programManager.joinStandardProgram(programName: selectedStandardProgramDBRepresentation.name, completionHandler: { programWithID in
+                            ProgramManager.shared.selectedProgram = programWithID
+                            showProgramPicker = false
+                        })
+                    }
+                }
             }
         }
         .navigationBarBackButtonHidden()
@@ -176,6 +189,55 @@ struct ProgramView: View {
                 Text("Nothing scheduled for today!")
                     .font(.system(size: 16, weight: .light, design: .default))
                     .foregroundColor(.gray)
+                
+                GeometryReader { geometry in
+                    let totalWidth = geometry.size.width
+                    let padding: CGFloat = 10
+                    let squareWidth = (totalWidth - padding) / 2
+                    
+                    HStack(spacing: padding) {
+                        Button(action: {
+                            navigateToMetricsView = true
+                        }) {
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text("Program Stats")
+                                    .font(.system(size: 18, weight: .light, design: .default))
+                                
+                                HStack {
+                                    Image(systemName: "chart.pie.fill")
+                                        .foregroundColor(Color(hex: "40C4FC"))
+                                    Spacer()
+                                }
+                            }
+                            .padding()
+                            .frame(width: squareWidth, height: squareWidth / 2)
+                            .background(Color(hex: "F5F5F5"))
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                        
+                        Button(action: {
+                            showConfirmationWidget = true
+                        }) {
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text("Leave Program")
+                                    .font(.system(size: 18, weight: .light))
+                                
+                                HStack {
+                                    Spacer()
+                                    Image("Exit")
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(height: 24)
+                                }
+                            }
+                            .padding()
+                            .frame(width: squareWidth, height: squareWidth / 2)
+                            .background(Color(hex: "F5F5F5"))
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                    }
+                }
+                .frame(height: (UIScreen.main.bounds.width - 10) / 2)
             }
         }
     }
@@ -366,21 +428,12 @@ struct ProgramView: View {
     private var gymProgramsScrollView: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 16) {
-                ForEach(programManager.standardProgramDBRepresentations.filter { $0.environment.contains("Gym") }, id: \.id) { program in
-                    ProgramCardView(standardProgramDBRepresentation: program)
+                ForEach(programManager.standardProgramDBRepresentations.filter { $0.environment.contains("Gym") }, id: \.id) { standardProgramDBRepresentation in
+                    ProgramCardView(standardProgramDBRepresentation: standardProgramDBRepresentation)
                         .onTapGesture {
-                            Task {
-                                await programManager.joinStandardProgram(programName: program.name, completionHandler: { programWithID in
-                                    showProgramManagerOptions = false
-                                    DispatchQueue.main.async {
-                                        ProgramManager.shared.selectedProgram = programWithID
-                                    }
-                                    showProgramPicker = false
-                                })
-                                
-//                                showProgramManagerOptions = false
-//                                ProgramManager.shared.selectedProgram = programWithID
-//                                showProgramPicker = false
+                            if !programManager.userProgramData.contains(where: { $0.program.programName == standardProgramDBRepresentation.name }) {
+                                self.selectedStandardProgramDBRepresentation = standardProgramDBRepresentation
+                                self.showJoinPopup = true
                             }
                         }
                 }
@@ -391,15 +444,12 @@ struct ProgramView: View {
     private var homeProgramsScrollView: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 16) {
-                ForEach(programManager.standardProgramDBRepresentations.filter { $0.environment.contains("Home") }, id: \.id) { program in
-                    ProgramCardView(standardProgramDBRepresentation: program)
+                ForEach(programManager.standardProgramDBRepresentations.filter { $0.environment.contains("Home") }, id: \.id) { standardProgramDBRepresentation in
+                    ProgramCardView(standardProgramDBRepresentation: standardProgramDBRepresentation)
                         .onTapGesture {
-                            Task {
-                                await programManager.joinStandardProgram(programName: program.name, completionHandler: { programWithID in
-                                    showProgramManagerOptions = false
-                                    ProgramManager.shared.selectedProgram = programWithID
-                                    showProgramPicker = false
-                                })
+                            if !programManager.userProgramData.contains(where: { $0.program.programName == standardProgramDBRepresentation.name }) {
+                                self.selectedStandardProgramDBRepresentation = standardProgramDBRepresentation
+                                self.showJoinPopup = true
                             }
                         }
                 }
@@ -407,18 +457,18 @@ struct ProgramView: View {
         }
     }
     
-    private var pastProgramsScrollView: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 16) {
-                    ForEach(programManager.userProgramData, id: \.program.programName) { programWithID in
-                        ProgramCardView(standardProgramDBRepresentation: StandardProgramDBRepresentation(id: UUID().uuidString, name: programWithID.program.programName, environment: programWithID.program.environment, image: programWithID.program.imageName))
-                    }
-                }
-            }
-        }
-    }
-    
+//    private var pastProgramsScrollView: some View {
+//        VStack(alignment: .leading, spacing: 16) {
+//            ScrollView(.horizontal, showsIndicators: false) {
+//                HStack(spacing: 16) {
+//                    ForEach(programManager.userProgramData, id: \.program.programName) { programWithID in
+//                        ProgramCardView(standardProgramDBRepresentation: StandardProgramDBRepresentation(id: UUID().uuidString, name: programWithID.program.programName, environment: programWithID.program.environment, image: programWithID.program.imageName))
+//                    }
+//                }
+//            }
+//        }
+//    }
+//    
     
     private func programSectionHeader(_ title: String) -> some View {
         HStack {
@@ -702,22 +752,6 @@ struct ProgramCardView: View {
     
     var body: some View {
         ZStack(alignment: .bottomLeading) {
-//            LinearGradient(gradient: Gradient(colors: [Color(hex: "40C4FC"), Color(hex: "3080FF")]), startPoint: .topLeading, endPoint: .bottomTrailing)
-//            
-//            GeometryReader { geometry in
-//                Path { path in
-//                    let width = geometry.size.width
-//                    let height = geometry.size.height
-//                    path.move(to: CGPoint(x: 0, y: height * 0.4))
-//                    path.addCurve(to: CGPoint(x: width, y: height * 0.6),
-//                                  control1: CGPoint(x: width * 0.5, y: height * 0.2),
-//                                  control2: CGPoint(x: width * 0.8, y: height * 0.7))
-//                    path.addLine(to: CGPoint(x: width, y: height))
-//                    path.addLine(to: CGPoint(x: 0, y: height))
-//                }
-//                .fill(Color.white.opacity(0.1))
-//            }
-            
             Image(standardProgramDBRepresentation.image)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
@@ -730,9 +764,6 @@ struct ProgramCardView: View {
                     .font(.system(size: 18, weight: .bold))
                     .foregroundColor(.white)
                     .lineLimit(2)
-//                Text(standardProgramDBRepresentation.environment)
-//                    .font(.system(size: 14, weight: .medium))
-//                    .foregroundColor(Color.white.opacity(0.8))
             }
             .padding()
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
@@ -748,19 +779,96 @@ struct ProgramCardView: View {
                     .padding([.top, .trailing], 12)
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
             }
+            
         }
         .frame(width: 200, height: 120)
         .cornerRadius(15)
         .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
         .opacity(isProgramJoined() ? 0.5 : 1.0)
         .disabled(isProgramJoined())
-//        .background(Color.black.opacity(0.2))
     }
     
     private func isProgramJoined() -> Bool {
         programManager.userProgramData.contains { $0.program.programName == standardProgramDBRepresentation.name }
     }
 }
+
+
+struct ProgramJoinPopupView: View {
+    @Binding var isPresented: Bool
+    let program: StandardProgramDBRepresentation
+    let joinProgramAction: () -> Void
+    
+    var body: some View {
+        ZStack {
+            Color.black.opacity(0.1)
+                .ignoresSafeArea()
+                .onTapGesture {
+                    isPresented = false
+                }
+            
+            VStack(spacing: 20) {
+                Image(program.image)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(height: 150)
+                    .clipped()
+                    .cornerRadius(10)
+
+                VStack(alignment: .leading, spacing: 12) {
+                    Text(program.name)
+                        .font(.system(size: 22, weight: .bold))
+                        .foregroundColor(.primary)
+                    
+                    Text(program.description)
+                        .font(.system(size: 16, weight: .regular))
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.leading)
+                }
+                .padding(.horizontal)
+                
+                HStack(spacing: 20) {
+                    Button(action: {
+                        withAnimation {
+                            isPresented = false
+                        }
+                    }) {
+                        Text("Cancel")
+                            .foregroundColor(.gray)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.white)
+                            .cornerRadius(10)
+                            .shadow(radius: 5)
+                    }
+                    
+                    Button(action: {
+                        joinProgramAction()
+                        withAnimation {
+                            isPresented = false
+                        }
+                    }) {
+                        Text("Join Program")
+                            .foregroundColor(.white)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.blue)
+                            .cornerRadius(10)
+                            .shadow(radius: 5)
+                    }
+                }
+                .padding(.horizontal)
+            }
+            .padding()
+            .background(Color.white)
+            .cornerRadius(10)
+            .shadow(radius: 20)
+            .padding(.horizontal)
+            
+        }
+    }
+}
+
 
 #Preview {
     ProgramView()

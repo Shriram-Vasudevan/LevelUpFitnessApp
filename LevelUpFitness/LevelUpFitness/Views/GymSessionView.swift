@@ -18,7 +18,9 @@ struct GymSessionsView: View {
     @State private var navigateToAllPastSessionsView = false
     @State private var selectedExerciseRecord: ExerciseRecord?
     @State private var selectedPastSession: GymSession?
-
+    
+    @State var showGymSessionInfoSheet: Bool = false
+    
     var body: some View {
         ZStack {
             Color.white.ignoresSafeArea()
@@ -71,6 +73,9 @@ struct GymSessionsView: View {
         .navigationDestination(isPresented: $navigateToAllPastSessionsView) {
             AllPastGymSessionsView(gymManager: gymManager)
         }
+        .sheet(isPresented: $showGymSessionInfoSheet, content: {
+            GymSessionInfoView()
+        })
         .navigationBarBackButtonHidden()
     }
 
@@ -91,6 +96,13 @@ struct GymSessionsView: View {
             
             Spacer()
             
+            Button {
+                showGymSessionInfoSheet = true
+            } label: {
+                Image(systemName: "info.circle")
+                    .foregroundColor(.black)
+            }
+
             
         }
     }
@@ -859,6 +871,138 @@ struct AddExerciseView: View {
             .background(Color.white)
             .cornerRadius(8)
         }
+    }
+}
+
+struct GymSessionInfoView: View {
+    @Environment(\.dismiss) var dismiss
+    
+    var body: some View {
+        VStack {
+            HStack {
+                Spacer()
+                Button(action: {
+                    dismiss()
+                }) {
+                    Image(systemName: "xmark.circle.fill")
+                        .font(.system(size: 24))
+                        .foregroundColor(Color(hex: "CCCCCC"))
+                }
+                .padding()
+            }
+
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    Text("Gym Sessions")
+                        .font(.system(size: 28, weight: .bold))
+                        .foregroundColor(Color(hex: "333333"))
+                        .padding(.horizontal)
+
+                    Text("Track your gym sessions by adding exercises manually or having automatically tracking completed exercises from the library or workout programs.")
+                        .font(.system(size: 16))
+                        .foregroundColor(Color(hex: "666666"))
+                        .padding(.horizontal)
+                    
+                    Divider()
+                        .padding(.horizontal)
+
+                    VStack(alignment: .leading, spacing: 16) {
+                        Text("Active Session")
+                            .font(.system(size: 20, weight: .medium))
+                            .foregroundColor(Color(hex: "333333"))
+                        
+                        HStack {
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text("Elapsed Time")
+                                    .font(.system(size: 16, weight: .regular))
+                                    .foregroundColor(Color(hex: "666666"))
+
+                                Text("00:45:23")
+                                    .font(.system(size: 40, weight: .bold))
+                                    .foregroundColor(Color(hex: "40C4FC"))
+                            }
+                            
+                            Spacer()
+                            
+                            Button(action: {}, label: {
+                                Text("End")
+                                    .font(.system(size: 16, weight: .medium))
+                                    .foregroundColor(.white)
+                                    .padding(.horizontal, 20)
+                                    .padding(.vertical, 10)
+                                    .background(Color(hex: "FF3B30"))
+                            }).disabled(true)
+                        }
+
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Completed Exercises")
+                                .font(.system(size: 18, weight: .semibold))
+                                .foregroundColor(Color(hex: "333333"))
+
+                            exerciseWidget(for: "Bench Press", sets: "3 sets", reps: "10 reps", weight: "225 lbs")
+                            exerciseWidget(for: "Squats", sets: "4 sets", reps: "8 reps", weight: "315 lbs")
+                            exerciseWidget(for: "Deadlifts", sets: "3 sets", reps: "6 reps", weight: "405 lbs")
+                        }
+                    }
+                    .padding()
+                    .background(Color(hex: "F5F5F5"))
+                    .cornerRadius(15)
+                    .padding(.horizontal)
+
+                    Divider()
+                        .padding(.horizontal)
+
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Exercise Tracking")
+                            .font(.system(size: 20, weight: .medium))
+                            .foregroundColor(Color(hex: "333333"))
+                        
+                        Text("You can add individual exercises to your gym session, or let the app track exercises that you complete from the exercise library or through your workout programs.")
+                            .font(.system(size: 16))
+                            .foregroundColor(Color(hex: "666666"))
+
+                        Text("The exercises you track will automatically contribute to your workout stats and trends.")
+                            .font(.system(size: 16))
+                            .foregroundColor(Color(hex: "666666"))
+                    }
+                    .padding(.horizontal)
+                    
+                    Spacer()
+                }
+                .padding(.bottom, 30)
+            }
+        }
+        .background(Color.white)
+    }
+
+    private func exerciseWidget(for name: String, sets: String, reps: String, weight: String) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(spacing: 16) {
+                Image(systemName: "figure.walk")
+                    .font(.system(size: 24))
+                    .foregroundColor(.white)
+                    .frame(width: 50, height: 50)
+                    .background(
+                        LinearGradient(gradient: Gradient(colors: [Color(hex: "40C4FC"), Color(hex: "3080FF")]), startPoint: .topLeading, endPoint: .bottomTrailing)
+                    )
+                    .cornerRadius(25)
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(name)
+                        .font(.system(size: 18, weight: .medium))
+                        .foregroundColor(Color(hex: "333333"))
+
+                    Text("\(sets) • \(reps) • \(weight)")
+                        .font(.system(size: 14, weight: .regular))
+                        .foregroundColor(Color(hex: "666666"))
+                }
+
+                Spacer()
+            }
+            Divider()
+                .foregroundColor(Color(hex: "CCCCCC"))
+        }
+        .padding(.vertical)
     }
 }
 

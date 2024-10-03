@@ -42,5 +42,5 @@ struct JoinProgramWidget: View {
 }
 
 #Preview {
-    JoinProgramWidget(standardProgramDBRepresentation: StandardProgramDBRepresentation(id: "vwerfwefegrw", name: "Masucle Maximization Program", environment: "Gym", image: ""))
+    JoinProgramWidget(standardProgramDBRepresentation: StandardProgramDBRepresentation(id: "vwerfwefegrw", name: "Masucle Maximization Program", environment: "Gym", image: "", description: ""))
 }

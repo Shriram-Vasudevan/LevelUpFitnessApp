@@ -28,6 +28,9 @@ struct IntroView: View {
                     }
                     
                     Button(action: {
+                        Task {
+                            await LevelChangeManager.shared.createNewLevelChange(property: "JoinedLevelUp", contribution: 10)
+                        }
                         onIntroCompletion()
                     }) {
                         Text("Accept")

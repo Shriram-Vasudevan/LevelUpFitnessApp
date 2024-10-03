@@ -46,7 +46,9 @@ class GymManager: ObservableObject {
         timer?.cancel()
         timer = nil
         
-        XPManager.shared.addXP(increment: 5, type: .total)
+        Task {
+            await LevelChangeManager.shared.createNewLevelChange(property: "GymSessionCompleted", contribution: 5)
+        }
     }
     
     private func updateElapsedTime() {

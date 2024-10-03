@@ -121,13 +121,14 @@ class ProgramCloudKitUtility {
                 guard let id = record["ID"] as? String,
                       let name = record["Name"] as? String,
                       let environment = record["Environment"] as? String,
-                      let image = record["Image"] as? String else {
+                      let image = record["Image"] as? String,
+                      let description = record["Description"] as? String else {
                     print("Record with missing fields")
                     return nil
                 }
                 
                 print("Fetched program - ID: \(id), Name: \(name)")
-                return StandardProgramDBRepresentation(id: id, name: name, environment: environment, image: image)
+                return StandardProgramDBRepresentation(id: id, name: name, environment: environment, image: image, description: description)
             } ?? []
             
             print("Returning \(programs.count) programs")
@@ -259,9 +260,26 @@ class ProgramCloudKitUtility {
                     print("Record with missing fields: \(recordID)")
                     return nil
                 }
+
+                if let expirationDate = DateUtility.getDateNWeeksAfterDate(dateString: startDate, weeks: 4),
+                   let expirationDateObj = DateFormatter().date(from: expirationDate),
+                   expirationDateObj < Date() {
+                    print("Program \(programID) has expired. Leaving the program.")
+
+                    leaveProgram(programID: programID) { success, error in
+                        if success {
+                            print("Successfully left program \(programID)")
+                        } else {
+                            print("Failed to leave program \(programID): \(error?.localizedDescription ?? "Unknown error")")
+                        }
+                    }
+
+                    return nil
+                }
                 
                 print("Fetched active program - ProgramID: \(programID), ProgramName: \(program)")
                 return UserProgramDBRepresentation(userID: userID, program: program, startDate: startDate, programID: programID)
+                
             case .failure(let error):
                 print("Failed to fetch record for \(recordID), error: \(error.localizedDescription)")
                 return nil
@@ -271,7 +289,6 @@ class ProgramCloudKitUtility {
         print("Returning \(activePrograms.count) active programs")
         return activePrograms
     }
-
 
 
     static func fetchUserProgramData(programID: String, completion: @escaping (ProgramWithID?, Error?) -> Void) {

@@ -27,11 +27,13 @@ struct StandardProgramDBRepresentation: Codable {
     var name: String
     var environment: String
     var image: String
+    var description: String
     
     enum CodingKeys: String, CodingKey {
         case id = "ID"
         case name = "Name"
         case environment = "Environment"
         case image = "Image"
+        case description = "Description"
     }
 }

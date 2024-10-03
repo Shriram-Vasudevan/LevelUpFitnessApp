@@ -36,27 +36,55 @@ class AuthenticationManager: ObservableObject {
     }
 
     func deleteUserData(completion: @escaping (Bool, Error?) -> Void) {
-        let userRecordID = CKRecord.ID(recordName: "UserRecord")
+        let privateDB = CKContainer.default().privateCloudDatabase
+        let recordTypes = ["UserRecord", "UserProgramData", "UserChallenge", "WeightTrendData", "LevelTrendData", "XPData"]
+        
+        let dispatchGroup = DispatchGroup()
+        var deletionError: Error?
+        
+        for recordType in recordTypes {
+            dispatchGroup.enter()
 
-        privateDB.delete(withRecordID: userRecordID) { (recordID, error) in
-            DispatchQueue.main.async {
+            let query = CKQuery(recordType: recordType, predicate: NSPredicate(value: true))
+            
+            privateDB.perform(query, inZoneWith: nil) { (records, error) in
                 if let error = error {
-                    print("Failed to delete user data: \(error.localizedDescription)")
-                    completion(false, error)
-                } else {
-                    self.username = nil
-                    self.name = nil
-                    self.pfp = nil
-                    
-                    UserDefaults.standard.removeObject(forKey: "username-key")
-                    UserDefaults.standard.removeObject(forKey: "name-key")
-                    
-                    print("User data deleted successfully from iCloud and locally.")
-                    completion(true, nil)
+                    deletionError = error
+                    dispatchGroup.leave()
+                    return
                 }
+                
+                guard let records = records else {
+                    dispatchGroup.leave()
+                    return
+                }
+
+                let recordIDs = records.map { $0.recordID }
+                let deleteOperation = CKModifyRecordsOperation(recordIDsToDelete: recordIDs)
+                deleteOperation.modifyRecordsCompletionBlock = { _, deletedRecordIDs, deleteError in
+                    if let deleteError = deleteError {
+                        deletionError = deleteError
+                    }
+                    dispatchGroup.leave()
+                }
+
+                privateDB.add(deleteOperation)
+            }
+        }
+
+        dispatchGroup.notify(queue: DispatchQueue.main) {
+            if let error = deletionError {
+                print("Failed to delete some or all data: \(error.localizedDescription)")
+                completion(false, error)
+            } else {
+                UserDefaults.standard.removeObject(forKey: "username-key")
+                UserDefaults.standard.removeObject(forKey: "name-key")
+                print("All user data deleted successfully from iCloud and locally.")
+                completion(true, nil)
             }
         }
     }
+
 
     
     func saveOrUpdateUserData(username: String?, name: String?, pfp: Data?, completion: @escaping (Bool, Error?) -> Void) {

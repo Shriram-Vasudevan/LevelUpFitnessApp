@@ -14,7 +14,7 @@ struct ConfirmLeaveProgramWidget: View {
                     close()
                 }
             
-            VStack (spacing: 5) {
+            VStack (spacing: 20) {
                 Text("Are you sure?")
                     .font(.system(size: 18, weight: .medium, design: .default))
                     .foregroundColor(.black)
@@ -25,30 +25,37 @@ struct ConfirmLeaveProgramWidget: View {
                         close()
                     }
                 }) {
-                    ZStack {
-                        Rectangle() 
-                            .fill(Color(hex: "40C4FC"))
-                            .cornerRadius(3)
-                            .shadow(radius: 3)
-                        
-                        Text("Confirm")
-                            .fontWeight(.bold)
-                            .foregroundColor(.white)
-                    }
-                    .frame(minWidth: 0, maxWidth: .infinity)
-                    .padding()
-                    .padding(.horizontal, 20)
-                    .padding(.top)
+                    
+                    Text("Confirm")
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(
+                            Rectangle()
+                                .fill(Color(hex: "40C4FC"))
+                                .cornerRadius(10)
+                                .shadow(radius: 3)
+                        )
                 }
-
+                .padding(.horizontal, 20)
                 
+                Button(action: {
+                    withAnimation {
+                        close()
+                    }
+                }) {
+                    Text("Cancel")
+                        .foregroundColor(.gray)
+                }
+                .padding(.top, 10)
             }
             .padding()
             .background(
-                Rectangle()
+                RoundedRectangle(cornerRadius: 10)
                     .fill(Color(hex: "F5F5F5"))
             )
-            .padding()
+            .padding(.horizontal, 30)
             .offset(x: 0, y: offset)
         }
         .onAppear {
