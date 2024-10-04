@@ -140,11 +140,11 @@ class ProgramCloudKitUtility {
         print("Fetching program data for program name: \(programName)")
         let publicDatabase = customContainer.publicCloudDatabase
         
-        let normalizedProgramName = programName.folding(options: .diacriticInsensitive, locale: .current)
+        // Remove any diacritic marks and make it case-insensitive
+        let normalizedProgramName = programName.folding(options: .diacriticInsensitive, locale: .current).lowercased()
         print("Normalized program name: \(normalizedProgramName)")
 
-        let predicate = NSPredicate(format: "Name == %@", normalizedProgramName)
-        let query = CKQuery(recordType: "StandardProgramData", predicate: predicate)
+        let query = CKQuery(recordType: "StandardProgramData", predicate: NSPredicate(value: true)) // Fetch all records
         
         publicDatabase.perform(query, inZoneWith: nil) { records, error in
             if let error = error {
@@ -155,7 +155,14 @@ class ProgramCloudKitUtility {
 
             print("Query completed. Found \(records?.count ?? 0) records.")
             
-            guard let record = records?.first else {
+            // Now we filter the records client-side for a case-insensitive and diacritic-insensitive match
+            guard let record = records?.first(where: { record in
+                if let storedProgramName = record["Name"] as? String {
+                    let normalizedStoredProgramName = storedProgramName.folding(options: .diacriticInsensitive, locale: .current).lowercased()
+                    return normalizedStoredProgramName == normalizedProgramName
+                }
+                return false
+            }) else {
                 print("No records found for program: \(normalizedProgramName)")
                 completion(nil, nil)
                 return
@@ -186,6 +193,7 @@ class ProgramCloudKitUtility {
             }
         }
     }
+
 
     static func saveUserProgram(userID: String, program: Program, startDate: String, completion: @escaping (String, Bool, Error?) -> Void) {
         print("Saving user program for UserID: \(userID), ProgramName: \(program.programName)")

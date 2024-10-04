@@ -86,8 +86,10 @@ struct ProgramView: View {
                 ProgramJoinPopupView(isPresented: $showJoinPopup, program: selectedStandardProgramDBRepresentation) {
                     Task {
                         await programManager.joinStandardProgram(programName: selectedStandardProgramDBRepresentation.name, completionHandler: { programWithID in
-                            ProgramManager.shared.selectedProgram = programWithID
-                            showProgramPicker = false
+                            DispatchQueue.main.async {
+                                ProgramManager.shared.selectedProgram = programWithID
+                                showProgramPicker = false
+                            }
                         })
                     }
                 }

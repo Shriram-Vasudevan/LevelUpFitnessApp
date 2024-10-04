@@ -300,7 +300,7 @@ struct GymSessionsView: View {
             HStack {
                 Text("My Trends")
                     .font(.system(size: 20, weight: .medium, design: .default))
-                    .foregroundColor(Color(hex: "333333"))
+                    .foregroundColor(.black)
                 
                 Spacer()
             }
@@ -311,8 +311,8 @@ struct GymSessionsView: View {
             else {
                 HStack {
                     Text("Trends will appear once 2 sessions have been completed")
-                        .font(.system(size: 13, weight: .medium, design: .default))
-                        .foregroundColor(Color(hex: "F5F5F5"))
+                        .font(.system(size: 15, weight: .medium, design: .default))
+                        .foregroundColor(.black)
                     
                     Spacer()
                 }
@@ -898,7 +898,7 @@ struct GymSessionInfoView: View {
                         .foregroundColor(Color(hex: "333333"))
                         .padding(.horizontal)
 
-                    Text("Track your gym sessions by adding exercises manually or having automatically tracking completed exercises from the library or workout programs.")
+                    Text("Track your gym sessions by adding exercises manually or having the app automatically track completed exercises from the library or workout programs.")
                         .font(.system(size: 16))
                         .foregroundColor(Color(hex: "666666"))
                         .padding(.horizontal)

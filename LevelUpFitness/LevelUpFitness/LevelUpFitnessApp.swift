@@ -31,12 +31,13 @@ struct OpeningViewsContainer: View {
             if showSplashScreen {
                 SplashScreenView()
                     .onAppear {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                             withAnimation {
                                 showSplashScreen = false
                             }
                         }
                     }
+                    .preferredColorScheme(.light)
             } else if showIntroView {
                 IntroView(onIntroCompletion: {
                     withAnimation {
@@ -44,9 +45,11 @@ struct OpeningViewsContainer: View {
                         showIntroView = false
                     }
                 })
+                .preferredColorScheme(.light)
             } else {
                 PagesHolderView(pageType: .home)
                     .transition(.opacity)
+                    .preferredColorScheme(.light)
             }
         }
         .animation(.easeInOut, value: showSplashScreen || showIntroView)
