@@ -27,6 +27,8 @@ struct ProgramView: View {
     @State var showJoinPopup: Bool = false
     @State var selectedStandardProgramDBRepresentation: StandardProgramDBRepresentation?
     
+    @State private var selectedDate: Date = Date()
+    
     var body: some View {
         ZStack {
             Color.white
@@ -35,6 +37,14 @@ struct ProgramView: View {
             ScrollView {
                 VStack(spacing: 0) {
                     programHeader
+                    
+                    if let selectedProgram = programManager.selectedProgram?.program {
+                        ScheduleBarView(
+                            selectedDate: $selectedDate, startDate: selectedProgram.startDate,
+                            program: selectedProgram.program
+                        )
+                        .padding(.vertical, 8)
+                    }
                     
                     if programManager.selectedProgram == nil {
                         
@@ -183,80 +193,115 @@ struct ProgramView: View {
 
 
     private var programContent: some View {
-        VStack(spacing: 8) {
-            if let todaysProgram = ProgramManager.shared.selectedProgram?.program.program.first(where: { $0.day == DateUtility.getCurrentWeekday() }) {
-                requiredEquipmentView(for: todaysProgram)
-                activeProgramView
-            } else {
-                Text("Nothing scheduled for today!")
-                    .font(.system(size: 16, weight: .light, design: .default))
-                    .foregroundColor(.gray)
-                
-                GeometryReader { geometry in
-                    let totalWidth = geometry.size.width
-                    let padding: CGFloat = 10
-                    let squareWidth = (totalWidth - padding) / 2
+        ZStack {
+            VStack(spacing: 8) {
+                // Your existing content
+                if let todaysProgram = ProgramManager.shared.selectedProgram?.program.program.first(where: { $0.day == DateUtility.getWeekdayFromDate(date: selectedDate.formatted(.dateTime.month(.defaultDigits).day().year())) ?? "" }) {
+                    requiredEquipmentView(for: todaysProgram)
+                    activeProgramView
+                } else {
+                    Text("No workout scheduled for today!")
+                        .font(.system(size: 16, weight: .light, design: .default))
+                        .foregroundColor(.gray)
                     
-                    HStack(spacing: padding) {
-                        Button(action: {
-                            navigateToMetricsView = true
-                        }) {
-                            VStack(alignment: .leading, spacing: 8) {
-                                Text("Program Stats")
-                                    .font(.system(size: 18, weight: .light, design: .default))
-                                
-                                HStack {
-                                    Image(systemName: "chart.pie.fill")
-                                        .foregroundColor(Color(hex: "40C4FC"))
-                                    Spacer()
-                                }
-                            }
-                            .padding()
-                            .frame(width: squareWidth, height: squareWidth / 2)
-                            .background(Color(hex: "F5F5F5"))
-                        }
-                        .buttonStyle(PlainButtonStyle())
+                    GeometryReader { geometry in
+                        let totalWidth = geometry.size.width
+                        let padding: CGFloat = 10
+                        let squareWidth = (totalWidth - padding) / 2
                         
-                        Button(action: {
-                            showConfirmationWidget = true
-                        }) {
-                            VStack(alignment: .leading, spacing: 8) {
-                                Text("Leave Program")
-                                    .font(.system(size: 18, weight: .light))
-                                
-                                HStack {
-                                    Spacer()
-                                    Image("Exit")
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                        .frame(height: 24)
+                        HStack(spacing: padding) {
+                            Button(action: {
+                                navigateToMetricsView = true
+                            }) {
+                                VStack(alignment: .leading, spacing: 8) {
+                                    Text("Program Stats")
+                                        .font(.system(size: 18, weight: .light, design: .default))
+                                    
+                                    HStack {
+                                        Image(systemName: "chart.pie.fill")
+                                            .foregroundColor(Color(hex: "40C4FC"))
+                                        Spacer()
+                                    }
                                 }
+                                .padding()
+                                .frame(width: squareWidth, height: squareWidth / 2)
+                                .background(Color(hex: "F5F5F5"))
                             }
-                            .padding()
-                            .frame(width: squareWidth, height: squareWidth / 2)
-                            .background(Color(hex: "F5F5F5"))
+                            .buttonStyle(PlainButtonStyle())
+                            
+                            Button(action: {
+                                showConfirmationWidget = true
+                            }) {
+                                VStack(alignment: .leading, spacing: 8) {
+                                    Text("Leave Program")
+                                        .font(.system(size: 18, weight: .light))
+                                    
+                                    HStack {
+                                        Spacer()
+                                        Image("Exit")
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                            .frame(height: 24)
+                                    }
+                                }
+                                .padding()
+                                .frame(width: squareWidth, height: squareWidth / 2)
+                                .background(Color(hex: "F5F5F5"))
+                            }
+                            .buttonStyle(PlainButtonStyle())
                         }
-                        .buttonStyle(PlainButtonStyle())
                     }
+                    .frame(height: (UIScreen.main.bounds.width - 10) / 2)
                 }
-                .frame(height: (UIScreen.main.bounds.width - 10) / 2)
+            }
+            
+            if selectedDate > Date() {
+                Color.black.opacity(0.7)
+                    .ignoresSafeArea()
+                
+                VStack(spacing: 20) {
+                    Image(systemName: "lock.fill")
+                        .font(.system(size: 48))
+                        .foregroundColor(.white)
+                        .background(
+                            Circle()
+                                .fill(Color(hex: "40C4FC").opacity(0.2))
+                                .frame(width: 80, height: 80)
+                        )
+                    
+                    Text("Coming Soon")
+                        .font(.system(size: 24, weight: .semibold))
+                        .foregroundColor(.white)
+                    
+                    Text(workoutAvailabilityText(for: selectedDate))
+                        .font(.system(size: 18, weight: .medium))
+                        .foregroundColor(Color(hex: "40C4FC"))
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 10)
+                        .background(Color.white.opacity(0.1))
+                        .cornerRadius(20)
+                }
             }
         }
     }
+    
 
     private func requiredEquipmentView(for todaysProgram: ProgramDay) -> some View {
-        VStack(alignment: .leading, spacing: 16) {
+        // Cache the equipment array to prevent recalculation
+        let equipment = todaysProgram.requiredEquipment()
+        
+        return VStack(alignment: .leading, spacing: 16) {
             HStack {
-                Text("Today's Required Equipment")
+                Text("\(selectedDate.isSameDay(as: Date()) ? "Today's" : "Required") Equipment")
                     .font(.system(size: 20, weight: .medium, design: .default))
                     .foregroundColor(.black)
                 
                 Spacer()
             }
             
-            if todaysProgram.requiredEquipment().isEmpty {
+            if equipment.isEmpty {
                 HStack {
-                    Text("No equipment required for today's workout")
+                    Text("No equipment required for this workout")
                         .font(.system(size: 16, weight: .regular, design: .default))
                         .foregroundColor(.gray)
                         .padding(.top, -12)
@@ -264,16 +309,20 @@ struct ProgramView: View {
                     Spacer()
                 }
             } else {
-                ScrollView(.horizontal) {
-                    HStack {
-                        ForEach(todaysProgram.requiredEquipment(), id: \.self) { equipment in
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 16) {
+                        ForEach(equipment, id: \.self) { equipment in
                             EquipmentItemView(equipment: equipment)
+                                .id("\(todaysProgram.day)_\(equipment)")  // Create a stable, unique identifier
                         }
                     }
                 }
             }
         }
         .padding(.bottom)
+        .transaction { transaction in
+            transaction.animation = nil  // Disable implicit animations
+        }
     }
 
     private var segmentedControl: some View {
@@ -337,9 +386,9 @@ struct ProgramView: View {
 
     private var activeProgramView: some View {
         VStack(spacing: 16) {
-            UpNextProgramExerciseWidget(programManager: programManager, navigateToWorkoutView: $navigateToWorkoutView)
+            UpNextProgramExerciseWidget(programManager: programManager, navigateToWorkoutView: $navigateToWorkoutView, selectedDate: selectedDate)
             
-            TodaysScheduleWidget(programManager: programManager)
+            TodaysScheduleWidget(programManager: programManager, selectedDate: selectedDate)
             
             GeometryReader { geometry in
                 let totalWidth = geometry.size.width
@@ -481,6 +530,27 @@ struct ProgramView: View {
         }
     }
     
+    private func workoutAvailabilityText(for date: Date) -> String {
+        let calendar = Calendar.current
+        let now = Date()
+        
+        // If it's future date
+        if date > now {
+            let nextMidnight = calendar.startOfDay(for: date)
+            let components = calendar.dateComponents([.hour, .minute], from: now, to: nextMidnight)
+            
+            if let hours = components.hour {
+                if hours > 24 {
+                    let days = hours / 24
+                    return "Available in \(days) \(days == 1 ? "day" : "days")"
+                } else {
+                    return "Available in \(hours) \(hours == 1 ? "hour" : "hours")"
+                }
+            }
+        }
+        return ""
+    }
+    
 }
 
 struct ProgramHeader: View {
@@ -544,6 +614,8 @@ struct UpNextProgramExerciseWidget: View {
     @ObservedObject var programManager: ProgramManager
     @Binding var navigateToWorkoutView: Bool
 
+    @State var selectedDate: Date
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack {
@@ -552,14 +624,11 @@ struct UpNextProgramExerciseWidget: View {
                 
                 Spacer()
                 
-                Text("Start Now")
-                    .foregroundColor(Color(hex: "40C4FC"))
-                    .font(.system(size: 13, weight: .medium, design: .default))
-//                    .onTapGesture {
-//                        withAnimation(.spring()) {
-//                            navigateToWorkoutView = true
-//                        }
-//                    }
+                if Calendar.current.isDateInToday(selectedDate) {
+                    Text("Start Now")
+                        .foregroundColor(Color(hex: "40C4FC"))
+                        .font(.system(size: 13, weight: .medium, design: .default))
+                }
             }
             
             if let todaysProgram = ProgramManager.shared.selectedProgram?.program.program.first(where: { $0.day == DateUtility.getCurrentWeekday() }),
@@ -576,11 +645,14 @@ struct UpNextProgramExerciseWidget: View {
         }
         .padding()
         .onTapGesture {
-            withAnimation(.spring()) {
-                navigateToWorkoutView = true
+            if Calendar.current.isDateInToday(selectedDate) { 
+                withAnimation(.spring()) {
+                    navigateToWorkoutView = true
+                }
             }
         }
         .background(Color(hex: "F5F5F5"))
+        .opacity(selectedDate < Date() ? 0.8 : 1.0)
     }
     
     private func exerciseDetailsView(for exercise: ProgramExercise) -> some View {
@@ -634,12 +706,14 @@ struct TodaysScheduleWidget: View {
     @ObservedObject var programManager: ProgramManager
     @State private var isExpanded: Bool = false
 
+    @State var selectedDate: Date
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Today's Schedule")
+            Text(selectedDate.isSameDay(as: Date()) ? "Today's Schedule" : "Schedule")
                 .font(.system(size: 20, weight: .medium, design: .default))
             
-            if let todaysProgram = ProgramManager.shared.selectedProgram?.program.program.first(where: { $0.day == DateUtility.getCurrentWeekday() }) {
+            if let todaysProgram = ProgramManager.shared.selectedProgram?.program.program.first(where: { $0.day == DateUtility.getWeekdayFromDate(date: selectedDate.formatted(.dateTime.month(.defaultDigits).day().year())) ?? "" }) {
                 let exercises = todaysProgram.exercises
                 let displayedExercises = isExpanded ? exercises : Array(exercises.prefix(3))
                 

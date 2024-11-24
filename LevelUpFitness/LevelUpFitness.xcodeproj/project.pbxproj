@@ -88,6 +88,8 @@
 		994E7DC72C03DE5400BAD9E0 /* PascalCaseCodingKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994E7DC62C03DE5400BAD9E0 /* PascalCaseCodingKey.swift */; };
 		994E7DC92C03DF5C00BAD9E0 /* ProgramView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994E7DC82C03DF5C00BAD9E0 /* ProgramView.swift */; };
 		994E7DCB2C05289F00BAD9E0 /* Program.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994E7DCA2C05289F00BAD9E0 /* Program.swift */; };
+		9953BDEC2CF2832800348AC3 /* ScheduleBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9953BDEB2CF2832800348AC3 /* ScheduleBarView.swift */; };
+		9953BDEE2CF2A25A00348AC3 /* FutureWorkoutOverlays.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9953BDED2CF2A25A00348AC3 /* FutureWorkoutOverlays.swift */; };
 		99569FC52C34CD06001DFCB8 /* JoinProgramWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99569FC42C34CD06001DFCB8 /* JoinProgramWidget.swift */; };
 		995B94B92C596EEF007AECF0 /* TimeSpentWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995B94B82C596EEF007AECF0 /* TimeSpentWidget.swift */; };
 		995B94BB2C596F0B007AECF0 /* TimeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995B94BA2C596F0B007AECF0 /* TimeData.swift */; };
@@ -250,6 +252,8 @@
 		994E7DC62C03DE5400BAD9E0 /* PascalCaseCodingKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PascalCaseCodingKey.swift; sourceTree = "<group>"; };
 		994E7DC82C03DF5C00BAD9E0 /* ProgramView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramView.swift; sourceTree = "<group>"; };
 		994E7DCA2C05289F00BAD9E0 /* Program.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Program.swift; sourceTree = "<group>"; };
+		9953BDEB2CF2832800348AC3 /* ScheduleBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleBarView.swift; sourceTree = "<group>"; };
+		9953BDED2CF2A25A00348AC3 /* FutureWorkoutOverlays.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FutureWorkoutOverlays.swift; sourceTree = "<group>"; };
 		99569FC42C34CD06001DFCB8 /* JoinProgramWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinProgramWidget.swift; sourceTree = "<group>"; };
 		995B94B82C596EEF007AECF0 /* TimeSpentWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSpentWidget.swift; sourceTree = "<group>"; };
 		995B94BA2C596F0B007AECF0 /* TimeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeData.swift; sourceTree = "<group>"; };
@@ -526,6 +530,8 @@
 				99F7F6E02CAB6BB0009858AC /* GymSessionStatsView.swift */,
 				99F7F6E22CAC422F009858AC /* GymSessionsInfoView.swift */,
 				99F7F6F82CAE3CE9009858AC /* WebView.swift */,
+				9953BDEB2CF2832800348AC3 /* ScheduleBarView.swift */,
+				9953BDED2CF2A25A00348AC3 /* FutureWorkoutOverlays.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -845,6 +851,7 @@
 				9978CDF62C7D797C00659813 /* HealthDataPoint.swift in Sources */,
 				991FB4522C66657C006B4ACE /* LevelChangeInfo.swift in Sources */,
 				991FB45D2C668A8D006B4ACE /* LocalStorageUtility.swift in Sources */,
+				9953BDEE2CF2A25A00348AC3 /* FutureWorkoutOverlays.swift in Sources */,
 				99A0C8BF2CA77A9900F9281A /* XPCloudKitUtility.swift in Sources */,
 				99EEC6182C32F37A0044F906 /* SizePreferanceKey.swift in Sources */,
 				999F70722C0EB4D400B35A78 /* AchievementWidget.swift in Sources */,
@@ -866,6 +873,7 @@
 				99DD3D542C1D0871006C07B3 /* FullPageVideoView.swift in Sources */,
 				99ECAD2E2C783C2F0012F8E7 /* ToDoListManager.swift in Sources */,
 				9978CDF22C7C22F500659813 /* LibraryExerciseDataView.swift in Sources */,
+				9953BDEC2CF2832800348AC3 /* ScheduleBarView.swift in Sources */,
 				99B44C062C9BA6CB00C0C434 /* CustomWorkoutExerciseDataSetWidget.swift in Sources */,
 				99FC9E482C5EC56B00DAFFAC /* RequestCustomProgramWidget.swift in Sources */,
 				991F8FEA2C17841300A134A5 /* BadgeManager.swift in Sources */,
