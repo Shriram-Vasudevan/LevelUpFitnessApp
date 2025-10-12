@@ -8,26 +8,8 @@
 import SwiftUI
 
 struct GymSessionsInfoView: View {
-    @Environment(\.dismiss) var dismiss
-    
     var body: some View {
-        ZStack {
-            ScrollView(.vertical) {
-                VStack {
-                    HStack {
-                        Button(action: { dismiss() }) {
-                            Image(systemName: "xmark")
-                                .foregroundColor(.black)
-                        }
-                        
-                        Spacer()
-                    }
-                    
-                    Spacer()
-                }
-            }
-            .padding(.horizontal)
-        }
+        GymSessionInfoView()
     }
 }
 
