@@ -28,12 +28,43 @@ struct StandardProgramDBRepresentation: Codable {
     var environment: String
     var image: String
     var description: String
-    
+    var isPremium: Bool
+
     enum CodingKeys: String, CodingKey {
         case id = "ID"
         case name = "Name"
         case environment = "Environment"
         case image = "Image"
         case description = "Description"
+        case isPremium = "IsPremium"
+    }
+
+    init(id: String, name: String, environment: String, image: String, description: String, isPremium: Bool = false) {
+        self.id = id
+        self.name = name
+        self.environment = environment
+        self.image = image
+        self.description = description
+        self.isPremium = isPremium
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(String.self, forKey: .id)
+        name = try container.decode(String.self, forKey: .name)
+        environment = try container.decode(String.self, forKey: .environment)
+        image = try container.decode(String.self, forKey: .image)
+        description = try container.decode(String.self, forKey: .description)
+        isPremium = try container.decodeIfPresent(Bool.self, forKey: .isPremium) ?? false
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: .id)
+        try container.encode(name, forKey: .name)
+        try container.encode(environment, forKey: .environment)
+        try container.encode(image, forKey: .image)
+        try container.encode(description, forKey: .description)
+        try container.encode(isPremium, forKey: .isPremium)
     }
 }

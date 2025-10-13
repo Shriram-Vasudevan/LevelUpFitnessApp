@@ -11,6 +11,7 @@ import CloudKit
 
 struct ProfileView: View {
     @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var storeKitManager: StoreKitManager
     @StateObject private var authManager = AuthenticationManager.shared
     @State private var showDeleteConfirmation = false
     @State private var showEditProfileSheet = false
@@ -19,11 +20,13 @@ struct ProfileView: View {
     @State private var pfpData: Data?
 
     @State var goBackToIntroView: Bool = false
-    
+    @State private var showPaywall = false
+
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
                 profileHeader
+                premiumSection
                 Divider()
                 supportSection
                 Divider()
@@ -78,6 +81,12 @@ struct ProfileView: View {
         .navigationDestination(isPresented: $goBackToIntroView) {
             OpeningViewsContainer()
         }
+        .fullScreenCover(isPresented: $showPaywall) {
+            PaywallView(allowDismissal: true) {
+                showPaywall = false
+            }
+            .environmentObject(storeKitManager)
+        }
     }
 
     private var profileHeader: some View {
@@ -128,6 +137,49 @@ struct ProfileView: View {
                     .clipShape(Circle())
             }
         }
+    }
+
+    private var premiumSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Text("LevelUp Premium")
+                    .font(.headline)
+                Spacer()
+                Text(storeKitManager.isPremiumUnlocked ? "Active" : "Free tier")
+                    .font(.footnote.bold())
+                    .foregroundColor(storeKitManager.isPremiumUnlocked ? Color.green : Color(hex: "40C4FC"))
+                    .padding(.vertical, 4)
+                    .padding(.horizontal, 10)
+                    .background((storeKitManager.isPremiumUnlocked ? Color.green.opacity(0.15) : Color(hex: "40C4FC").opacity(0.1)))
+                    .clipShape(Capsule())
+            }
+
+            Text("Unlock unlimited history, premium programs, and advanced analytics across the app.")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+
+            Button {
+                if storeKitManager.isPremiumUnlocked {
+                    Task {
+                        await storeKitManager.showManageSubscriptions()
+                    }
+                } else {
+                    storeKitManager.recordPaywallTrigger(.manualUpgrade)
+                    showPaywall = true
+                }
+            } label: {
+                Text(storeKitManager.isPremiumUnlocked ? "Manage subscription" : "Upgrade to Premium")
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundColor(.white)
+                    .frame(height: 44)
+                    .frame(maxWidth: .infinity)
+                    .background(Color(hex: "40C4FC"))
+                    .cornerRadius(10)
+            }
+        }
+        .padding()
+        .background(Color(uiColor: .secondarySystemGroupedBackground))
+        .cornerRadius(16)
     }
 
     private var supportSection: some View {
@@ -278,4 +330,5 @@ struct SupportView: View {
 
 #Preview {
     ProfileView()
+        .environmentObject(StoreKitManager.shared)
 }

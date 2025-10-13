@@ -48,19 +48,26 @@ class ProgramManager: ObservableObject {
 
     func joinStandardProgram(programName: String, completionHandler: @escaping (ProgramWithID) -> Void) async {
         print("trying to join standard program")
+        let isPremiumProgram = standardProgramDBRepresentations.first(where: { $0.name == programName })?.isPremium ?? false
+        if isPremiumProgram && !StoreKitManager.shared.isPremiumUnlocked {
+            print("Premium subscription required to join \(programName)")
+            return
+        }
         do {
             print("trying to join standard program 1")
             let userID = try await ProgramCloudKitUtility.customContainer.userRecordID().recordName
             let startDate = DateUtility.getCurrentDate()
 
             print("trying to join standard program 2")
-            
+
             ProgramCloudKitUtility.fetchStandardProgramData(programName: programName) { program, error in
                 if let program = program {
-                    ProgramCloudKitUtility.saveUserProgram(userID: userID, program: program, startDate: startDate) { programID, success, error in
+                    var enrichedProgram = program
+                    enrichedProgram.isPremium = program.isPremium || isPremiumProgram
+                    ProgramCloudKitUtility.saveUserProgram(userID: userID, program: enrichedProgram, startDate: startDate) { programID, success, error in
                         if success {
-                            let programWithID = ProgramWithID(programID: programID, program: program)
-                            
+                            let programWithID = ProgramWithID(programID: programID, program: enrichedProgram)
+
                             DispatchQueue.main.async {
                                 self.userProgramData.append(programWithID)
                                 print("Program with ID \(programID) set as selectedProgram and added to userProgramData")

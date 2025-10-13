@@ -10,7 +10,8 @@ import SwiftUI
 
 struct GymSessionsView: View {
     @ObservedObject var gymManager = GymManager.shared
-    
+    @EnvironmentObject private var storeKitManager: StoreKitManager
+
     @State private var showEndSessionConfirmation = false
     @State private var navigateToExerciseView = false
     @State private var navigateToPastSessionDetailView = false
@@ -18,9 +19,10 @@ struct GymSessionsView: View {
     @State private var navigateToAllPastSessionsView = false
     @State private var selectedExerciseRecord: ExerciseRecord?
     @State private var selectedPastSession: GymSession?
-    
+
     @State var showGymSessionInfoSheet: Bool = false
     @State private var expandedExercises: Set<UUID> = []
+    @State private var showPaywall = false
     
     var body: some View {
         ZStack {
@@ -81,6 +83,12 @@ struct GymSessionsView: View {
             GymSessionInfoView()
         })
         .navigationBarBackButtonHidden()
+        .fullScreenCover(isPresented: $showPaywall) {
+            PaywallView(allowDismissal: true) {
+                showPaywall = false
+            }
+            .environmentObject(storeKitManager)
+        }
     }
 
     private var headerView: some View {
@@ -590,7 +598,12 @@ struct GymSessionsView: View {
                     .font(.system(size: 20, weight: .semibold))
                 Spacer()
                 Button {
-                    navigateToAllPastSessionsView = true
+                    if storeKitManager.isPremiumUnlocked {
+                        navigateToAllPastSessionsView = true
+                    } else {
+                        storeKitManager.recordPaywallTrigger(.premiumHistory)
+                        showPaywall = true
+                    }
                 } label: {
                     Label("See all", systemImage: "chevron.right")
                         .labelStyle(.titleAndIcon)
@@ -625,16 +638,49 @@ struct GymSessionsView: View {
             Text("My trends")
                 .font(.system(size: 20, weight: .semibold))
 
-            if gymManager.gymSessions.totalNumberOfSessions >= 2 {
-                GymSessionsStatsView()
+            if storeKitManager.isPremiumUnlocked {
+                if gymManager.gymSessions.totalNumberOfSessions >= 2 {
+                    GymSessionsStatsView()
+                } else {
+                    Text("Trends will appear once 2 sessions have been completed")
+                        .font(.system(size: 15, weight: .medium))
+                        .foregroundColor(.secondary)
+                }
             } else {
-                Text("Trends will appear once 2 sessions have been completed")
-                    .font(.system(size: 15, weight: .medium))
-                    .foregroundColor(.secondary)
+                premiumUpsellCard
             }
         }
         .padding(24)
         .background(cardBackground())
+    }
+
+    private var premiumUpsellCard: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Label("Premium analytics", systemImage: "sparkles")
+                .font(.system(size: 18, weight: .semibold))
+
+            Text("Unlock trends for volume, rest, top sets, and more with LevelUp Premium.")
+                .font(.system(size: 15, weight: .medium))
+                .foregroundColor(.secondary)
+
+            Button {
+                storeKitManager.recordPaywallTrigger(.premiumAnalytics)
+                showPaywall = true
+            } label: {
+                Text("See what's included")
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundColor(.white)
+                    .padding(.vertical, 10)
+                    .padding(.horizontal, 16)
+                    .background(Color(hex: "3080FF"))
+                    .clipShape(Capsule())
+            }
+            .buttonStyle(.plain)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(20)
+        .background(Color(hex: "E8F3FF"))
+        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
     }
 
     private func sessionHistoryCard(for session: GymSession) -> some View {
@@ -1118,49 +1164,65 @@ struct PastGymSessionDetailView: View {
 
 struct AllPastGymSessionsView: View {
     @Environment(\.dismiss) var dismiss
+    @EnvironmentObject private var storeKitManager: StoreKitManager
 
     @ObservedObject var gymManager: GymManager
     @State private var navigateToPastSessionDetailView = false
     @State private var selectedPastSession: GymSession?
+    @State private var showPaywall = false
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: 20) {
-                HStack {
-                    Button {
-                        dismiss()
-                    } label: {
-                        Image(systemName: "chevron.left")
-                            .font(.system(size: 18, weight: .semibold))
-                            .foregroundColor(Color(hex: "3080FF"))
-                            .padding(10)
-                            .background(Color(hex: "3080FF").opacity(0.1))
-                            .clipShape(Circle())
+        Group {
+            if storeKitManager.isPremiumUnlocked {
+                ScrollView {
+                    VStack(spacing: 20) {
+                        header
+
+                        ForEach(gymManager.loadAllGymSessions()) { session in
+                            Button {
+                                selectedPastSession = session
+                                navigateToPastSessionDetailView = true
+                            } label: {
+                                sessionCard(for: session)
+                            }
+                            .buttonStyle(.plain)
+                        }
                     }
-
-                    Spacer()
-
-                    Text("Past sessions")
-                        .font(.system(size: 22, weight: .bold))
-                        .foregroundColor(.primary)
-
-                    Spacer()
-
-                    Spacer()
-                        .frame(width: 44)
+                    .padding(24)
                 }
+            } else {
+                VStack(spacing: 24) {
+                    header
 
-                ForEach(gymManager.loadAllGymSessions()) { session in
+                    Image(systemName: "lock.rectangle.stack")
+                        .font(.system(size: 48))
+                        .foregroundColor(Color(hex: "3080FF"))
+
+                    Text("Full history is a Premium feature")
+                        .font(.title3.weight(.semibold))
+
+                    Text("Upgrade to keep every workout at your fingertips and unlock advanced trends.")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal)
+
                     Button {
-                        selectedPastSession = session
-                        navigateToPastSessionDetailView = true
+                        storeKitManager.recordPaywallTrigger(.premiumHistory)
+                        showPaywall = true
                     } label: {
-                        sessionCard(for: session)
+                        Text("Upgrade to Premium")
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundColor(.white)
+                            .padding(.horizontal, 24)
+                            .padding(.vertical, 12)
+                            .background(Color(hex: "3080FF"))
+                            .clipShape(Capsule())
                     }
-                    .buttonStyle(.plain)
                 }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .padding(24)
             }
-            .padding(24)
         }
         .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())
         .navigationDestination(isPresented: $navigateToPastSessionDetailView) {
@@ -1169,6 +1231,38 @@ struct AllPastGymSessionsView: View {
             }
         }
         .navigationBarBackButtonHidden()
+        .fullScreenCover(isPresented: $showPaywall) {
+            PaywallView(allowDismissal: true) {
+                showPaywall = false
+            }
+            .environmentObject(storeKitManager)
+        }
+    }
+
+    private var header: some View {
+        HStack {
+            Button {
+                dismiss()
+            } label: {
+                Image(systemName: "chevron.left")
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundColor(Color(hex: "3080FF"))
+                    .padding(10)
+                    .background(Color(hex: "3080FF").opacity(0.1))
+                    .clipShape(Circle())
+            }
+
+            Spacer()
+
+            Text("Past sessions")
+                .font(.system(size: 22, weight: .bold))
+                .foregroundColor(.primary)
+
+            Spacer()
+
+            Spacer()
+                .frame(width: 44)
+        }
     }
 
     private func sessionCard(for session: GymSession) -> some View {
@@ -1464,8 +1558,9 @@ struct GymSessionInfoView: View {
                         Label("Session highlights surface your heaviest set for fast review", systemImage: "trophy")
                     }
 
-                    infoCard(title: "Session analytics", description: "Scroll to \"My trends\" after logging a few workouts to see total volume, reps, and weekly momentum. Each past session tile now shows its own metric grid so you can spot patterns at a glance.") {
+                    infoCard(title: "Session analytics", description: "Scroll to \"My trends\" after logging a few workouts to see total volume, reps, and weekly momentum. Premium unlocks charts for volume, rest, and streaks so you can spot patterns at a glance.") {
                         Label("Open any past session to view every recorded set", systemImage: "clock.arrow.circlepath")
+                        Label("Upgrade to Premium to compare volume, reps, and rest trends over time", systemImage: "chart.xyaxis.line")
                         Label("Use the highlight badge to jump directly to your strongest lifts", systemImage: "sparkles")
                     }
 
@@ -1473,6 +1568,7 @@ struct GymSessionInfoView: View {
                         Label("Navigate to the Programs tab from the main navigation bar", systemImage: "square.grid.2x2")
                         Label("Tap the program title at the top and choose \"View Programs\" to browse", systemImage: "magnifyingglass")
                         Label("Join a standard plan or tap \"Request a custom plan\" to submit your preferences", systemImage: "person.crop.circle.badge.plus")
+                        Label("Look for the Premium badge — those plans require an active subscription to unlock", systemImage: "star.circle.fill")
                         Label("Once joined, the day's workout will appear automatically in the active session list", systemImage: "bolt.badge.clock")
                     }
 
