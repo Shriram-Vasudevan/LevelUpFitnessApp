@@ -126,9 +126,11 @@ class ProgramCloudKitUtility {
                     print("Record with missing fields")
                     return nil
                 }
-                
+
+                let isPremium = record["IsPremium"] as? Bool ?? false
+
                 print("Fetched program - ID: \(id), Name: \(name)")
-                return StandardProgramDBRepresentation(id: id, name: name, environment: environment, image: image, description: description)
+                return StandardProgramDBRepresentation(id: id, name: name, environment: environment, image: image, description: description, isPremium: isPremium)
             } ?? []
             
             print("Returning \(programs.count) programs")

@@ -1,0 +1,51 @@
+{
+  "data": {
+    "type": "storekitconfiguration",
+    "attributes": {
+      "appAppleId": 0,
+      "bundleId": "com.levelupfitness.app",
+      "name": "LevelUpFitness",
+      "schemaVersion": "1.0",
+      "configuration": {
+        "inAppPurchases": [
+          {
+            "referenceName": "Premium Monthly",
+            "productId": "com.levelupfitness.premium.monthly",
+            "familyShareable": false,
+            "type": "auto-renewable-subscription",
+            "subscription": {
+              "group": "com.levelupfitness.premium",
+              "duration": "P1M",
+              "offers": [
+                {
+                  "displayPrice": "7.99",
+                  "price": 7.99,
+                  "currencyCode": "USD"
+                }
+              ],
+              "introductoryOffers": []
+            }
+          },
+          {
+            "referenceName": "Premium Annual",
+            "productId": "com.levelupfitness.premium.annual",
+            "familyShareable": false,
+            "type": "auto-renewable-subscription",
+            "subscription": {
+              "group": "com.levelupfitness.premium",
+              "duration": "P1Y",
+              "offers": [
+                {
+                  "displayPrice": "79.99",
+                  "price": 79.99,
+                  "currencyCode": "USD"
+                }
+              ],
+              "introductoryOffers": []
+            }
+          }
+        ]
+      }
+    }
+  }
+}

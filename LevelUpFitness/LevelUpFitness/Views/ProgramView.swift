@@ -11,7 +11,8 @@ struct ProgramView: View {
     @ObservedObject var programManager = ProgramManager.shared
     @ObservedObject var badgeManager = BadgeManager.shared
     @ObservedObject var xpManager = XPManager.shared
-    
+    @EnvironmentObject private var storeKitManager: StoreKitManager
+
     @State var navigateToWorkoutView: Bool = false
     @State var navigateToMetricsView: Bool = false
     @State var showConfirmationWidget: Bool = false
@@ -26,8 +27,9 @@ struct ProgramView: View {
     
     @State var showJoinPopup: Bool = false
     @State var selectedStandardProgramDBRepresentation: StandardProgramDBRepresentation?
-    
+
     @State private var selectedDate: Date = Date()
+    @State private var showPaywall = false
     
     var body: some View {
         ZStack {
@@ -120,6 +122,12 @@ struct ProgramView: View {
         .sheet(isPresented: $showProgramPicker) {
             programPickerView
         }
+        .fullScreenCover(isPresented: $showPaywall) {
+            PaywallView(allowDismissal: true) {
+                showPaywall = false
+            }
+            .environmentObject(storeKitManager)
+        }
         .onAppear {
 //            if programManager.selectedProgram == nil, let firstProgram = programManager.userProgramData.first {
 //                programManager.selectedProgram = firstProgram
@@ -211,7 +219,12 @@ struct ProgramView: View {
                         
                         HStack(spacing: padding) {
                             Button(action: {
-                                navigateToMetricsView = true
+                                if storeKitManager.isPremiumUnlocked {
+                                    navigateToMetricsView = true
+                                } else {
+                                    storeKitManager.recordPaywallTrigger(.premiumAnalytics)
+                                    showPaywall = true
+                                }
                             }) {
                                 VStack(alignment: .leading, spacing: 8) {
                                     Text("Program Stats")
@@ -397,7 +410,12 @@ struct ProgramView: View {
                 
                 HStack(spacing: padding) {
                     Button(action: {
-                        navigateToMetricsView = true
+                        if storeKitManager.isPremiumUnlocked {
+                            navigateToMetricsView = true
+                        } else {
+                            storeKitManager.recordPaywallTrigger(.premiumAnalytics)
+                            showPaywall = true
+                        }
                     }) {
                         VStack(alignment: .leading, spacing: 8) {
                             Text("Program Stats")
@@ -483,8 +501,13 @@ struct ProgramView: View {
                     ProgramCardView(standardProgramDBRepresentation: standardProgramDBRepresentation)
                         .onTapGesture {
                             if !programManager.userProgramData.contains(where: { $0.program.programName == standardProgramDBRepresentation.name }) {
-                                self.selectedStandardProgramDBRepresentation = standardProgramDBRepresentation
-                                self.showJoinPopup = true
+                                if standardProgramDBRepresentation.isPremium && !storeKitManager.isPremiumUnlocked {
+                                    storeKitManager.recordPaywallTrigger(.premiumProgram(name: standardProgramDBRepresentation.name))
+                                    showPaywall = true
+                                } else {
+                                    self.selectedStandardProgramDBRepresentation = standardProgramDBRepresentation
+                                    self.showJoinPopup = true
+                                }
                             }
                         }
                 }
@@ -499,8 +522,13 @@ struct ProgramView: View {
                     ProgramCardView(standardProgramDBRepresentation: standardProgramDBRepresentation)
                         .onTapGesture {
                             if !programManager.userProgramData.contains(where: { $0.program.programName == standardProgramDBRepresentation.name }) {
-                                self.selectedStandardProgramDBRepresentation = standardProgramDBRepresentation
-                                self.showJoinPopup = true
+                                if standardProgramDBRepresentation.isPremium && !storeKitManager.isPremiumUnlocked {
+                                    storeKitManager.recordPaywallTrigger(.premiumProgram(name: standardProgramDBRepresentation.name))
+                                    showPaywall = true
+                                } else {
+                                    self.selectedStandardProgramDBRepresentation = standardProgramDBRepresentation
+                                    self.showJoinPopup = true
+                                }
                             }
                         }
                 }
@@ -825,7 +853,8 @@ struct ActiveProgramCardView: View {
 struct ProgramCardView: View {
     var standardProgramDBRepresentation: StandardProgramDBRepresentation
     @ObservedObject var programManager = ProgramManager.shared
-    
+    @EnvironmentObject private var storeKitManager: StoreKitManager
+
     var body: some View {
         ZStack(alignment: .bottomLeading) {
             Image(standardProgramDBRepresentation.image)
@@ -833,7 +862,7 @@ struct ProgramCardView: View {
                 .aspectRatio(contentMode: .fill)
                 .frame(width: 200, height: 120)
                 .clipped()
-            
+
             VStack(alignment: .leading, spacing: 4) {
                 Spacer()
                 Text(standardProgramDBRepresentation.name)
@@ -843,9 +872,9 @@ struct ProgramCardView: View {
             }
             .padding()
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
-            
+
             if !isProgramJoined() {
-                Text("Join")
+                Text(ctaLabel)
                     .font(.system(size: 14, weight: .semibold))
                     .foregroundColor(Color(hex: "40C4FC"))
                     .padding(.horizontal, 16)
@@ -855,7 +884,18 @@ struct ProgramCardView: View {
                     .padding([.top, .trailing], 12)
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
             }
-            
+
+            if standardProgramDBRepresentation.isPremium {
+                Label("Premium", systemImage: "star.fill")
+                    .font(.system(size: 12, weight: .bold))
+                    .foregroundColor(.white)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                    .background(Color.black.opacity(0.45))
+                    .clipShape(Capsule())
+                    .padding(12)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            }
         }
         .frame(width: 200, height: 120)
         .cornerRadius(15)
@@ -863,9 +903,16 @@ struct ProgramCardView: View {
         .opacity(isProgramJoined() ? 0.5 : 1.0)
         .disabled(isProgramJoined())
     }
-    
+
     private func isProgramJoined() -> Bool {
         programManager.userProgramData.contains { $0.program.programName == standardProgramDBRepresentation.name }
+    }
+
+    private var ctaLabel: String {
+        if standardProgramDBRepresentation.isPremium && !storeKitManager.isPremiumUnlocked {
+            return "Unlock"
+        }
+        return "Join"
     }
 }
 
@@ -874,7 +921,8 @@ struct ProgramJoinPopupView: View {
     @Binding var isPresented: Bool
     let program: StandardProgramDBRepresentation
     let joinProgramAction: () -> Void
-    
+    @EnvironmentObject private var storeKitManager: StoreKitManager
+
     var body: some View {
         ZStack {
             Color.black.opacity(0.1)
@@ -895,14 +943,24 @@ struct ProgramJoinPopupView: View {
                     Text(program.name)
                         .font(.system(size: 22, weight: .bold))
                         .foregroundColor(.primary)
-                    
+
                     Text(program.description)
                         .font(.system(size: 16, weight: .regular))
                         .foregroundColor(.secondary)
                         .multilineTextAlignment(.leading)
+
+                    if program.isPremium {
+                        HStack(spacing: 8) {
+                            Image(systemName: "star.fill")
+                                .foregroundColor(Color(hex: "40C4FC"))
+                            Text(storeKitManager.isPremiumUnlocked ? "Included with your Premium subscription." : "Requires LevelUp Premium to join.")
+                                .font(.system(size: 14, weight: .semibold))
+                                .foregroundColor(.primary)
+                        }
+                    }
                 }
                 .padding(.horizontal)
-                
+
                 HStack(spacing: 20) {
                     Button(action: {
                         withAnimation {
@@ -924,7 +982,7 @@ struct ProgramJoinPopupView: View {
                             isPresented = false
                         }
                     }) {
-                        Text("Join Program")
+                        Text(storeKitManager.isPremiumUnlocked || !program.isPremium ? "Join Program" : "Unlock Premium")
                             .foregroundColor(.white)
                             .padding()
                             .frame(maxWidth: .infinity)
@@ -932,6 +990,7 @@ struct ProgramJoinPopupView: View {
                             .cornerRadius(10)
                             .shadow(radius: 5)
                     }
+                    .disabled(program.isPremium && !storeKitManager.isPremiumUnlocked)
                 }
                 .padding(.horizontal)
             }
@@ -948,5 +1007,6 @@ struct ProgramJoinPopupView: View {
 
 #Preview {
     ProgramView()
+        .environmentObject(StoreKitManager.shared)
 }
 

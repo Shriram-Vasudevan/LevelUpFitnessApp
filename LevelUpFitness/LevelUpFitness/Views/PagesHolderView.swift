@@ -215,4 +215,5 @@ struct PagesHolderView: View {
 
 #Preview {
     PagesHolderView(pageType: .home)
+        .environmentObject(StoreKitManager.shared)
 }

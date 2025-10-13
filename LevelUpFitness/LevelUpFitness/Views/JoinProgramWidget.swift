@@ -9,13 +9,28 @@ import SwiftUI
 
 struct JoinProgramWidget: View {
     var standardProgramDBRepresentation: StandardProgramDBRepresentation
-    
+    @EnvironmentObject private var storeKitManager: StoreKitManager
+
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text(standardProgramDBRepresentation.name)
-                .font(.system(size: 22, weight: .bold, design: .default))
-                .foregroundColor(.black)
-            
+            HStack {
+                Text(standardProgramDBRepresentation.name)
+                    .font(.system(size: 22, weight: .bold, design: .default))
+                    .foregroundColor(.black)
+
+                Spacer()
+
+                if standardProgramDBRepresentation.isPremium {
+                    Text(storeKitManager.isPremiumUnlocked ? "Premium" : "Unlock")
+                        .font(.system(size: 12, weight: .semibold))
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 6)
+                        .background(Color(hex: "40C4FC"))
+                        .clipShape(Capsule())
+                }
+            }
+
             HStack {
                 programInfoItem(title: "Environment:", value: standardProgramDBRepresentation.environment)
                 Spacer()
@@ -42,5 +57,15 @@ struct JoinProgramWidget: View {
 }
 
 #Preview {
-    JoinProgramWidget(standardProgramDBRepresentation: StandardProgramDBRepresentation(id: "vwerfwefegrw", name: "Masucle Maximization Program", environment: "Gym", image: "", description: ""))
+    JoinProgramWidget(
+        standardProgramDBRepresentation: StandardProgramDBRepresentation(
+            id: "vwerfwefegrw",
+            name: "Muscle Maximization Program",
+            environment: "Gym",
+            image: "",
+            description: "A high-intensity split to ramp up strength",
+            isPremium: true
+        )
+    )
+    .environmentObject(StoreKitManager.shared)
 }

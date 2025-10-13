@@ -627,6 +627,12 @@ extension GymSession {
         return programExerciseCount + individualExerciseCount
     }
 
+    // All logged exercises for convenience
+    var loggedExercises: [ExerciseRecord] {
+        let programRecords = programExercises.values.flatMap { $0 }
+        return programRecords + individualExercises
+    }
+
     // Total volume lifted during the session (for exercises that involve weightlifting)
     var totalVolume: Double {
         let programVolume = programExercises.values.flatMap { $0 }.reduce(0.0) { $0 + $1.totalVolume }
@@ -637,12 +643,12 @@ extension GymSession {
     // Breakdown of total volume by exercise type
     var totalVolumeByExerciseType: [String: Double] {
         var volumeByType: [String: Double] = [:]
-        
+
         for (programName, exercises) in programExercises {
             let programVolume = exercises.reduce(0.0) { $0 + $1.totalVolume }
             volumeByType[programName] = programVolume
         }
-        
+
         for individualExercise in individualExercises {
             let exerciseName = individualExercise.exerciseInfo.exerciseName
             volumeByType[exerciseName, default: 0.0] += individualExercise.totalVolume
@@ -650,7 +656,7 @@ extension GymSession {
 
         return volumeByType
     }
-    
+
     // Total reps completed during the session
     var totalReps: Int {
         let programReps = programExercises.values.flatMap { $0 }.reduce(0) { $0 + $1.totalReps }
@@ -661,12 +667,12 @@ extension GymSession {
     // Breakdown of total reps by exercise type
     var totalRepsByExerciseType: [String: Int] {
         var repsByType: [String: Int] = [:]
-        
+
         for (programName, exercises) in programExercises {
             let programReps = exercises.reduce(0) { $0 + $1.totalReps }
             repsByType[programName] = programReps
         }
-        
+
         for individualExercise in individualExercises {
             let exerciseName = individualExercise.exerciseInfo.exerciseName
             repsByType[exerciseName, default: 0] += individualExercise.totalReps
@@ -674,28 +680,62 @@ extension GymSession {
 
         return repsByType
     }
-    
+
+    /// Total number of sets completed during the session
+    var totalSets: Int {
+        loggedExercises.reduce(0) { $0 + $1.totalSets }
+    }
+
+    /// Average rest time across all sets (in seconds) if any rest has been captured
+    var averageRestSeconds: Double? {
+        let allRests = loggedExercises.flatMap { $0.exerciseData.sets.map { $0.rest } }.filter { $0 > 0 }
+        guard !allRests.isEmpty else { return nil }
+        let total = allRests.reduce(0, +)
+        return total / Double(allRests.count)
+    }
+
+    /// Heaviest lift performed in the session, returning the exercise name and set data
+    var highlightLift: (exerciseName: String, set: ExerciseDataSet)? {
+        loggedExercises.compactMap { record -> (String, ExerciseDataSet)? in
+            guard let set = record.heaviestSet else { return nil }
+            return (record.exerciseInfo.exerciseName, set)
+        }
+        .max(by: { lhs, rhs in lhs.set.weight < rhs.set.weight })
+    }
 }
 
 extension ExerciseRecord {
     var totalVolume: Double {
         var totalVolume: Double = 0
-        
+
         for set in exerciseData.sets {
             totalVolume += Double(set.reps * set.weight)
         }
-        print(totalVolume)
-        
+
         return totalVolume
     }
-    
+
     var totalReps: Int {
         var totalReps: Int = 0
         for set in exerciseData.sets {
             totalReps += set.reps
         }
-        print(totalReps)
         return totalReps
+    }
+
+    var totalSets: Int {
+        exerciseData.sets.count
+    }
+
+    var averageRestSeconds: Double? {
+        let rests = exerciseData.sets.map { $0.rest }.filter { $0 > 0 }
+        guard !rests.isEmpty else { return nil }
+        let total = rests.reduce(0, +)
+        return total / Double(rests.count)
+    }
+
+    var heaviestSet: ExerciseDataSet? {
+        exerciseData.sets.max(by: { $0.weight < $1.weight })
     }
 }
 

@@ -10,14 +10,20 @@ import Amplify
 import AWSS3StoragePlugin
 import AWSCognitoAuthPlugin
 import AWSAPIPlugin
+import StoreKit
 
 @main
 struct LevelUpFitnessApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    
+    @StateObject private var storeKitManager = StoreKitManager.shared
+
     var body: some Scene {
         WindowGroup {
             OpeningViewsContainer()
+                .environmentObject(storeKitManager)
+                .task {
+                    await storeKitManager.refresh()
+                }
         }
     }
 }
@@ -25,7 +31,8 @@ struct LevelUpFitnessApp: App {
 struct OpeningViewsContainer: View {
     @State private var showSplashScreen = true
     @State private var showIntroView = FirstLaunchManager.shared.isFirstLaunch
-    
+    @EnvironmentObject private var storeKitManager: StoreKitManager
+
     var body: some View {
         ZStack {
             if showSplashScreen {
@@ -56,11 +63,12 @@ struct OpeningViewsContainer: View {
         .onAppear {
             Task {
                 await InitializationManager.shared.initialize()
+                await storeKitManager.refresh()
             }
         }
-        .navigationBarBackButtonHidden()    
+        .navigationBarBackButtonHidden()
     }
-    
+
 }
 
 

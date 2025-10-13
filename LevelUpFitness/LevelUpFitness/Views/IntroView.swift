@@ -8,8 +8,10 @@
 import SwiftUI
 
 struct IntroView: View {
+    @EnvironmentObject private var storeKitManager: StoreKitManager
     @State private var currentStep: Int = 0
     @State private var showPrivacyPolicy: Bool = false
+    @State private var showPaywall: Bool = false
     private let totalSteps = 7
     var onIntroCompletion: () -> Void
     
@@ -31,7 +33,12 @@ struct IntroView: View {
                         Task {
                             await LevelChangeManager.shared.createNewLevelChange(property: "JoinedLevelUp", contribution: 10)
                         }
-                        onIntroCompletion()
+                        if storeKitManager.isPremiumUnlocked {
+                            onIntroCompletion()
+                        } else {
+                            storeKitManager.recordPaywallTrigger(.onboarding)
+                            showPaywall = true
+                        }
                     }) {
                         Text("Accept")
                             .foregroundColor(.white)
@@ -124,6 +131,12 @@ struct IntroView: View {
                 .padding(.horizontal)
             }
         }
+        .fullScreenCover(isPresented: $showPaywall) {
+            PaywallView(allowDismissal: true) {
+                onIntroCompletion()
+            }
+            .environmentObject(storeKitManager)
+        }
     }
 
     func getTitle(for step: Int) -> String {
@@ -155,4 +168,5 @@ struct IntroView: View {
 
 #Preview {
     IntroView(onIntroCompletion: {})
+        .environmentObject(StoreKitManager.shared)
 }
