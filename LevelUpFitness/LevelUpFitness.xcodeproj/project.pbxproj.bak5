@@ -537,7 +537,6 @@
 				99F7F6F82CAE3CE9009858AC /* WebView.swift */,
 				9953BDEB2CF2832800348AC3 /* ScheduleBarView.swift */,
 				9953BDED2CF2A25A00348AC3 /* FutureWorkoutOverlays.swift */,
-				BB7654322C84567890FED002 /* PaywallView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -932,8 +931,6 @@
 				99A0C8C72CA84C2500F9281A /* FirstLaunchManager.swift in Sources */,
 				9978CE102C83DE9800659813 /* WeightStatView.swift in Sources */,
 				994E7DB92C026BE500BAD9E0 /* AuthCheckView.swift in Sources */,
-				AA1234562C84567890ABC001 /* StoreKitManager.swift in Sources */,
-				BB7654322C84567890FED001 /* PaywallView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
