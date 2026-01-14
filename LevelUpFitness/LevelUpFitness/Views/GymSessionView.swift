@@ -306,10 +306,7 @@ struct GymSessionsView: View {
 
     @ViewBuilder
     private func highlightView(for session: GymSession, context: HighlightContext) -> some View {
-        guard let highlight = session.highlightLift else {
-            EmptyView()
-            return
-        }
+        if let highlight = session.highlightLift {
 
         let content = HStack(spacing: 16) {
             Image(systemName: "trophy.fill")
@@ -361,6 +358,9 @@ struct GymSessionsView: View {
             }
         case .informational:
             content
+        }
+        } else {
+            EmptyView()
         }
     }
 
@@ -598,7 +598,7 @@ struct GymSessionsView: View {
                     .font(.system(size: 20, weight: .semibold))
                 Spacer()
                 Button {
-                    if storeKitManager.isPremiumUnlocked {
+                    if storeKitManager.effectiveIsPremiumUnlocked {
                         navigateToAllPastSessionsView = true
                     } else {
                         storeKitManager.recordPaywallTrigger(.premiumHistory)
@@ -638,7 +638,7 @@ struct GymSessionsView: View {
             Text("My trends")
                 .font(.system(size: 20, weight: .semibold))
 
-            if storeKitManager.isPremiumUnlocked {
+            if storeKitManager.effectiveIsPremiumUnlocked {
                 if gymManager.gymSessions.totalNumberOfSessions >= 2 {
                     GymSessionsStatsView()
                 } else {
@@ -1173,7 +1173,7 @@ struct AllPastGymSessionsView: View {
 
     var body: some View {
         Group {
-            if storeKitManager.isPremiumUnlocked {
+            if storeKitManager.effectiveIsPremiumUnlocked {
                 ScrollView {
                     VStack(spacing: 20) {
                         header

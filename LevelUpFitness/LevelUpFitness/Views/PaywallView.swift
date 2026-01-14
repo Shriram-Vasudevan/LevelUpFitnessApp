@@ -64,7 +64,7 @@ struct PaywallView: View {
             .onReceive(storeKitManager.$lastError) { error in
                 showError = error != nil
             }
-            .onChange(of: storeKitManager.isPremiumUnlocked) { isUnlocked in
+            .onChange(of: storeKitManager.effectiveIsPremiumUnlocked) { isUnlocked in
                 if isUnlocked {
                     dismissAndComplete()
                 }
@@ -134,10 +134,42 @@ struct PaywallView: View {
                 .foregroundColor(.white)
 
             if storeKitManager.availableProducts.isEmpty {
-                ProgressView()
-                    .progressViewStyle(.circular)
-                    .tint(.white)
-                    .frame(maxWidth: .infinity)
+                VStack(spacing: 16) {
+                    if storeKitManager.isLoadingProducts {
+                        ProgressView()
+                            .progressViewStyle(.circular)
+                            .tint(.white)
+                        Text("Loading subscription options...")
+                            .font(.subheadline)
+                            .foregroundColor(.white.opacity(0.8))
+                    } else if let error = storeKitManager.productLoadError {
+                        VStack(spacing: 12) {
+                            Image(systemName: "exclamationmark.triangle")
+                                .font(.largeTitle)
+                                .foregroundColor(.orange)
+
+                            Text(error)
+                                .font(.subheadline)
+                                .foregroundColor(.white.opacity(0.8))
+                                .multilineTextAlignment(.center)
+
+                            Button("Retry") {
+                                Task {
+                                    await storeKitManager.updateProducts()
+                                }
+                            }
+                            .buttonStyle(.borderedProminent)
+                            .tint(.white)
+                            .foregroundColor(Color(hex: "0E1D45"))
+                        }
+                    } else {
+                        Text("No subscription options available")
+                            .font(.subheadline)
+                            .foregroundColor(.white.opacity(0.8))
+                    }
+                }
+                .frame(maxWidth: .infinity)
+                .padding()
             } else {
                 VStack(spacing: 12) {
                     ForEach(storeKitManager.availableProducts, id: \.id) { product in

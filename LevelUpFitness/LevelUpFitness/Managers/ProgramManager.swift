@@ -19,6 +19,26 @@ class ProgramManager: ObservableObject {
     @Published var exercises: [ExerciseLibraryExercise] = []
     @Published var retrievingProgram: Bool = false
 
+    enum ProgramJoinError: Error, LocalizedError {
+        case premiumRequired(programName: String)
+        case networkError
+        case userNotAuthenticated
+        case programNotFound
+
+        var errorDescription: String? {
+            switch self {
+            case .premiumRequired(let name):
+                return "\(name) requires a Premium subscription"
+            case .networkError:
+                return "Unable to connect. Check your internet connection."
+            case .userNotAuthenticated:
+                return "Please sign in to join a program"
+            case .programNotFound:
+                return "This program is no longer available"
+            }
+        }
+    }
+
     func leaveProgram(programID: String, completion: @escaping (Bool) -> Void) async {
         await ProgramCloudKitUtility.leaveProgram(programID: programID) { success, error in
             if success {
@@ -46,11 +66,19 @@ class ProgramManager: ObservableObject {
         }
     }
 
-    func joinStandardProgram(programName: String, completionHandler: @escaping (ProgramWithID) -> Void) async {
+    func joinStandardProgram(
+        programName: String,
+        completionHandler: @escaping (ProgramWithID?) -> Void,
+        errorHandler: @escaping (ProgramJoinError) -> Void
+    ) async {
         print("trying to join standard program")
         let isPremiumProgram = standardProgramDBRepresentations.first(where: { $0.name == programName })?.isPremium ?? false
-        if isPremiumProgram && !StoreKitManager.shared.isPremiumUnlocked {
+        if isPremiumProgram && !StoreKitManager.shared.effectiveIsPremiumUnlocked {
             print("Premium subscription required to join \(programName)")
+            await MainActor.run {
+                StoreKitManager.shared.recordPaywallTrigger(.premiumProgram(name: programName))
+                errorHandler(.premiumRequired(programName: programName))
+            }
             return
         }
         do {
@@ -72,18 +100,24 @@ class ProgramManager: ObservableObject {
                                 self.userProgramData.append(programWithID)
                                 print("Program with ID \(programID) set as selectedProgram and added to userProgramData")
                             }
-                            
+
                             completionHandler(programWithID)
                         } else {
                             print("Error saving program: \(error?.localizedDescription ?? "Unknown error")")
+                            errorHandler(.networkError)
+                            completionHandler(nil)
                         }
                     }
                 } else if let error = error {
                     print("Error fetching standard program: \(error.localizedDescription)")
+                    errorHandler(.programNotFound)
+                    completionHandler(nil)
                 }
             }
         } catch {
             print("Error getting user record: \(error.localizedDescription)")
+            errorHandler(.userNotAuthenticated)
+            completionHandler(nil)
         }
     }
 

@@ -7,6 +7,7 @@
 
 import Foundation
 import StoreKit
+import UIKit
 
 @MainActor
 final class StoreKitManager: ObservableObject {
@@ -82,10 +83,55 @@ final class StoreKitManager: ObservableObject {
     @Published private(set) var purchaseInProgress: Bool = false
     @Published var lastPaywallTrigger: PaywallTriggerReason?
     @Published var lastError: String?
+    @Published private(set) var productLoadError: String?
+    @Published private(set) var connectionState: ConnectionState = .connected
+
+    enum ConnectionState {
+        case connected
+        case disconnected
+        case retrying
+    }
+
+    private let premiumStatusKey = "com.levelupfitness.premiumUnlockedCache"
+
+    #if DEBUG
+    @Published var debugMode: Bool = false
+    @Published var debugPremiumOverride: Bool = false
+
+    var effectiveIsPremiumUnlocked: Bool {
+        debugMode ? debugPremiumOverride : isPremiumUnlocked
+    }
+
+    func resetSubscriptionStateForTesting() {
+        isPremiumUnlocked = false
+        activeSubscription = nil
+        availableProducts = []
+        lastError = nil
+        productLoadError = nil
+    }
+    #else
+    var effectiveIsPremiumUnlocked: Bool {
+        isPremiumUnlocked
+    }
+    #endif
 
     private init() {
+        restoreFromCacheIfNeeded()
         Task {
             await listenForTransactions()
+        }
+    }
+
+    private func cacheSubscriptionStatus() {
+        UserDefaults.standard.set(isPremiumUnlocked, forKey: premiumStatusKey)
+    }
+
+    private func restoreFromCacheIfNeeded() {
+        if availableProducts.isEmpty {
+            let cached = UserDefaults.standard.bool(forKey: premiumStatusKey)
+            if cached != isPremiumUnlocked {
+                isPremiumUnlocked = cached
+            }
         }
     }
 
@@ -98,20 +144,41 @@ final class StoreKitManager: ObservableObject {
         lastPaywallTrigger = reason
     }
 
-    func updateProducts() async {
+    func updateProducts(retryCount: Int = 3) async {
         guard !isLoadingProducts else { return }
         isLoadingProducts = true
+        productLoadError = nil
         defer { isLoadingProducts = false }
 
-        do {
-            let productIDs = SubscriptionTier.allCases.map(\.rawValue)
-            let storeProducts = try await Product.products(for: productIDs)
-            availableProducts = storeProducts.sorted(by: { lhs, rhs in
-                lhs.price < rhs.price
-            })
-        } catch {
-            lastError = error.localizedDescription
-            print("StoreKitManager updateProducts error: \(error.localizedDescription)")
+        var attempts = 0
+        while attempts < retryCount {
+            do {
+                let productIDs = SubscriptionTier.allCases.map(\.rawValue)
+                let storeProducts = try await Product.products(for: productIDs)
+
+                if storeProducts.isEmpty {
+                    productLoadError = "Products not configured in App Store Connect"
+                    connectionState = .disconnected
+                } else {
+                    availableProducts = storeProducts.sorted(by: { lhs, rhs in
+                        lhs.price < rhs.price
+                    })
+                    connectionState = .connected
+                    productLoadError = nil
+                    return
+                }
+            } catch {
+                attempts += 1
+                if attempts < retryCount {
+                    connectionState = .retrying
+                    try? await Task.sleep(nanoseconds: 2_000_000_000) // 2 second delay
+                } else {
+                    productLoadError = "Unable to load subscription options. Please check your internet connection."
+                    connectionState = .disconnected
+                    lastError = error.localizedDescription
+                    print("StoreKitManager updateProducts error: \(error.localizedDescription)")
+                }
+            }
         }
     }
 
@@ -138,6 +205,9 @@ final class StoreKitManager: ObservableObject {
         isPremiumUnlocked = latestEntitlement != nil
         activeSubscription = latestEntitlement
         lastError = lastSeenError
+
+        // Cache the subscription status for offline use
+        cacheSubscriptionStatus()
     }
 
     func purchase(_ product: Product) async {
@@ -180,11 +250,15 @@ final class StoreKitManager: ObservableObject {
     }
 
     func showManageSubscriptions() async {
-        do {
-            try await AppStore.showManageSubscriptions()
-        } catch {
-            lastError = error.localizedDescription
-            print("StoreKitManager manage subscriptions error: \(error.localizedDescription)")
+        if #available(iOS 15.0, *) {
+            do {
+                if let windowScene = await UIApplication.shared.connectedScenes.first as? UIWindowScene {
+                    try await AppStore.showManageSubscriptions(in: windowScene)
+                }
+            } catch {
+                lastError = error.localizedDescription
+                print("StoreKitManager manage subscriptions error: \(error.localizedDescription)")
+            }
         }
     }
 

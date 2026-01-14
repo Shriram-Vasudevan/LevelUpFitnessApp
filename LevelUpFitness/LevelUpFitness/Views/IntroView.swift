@@ -33,7 +33,7 @@ struct IntroView: View {
                         Task {
                             await LevelChangeManager.shared.createNewLevelChange(property: "JoinedLevelUp", contribution: 10)
                         }
-                        if storeKitManager.isPremiumUnlocked {
+                        if storeKitManager.effectiveIsPremiumUnlocked {
                             onIntroCompletion()
                         } else {
                             storeKitManager.recordPaywallTrigger(.onboarding)

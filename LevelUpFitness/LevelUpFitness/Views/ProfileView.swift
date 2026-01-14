@@ -21,6 +21,9 @@ struct ProfileView: View {
 
     @State var goBackToIntroView: Bool = false
     @State private var showPaywall = false
+    #if DEBUG
+    @State private var navigateToDebugMenu = false
+    #endif
 
     var body: some View {
         ScrollView {
@@ -81,6 +84,11 @@ struct ProfileView: View {
         .navigationDestination(isPresented: $goBackToIntroView) {
             OpeningViewsContainer()
         }
+        #if DEBUG
+        .navigationDestination(isPresented: $navigateToDebugMenu) {
+            DebugSubscriptionMenu(storeKitManager: storeKitManager)
+        }
+        #endif
         .fullScreenCover(isPresented: $showPaywall) {
             PaywallView(allowDismissal: true) {
                 showPaywall = false
@@ -145,12 +153,12 @@ struct ProfileView: View {
                 Text("LevelUp Premium")
                     .font(.headline)
                 Spacer()
-                Text(storeKitManager.isPremiumUnlocked ? "Active" : "Free tier")
+                Text(storeKitManager.effectiveIsPremiumUnlocked ? "Active" : "Free tier")
                     .font(.footnote.bold())
-                    .foregroundColor(storeKitManager.isPremiumUnlocked ? Color.green : Color(hex: "40C4FC"))
+                    .foregroundColor(storeKitManager.effectiveIsPremiumUnlocked ? Color.green : Color(hex: "40C4FC"))
                     .padding(.vertical, 4)
                     .padding(.horizontal, 10)
-                    .background((storeKitManager.isPremiumUnlocked ? Color.green.opacity(0.15) : Color(hex: "40C4FC").opacity(0.1)))
+                    .background((storeKitManager.effectiveIsPremiumUnlocked ? Color.green.opacity(0.15) : Color(hex: "40C4FC").opacity(0.1)))
                     .clipShape(Capsule())
             }
 
@@ -159,7 +167,7 @@ struct ProfileView: View {
                 .foregroundColor(.secondary)
 
             Button {
-                if storeKitManager.isPremiumUnlocked {
+                if storeKitManager.effectiveIsPremiumUnlocked {
                     Task {
                         await storeKitManager.showManageSubscriptions()
                     }
@@ -168,7 +176,7 @@ struct ProfileView: View {
                     showPaywall = true
                 }
             } label: {
-                Text(storeKitManager.isPremiumUnlocked ? "Manage subscription" : "Upgrade to Premium")
+                Text(storeKitManager.effectiveIsPremiumUnlocked ? "Manage subscription" : "Upgrade to Premium")
                     .font(.subheadline.weight(.semibold))
                     .foregroundColor(.white)
                     .frame(height: 44)
@@ -187,7 +195,7 @@ struct ProfileView: View {
             Text("Support")
                 .font(.headline)
                 .foregroundColor(.secondary)
-            
+
             Button(action: { navigateToShowHelpAndSupportView = true }) {
                 HStack {
                     Image(systemName: "questionmark.circle.fill")
@@ -201,6 +209,22 @@ struct ProfileView: View {
                 }
             }
             .foregroundColor(.primary)
+
+            #if DEBUG
+            Button(action: { navigateToDebugMenu = true }) {
+                HStack {
+                    Image(systemName: "ladybug.fill")
+                        .foregroundColor(.orange)
+                    Text("Subscription Debug")
+                        .font(.subheadline)
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .foregroundColor(.secondary)
+                        .font(.caption)
+                }
+            }
+            .foregroundColor(.primary)
+            #endif
         }
     }
 
@@ -327,6 +351,94 @@ struct SupportView: View {
         .padding(.vertical, 8)
     }
 }
+
+#if DEBUG
+struct DebugSubscriptionMenu: View {
+    @ObservedObject var storeKitManager: StoreKitManager
+
+    var body: some View {
+        Form {
+            Section("Debug Controls") {
+                Toggle("Debug Mode", isOn: $storeKitManager.debugMode)
+                    .tint(Color(hex: "40C4FC"))
+
+                if storeKitManager.debugMode {
+                    Toggle("Override Premium Status", isOn: $storeKitManager.debugPremiumOverride)
+                        .tint(Color(hex: "40C4FC"))
+
+                    Button("Reset Subscription State") {
+                        storeKitManager.resetSubscriptionStateForTesting()
+                    }
+                    .foregroundColor(.red)
+                }
+            }
+
+            Section("Current State") {
+                LabeledContent("Products Loaded", value: "\(storeKitManager.availableProducts.count)")
+                LabeledContent("Premium Status", value: storeKitManager.effectiveIsPremiumUnlocked ? "Active" : "Inactive")
+
+                if let subscription = storeKitManager.activeSubscription {
+                    LabeledContent("Active Subscription", value: subscription.displayName)
+                    LabeledContent("Price", value: subscription.displayPrice)
+                }
+
+                if let error = storeKitManager.lastError {
+                    LabeledContent("Last Error") {
+                        Text(error)
+                            .font(.caption)
+                            .foregroundColor(.red)
+                            .multilineTextAlignment(.trailing)
+                    }
+                }
+
+                if let productError = storeKitManager.productLoadError {
+                    LabeledContent("Product Load Error") {
+                        Text(productError)
+                            .font(.caption)
+                            .foregroundColor(.red)
+                            .multilineTextAlignment(.trailing)
+                    }
+                }
+
+                LabeledContent("Connection State") {
+                    switch storeKitManager.connectionState {
+                    case .connected:
+                        Text("Connected")
+                            .foregroundColor(.green)
+                    case .disconnected:
+                        Text("Disconnected")
+                            .foregroundColor(.red)
+                    case .retrying:
+                        Text("Retrying...")
+                            .foregroundColor(.orange)
+                    }
+                }
+            }
+
+            Section("Actions") {
+                Button("Refresh Products") {
+                    Task {
+                        await storeKitManager.updateProducts()
+                    }
+                }
+
+                Button("Refresh Subscription Status") {
+                    Task {
+                        await storeKitManager.updateSubscriptionStatus()
+                    }
+                }
+
+                Button("Restore Purchases") {
+                    Task {
+                        await storeKitManager.restorePurchases()
+                    }
+                }
+            }
+        }
+        .navigationTitle("Subscription Debug")
+    }
+}
+#endif
 
 #Preview {
     ProfileView()

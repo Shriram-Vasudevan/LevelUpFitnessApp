@@ -21,7 +21,7 @@ struct JoinProgramWidget: View {
                 Spacer()
 
                 if standardProgramDBRepresentation.isPremium {
-                    Text(storeKitManager.isPremiumUnlocked ? "Premium" : "Unlock")
+                    Text(storeKitManager.effectiveIsPremiumUnlocked ? "Premium" : "Unlock")
                         .font(.system(size: 12, weight: .semibold))
                         .foregroundColor(.white)
                         .padding(.horizontal, 12)

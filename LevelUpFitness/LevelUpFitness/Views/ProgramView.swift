@@ -30,6 +30,8 @@ struct ProgramView: View {
 
     @State private var selectedDate: Date = Date()
     @State private var showPaywall = false
+    @State private var joinError: ProgramManager.ProgramJoinError?
+    @State private var showJoinError = false
     
     var body: some View {
         ZStack {
@@ -97,12 +99,27 @@ struct ProgramView: View {
             if showJoinPopup, let selectedStandardProgramDBRepresentation = self.selectedStandardProgramDBRepresentation {
                 ProgramJoinPopupView(isPresented: $showJoinPopup, program: selectedStandardProgramDBRepresentation) {
                     Task {
-                        await programManager.joinStandardProgram(programName: selectedStandardProgramDBRepresentation.name, completionHandler: { programWithID in
-                            DispatchQueue.main.async {
-                                ProgramManager.shared.selectedProgram = programWithID
-                                showProgramPicker = false
+                        await programManager.joinStandardProgram(
+                            programName: selectedStandardProgramDBRepresentation.name,
+                            completionHandler: { programWithID in
+                                if let programWithID = programWithID {
+                                    DispatchQueue.main.async {
+                                        ProgramManager.shared.selectedProgram = programWithID
+                                        showProgramPicker = false
+                                    }
+                                }
+                            },
+                            errorHandler: { error in
+                                DispatchQueue.main.async {
+                                    if case .premiumRequired = error {
+                                        showPaywall = true
+                                    } else {
+                                        joinError = error
+                                        showJoinError = true
+                                    }
+                                }
                             }
-                        })
+                        )
                     }
                 }
             }
@@ -127,6 +144,11 @@ struct ProgramView: View {
                 showPaywall = false
             }
             .environmentObject(storeKitManager)
+        }
+        .alert("Unable to Join Program", isPresented: $showJoinError, presenting: joinError) { _ in
+            Button("OK", role: .cancel) { }
+        } message: { error in
+            Text(error.localizedDescription)
         }
         .onAppear {
 //            if programManager.selectedProgram == nil, let firstProgram = programManager.userProgramData.first {
@@ -219,7 +241,7 @@ struct ProgramView: View {
                         
                         HStack(spacing: padding) {
                             Button(action: {
-                                if storeKitManager.isPremiumUnlocked {
+                                if storeKitManager.effectiveIsPremiumUnlocked {
                                     navigateToMetricsView = true
                                 } else {
                                     storeKitManager.recordPaywallTrigger(.premiumAnalytics)
@@ -367,11 +389,26 @@ struct ProgramView: View {
                 JoinProgramWidget(standardProgramDBRepresentation: program)
                     .onTapGesture {
                         Task {
-                            await programManager.joinStandardProgram(programName: program.name, completionHandler: { programWithID in
-                                showProgramManagerOptions = false
-                                ProgramManager.shared.selectedProgram = programWithID
-                                showProgramPicker = false
-                            })
+                            await programManager.joinStandardProgram(
+                                programName: program.name,
+                                completionHandler: { programWithID in
+                                    if let programWithID = programWithID {
+                                        showProgramManagerOptions = false
+                                        ProgramManager.shared.selectedProgram = programWithID
+                                        showProgramPicker = false
+                                    }
+                                },
+                                errorHandler: { error in
+                                    DispatchQueue.main.async {
+                                        if case .premiumRequired = error {
+                                            showPaywall = true
+                                        } else {
+                                            joinError = error
+                                            showJoinError = true
+                                        }
+                                    }
+                                }
+                            )
                         }
                     }
                     .opacity(programManager.userProgramData.contains(where: { Program in
@@ -410,7 +447,7 @@ struct ProgramView: View {
                 
                 HStack(spacing: padding) {
                     Button(action: {
-                        if storeKitManager.isPremiumUnlocked {
+                        if storeKitManager.effectiveIsPremiumUnlocked {
                             navigateToMetricsView = true
                         } else {
                             storeKitManager.recordPaywallTrigger(.premiumAnalytics)
@@ -501,7 +538,7 @@ struct ProgramView: View {
                     ProgramCardView(standardProgramDBRepresentation: standardProgramDBRepresentation)
                         .onTapGesture {
                             if !programManager.userProgramData.contains(where: { $0.program.programName == standardProgramDBRepresentation.name }) {
-                                if standardProgramDBRepresentation.isPremium && !storeKitManager.isPremiumUnlocked {
+                                if standardProgramDBRepresentation.isPremium && !storeKitManager.effectiveIsPremiumUnlocked {
                                     storeKitManager.recordPaywallTrigger(.premiumProgram(name: standardProgramDBRepresentation.name))
                                     showPaywall = true
                                 } else {
@@ -522,7 +559,7 @@ struct ProgramView: View {
                     ProgramCardView(standardProgramDBRepresentation: standardProgramDBRepresentation)
                         .onTapGesture {
                             if !programManager.userProgramData.contains(where: { $0.program.programName == standardProgramDBRepresentation.name }) {
-                                if standardProgramDBRepresentation.isPremium && !storeKitManager.isPremiumUnlocked {
+                                if standardProgramDBRepresentation.isPremium && !storeKitManager.effectiveIsPremiumUnlocked {
                                     storeKitManager.recordPaywallTrigger(.premiumProgram(name: standardProgramDBRepresentation.name))
                                     showPaywall = true
                                 } else {
@@ -909,7 +946,7 @@ struct ProgramCardView: View {
     }
 
     private var ctaLabel: String {
-        if standardProgramDBRepresentation.isPremium && !storeKitManager.isPremiumUnlocked {
+        if standardProgramDBRepresentation.isPremium && !storeKitManager.effectiveIsPremiumUnlocked {
             return "Unlock"
         }
         return "Join"
@@ -953,7 +990,7 @@ struct ProgramJoinPopupView: View {
                         HStack(spacing: 8) {
                             Image(systemName: "star.fill")
                                 .foregroundColor(Color(hex: "40C4FC"))
-                            Text(storeKitManager.isPremiumUnlocked ? "Included with your Premium subscription." : "Requires LevelUp Premium to join.")
+                            Text(storeKitManager.effectiveIsPremiumUnlocked ? "Included with your Premium subscription." : "Requires LevelUp Premium to join.")
                                 .font(.system(size: 14, weight: .semibold))
                                 .foregroundColor(.primary)
                         }
@@ -982,7 +1019,7 @@ struct ProgramJoinPopupView: View {
                             isPresented = false
                         }
                     }) {
-                        Text(storeKitManager.isPremiumUnlocked || !program.isPremium ? "Join Program" : "Unlock Premium")
+                        Text(storeKitManager.effectiveIsPremiumUnlocked || !program.isPremium ? "Join Program" : "Unlock Premium")
                             .foregroundColor(.white)
                             .padding()
                             .frame(maxWidth: .infinity)
@@ -990,7 +1027,7 @@ struct ProgramJoinPopupView: View {
                             .cornerRadius(10)
                             .shadow(radius: 5)
                     }
-                    .disabled(program.isPremium && !storeKitManager.isPremiumUnlocked)
+                    .disabled(program.isPremium && !storeKitManager.effectiveIsPremiumUnlocked)
                 }
                 .padding(.horizontal)
             }
