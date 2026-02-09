@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key></key>
-	<string></string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Gugi-Regular.ttf</string>
@@ -24,5 +22,9 @@
 		<string>fetch</string>
 		<string>remote-notification</string>
 	</array>
+	<key>NSHealthShareUsageDescription</key>
+	<string>LevelUp Fitness uses your Health data to show daily steps, calories, and distance trends.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Allow access to your photo library so you can pick profile and workout images.</string>
 </dict>
 </plist>

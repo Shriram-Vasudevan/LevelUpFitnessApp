@@ -13,30 +13,36 @@ class HealthManager: ObservableObject {
     let healthStore = HKHealthStore()
     
     
-    private func requestAuthorization() {
+    private func requestAuthorization(completion: @escaping (Bool) -> Void) {
         guard let stepsQuantityType = HKQuantityType.quantityType(forIdentifier: .stepCount),
               let caloriesQuantityType = HKQuantityType.quantityType(forIdentifier: .activeEnergyBurned),
               let distanceQuantityType = HKQuantityType.quantityType(forIdentifier: .distanceWalkingRunning) else {
             print("Required types are unavailable")
+            completion(false)
             return
         }
         let typesToShare: Set<HKSampleType> = []
         let typesToRead: Set<HKObjectType> = [stepsQuantityType, caloriesQuantityType, distanceQuantityType]
         
         healthStore.requestAuthorization(toShare: typesToShare, read: typesToRead) { success, error in
-            if success {
-                self.getInitialHealthData()
-            } else {
-                print("Authorization failed: \(String(describing: error))")
+            Task { @MainActor in
+                if success {
+                    completion(true)
+                } else {
+                    print("Authorization failed: \(String(describing: error))")
+                    completion(false)
+                }
             }
         }
     }
     
     func getInitialHealthData() {
-        requestAuthorization()
-        getTodaysSteps()
-        getTodaysCalories()
-        getTodaysDistance()
+        requestAuthorization { [weak self] success in
+            guard success, let self else { return }
+            self.getTodaysSteps()
+            self.getTodaysCalories()
+            self.getTodaysDistance()
+        }
     }
         
     func getTodaysSteps() {
