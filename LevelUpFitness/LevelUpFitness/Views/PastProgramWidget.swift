@@ -14,22 +14,31 @@ struct PastProgramWidget: View {
     
     var body: some View {
         Button(action: { viewPastProgram(programUnformatted) }) {
-            HStack {
+            HStack(spacing: 10) {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(programFormatted)
-                        .font(.system(size: 16, weight: .regular))
-                        .foregroundColor(.black)
-                    Text("Tap to view details")
-                        .font(.system(size: 14, weight: .light))
-                        .foregroundColor(.gray)
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundColor(Color(hex: "111827"))
+                    Text("Open program insight report")
+                        .font(.system(size: 13, weight: .medium))
+                        .foregroundColor(Color(hex: "6B7280"))
                 }
+
                 Spacer()
+
                 Image(systemName: "chevron.right")
-                    .foregroundColor(.gray)
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundColor(Color(hex: "0B5ED7"))
             }
-            .padding()
+            .padding(12)
             .background(Color.white)
+            .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+            .overlay(
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .stroke(Color.black.opacity(0.08), lineWidth: 1)
+            )
         }
+        .buttonStyle(.plain)
     }
 }
 

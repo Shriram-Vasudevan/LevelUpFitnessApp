@@ -104,9 +104,16 @@ class ProgramManager: ObservableObject {
                     ProgramCloudKitUtility.saveUserProgram(userID: userID, program: enrichedProgram, startDate: startDate) { programID, success, error in
                         if success {
                             let programWithID = ProgramWithID(programID: programID, program: enrichedProgram)
+                            let metadata = UserProgramDBRepresentation(
+                                userID: userID,
+                                program: enrichedProgram.programName,
+                                startDate: startDate,
+                                programID: programID
+                            )
 
                             DispatchQueue.main.async {
                                 self.userProgramData.append(programWithID)
+                                self.userActivePrograms.append(metadata)
                                 print("Program with ID \(programID) set as selectedProgram and added to userProgramData")
                             }
 
@@ -164,6 +171,7 @@ class ProgramManager: ObservableObject {
             }
         }
 
+        userActivePrograms = activePrograms
         userProgramData = loadedPrograms
     }
 

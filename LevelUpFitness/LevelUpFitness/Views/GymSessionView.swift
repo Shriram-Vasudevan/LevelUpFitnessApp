@@ -23,14 +23,17 @@ struct GymSessionsView: View {
     @State var showGymSessionInfoSheet: Bool = false
     @State private var expandedExercises: Set<UUID> = []
     @State private var showPaywall = false
+    @State private var teammateRooms = GymFriendSession.defaultRooms
+    @State private var friendMessage: String?
+    @State private var showFriendMessage = false
     
     var body: some View {
         ZStack {
-            Color(uiColor: .systemGroupedBackground)
+            Color(hex: "F3F5F8")
                 .ignoresSafeArea()
 
             ScrollView {
-                VStack(spacing: 24) {
+                VStack(spacing: 14) {
                     headerView
 
                     if let currentSession = gymManager.currentSession {
@@ -43,14 +46,15 @@ struct GymSessionsView: View {
                         }
                     }
 
+                    friendsSessionSection
                     pastSessionsView
 
                     if !gymManager.gymSessions.isEmpty {
                         gymStatsView
                     }
                 }
-                .padding(.horizontal)
-                .padding(.vertical, 24)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 14)
             }
 
             if showEndSessionConfirmation {
@@ -89,6 +93,11 @@ struct GymSessionsView: View {
             }
             .environmentObject(storeKitManager)
         }
+        .alert("Friends Sessions", isPresented: $showFriendMessage) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text(friendMessage ?? "")
+        }
     }
 
     private var headerView: some View {
@@ -96,7 +105,7 @@ struct GymSessionsView: View {
             HStack(alignment: .top) {
                 VStack(alignment: .leading, spacing: 6) {
                     Text("Gym Sessions")
-                        .font(.system(size: 30, weight: .semibold, design: .rounded))
+                        .font(.system(size: 30, weight: .bold))
                         .foregroundColor(.white)
 
                     Text(gymManager.currentSession == nil ? "Track every rep, revisit every win." : "Session in progress — keep the momentum going!")
@@ -123,7 +132,7 @@ struct GymSessionsView: View {
                         .padding(.vertical, 8)
                         .padding(.horizontal, 12)
                         .background(Color.white.opacity(0.25))
-                        .clipShape(Capsule())
+                        .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
                         .foregroundColor(.white)
                 }
 
@@ -132,16 +141,16 @@ struct GymSessionsView: View {
                     .padding(.vertical, 8)
                     .padding(.horizontal, 12)
                     .background(Color.white.opacity(0.15))
-                    .clipShape(Capsule())
+                    .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
                     .foregroundColor(.white)
             }
         }
-        .padding()
+        .padding(14)
         .background(
             LinearGradient(colors: [Color(hex: "3080FF"), Color(hex: "40C4FC")], startPoint: .topLeading, endPoint: .bottomTrailing)
         )
-        .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
-        .shadow(color: Color.black.opacity(0.15), radius: 20, x: 0, y: 12)
+        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+        .shadow(color: Color.black.opacity(0.08), radius: 10, x: 0, y: 6)
     }
 
     private var startNewSessionView: some View {
@@ -175,11 +184,11 @@ struct GymSessionsView: View {
                 .background(
                     LinearGradient(colors: [Color(hex: "40C4FC"), Color(hex: "3080FF")], startPoint: .leading, endPoint: .trailing)
                 )
-                .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+                .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
             }
             .buttonStyle(.plain)
         }
-        .padding(24)
+        .padding(16)
         .background(cardBackground())
     }
 
@@ -208,7 +217,7 @@ struct GymSessionsView: View {
                         .padding(.horizontal, 18)
                         .background(Color(hex: "FF3B30"))
                         .foregroundColor(.white)
-                        .clipShape(Capsule())
+                        .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
                 }
                 .buttonStyle(.plain)
             }
@@ -233,11 +242,11 @@ struct GymSessionsView: View {
                 .background(
                     LinearGradient(colors: [Color(hex: "3080FF"), Color(hex: "40C4FC")], startPoint: .leading, endPoint: .trailing)
                 )
-                .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+                .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
             }
             .buttonStyle(.plain)
         }
-        .padding(24)
+        .padding(16)
         .background(cardBackground())
     }
 
@@ -258,7 +267,7 @@ struct GymSessionsView: View {
 
             highlightView(for: session, context: .informational)
         }
-        .padding(24)
+        .padding(16)
         .background(cardBackground())
     }
 
@@ -339,7 +348,7 @@ struct GymSessionsView: View {
         }
         .padding(18)
         .background(
-            RoundedRectangle(cornerRadius: 22, style: .continuous)
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
                 .fill(Color(uiColor: .secondarySystemGroupedBackground))
         )
 
@@ -376,9 +385,9 @@ struct GymSessionsView: View {
     }
 
     private func cardBackground() -> some View {
-        RoundedRectangle(cornerRadius: 28, style: .continuous)
+        RoundedRectangle(cornerRadius: 10, style: .continuous)
             .fill(Color(uiColor: .systemBackground))
-            .shadow(color: Color.black.opacity(0.08), radius: 20, x: 0, y: 12)
+            .shadow(color: Color.black.opacity(0.08), radius: 10, x: 0, y: 6)
     }
 
     private func formatDuration(_ duration: TimeInterval) -> String {
@@ -452,7 +461,7 @@ struct GymSessionsView: View {
         }
         .padding(20)
         .background(
-            RoundedRectangle(cornerRadius: 24, style: .continuous)
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
                 .fill(Color(uiColor: .secondarySystemGroupedBackground))
         )
     }
@@ -498,7 +507,7 @@ struct GymSessionsView: View {
                     .background(
                         LinearGradient(colors: [Color(hex: "3080FF"), Color(hex: "40C4FC")], startPoint: .topLeading, endPoint: .bottomTrailing)
                     )
-                    .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+                    .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
 
                 VStack(alignment: .leading, spacing: 6) {
                     Text(record.exerciseInfo.exerciseName)
@@ -525,7 +534,7 @@ struct GymSessionsView: View {
         .padding(.horizontal, 16)
         .padding(.vertical, 4)
         .background(
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
                 .fill(Color(uiColor: .systemBackground))
                 .shadow(color: Color.black.opacity(0.05), radius: 6, x: 0, y: 4)
         )
@@ -588,7 +597,60 @@ struct GymSessionsView: View {
         .padding(.vertical, 4)
         .padding(.horizontal, 8)
         .background(Color(hex: "3080FF").opacity(0.12))
-        .clipShape(Capsule())
+        .clipShape(RoundedRectangle(cornerRadius: 7, style: .continuous))
+    }
+
+    private var friendsSessionSection: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack {
+                Text("Train With Friends")
+                    .font(.system(size: 20, weight: .semibold))
+                Spacer()
+                Button("Create") {
+                    friendMessage = "New friend session setup will open after sync."
+                    showFriendMessage = true
+                }
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundColor(Color(hex: "3080FF"))
+            }
+
+            ForEach($teammateRooms) { room in
+                HStack(spacing: 12) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(room.wrappedValue.title)
+                            .font(.system(size: 15, weight: .semibold))
+                            .foregroundColor(Color(hex: "111827"))
+                        Text(room.wrappedValue.time)
+                            .font(.system(size: 13, weight: .medium))
+                            .foregroundColor(.secondary)
+                        Text("\(room.wrappedValue.participants) athletes")
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundColor(Color(hex: "3080FF"))
+                    }
+
+                    Spacer()
+
+                    Button(room.wrappedValue.joined ? "Joined" : "Join") {
+                        room.wrappedValue.joined.toggle()
+                        friendMessage = room.wrappedValue.joined
+                            ? "You joined \(room.wrappedValue.title)."
+                            : "You left \(room.wrappedValue.title)."
+                        showFriendMessage = true
+                    }
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundColor(room.wrappedValue.joined ? Color(hex: "3080FF") : .white)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 8)
+                    .background(room.wrappedValue.joined ? Color(hex: "E8F3FF") : Color(hex: "3080FF"))
+                    .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+                }
+                .padding(10)
+                .background(Color(uiColor: .secondarySystemGroupedBackground))
+                .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+            }
+        }
+        .padding(16)
+        .background(cardBackground())
     }
 
     private var pastSessionsView: some View {
@@ -629,7 +691,7 @@ struct GymSessionsView: View {
                 }
             }
         }
-        .padding(24)
+        .padding(16)
         .background(cardBackground())
     }
 
@@ -650,7 +712,7 @@ struct GymSessionsView: View {
                 premiumUpsellCard
             }
         }
-        .padding(24)
+        .padding(16)
         .background(cardBackground())
     }
 
@@ -673,14 +735,14 @@ struct GymSessionsView: View {
                     .padding(.vertical, 10)
                     .padding(.horizontal, 16)
                     .background(Color(hex: "3080FF"))
-                    .clipShape(Capsule())
+                    .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
             }
             .buttonStyle(.plain)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(20)
         .background(Color(hex: "E8F3FF"))
-        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
     }
 
     private func sessionHistoryCard(for session: GymSession) -> some View {
@@ -707,7 +769,7 @@ struct GymSessionsView: View {
         }
         .padding(20)
         .background(
-            RoundedRectangle(cornerRadius: 24, style: .continuous)
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
                 .fill(Color(uiColor: .systemBackground))
                 .shadow(color: Color.black.opacity(0.05), radius: 10, x: 0, y: 6)
         )
@@ -720,6 +782,20 @@ struct SessionMetric: Identifiable {
     let title: String
     let value: String
     let iconName: String
+}
+
+struct GymFriendSession: Identifiable {
+    let id = UUID()
+    let title: String
+    let time: String
+    let participants: Int
+    var joined: Bool
+
+    static let defaultRooms: [GymFriendSession] = [
+        GymFriendSession(title: "Morning Strength Crew", time: "Tue • 6:45 AM", participants: 4, joined: true),
+        GymFriendSession(title: "After Work Push", time: "Thu • 6:15 PM", participants: 7, joined: false),
+        GymFriendSession(title: "Weekend Conditioning", time: "Sat • 9:00 AM", participants: 5, joined: false)
+    ]
 }
 
 struct SessionMetricChip: View {
@@ -747,7 +823,7 @@ struct SessionMetricChip: View {
         .padding(.horizontal, isProminent ? 16 : 14)
         .frame(minWidth: isProminent ? 140 : nil, alignment: .leading)
         .background(
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
                 .fill(isProminent ? Color(uiColor: .systemBackground) : Color(uiColor: .secondarySystemGroupedBackground))
         )
         .shadow(color: isProminent ? Color.black.opacity(0.08) : Color.clear, radius: 10, x: 0, y: 6)
@@ -777,7 +853,7 @@ struct GymSessionExerciseView: View {
                     }
                 }
             }
-            .padding(24)
+            .padding(16)
         }
         .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())
         .navigationTitle(exerciseTitle)
@@ -792,7 +868,7 @@ struct GymSessionExerciseView: View {
                 .background(
                     LinearGradient(colors: [Color(hex: "3080FF"), Color(hex: "40C4FC")], startPoint: .topLeading, endPoint: .bottomTrailing)
                 )
-                .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
+                .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
 
             VStack(alignment: .leading, spacing: 6) {
                 Text(exerciseTitle)
@@ -807,7 +883,7 @@ struct GymSessionExerciseView: View {
         }
         .padding()
         .background(
-            RoundedRectangle(cornerRadius: 28, style: .continuous)
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
                 .fill(Color(uiColor: .systemBackground))
                 .shadow(color: Color.black.opacity(0.08), radius: 12, x: 0, y: 8)
         )
@@ -858,7 +934,7 @@ struct GymSessionExerciseView: View {
         .padding(18)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
-            RoundedRectangle(cornerRadius: 24, style: .continuous)
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
                 .fill(Color(uiColor: .systemBackground))
                 .shadow(color: Color.black.opacity(0.05), radius: 6, x: 0, y: 4)
         )
@@ -875,7 +951,7 @@ struct GymSessionExerciseView: View {
         .padding(.vertical, 6)
         .padding(.horizontal, 10)
         .background(Color(hex: "3080FF").opacity(0.12))
-        .clipShape(Capsule())
+        .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
     }
 
     private var exerciseTitle: String {
@@ -1188,7 +1264,7 @@ struct AllPastGymSessionsView: View {
                             .buttonStyle(.plain)
                         }
                     }
-                    .padding(24)
+                    .padding(16)
                 }
             } else {
                 VStack(spacing: 24) {
@@ -1217,11 +1293,11 @@ struct AllPastGymSessionsView: View {
                             .padding(.horizontal, 24)
                             .padding(.vertical, 12)
                             .background(Color(hex: "3080FF"))
-                            .clipShape(Capsule())
+                            .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .padding(24)
+                .padding(16)
             }
         }
         .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())
@@ -1295,7 +1371,7 @@ struct AllPastGymSessionsView: View {
         }
         .padding(20)
         .background(
-            RoundedRectangle(cornerRadius: 24, style: .continuous)
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
                 .fill(Color(uiColor: .systemBackground))
                 .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 4)
         )
@@ -1342,7 +1418,7 @@ struct AllPastGymSessionsView: View {
         }
         .padding(16)
         .background(
-            RoundedRectangle(cornerRadius: 22, style: .continuous)
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
                 .fill(Color(uiColor: .secondarySystemGroupedBackground))
         )
     }
@@ -1598,11 +1674,10 @@ struct GymSessionInfoView: View {
         }
         .padding(20)
         .background(
-            RoundedRectangle(cornerRadius: 24, style: .continuous)
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
                 .fill(Color(uiColor: .systemBackground))
                 .shadow(color: Color.black.opacity(0.05), radius: 10, x: 0, y: 6)
         )
         .padding(.horizontal)
     }
 }
-

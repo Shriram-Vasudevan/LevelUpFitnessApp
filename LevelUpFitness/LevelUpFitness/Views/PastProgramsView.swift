@@ -10,104 +10,132 @@ import SwiftUI
 struct PastProgramsView: View {
     @ObservedObject var programManager: ProgramManager
     @State private var isRefreshing = false
-    
+
     var viewPastProgram: (String) -> Void
-    
+
     var body: some View {
         ZStack {
-            Color.white.ignoresSafeArea()
-            
+            Color(hex: "F3F5F8").ignoresSafeArea()
+
             VStack(spacing: 0) {
                 navigationBar
-                
+
                 ScrollView {
-                    VStack(spacing: 16) {
-                        if programManager.userActivePrograms.isEmpty {
+                    VStack(spacing: 10) {
+                        if isRefreshing && programManager.userActivePrograms.isEmpty {
+                            loadingView
+                        } else if programManager.userActivePrograms.isEmpty {
                             emptyStateView
                         } else {
-                            programList(programManager.userActivePrograms.map({$0.program}))
+                            programList(programManager.userActivePrograms.map(\.program))
                         }
-//                        
-//                        if let userActivePrograms = programManager.userActivePrograms {
-//                            if programManager.userActivePrograms.isEmpty {
-//                                emptyStateView
-//                            } else {
-//                                programList(programManager.userActivePrograms.map({$0.program}))
-//                            }
-//                        } else {
-//                            loadingView
-//                        }
                     }
-                    .padding()
+                    .padding(16)
                 }
             }
         }
-        .onAppear(perform: refreshProgramNames)
+        .task {
+            refreshProgramNames()
+        }
     }
-    
+
     private var navigationBar: some View {
-        ZStack {
-            Text("Past Programs")
-                .font(.system(size: 18, weight: .semibold))
-            
-            HStack {
-                Spacer()
-                Button(action: refreshProgramNames) {
-                    Image(systemName: "arrow.clockwise")
-                        .font(.system(size: 20, weight: .medium))
-                        .foregroundColor(Color(hex: "40C4FC"))
-                        .rotationEffect(Angle(degrees: isRefreshing ? 360 : 0))
-                        .animation(isRefreshing ? Animation.linear(duration: 1).repeatForever(autoreverses: false) : .default, value: isRefreshing)
-                }
+        HStack {
+            Text("Program History")
+                .font(.system(size: 20, weight: .bold))
+                .foregroundColor(Color(hex: "111827"))
+
+            Spacer()
+
+            Button(action: refreshProgramNames) {
+                Image(systemName: "arrow.clockwise")
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundColor(Color(hex: "0B5ED7"))
+                    .rotationEffect(.degrees(isRefreshing ? 360 : 0))
+                    .animation(
+                        isRefreshing
+                        ? .linear(duration: 0.9).repeatForever(autoreverses: false)
+                        : .default,
+                        value: isRefreshing
+                    )
+                    .frame(width: 34, height: 34)
+                    .background(Color.white)
+                    .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8, style: .continuous)
+                            .stroke(Color.black.opacity(0.08), lineWidth: 1)
+                    )
             }
+            .buttonStyle(.plain)
         }
-        .padding(.horizontal)
-        .padding(.top, 8)
-        .padding(.bottom, 8)
-        .background(Color.white)
-        .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
+        .background(Color(hex: "F3F5F8"))
     }
-    
+
     private var emptyStateView: some View {
-        Text("No past programs found")
-            .font(.system(size: 16, weight: .light))
-            .foregroundColor(.gray)
-            .padding()
-            .frame(maxWidth: .infinity)
-            .background(Color(hex: "F5F5F5"))
+        VStack(alignment: .leading, spacing: 8) {
+            Text("No past programs found")
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundColor(Color(hex: "111827"))
+            Text("Program history entries will appear after your first completed cycle.")
+                .font(.system(size: 14, weight: .medium))
+                .foregroundColor(Color(hex: "6B7280"))
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(12)
+        .background(Color.white)
+        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                .stroke(Color.black.opacity(0.08), lineWidth: 1)
+        )
     }
-    
+
     private func programList(_ userProgramNames: [String]) -> some View {
-        VStack(spacing: 1) {
+        VStack(spacing: 8) {
             ForEach(userProgramNames, id: \.self) { name in
-                if let programFormatted = StringUtility.formatS3ProgramRepresentation(name) {
-                    PastProgramWidget(programUnformatted: name, programFormatted: programFormatted, viewPastProgram: viewPastProgram)
+                if let formatted = StringUtility.formatS3ProgramRepresentation(name) {
+                    PastProgramWidget(
+                        programUnformatted: name,
+                        programFormatted: formatted,
+                        viewPastProgram: viewPastProgram
+                    )
                 }
             }
         }
-        .background(Color(hex: "F5F5F5"))
     }
-    
+
     private var loadingView: some View {
-        ProgressView()
-            .progressViewStyle(CircularProgressViewStyle(tint: Color(hex: "40C4FC")))
-            .scaleEffect(1.5)
-            .padding()
-            .frame(maxWidth: .infinity)
-            .background(Color(hex: "F5F5F5"))
+        HStack(spacing: 10) {
+            ProgressView()
+                .progressViewStyle(CircularProgressViewStyle(tint: Color(hex: "0B5ED7")))
+            Text("Refreshing program history...")
+                .font(.system(size: 14, weight: .medium))
+                .foregroundColor(Color(hex: "6B7280"))
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(12)
+        .background(Color.white)
+        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                .stroke(Color.black.opacity(0.08), lineWidth: 1)
+        )
     }
-    
+
     private func refreshProgramNames() {
         isRefreshing = true
-        programManager.userActivePrograms = []
         Task {
-            await programManager.loadUserActivePrograms()
-            isRefreshing = false
+            let activePrograms = await programManager.loadUserActivePrograms()
+            await MainActor.run {
+                programManager.userActivePrograms = activePrograms
+                isRefreshing = false
+            }
         }
     }
 }
 
-
 #Preview {
-    (PastProgramsView(programManager: ProgramManager(), viewPastProgram: {_ in})
-)}
+    PastProgramsView(programManager: ProgramManager(), viewPastProgram: { _ in })
+}
