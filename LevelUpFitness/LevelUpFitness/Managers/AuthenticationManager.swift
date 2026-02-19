@@ -154,13 +154,22 @@ class AuthenticationManager: ObservableObject {
                     self.name = record["name"] as? String
 
                     if let profilePictureAsset = record["profilePicture"] as? CKAsset,
-                       let imageData = try? Data(contentsOf: profilePictureAsset.fileURL!) {
+                       let fileURL = profilePictureAsset.fileURL,
+                       let imageData = try? Data(contentsOf: fileURL) {
                         self.pfp = imageData
                     }
 
                     print("User data retrieved successfully.")
                     completion(true, nil)
                 }
+            }
+        }
+    }
+
+    func getUserData() async -> Bool {
+        await withCheckedContinuation { continuation in
+            getUserData { success, _ in
+                continuation.resume(returning: success)
             }
         }
     }

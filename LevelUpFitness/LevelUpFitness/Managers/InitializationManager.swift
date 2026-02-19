@@ -32,9 +32,7 @@ class InitializationManager {
             async let toDoListManager: () = ToDoListManager.shared.toDoListInit()
             async let exerciseManager: () = ExerciseManager.shared.exerciseManagerInit()
             async let xpManager: () = XPManager.shared.xpManagerInit()
-            async let authenticationManager: () = AuthenticationManager.shared.getUserData(completion: { success, error in
-                print("done")
-            })
+            async let authenticationManager: Bool = AuthenticationManager.shared.getUserData()
 
             _ = await (authenticationManager, userProgram, notificationManager, challengeManager, toDoListManager, exerciseManager, xpManager)
             
@@ -44,6 +42,6 @@ class InitializationManager {
     
     func userProgramInitialization() async {
         await ProgramManager.shared.userProgramData.isEmpty ? ProgramManager.shared.loadUserProgramData() : nil
-        await ProgramManager.shared.loadStandardProgramNames()
+        await ProgramManager.shared.loadStandardProgramNamesAsync()
     }
 }

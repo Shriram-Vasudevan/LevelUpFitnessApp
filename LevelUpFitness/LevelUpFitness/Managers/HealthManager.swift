@@ -84,7 +84,7 @@ class HealthManager: ObservableObject {
                             comparison = .equal
                         }
                         
-                        DispatchQueue.main.sync {
+                        DispatchQueue.main.async {
                             self.todaysSteps = (count: todaysSteps, comparison: comparison)
                         }
                     }
@@ -165,7 +165,7 @@ class HealthManager: ObservableObject {
                         } else {
                             comparison = .equal
                         }
-                        DispatchQueue.main.sync {
+                        DispatchQueue.main.async {
                             self.todaysCalories = (count: todaysCalories, comparison: comparison)
                         }
                         
@@ -248,7 +248,7 @@ class HealthManager: ObservableObject {
                             comparison = .equal
                         }
                         
-                        DispatchQueue.main.sync {
+                        DispatchQueue.main.async {
                             self.todaysDistance = (count: Int(todaysDistance), comparison: comparison)
                         }
                     }

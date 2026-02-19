@@ -5,7 +5,6 @@
 //  Created by Shriram Vasudevan on 8/10/24.
 //
 import Foundation
-import Amplify
 import Combine
 
 @MainActor
@@ -19,42 +18,7 @@ class LevelChangeManager: ObservableObject {
     
 
     func addNewProgramLevelChanges() async {
-        do {
-            let userID = try await ProgramCloudKitUtility.customContainer.userRecordID().recordName
-            
-            if let userProgramDBRepresentations = await ProgramDynamoDBUtility.getUserProgramDBRepresentation() {
-                for userProgramDBRepresentation in userProgramDBRepresentations {
-                    let endDate = DateUtility.getDateNWeeksAfterDate(dateString: userProgramDBRepresentation.startDate, weeks: 4)
-                    
-                    print("program name \(userProgramDBRepresentation.program)")
-                    if !LocalStorageUtility.fileModifiedInLast24Hours(at: "\(userID)-LevelChangeInfo.json") {
-                        print("current properties \(currentProperties)")
-                        let selectedPropterties = selectedProperties()
-                        print("selected properties \(selectedPropterties)")
-                        
-                        if let programs = LocalStorageUtility.getCachedUserPrograms(at: "Programs/\(userID)/\(userProgramDBRepresentation.program) (\(userProgramDBRepresentation.startDate)|\(String(describing: endDate)))") {
-                            print("got programs")
-                            let tasks = selectedPropterties.map { selectedProperty in
-                                    Task {
-                                        await performProgramLevelChange(selectedProperty: selectedProperty, programs: programs)
-                                    }
-                                }
-          
-                                for task in tasks {
-                                    _ = await task.value
-                                }
-                        }
-                        
-                        await getLevelChanges()
-                        
-                        print("level chagnes \(self.levelChanges)")
-                    }
-                }
-                
-            }
-        } catch {
-            print(error)
-        }
+        // Intentionally unused in current CloudKit-only flow.
     }
     
     func getLevelChanges() async {

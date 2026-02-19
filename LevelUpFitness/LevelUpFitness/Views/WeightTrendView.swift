@@ -8,7 +8,7 @@ struct WeightTrendView: View {
     private let accentColor = Color(hex: "40C4FC")
     private let grayColor = Color(hex: "F5F5F5")
     
-    @Environment (\.dismiss) var dismiss
+    @Environment(\.dismiss) var dismiss
     
     var body: some View {
         ZStack {

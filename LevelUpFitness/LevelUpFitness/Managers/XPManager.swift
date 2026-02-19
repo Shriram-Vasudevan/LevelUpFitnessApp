@@ -6,10 +6,6 @@
 //
 
 import Foundation
-import Amplify
-import AWSAPIPlugin
-
-import Foundation
 import CloudKit
 
 @MainActor
@@ -31,7 +27,7 @@ class XPManager: ObservableObject {
             let userID = try await XPCloudKitUtility.customContainer.userRecordID().recordName
             XPCloudKitUtility.fetchUserXPData(userID: userID) { data, error in
                 if let xpData = data {
-                    DispatchQueue.main.sync {
+                    DispatchQueue.main.async {
                         self.userXPData = xpData
                     }
                     Task {
@@ -91,8 +87,11 @@ class XPManager: ObservableObject {
         let encoder = JSONEncoder()
         do {
             let data = try encoder.encode(userXPData)
-            let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("userXPData.json")
-            try data.write(to: fileURL!)
+            guard let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("userXPData.json") else {
+                print("Failed to resolve documents directory for XP cache.")
+                return
+            }
+            try data.write(to: fileURL)
             print("User XP data cached successfully.")
         } catch {
             print("Failed to cache user XP data: \(error.localizedDescription)")

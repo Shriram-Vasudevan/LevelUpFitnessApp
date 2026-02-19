@@ -7,7 +7,6 @@
 
 import Foundation
 import UserNotifications
-import Amplify
 
 struct NotificationManager {
     static let shared = NotificationManager()
@@ -18,12 +17,7 @@ struct NotificationManager {
     }
     
     func identifyUser() async {
-        do {
-            let user = try await Amplify.Auth.getCurrentUser().userId
-            try await Amplify.Notifications.Push.identifyUser(userId: user)
-        } catch {
-            print("Failed to get userID: \(error)")
-        }
+        // No-op: push endpoint identification is not used in current CloudKit-based architecture.
     }
     
     func askPermission() {

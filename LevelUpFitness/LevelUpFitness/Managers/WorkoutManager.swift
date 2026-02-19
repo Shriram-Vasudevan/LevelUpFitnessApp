@@ -142,7 +142,7 @@ class WorkoutManager: ObservableObject {
                 programName: selectedProgram.program.programName,
                exerciseRecord: exerciseRecord
            )
-           GymManager.shared.saveGymSession(GymManager.shared.currentSession!)
+           GymManager.shared.saveGymSession(currentSession)
        }
     
     func saveProgramStatus() {

@@ -55,6 +55,13 @@ class ProgramManager: ObservableObject {
     }
 
     func loadStandardProgramNames() {
+        Task {
+            await loadStandardProgramNamesAsync()
+        }
+    }
+
+    func loadStandardProgramNamesAsync() async {
+        await withCheckedContinuation { continuation in
         ProgramCloudKitUtility.fetchStandardProgramDBRepresentations { programs, error in
             if let programs = programs {
                 DispatchQueue.main.async {
@@ -63,6 +70,8 @@ class ProgramManager: ObservableObject {
             } else if let error = error {
                 print("Error fetching standard programs: \(error.localizedDescription)")
             }
+            continuation.resume()
+        }
         }
     }
 
@@ -143,18 +152,19 @@ class ProgramManager: ObservableObject {
     func loadUserProgramData() async {
         let activePrograms = await loadUserActivePrograms()
         print("the active program \(activePrograms)")
+        var loadedPrograms: [ProgramWithID] = []
+
         for programMeta in activePrograms {
-            print("looping through")
-            ProgramCloudKitUtility.fetchUserProgramData(programID: programMeta.programID) { programWithID, error in
-                if let programWithID = programWithID {
-                    DispatchQueue.main.async {
-                        self.userProgramData.append(programWithID)
-                    }
-                } else if let error = error {
-                    print("Error fetching user program data: \(error.localizedDescription)")
+            do {
+                if let programWithID = try await ProgramCloudKitUtility.fetchUserProgramData(programID: programMeta.programID) {
+                    loadedPrograms.append(programWithID)
                 }
+            } catch {
+                print("Error fetching user program data: \(error.localizedDescription)")
             }
         }
+
+        userProgramData = loadedPrograms
     }
 
     func uploadNewProgramStatus(completion: @escaping (Bool) -> Void) async {

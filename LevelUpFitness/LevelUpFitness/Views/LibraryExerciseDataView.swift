@@ -141,22 +141,21 @@ struct LibraryExerciseDataView: View {
     }
     
     @MainActor func addToGymSession() {
-            guard let currentSession = GymManager.shared.currentSession else {
-                print("No active gym session found.")
-                return
-            }
-
-            let exerciseRecord = ExerciseRecord(
-                exerciseInfo: .libraryExercise(progression),
-                exerciseData: exerciseData
-            )
-
-            GymManager.shared.currentSession?.addIndividualExercise(exerciseRecord: exerciseRecord)
-
-            GymManager.shared.saveGymSession(GymManager.shared.currentSession!)
-            
-            print("Exercise added to current session.")
+        guard let currentSession = GymManager.shared.currentSession else {
+            print("No active gym session found.")
+            return
         }
+
+        let exerciseRecord = ExerciseRecord(
+            exerciseInfo: .libraryExercise(progression),
+            exerciseData: exerciseData
+        )
+
+        GymManager.shared.currentSession?.addIndividualExercise(exerciseRecord: exerciseRecord)
+        GymManager.shared.saveGymSession(currentSession)
+
+        print("Exercise added to current session.")
+    }
 }
 
 struct LibraryExerciseDataSetWidget: View {

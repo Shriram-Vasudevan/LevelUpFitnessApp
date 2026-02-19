@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0E5CE1C6E0490B7BE5F50F4D /* awsconfiguration.json in Resources */ = {isa = PBXBuildFile; fileRef = C9EF97A8E6FAD1E27A905BF3 /* awsconfiguration.json */; };
 		991F8FDA2C13EB3900A134A5 /* HealthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991F8FD92C13EB3900A134A5 /* HealthManager.swift */; };
 		991F8FE22C15278500A134A5 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991F8FE12C15278500A134A5 /* Extensions.swift */; };
 		991F8FE42C1527A900A134A5 /* ProgramStatisticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991F8FE32C1527A900A134A5 /* ProgramStatisticsView.swift */; };
@@ -26,8 +25,6 @@
 		991FB4572C6687EE006B4ACE /* DateUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991FB4562C6687EE006B4ACE /* DateUtility.swift */; };
 		991FB45D2C668A8D006B4ACE /* LocalStorageUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991FB45C2C668A8D006B4ACE /* LocalStorageUtility.swift */; };
 		991FB45F2C668DF8006B4ACE /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991FB45E2C668DF8006B4ACE /* Errors.swift */; };
-		991FB4652C668FFB006B4ACE /* ProgramS3Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991FB4642C668FFB006B4ACE /* ProgramS3Utility.swift */; };
-		991FB4692C6695EB006B4ACE /* ProgramDynamoDBUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991FB4682C6695EB006B4ACE /* ProgramDynamoDBUtility.swift */; };
 		991FB46B2C66B5ED006B4ACE /* ProgramManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991FB46A2C66B5ED006B4ACE /* ProgramManager.swift */; };
 		991FB46F2C682055006B4ACE /* ChallengeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991FB46E2C682055006B4ACE /* ChallengeManager.swift */; };
 		991FB4712C68223E006B4ACE /* LevelChangeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991FB4702C68223E006B4ACE /* LevelChangeManager.swift */; };
@@ -50,36 +47,11 @@
 		993DF23F2C38AFEF00BBC1BF /* SetStatWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993DF23E2C38AFEF00BBC1BF /* SetStatWidget.swift */; };
 		993DF2412C397C5C00BBC1BF /* SetCounterWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993DF2402C397C5C00BBC1BF /* SetCounterWidget.swift */; };
 		9942D3952C6EBD2A0022C219 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9942D3942C6EBD2A0022C219 /* NotificationManager.swift */; };
-		9942D3992C6F013B0022C219 /* AWSAPIPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 9942D3982C6F013B0022C219 /* AWSAPIPlugin */; };
-		9942D39B2C6F013B0022C219 /* AWSCloudWatchLoggingPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 9942D39A2C6F013B0022C219 /* AWSCloudWatchLoggingPlugin */; };
-		9942D39D2C6F013B0022C219 /* AWSCognitoAuthPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 9942D39C2C6F013B0022C219 /* AWSCognitoAuthPlugin */; };
-		9942D39F2C6F013B0022C219 /* AWSDataStorePlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 9942D39E2C6F013B0022C219 /* AWSDataStorePlugin */; };
-		9942D3A12C6F013B0022C219 /* AWSLocationGeoPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 9942D3A02C6F013B0022C219 /* AWSLocationGeoPlugin */; };
-		9942D3A32C6F013B0022C219 /* AWSPinpointAnalyticsPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 9942D3A22C6F013B0022C219 /* AWSPinpointAnalyticsPlugin */; };
-		9942D3A52C6F013B0022C219 /* AWSPinpointPushNotificationsPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 9942D3A42C6F013B0022C219 /* AWSPinpointPushNotificationsPlugin */; };
-		9942D3A72C6F013B0022C219 /* AWSPluginsCore in Frameworks */ = {isa = PBXBuildFile; productRef = 9942D3A62C6F013B0022C219 /* AWSPluginsCore */; };
-		9942D3A92C6F013B0022C219 /* AWSPredictionsPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 9942D3A82C6F013B0022C219 /* AWSPredictionsPlugin */; };
-		9942D3AB2C6F013B0022C219 /* AWSS3StoragePlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 9942D3AA2C6F013B0022C219 /* AWSS3StoragePlugin */; };
-		9942D3AD2C6F013B0022C219 /* Amplify in Frameworks */ = {isa = PBXBuildFile; productRef = 9942D3AC2C6F013B0022C219 /* Amplify */; };
-		9942D3AF2C6F013B0022C219 /* CoreMLPredictionsPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 9942D3AE2C6F013B0022C219 /* CoreMLPredictionsPlugin */; };
 		9945E0BA2C39A15F00EA19D2 /* XPManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9945E0B92C39A15E00EA19D2 /* XPManager.swift */; };
 		9945E0BC2C39A19300EA19D2 /* XPData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9945E0BB2C39A19300EA19D2 /* XPData.swift */; };
-		994BE7082C01483D00959EB5 /* AWSAPIPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 994BE7072C01483D00959EB5 /* AWSAPIPlugin */; };
-		994BE70A2C01483D00959EB5 /* AWSCloudWatchLoggingPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 994BE7092C01483D00959EB5 /* AWSCloudWatchLoggingPlugin */; };
-		994BE70C2C01483D00959EB5 /* AWSCognitoAuthPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 994BE70B2C01483D00959EB5 /* AWSCognitoAuthPlugin */; };
-		994BE70E2C01483D00959EB5 /* AWSDataStorePlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 994BE70D2C01483D00959EB5 /* AWSDataStorePlugin */; };
-		994BE7102C01483D00959EB5 /* AWSLocationGeoPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 994BE70F2C01483D00959EB5 /* AWSLocationGeoPlugin */; };
-		994BE7122C01483D00959EB5 /* AWSPinpointAnalyticsPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 994BE7112C01483D00959EB5 /* AWSPinpointAnalyticsPlugin */; };
-		994BE7142C01483D00959EB5 /* AWSPinpointPushNotificationsPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 994BE7132C01483D00959EB5 /* AWSPinpointPushNotificationsPlugin */; };
-		994BE7162C01483D00959EB5 /* AWSPluginsCore in Frameworks */ = {isa = PBXBuildFile; productRef = 994BE7152C01483D00959EB5 /* AWSPluginsCore */; };
-		994BE7182C01483D00959EB5 /* AWSPredictionsPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 994BE7172C01483D00959EB5 /* AWSPredictionsPlugin */; };
-		994BE71A2C01483D00959EB5 /* AWSS3StoragePlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 994BE7192C01483D00959EB5 /* AWSS3StoragePlugin */; };
-		994BE71C2C01483D00959EB5 /* Amplify in Frameworks */ = {isa = PBXBuildFile; productRef = 994BE71B2C01483D00959EB5 /* Amplify */; };
-		994BE71E2C01483D00959EB5 /* CoreMLPredictionsPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 994BE71D2C01483D00959EB5 /* CoreMLPredictionsPlugin */; };
 		994E7DB12C02643D00BAD9E0 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994E7DB02C02643D00BAD9E0 /* LoginView.swift */; };
 		994E7DB32C02665300BAD9E0 /* KeyboardResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994E7DB22C02665300BAD9E0 /* KeyboardResponder.swift */; };
 		994E7DB52C0266A000BAD9E0 /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994E7DB42C0266A000BAD9E0 /* RegisterView.swift */; };
-		994E7DB72C026A1D00BAD9E0 /* AuthStateObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994E7DB62C026A1D00BAD9E0 /* AuthStateObserver.swift */; };
 		994E7DB92C026BE500BAD9E0 /* AuthCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994E7DB82C026BE400BAD9E0 /* AuthCheckView.swift */; };
 		994E7DBB2C026BFE00BAD9E0 /* SplashScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994E7DBA2C026BFE00BAD9E0 /* SplashScreenView.swift */; };
 		994E7DBD2C028F5B00BAD9E0 /* ConfirmationCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994E7DBC2C028F5B00BAD9E0 /* ConfirmationCodeView.swift */; };
@@ -175,7 +147,6 @@
 		99ECAD2E2C783C2F0012F8E7 /* ToDoListManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99ECAD2D2C783C2F0012F8E7 /* ToDoListManager.swift */; };
 		99ECAD302C7841BA0012F8E7 /* StringUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99ECAD2F2C7841BA0012F8E7 /* StringUtility.swift */; };
 		99ECAD322C7844080012F8E7 /* PastProgramWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99ECAD312C7844080012F8E7 /* PastProgramWidget.swift */; };
-		99ECAD342C784ED40012F8E7 /* S3Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99ECAD332C784ED40012F8E7 /* S3Utility.swift */; };
 		99ECAD362C7850F40012F8E7 /* PastProgramInsightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99ECAD352C7850F40012F8E7 /* PastProgramInsightView.swift */; };
 		99EEC6132C3201780044F906 /* LevelUpBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EEC6122C3201780044F906 /* LevelUpBar.swift */; };
 		99EEC6152C320FC30044F906 /* FitnessOptionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EEC6142C320FC30044F906 /* FitnessOptionType.swift */; };
@@ -190,13 +161,11 @@
 		99FC9E442C5EADC800DAFFAC /* XPAdditionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC9E432C5EADC800DAFFAC /* XPAdditionType.swift */; };
 		99FC9E462C5EC1F900DAFFAC /* AnalyticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC9E452C5EC1F900DAFFAC /* AnalyticsView.swift */; };
 		99FC9E482C5EC56B00DAFFAC /* RequestCustomProgramWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC9E472C5EC56B00DAFFAC /* RequestCustomProgramWidget.swift */; };
-		E244B057B6BA41AE81672440 /* amplifyconfiguration.json in Resources */ = {isa = PBXBuildFile; fileRef = 4CBA503DE7750582F847DD00 /* amplifyconfiguration.json */; };
 		AA1234562C84567890ABC001 /* StoreKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1234562C84567890ABC002 /* StoreKitManager.swift */; };
 		BB7654322C84567890FED001 /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7654322C84567890FED002 /* PaywallView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		4CBA503DE7750582F847DD00 /* amplifyconfiguration.json */ = {isa = PBXFileReference; explicitFileType = text.json; path = amplifyconfiguration.json; sourceTree = "<group>"; };
 		991F8FD92C13EB3900A134A5 /* HealthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthManager.swift; sourceTree = "<group>"; };
 		991F8FE12C15278500A134A5 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		AA1234562C84567890ABC002 /* StoreKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreKitManager.swift; sourceTree = "<group>"; };
@@ -217,8 +186,6 @@
 		991FB4562C6687EE006B4ACE /* DateUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateUtility.swift; sourceTree = "<group>"; };
 		991FB45C2C668A8D006B4ACE /* LocalStorageUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalStorageUtility.swift; sourceTree = "<group>"; };
 		991FB45E2C668DF8006B4ACE /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
-		991FB4642C668FFB006B4ACE /* ProgramS3Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramS3Utility.swift; sourceTree = "<group>"; };
-		991FB4682C6695EB006B4ACE /* ProgramDynamoDBUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramDynamoDBUtility.swift; sourceTree = "<group>"; };
 		991FB46A2C66B5ED006B4ACE /* ProgramManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramManager.swift; sourceTree = "<group>"; };
 		991FB46E2C682055006B4ACE /* ChallengeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeManager.swift; sourceTree = "<group>"; };
 		991FB4702C68223E006B4ACE /* LevelChangeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelChangeManager.swift; sourceTree = "<group>"; };
@@ -247,7 +214,6 @@
 		994E7DB02C02643D00BAD9E0 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		994E7DB22C02665300BAD9E0 /* KeyboardResponder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardResponder.swift; sourceTree = "<group>"; };
 		994E7DB42C0266A000BAD9E0 /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
-		994E7DB62C026A1D00BAD9E0 /* AuthStateObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthStateObserver.swift; sourceTree = "<group>"; };
 		994E7DB82C026BE400BAD9E0 /* AuthCheckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthCheckView.swift; sourceTree = "<group>"; };
 		994E7DBA2C026BFE00BAD9E0 /* SplashScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreenView.swift; sourceTree = "<group>"; };
 		994E7DBC2C028F5B00BAD9E0 /* ConfirmationCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmationCodeView.swift; sourceTree = "<group>"; };
@@ -346,7 +312,6 @@
 		99ECAD2D2C783C2F0012F8E7 /* ToDoListManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoListManager.swift; sourceTree = "<group>"; };
 		99ECAD2F2C7841BA0012F8E7 /* StringUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringUtility.swift; sourceTree = "<group>"; };
 		99ECAD312C7844080012F8E7 /* PastProgramWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastProgramWidget.swift; sourceTree = "<group>"; };
-		99ECAD332C784ED40012F8E7 /* S3Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = S3Utility.swift; sourceTree = "<group>"; };
 		99ECAD352C7850F40012F8E7 /* PastProgramInsightView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastProgramInsightView.swift; sourceTree = "<group>"; };
 		99EEC6122C3201780044F906 /* LevelUpBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelUpBar.swift; sourceTree = "<group>"; };
 		99EEC6142C320FC30044F906 /* FitnessOptionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessOptionType.swift; sourceTree = "<group>"; };
@@ -361,7 +326,6 @@
 		99FC9E432C5EADC800DAFFAC /* XPAdditionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XPAdditionType.swift; sourceTree = "<group>"; };
 		99FC9E452C5EC1F900DAFFAC /* AnalyticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsView.swift; sourceTree = "<group>"; };
 		99FC9E472C5EC56B00DAFFAC /* RequestCustomProgramWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestCustomProgramWidget.swift; sourceTree = "<group>"; };
-		C9EF97A8E6FAD1E27A905BF3 /* awsconfiguration.json */ = {isa = PBXFileReference; explicitFileType = text.json; path = awsconfiguration.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -369,30 +333,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				994BE7082C01483D00959EB5 /* AWSAPIPlugin in Frameworks */,
-				9942D3A92C6F013B0022C219 /* AWSPredictionsPlugin in Frameworks */,
-				9942D3A12C6F013B0022C219 /* AWSLocationGeoPlugin in Frameworks */,
-				994BE7122C01483D00959EB5 /* AWSPinpointAnalyticsPlugin in Frameworks */,
-				9942D3A52C6F013B0022C219 /* AWSPinpointPushNotificationsPlugin in Frameworks */,
-				9942D3A72C6F013B0022C219 /* AWSPluginsCore in Frameworks */,
-				994BE7102C01483D00959EB5 /* AWSLocationGeoPlugin in Frameworks */,
-				9942D39F2C6F013B0022C219 /* AWSDataStorePlugin in Frameworks */,
-				994BE70A2C01483D00959EB5 /* AWSCloudWatchLoggingPlugin in Frameworks */,
-				994BE71C2C01483D00959EB5 /* Amplify in Frameworks */,
-				994BE7182C01483D00959EB5 /* AWSPredictionsPlugin in Frameworks */,
-				9942D3AD2C6F013B0022C219 /* Amplify in Frameworks */,
-				994BE71A2C01483D00959EB5 /* AWSS3StoragePlugin in Frameworks */,
-				994BE7162C01483D00959EB5 /* AWSPluginsCore in Frameworks */,
-				9942D3992C6F013B0022C219 /* AWSAPIPlugin in Frameworks */,
-				994BE71E2C01483D00959EB5 /* CoreMLPredictionsPlugin in Frameworks */,
-				994BE70C2C01483D00959EB5 /* AWSCognitoAuthPlugin in Frameworks */,
-				9942D3A32C6F013B0022C219 /* AWSPinpointAnalyticsPlugin in Frameworks */,
-				9942D3AB2C6F013B0022C219 /* AWSS3StoragePlugin in Frameworks */,
-				9942D39D2C6F013B0022C219 /* AWSCognitoAuthPlugin in Frameworks */,
-				9942D3AF2C6F013B0022C219 /* CoreMLPredictionsPlugin in Frameworks */,
-				9942D39B2C6F013B0022C219 /* AWSCloudWatchLoggingPlugin in Frameworks */,
-				994BE7142C01483D00959EB5 /* AWSPinpointPushNotificationsPlugin in Frameworks */,
-				994BE70E2C01483D00959EB5 /* AWSDataStorePlugin in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -404,11 +344,8 @@
 			children = (
 				991FB4562C6687EE006B4ACE /* DateUtility.swift */,
 				991FB45C2C668A8D006B4ACE /* LocalStorageUtility.swift */,
-				991FB4642C668FFB006B4ACE /* ProgramS3Utility.swift */,
-				991FB4682C6695EB006B4ACE /* ProgramDynamoDBUtility.swift */,
 				991FB4802C6D8B10006B4ACE /* ChallengesUtility.swift */,
 				99ECAD2F2C7841BA0012F8E7 /* StringUtility.swift */,
-				99ECAD332C784ED40012F8E7 /* S3Utility.swift */,
 				99E0A5182C9141BC00CC1224 /* ErrorUtility.swift */,
 				99A0C8BA2CA4D0B700F9281A /* ProgramCloudKitUtility.swift */,
 				99A0C8BE2CA77A9900F9281A /* XPCloudKitUtility.swift */,
@@ -438,7 +375,6 @@
 			children = (
 				994E7DB22C02665300BAD9E0 /* KeyboardResponder.swift */,
 				998475172BFC18F200295C6E /* AuthenticationManager.swift */,
-				994E7DB62C026A1D00BAD9E0 /* AuthStateObserver.swift */,
 				991F8FD92C13EB3900A134A5 /* HealthManager.swift */,
 				991F8FE92C17841300A134A5 /* BadgeManager.swift */,
 				9945E0B92C39A15E00EA19D2 /* XPManager.swift */,
@@ -615,7 +551,6 @@
 				99CFAAE42BEB075500EFF67E /* LevelUpFitness */,
 				99CFAAE32BEB075500EFF67E /* Products */,
 				996E6AC52C0023A9000720FC /* Frameworks */,
-				DD9E74D5C9CEB2157F079D13 /* AmplifyConfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -666,15 +601,6 @@
 			path = PreferenceKeys;
 			sourceTree = "<group>";
 		};
-		DD9E74D5C9CEB2157F079D13 /* AmplifyConfig */ = {
-			isa = PBXGroup;
-			children = (
-				C9EF97A8E6FAD1E27A905BF3 /* awsconfiguration.json */,
-				4CBA503DE7750582F847DD00 /* amplifyconfiguration.json */,
-			);
-			name = AmplifyConfig;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -692,30 +618,6 @@
 			);
 			name = LevelUpFitness;
 			packageProductDependencies = (
-				994BE7072C01483D00959EB5 /* AWSAPIPlugin */,
-				994BE7092C01483D00959EB5 /* AWSCloudWatchLoggingPlugin */,
-				994BE70B2C01483D00959EB5 /* AWSCognitoAuthPlugin */,
-				994BE70D2C01483D00959EB5 /* AWSDataStorePlugin */,
-				994BE70F2C01483D00959EB5 /* AWSLocationGeoPlugin */,
-				994BE7112C01483D00959EB5 /* AWSPinpointAnalyticsPlugin */,
-				994BE7132C01483D00959EB5 /* AWSPinpointPushNotificationsPlugin */,
-				994BE7152C01483D00959EB5 /* AWSPluginsCore */,
-				994BE7172C01483D00959EB5 /* AWSPredictionsPlugin */,
-				994BE7192C01483D00959EB5 /* AWSS3StoragePlugin */,
-				994BE71B2C01483D00959EB5 /* Amplify */,
-				994BE71D2C01483D00959EB5 /* CoreMLPredictionsPlugin */,
-				9942D3982C6F013B0022C219 /* AWSAPIPlugin */,
-				9942D39A2C6F013B0022C219 /* AWSCloudWatchLoggingPlugin */,
-				9942D39C2C6F013B0022C219 /* AWSCognitoAuthPlugin */,
-				9942D39E2C6F013B0022C219 /* AWSDataStorePlugin */,
-				9942D3A02C6F013B0022C219 /* AWSLocationGeoPlugin */,
-				9942D3A22C6F013B0022C219 /* AWSPinpointAnalyticsPlugin */,
-				9942D3A42C6F013B0022C219 /* AWSPinpointPushNotificationsPlugin */,
-				9942D3A62C6F013B0022C219 /* AWSPluginsCore */,
-				9942D3A82C6F013B0022C219 /* AWSPredictionsPlugin */,
-				9942D3AA2C6F013B0022C219 /* AWSS3StoragePlugin */,
-				9942D3AC2C6F013B0022C219 /* Amplify */,
-				9942D3AE2C6F013B0022C219 /* CoreMLPredictionsPlugin */,
 			);
 			productName = LevelUpFitness;
 			productReference = 99CFAAE22BEB075500EFF67E /* LevelUpFitness.app */;
@@ -746,7 +648,6 @@
 			);
 			mainGroup = 99CFAAD92BEB075400EFF67E;
 			packageReferences = (
-				994BE7062C01483D00959EB5 /* XCRemoteSwiftPackageReference "amplify-swift" */,
 			);
 			productRefGroup = 99CFAAE32BEB075500EFF67E /* Products */;
 			projectDirPath = "";
@@ -780,8 +681,6 @@
 				9978CE0B2C83A94500659813 /* YanoneKaffeesatz-Bold.ttf in Resources */,
 				99A67F012BF45251002DC3DC /* times new roman italic.ttf in Resources */,
 				99A67EFB2BF45251002DC3DC /* times new roman.ttf in Resources */,
-				0E5CE1C6E0490B7BE5F50F4D /* awsconfiguration.json in Resources */,
-				E244B057B6BA41AE81672440 /* amplifyconfiguration.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -837,7 +736,6 @@
 				991FB47D2C6C3BCF006B4ACE /* ChallengeTemplateWidget.swift in Sources */,
 				99E0A5192C9141BC00CC1224 /* ErrorUtility.swift in Sources */,
 				9945E0BC2C39A19300EA19D2 /* XPData.swift in Sources */,
-				991FB4652C668FFB006B4ACE /* ProgramS3Utility.swift in Sources */,
 				994E7DC12C02950000BAD9E0 /* WorkoutCard.swift in Sources */,
 				9978CDF82C7D79C700659813 /* HealthTrendView.swift in Sources */,
 				995B94B92C596EEF007AECF0 /* TimeSpentWidget.swift in Sources */,
@@ -883,7 +781,6 @@
 				99B44C062C9BA6CB00C0C434 /* CustomWorkoutExerciseDataSetWidget.swift in Sources */,
 				99FC9E482C5EC56B00DAFFAC /* RequestCustomProgramWidget.swift in Sources */,
 				991F8FEA2C17841300A134A5 /* BadgeManager.swift in Sources */,
-				99ECAD342C784ED40012F8E7 /* S3Utility.swift in Sources */,
 				991F8FF22C18D0A100A134A5 /* LibraryView.swift in Sources */,
 				99CFAAE62BEB075500EFF67E /* LevelUpFitnessApp.swift in Sources */,
 				99ECAD2C2C78208F0012F8E7 /* ProgramCompletedForTheDayCover.swift in Sources */,
@@ -895,7 +792,6 @@
 				99EEC6152C320FC30044F906 /* FitnessOptionType.swift in Sources */,
 				991FB4752C69394D006B4ACE /* LevelChangeWidget.swift in Sources */,
 				994E7DC72C03DE5400BAD9E0 /* PascalCaseCodingKey.swift in Sources */,
-				994E7DB72C026A1D00BAD9E0 /* AuthStateObserver.swift in Sources */,
 				9978CE022C7FC96C00659813 /* ExerciseData.swift in Sources */,
 				998DA0172C1A34840078E882 /* ChatView.swift in Sources */,
 				99FC9E462C5EC1F900DAFFAC /* AnalyticsView.swift in Sources */,
@@ -903,7 +799,6 @@
 				99F7F6DD2CAB41FC009858AC /* StatPoint.swift in Sources */,
 				99A0C8E32CA9B0D900F9281A /* ExerciseCloudKitUtility.swift in Sources */,
 				99A0C8C12CA77F5000F9281A /* TrendCloudKitUtility.swift in Sources */,
-				991FB4692C6695EB006B4ACE /* ProgramDynamoDBUtility.swift in Sources */,
 				9945E0BA2C39A15F00EA19D2 /* XPManager.swift in Sources */,
 				99DD3D522C1D0839006C07B3 /* ExerciseLibraryExerciseWidget.swift in Sources */,
 				99A0C8C32CA7917100F9281A /* ChallengeCloudKitUtility.swift in Sources */,
@@ -1160,139 +1055,6 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		994BE7062C01483D00959EB5 /* XCRemoteSwiftPackageReference "amplify-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/aws-amplify/amplify-swift";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.34.1;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		9942D3982C6F013B0022C219 /* AWSAPIPlugin */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 994BE7062C01483D00959EB5 /* XCRemoteSwiftPackageReference "amplify-swift" */;
-			productName = AWSAPIPlugin;
-		};
-		9942D39A2C6F013B0022C219 /* AWSCloudWatchLoggingPlugin */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 994BE7062C01483D00959EB5 /* XCRemoteSwiftPackageReference "amplify-swift" */;
-			productName = AWSCloudWatchLoggingPlugin;
-		};
-		9942D39C2C6F013B0022C219 /* AWSCognitoAuthPlugin */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 994BE7062C01483D00959EB5 /* XCRemoteSwiftPackageReference "amplify-swift" */;
-			productName = AWSCognitoAuthPlugin;
-		};
-		9942D39E2C6F013B0022C219 /* AWSDataStorePlugin */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 994BE7062C01483D00959EB5 /* XCRemoteSwiftPackageReference "amplify-swift" */;
-			productName = AWSDataStorePlugin;
-		};
-		9942D3A02C6F013B0022C219 /* AWSLocationGeoPlugin */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 994BE7062C01483D00959EB5 /* XCRemoteSwiftPackageReference "amplify-swift" */;
-			productName = AWSLocationGeoPlugin;
-		};
-		9942D3A22C6F013B0022C219 /* AWSPinpointAnalyticsPlugin */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 994BE7062C01483D00959EB5 /* XCRemoteSwiftPackageReference "amplify-swift" */;
-			productName = AWSPinpointAnalyticsPlugin;
-		};
-		9942D3A42C6F013B0022C219 /* AWSPinpointPushNotificationsPlugin */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 994BE7062C01483D00959EB5 /* XCRemoteSwiftPackageReference "amplify-swift" */;
-			productName = AWSPinpointPushNotificationsPlugin;
-		};
-		9942D3A62C6F013B0022C219 /* AWSPluginsCore */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 994BE7062C01483D00959EB5 /* XCRemoteSwiftPackageReference "amplify-swift" */;
-			productName = AWSPluginsCore;
-		};
-		9942D3A82C6F013B0022C219 /* AWSPredictionsPlugin */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 994BE7062C01483D00959EB5 /* XCRemoteSwiftPackageReference "amplify-swift" */;
-			productName = AWSPredictionsPlugin;
-		};
-		9942D3AA2C6F013B0022C219 /* AWSS3StoragePlugin */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 994BE7062C01483D00959EB5 /* XCRemoteSwiftPackageReference "amplify-swift" */;
-			productName = AWSS3StoragePlugin;
-		};
-		9942D3AC2C6F013B0022C219 /* Amplify */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 994BE7062C01483D00959EB5 /* XCRemoteSwiftPackageReference "amplify-swift" */;
-			productName = Amplify;
-		};
-		9942D3AE2C6F013B0022C219 /* CoreMLPredictionsPlugin */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 994BE7062C01483D00959EB5 /* XCRemoteSwiftPackageReference "amplify-swift" */;
-			productName = CoreMLPredictionsPlugin;
-		};
-		994BE7072C01483D00959EB5 /* AWSAPIPlugin */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 994BE7062C01483D00959EB5 /* XCRemoteSwiftPackageReference "amplify-swift" */;
-			productName = AWSAPIPlugin;
-		};
-		994BE7092C01483D00959EB5 /* AWSCloudWatchLoggingPlugin */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 994BE7062C01483D00959EB5 /* XCRemoteSwiftPackageReference "amplify-swift" */;
-			productName = AWSCloudWatchLoggingPlugin;
-		};
-		994BE70B2C01483D00959EB5 /* AWSCognitoAuthPlugin */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 994BE7062C01483D00959EB5 /* XCRemoteSwiftPackageReference "amplify-swift" */;
-			productName = AWSCognitoAuthPlugin;
-		};
-		994BE70D2C01483D00959EB5 /* AWSDataStorePlugin */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 994BE7062C01483D00959EB5 /* XCRemoteSwiftPackageReference "amplify-swift" */;
-			productName = AWSDataStorePlugin;
-		};
-		994BE70F2C01483D00959EB5 /* AWSLocationGeoPlugin */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 994BE7062C01483D00959EB5 /* XCRemoteSwiftPackageReference "amplify-swift" */;
-			productName = AWSLocationGeoPlugin;
-		};
-		994BE7112C01483D00959EB5 /* AWSPinpointAnalyticsPlugin */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 994BE7062C01483D00959EB5 /* XCRemoteSwiftPackageReference "amplify-swift" */;
-			productName = AWSPinpointAnalyticsPlugin;
-		};
-		994BE7132C01483D00959EB5 /* AWSPinpointPushNotificationsPlugin */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 994BE7062C01483D00959EB5 /* XCRemoteSwiftPackageReference "amplify-swift" */;
-			productName = AWSPinpointPushNotificationsPlugin;
-		};
-		994BE7152C01483D00959EB5 /* AWSPluginsCore */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 994BE7062C01483D00959EB5 /* XCRemoteSwiftPackageReference "amplify-swift" */;
-			productName = AWSPluginsCore;
-		};
-		994BE7172C01483D00959EB5 /* AWSPredictionsPlugin */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 994BE7062C01483D00959EB5 /* XCRemoteSwiftPackageReference "amplify-swift" */;
-			productName = AWSPredictionsPlugin;
-		};
-		994BE7192C01483D00959EB5 /* AWSS3StoragePlugin */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 994BE7062C01483D00959EB5 /* XCRemoteSwiftPackageReference "amplify-swift" */;
-			productName = AWSS3StoragePlugin;
-		};
-		994BE71B2C01483D00959EB5 /* Amplify */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 994BE7062C01483D00959EB5 /* XCRemoteSwiftPackageReference "amplify-swift" */;
-			productName = Amplify;
-		};
-		994BE71D2C01483D00959EB5 /* CoreMLPredictionsPlugin */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 994BE7062C01483D00959EB5 /* XCRemoteSwiftPackageReference "amplify-swift" */;
-			productName = CoreMLPredictionsPlugin;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 99CFAADA2BEB075500EFF67E /* Project object */;
 }

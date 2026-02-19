@@ -25,8 +25,9 @@ class GymManager: ObservableObject {
     }
     
     func startGymSession() {
-        startTime = Date()
-        currentSession = GymSession(startTime: startTime!)
+        let sessionStartTime = Date()
+        startTime = sessionStartTime
+        currentSession = GymSession(startTime: sessionStartTime)
 
         timer = Timer.publish(every: 1.0, on: .main, in: .common)
             .autoconnect()
@@ -98,4 +99,3 @@ class GymManager: ObservableObject {
         return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
     }
 }
-

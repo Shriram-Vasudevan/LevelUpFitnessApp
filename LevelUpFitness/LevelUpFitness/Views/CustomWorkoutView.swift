@@ -118,8 +118,7 @@ struct CustomWorkoutView: View {
         )
 
         GymManager.shared.currentSession?.addIndividualExercise(exerciseRecord: exerciseRecord)
-
-        GymManager.shared.saveGymSession(GymManager.shared.currentSession!)
+        GymManager.shared.saveGymSession(currentSession)
         
         print("Exercise added to current session.")
     }

@@ -180,7 +180,11 @@ class ProgramCloudKitUtility {
             
             do {
                 print("Attempting to read program data from ProgramAsset...")
-                let programData = try Data(contentsOf: programAsset.fileURL!)
+                guard let fileURL = programAsset.fileURL else {
+                    completion(nil, nil)
+                    return
+                }
+                let programData = try Data(contentsOf: fileURL)
                 print("Program data read successfully.")
                 
                 print("Decoding program data...")
@@ -324,7 +328,11 @@ class ProgramCloudKitUtility {
             
             do {
                 print("Attempting to read program data from ProgramAsset...")
-                let programData = try Data(contentsOf: programAsset.fileURL!)
+                guard let fileURL = programAsset.fileURL else {
+                    completion(nil, nil)
+                    return
+                }
+                let programData = try Data(contentsOf: fileURL)
                 print("Program data read successfully.")
                 
                 print("Decoding program data...")
@@ -337,6 +345,18 @@ class ProgramCloudKitUtility {
             } catch {
                 print("Error decoding program data: \(error.localizedDescription)")
                 completion(nil, error)
+            }
+        }
+    }
+
+    static func fetchUserProgramData(programID: String) async throws -> ProgramWithID? {
+        try await withCheckedThrowingContinuation { continuation in
+            fetchUserProgramData(programID: programID) { programWithID, error in
+                if let error {
+                    continuation.resume(throwing: error)
+                } else {
+                    continuation.resume(returning: programWithID)
+                }
             }
         }
     }
