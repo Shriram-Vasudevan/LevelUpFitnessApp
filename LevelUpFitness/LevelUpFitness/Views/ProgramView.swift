@@ -12,6 +12,7 @@ struct ProgramView: View {
     @ObservedObject var programManager = ProgramManager.shared
     @ObservedObject var challengeManager = ChallengeManager.shared
     @ObservedObject var xpManager = XPManager.shared
+    @ObservedObject var friendWorkoutManager = FriendWorkoutManager.shared
     @EnvironmentObject private var storeKitManager: StoreKitManager
 
     @State private var navigateToWorkoutView = false
@@ -30,7 +31,7 @@ struct ProgramView: View {
     @State private var pendingLeaveProgram: ProgramWithID?
     @State private var infoMessage: String?
     @State private var showInfoAlert = false
-    @State private var friendRooms = FriendWorkoutRoom.defaultRooms
+    @State private var showFriendRoomComposer = false
 
     var body: some View {
         ZStack {
@@ -82,6 +83,17 @@ struct ProgramView: View {
         }
         .sheet(isPresented: $showProgramHub) {
             programHubSheet
+        }
+        .sheet(isPresented: $showFriendRoomComposer) {
+            CreateFriendRoomSheet(context: .program) { title, date in
+                Task {
+                    let success = await friendWorkoutManager.createRoom(context: .program, title: title, scheduleDate: date)
+                    infoMessage = success
+                        ? "Friend workout room created."
+                        : (friendWorkoutManager.syncErrorMessage ?? "Could not create room right now.")
+                    showInfoAlert = true
+                }
+            }
         }
         .fullScreenCover(isPresented: $showPaywall) {
             PaywallView(allowDismissal: true) {
@@ -154,6 +166,12 @@ struct ProgramView: View {
                 Text("\(programManager.userProgramData.count)")
                     .font(.system(size: 14, weight: .bold))
                     .foregroundColor(Color(hex: "0B5ED7"))
+
+                Button("Manage") {
+                    showProgramHub = true
+                }
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundColor(Color(hex: "0B5ED7"))
             }
 
             if programManager.userProgramData.isEmpty {
@@ -186,9 +204,7 @@ struct ProgramView: View {
                                 isSelected: programManager.selectedProgram?.programID == programWithID.programID
                             ) {
                                 programManager.selectedProgram = programWithID
-                            } onLeave: {
-                                pendingLeaveProgram = programWithID
-                                showConfirmationWidget = true
+                                showFullSchedule = false
                             }
                         }
                     }
@@ -209,6 +225,8 @@ struct ProgramView: View {
 
     private func selectedProgramWorkspace(_ program: Program) -> some View {
         VStack(spacing: 14) {
+            workspaceHeader(program)
+
             ProgramHeroCard(
                 program: program,
                 weekLabel: weekText(for: program),
@@ -225,9 +243,10 @@ struct ProgramView: View {
             if isFutureSelection {
                 lockedDayCard
             } else if let day = dayProgram(for: selectedDate, in: program) {
-                equipmentSection(for: day)
+                selectedDaySnapshot(for: day)
                 upNextSection(for: day)
                 scheduleSection(for: day)
+                equipmentSection(for: day)
             } else {
                 emptyScheduleCard
             }
@@ -236,6 +255,18 @@ struct ProgramView: View {
             friendsWorkoutSection
             challengeSection
         }
+    }
+
+    private func workspaceHeader(_ program: Program) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Current Program Workspace")
+                .font(.system(size: 18, weight: .semibold))
+                .foregroundColor(Color(hex: "111827"))
+            Text("Selected: \(program.programName)")
+                .font(.system(size: 13, weight: .medium))
+                .foregroundColor(Color(hex: "6B7280"))
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private func programDiscoverSection(
@@ -293,12 +324,9 @@ struct ProgramView: View {
             }
 
             Button {
-                if let current = programManager.selectedProgram {
-                    pendingLeaveProgram = current
-                    showConfirmationWidget = true
-                }
+                showProgramHub = true
             } label: {
-                actionCard(title: "Leave Program", subtitle: "Remove active plan", icon: "rectangle.portrait.and.arrow.right")
+                actionCard(title: "Manage Programs", subtitle: "Switch or leave plans", icon: "slider.horizontal.3")
             }
         }
     }
@@ -348,6 +376,42 @@ struct ProgramView: View {
                         }
                     }
                 }
+            }
+        }
+        .padding(12)
+        .background(Color.white)
+        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                .stroke(Color.black.opacity(0.08), lineWidth: 1)
+        )
+    }
+
+    private func selectedDaySnapshot(for day: ProgramDay) -> some View {
+        let totalCount = day.exercises.count
+        let completedCount = day.exercises.filter { $0.completed }.count
+        let pendingCount = max(totalCount - completedCount, 0)
+        let completionText = "\(completedCount)/\(totalCount) complete"
+
+        return VStack(alignment: .leading, spacing: 10) {
+            HStack(alignment: .firstTextBaseline) {
+                Text(Calendar.current.isDateInToday(selectedDate) ? "Today's Plan" : selectedDate.formatted(.dateTime.weekday(.wide).month().day()))
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundColor(Color(hex: "111827"))
+                Spacer()
+                Text(day.day)
+                    .font(.system(size: 12, weight: .bold))
+                    .foregroundColor(Color(hex: "0B5ED7"))
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(Color(hex: "E8F3FF"))
+                    .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
+            }
+
+            HStack(spacing: 8) {
+                workoutPill("\(totalCount) exercises")
+                workoutPill("\(pendingCount) pending")
+                workoutPill(completionText)
             }
         }
         .padding(12)
@@ -436,11 +500,11 @@ struct ProgramView: View {
         let displayedExercises = showFullSchedule ? day.exercises : Array(day.exercises.prefix(4))
 
         return VStack(alignment: .leading, spacing: 10) {
-            Text("Schedule")
+            Text("Exercise Sequence")
                 .font(.system(size: 18, weight: .semibold))
                 .foregroundColor(Color(hex: "111827"))
 
-            ForEach(displayedExercises, id: \.name) { exercise in
+            ForEach(Array(displayedExercises.enumerated()), id: \.offset) { _, exercise in
                 HStack(spacing: 10) {
                     Image(systemName: exercise.isWeight ? "dumbbell.fill" : "figure.run")
                         .font(.system(size: 14, weight: .bold))
@@ -524,27 +588,53 @@ struct ProgramView: View {
     }
 
     private var friendsWorkoutSection: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        let rooms = friendWorkoutManager.rooms(for: .program)
+
+        return VStack(alignment: .leading, spacing: 10) {
             HStack {
                 Text("Workout With Friends")
                     .font(.system(size: 18, weight: .semibold))
                     .foregroundColor(Color(hex: "111827"))
                 Spacer()
+                Button {
+                    Task {
+                        await friendWorkoutManager.refresh(context: .program)
+                    }
+                } label: {
+                    Image(systemName: "arrow.clockwise")
+                        .font(.system(size: 13, weight: .bold))
+                        .foregroundColor(Color(hex: "0B5ED7"))
+                        .frame(width: 28, height: 28)
+                        .background(Color(hex: "E8F3FF"))
+                        .clipShape(RoundedRectangle(cornerRadius: 7, style: .continuous))
+                }
+                .buttonStyle(.plain)
                 Button("Create Room") {
-                    infoMessage = "Friend room creation has been queued. Invites will be available in the next sync update."
-                    showInfoAlert = true
+                    showFriendRoomComposer = true
                 }
                 .font(.system(size: 13, weight: .semibold))
                 .foregroundColor(Color(hex: "0B5ED7"))
             }
 
-            ForEach($friendRooms) { room in
-                FriendRoomCard(room: room.wrappedValue) {
-                    room.wrappedValue.joined.toggle()
-                    infoMessage = room.wrappedValue.joined
-                        ? "You joined \(room.wrappedValue.title)."
-                        : "You left \(room.wrappedValue.title)."
-                    showInfoAlert = true
+            if rooms.isEmpty {
+                Text("No friend rooms yet. Create one and invite your group.")
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundColor(Color(hex: "6B7280"))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(10)
+                    .background(Color(hex: "F8FAFC"))
+                    .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+            } else {
+                ForEach(rooms) { room in
+                    FriendRoomCard(room: room) {
+                        Task {
+                            let success = await friendWorkoutManager.toggleMembership(room: room)
+                            infoMessage = success
+                                ? (room.joined ? "You left \(room.title)." : "You joined \(room.title).")
+                                : (friendWorkoutManager.syncErrorMessage ?? "Unable to update room membership.")
+                            showInfoAlert = true
+                        }
+                    }
                 }
             }
         }
@@ -568,9 +658,12 @@ struct ProgramView: View {
                     challengeFallbackRow("Perfect Program Week", subtitle: "Complete every scheduled session this week.")
                     challengeFallbackRow("3-in-15 Challenge", subtitle: "Level up three times within fifteen days.")
                     challengeFallbackRow("30 Day LevelUp Challenge", subtitle: "Maintain momentum for thirty days.")
+                    challengeFallbackRow("Consistency Sprint", subtitle: "Hit all planned sessions for ten consecutive days.")
+                    challengeFallbackRow("Volume Builder", subtitle: "Increase your total lifted volume by 8% this month.")
+                    challengeFallbackRow("Recovery Discipline", subtitle: "Stay inside target rest windows for seven workouts.")
                 }
             } else {
-                ForEach(challengeManager.challengeTemplates.prefix(4)) { template in
+                ForEach(challengeManager.challengeTemplates.prefix(6)) { template in
                     HStack(alignment: .top, spacing: 10) {
                         VStack(alignment: .leading, spacing: 4) {
                             Text(template.name)
@@ -706,20 +799,34 @@ struct ProgramView: View {
 
                                 Spacer()
 
-                                Button("Open") {
-                                    programManager.selectedProgram = programWithID
-                                    showProgramHub = false
+                                if programManager.selectedProgram?.programID == programWithID.programID {
+                                    Text("Current")
+                                        .font(.system(size: 11, weight: .bold))
+                                        .foregroundColor(Color(hex: "0B5ED7"))
+                                        .padding(.horizontal, 8)
+                                        .padding(.vertical, 5)
+                                        .background(Color(hex: "E8F3FF"))
+                                        .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
+                                } else {
+                                    Button("Set Current") {
+                                        programManager.selectedProgram = programWithID
+                                    }
+                                    .font(.system(size: 13, weight: .semibold))
+                                    .foregroundColor(Color(hex: "0B5ED7"))
                                 }
-                                .font(.system(size: 13, weight: .semibold))
-                                .foregroundColor(Color(hex: "0B5ED7"))
 
-                                Button("Leave") {
-                                    pendingLeaveProgram = programWithID
-                                    showConfirmationWidget = true
-                                    showProgramHub = false
+                                Menu {
+                                    Button("Remove Program", role: .destructive) {
+                                        pendingLeaveProgram = programWithID
+                                        showConfirmationWidget = true
+                                        showProgramHub = false
+                                    }
+                                } label: {
+                                    Image(systemName: "ellipsis.circle")
+                                        .font(.system(size: 18, weight: .semibold))
+                                        .foregroundColor(Color(hex: "6B7280"))
+                                        .frame(width: 30, height: 30)
                                 }
-                                .font(.system(size: 13, weight: .semibold))
-                                .foregroundColor(Color(hex: "D94841"))
                             }
                             .padding(10)
                             .background(Color.white)
@@ -736,8 +843,22 @@ struct ProgramView: View {
                         .foregroundColor(Color(hex: "111827"))
                         .padding(.top, 4)
 
-                    ForEach(programManager.standardProgramDBRepresentations, id: \.id) { program in
-                        let joined = isProgramJoined(program)
+                    let joinablePrograms = programManager.standardProgramDBRepresentations.filter { !isProgramJoined($0) }
+                    if joinablePrograms.isEmpty {
+                        Text("You've joined every available program.")
+                            .font(.system(size: 14, weight: .medium))
+                            .foregroundColor(Color(hex: "6B7280"))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(12)
+                            .background(Color.white)
+                            .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                    .stroke(Color.black.opacity(0.08), lineWidth: 1)
+                            )
+                    }
+
+                    ForEach(joinablePrograms, id: \.id) { program in
                         HStack(spacing: 10) {
                             ProgramPreviewImage(reference: program.image)
                                 .frame(width: 60, height: 44)
@@ -753,24 +874,18 @@ struct ProgramView: View {
 
                             Spacer()
 
-                            if joined {
-                                Text("Joined")
-                                    .font(.system(size: 12, weight: .bold))
-                                    .foregroundColor(Color(hex: "0B5ED7"))
-                            } else {
-                                Button(program.isPremium && !storeKitManager.effectiveIsPremiumUnlocked ? "Unlock" : "Join") {
-                                    if program.isPremium && !storeKitManager.effectiveIsPremiumUnlocked {
-                                        showProgramHub = false
-                                        storeKitManager.recordPaywallTrigger(.premiumProgram(name: program.name))
-                                        showPaywall = true
-                                    } else {
-                                        showProgramHub = false
-                                        joinProgram(program)
-                                    }
+                            Button(program.isPremium && !storeKitManager.effectiveIsPremiumUnlocked ? "Unlock" : "Join") {
+                                if program.isPremium && !storeKitManager.effectiveIsPremiumUnlocked {
+                                    showProgramHub = false
+                                    storeKitManager.recordPaywallTrigger(.premiumProgram(name: program.name))
+                                    showPaywall = true
+                                } else {
+                                    showProgramHub = false
+                                    joinProgram(program)
                                 }
-                                .font(.system(size: 13, weight: .semibold))
-                                .foregroundColor(Color(hex: "0B5ED7"))
                             }
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundColor(Color(hex: "0B5ED7"))
                         }
                         .padding(10)
                         .background(Color.white)
@@ -851,10 +966,15 @@ struct ProgramView: View {
         if challengeManager.challengeTemplates.isEmpty {
             await challengeManager.fetchChallengeTemplates()
         }
+
+        await friendWorkoutManager.refreshIfNeeded(context: .program)
     }
 
     private func isProgramJoined(_ program: StandardProgramDBRepresentation) -> Bool {
-        programManager.userProgramData.contains(where: { $0.program.programName == program.name })
+        let target = normalizeProgramName(program.name)
+        return programManager.userProgramData.contains(where: {
+            normalizeProgramName($0.program.programName) == target
+        })
     }
 
     private func requestJoin(_ program: StandardProgramDBRepresentation) {
@@ -940,51 +1060,62 @@ struct ProgramView: View {
             }
         }
     }
+
+    private func normalizeProgramName(_ value: String) -> String {
+        value
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .folding(options: .diacriticInsensitive, locale: .current)
+            .lowercased()
+    }
 }
 
 private struct ActiveProgramSummaryCard: View {
     let programWithID: ProgramWithID
     let isSelected: Bool
-    let onOpen: () -> Void
-    let onLeave: () -> Void
+    let onSelect: () -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            ProgramPreviewImage(reference: programWithID.program.imageName)
-                .frame(width: 180, height: 90)
-                .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+        Button(action: onSelect) {
+            VStack(alignment: .leading, spacing: 8) {
+                ProgramPreviewImage(reference: programWithID.program.imageName)
+                    .frame(width: 180, height: 90)
+                    .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
 
-            Text(programWithID.program.programName)
-                .font(.system(size: 15, weight: .semibold))
-                .foregroundColor(Color(hex: "111827"))
-                .lineLimit(1)
+                Text(programWithID.program.programName)
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundColor(Color(hex: "111827"))
+                    .lineLimit(1)
 
-            Text(programWithID.program.environment)
-                .font(.system(size: 12, weight: .medium))
-                .foregroundColor(Color(hex: "6B7280"))
+                HStack {
+                    Text(programWithID.program.environment)
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundColor(Color(hex: "6B7280"))
 
-            HStack(spacing: 10) {
-                Button("Open") {
-                    onOpen()
+                    Spacer()
+
+                    Text(isSelected ? "Current" : "Select")
+                        .font(.system(size: 11, weight: .bold))
+                        .foregroundColor(Color(hex: "0B5ED7"))
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .background(Color(hex: "E8F3FF"))
+                        .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
                 }
-                .font(.system(size: 12, weight: .semibold))
-                .foregroundColor(Color(hex: "0B5ED7"))
 
-                Button("Leave") {
-                    onLeave()
-                }
-                .font(.system(size: 12, weight: .semibold))
-                .foregroundColor(Color(hex: "D94841"))
+                Text(isSelected ? "Current plan in focus" : "Tap to switch focus")
+                    .font(.system(size: 11, weight: .medium))
+                    .foregroundColor(Color(hex: "6B7280"))
             }
+            .padding(10)
+            .frame(width: 200, height: 176, alignment: .topLeading)
+            .background(Color.white)
+            .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+            .overlay(
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .stroke(isSelected ? Color(hex: "0B5ED7") : Color.black.opacity(0.08), lineWidth: isSelected ? 2 : 1)
+            )
         }
-        .padding(10)
-        .frame(width: 200, alignment: .leading)
-        .background(Color.white)
-        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .stroke(isSelected ? Color(hex: "0B5ED7") : Color.black.opacity(0.08), lineWidth: isSelected ? 2 : 1)
-        )
+        .buttonStyle(.plain)
     }
 }
 
@@ -1077,7 +1208,7 @@ private struct ProgramMarketplaceCard: View {
                 }
             }
             .padding(10)
-            .frame(width: 240, alignment: .leading)
+            .frame(width: 240, height: 200, alignment: .topLeading)
             .background(Color.white)
             .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
             .overlay(
@@ -1122,17 +1253,28 @@ private struct FriendRoomCard: View {
                 Text(room.title)
                     .font(.system(size: 15, weight: .semibold))
                     .foregroundColor(Color(hex: "111827"))
-                Text(room.schedule)
+                Text(room.scheduleLabel)
                     .font(.system(size: 13, weight: .medium))
                     .foregroundColor(Color(hex: "6B7280"))
-                Text("\(room.participants) members")
+                HStack(spacing: 6) {
+                    Text("\(room.participantCount) members")
+                    if room.hostedByCurrentUser {
+                        Text("Host")
+                            .font(.system(size: 10, weight: .bold))
+                            .foregroundColor(Color(hex: "0B5ED7"))
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 2)
+                            .background(Color(hex: "E8F3FF"))
+                            .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
+                    }
+                }
                     .font(.system(size: 12, weight: .semibold))
                     .foregroundColor(Color(hex: "0B5ED7"))
             }
 
             Spacer()
 
-            Button(room.joined ? "Joined" : "Join") {
+            Button(room.joined ? "Leave Room" : "Join Room") {
                 onToggle()
             }
             .font(.system(size: 13, weight: .semibold))
@@ -1148,18 +1290,20 @@ private struct FriendRoomCard: View {
     }
 }
 
-private struct ProgramPreviewImage: View {
+struct ProgramPreviewImage: View {
     let reference: String
 
     var body: some View {
         Group {
-            if let url = URL(string: reference), let scheme = url.scheme?.lowercased(), scheme == "http" || scheme == "https" {
-                AsyncImage(url: url) { phase in
+            if let url = resolvedURL {
+                AsyncImage(url: url, transaction: Transaction(animation: .easeInOut(duration: 0.15))) { phase in
                     switch phase {
                     case .success(let image):
                         image
                             .resizable()
                             .aspectRatio(contentMode: .fill)
+                    case .empty:
+                        loadingImage
                     default:
                         fallbackImage
                     }
@@ -1171,6 +1315,34 @@ private struct ProgramPreviewImage: View {
             } else {
                 fallbackImage
             }
+        }
+        .clipped()
+    }
+
+    private var resolvedURL: URL? {
+        if let url = URL(string: reference), let scheme = url.scheme?.lowercased(), scheme == "http" || scheme == "https" {
+            return url
+        }
+
+        guard let encoded = reference.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+              let encodedURL = URL(string: encoded),
+              let scheme = encodedURL.scheme?.lowercased(),
+              scheme == "http" || scheme == "https" else {
+            return nil
+        }
+
+        return encodedURL
+    }
+
+    private var loadingImage: some View {
+        ZStack {
+            LinearGradient(
+                colors: [Color(hex: "EEF3FF"), Color(hex: "F7FAFF")],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            ProgressView()
+                .tint(Color(hex: "0B5ED7"))
         }
     }
 
@@ -1188,20 +1360,6 @@ private struct ProgramPreviewImage: View {
     }
 }
 
-private struct FriendWorkoutRoom: Identifiable {
-    let id = UUID()
-    let title: String
-    let schedule: String
-    let participants: Int
-    var joined: Bool
-
-    static let defaultRooms: [FriendWorkoutRoom] = [
-        FriendWorkoutRoom(title: "Monday Lift Crew", schedule: "Mon • 6:30 PM", participants: 5, joined: true),
-        FriendWorkoutRoom(title: "Friday Hypertrophy", schedule: "Fri • 7:00 AM", participants: 8, joined: false),
-        FriendWorkoutRoom(title: "Weekend Conditioning", schedule: "Sat • 9:15 AM", participants: 4, joined: false)
-    ]
-}
-
 struct ProgramJoinPopupView: View {
     @Binding var isPresented: Bool
     let program: StandardProgramDBRepresentation
@@ -1210,32 +1368,49 @@ struct ProgramJoinPopupView: View {
 
     var body: some View {
         ZStack {
-            Color.black.opacity(0.2)
+            Color.black.opacity(0.24)
                 .ignoresSafeArea()
                 .onTapGesture {
                     isPresented = false
                 }
 
-            VStack(spacing: 14) {
+            VStack(spacing: 16) {
                 ProgramPreviewImage(reference: program.image)
-                    .frame(height: 150)
+                    .frame(height: 164)
                     .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
 
-                VStack(alignment: .leading, spacing: 8) {
+                VStack(alignment: .leading, spacing: 10) {
+                    HStack(spacing: 8) {
+                        Text(program.environment)
+                            .font(.system(size: 12, weight: .bold))
+                            .foregroundColor(Color(hex: "0B5ED7"))
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 5)
+                            .background(Color(hex: "E8F3FF"))
+                            .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
+
+                        if program.isPremium {
+                            Label(
+                                storeKitManager.effectiveIsPremiumUnlocked ? "Premium" : "Premium Required",
+                                systemImage: "star.fill"
+                            )
+                            .font(.system(size: 11, weight: .bold))
+                            .foregroundColor(Color(hex: "A16207"))
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 5)
+                            .background(Color(hex: "FEF3C7"))
+                            .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
+                        }
+                    }
+
                     Text(program.name)
-                        .font(.system(size: 22, weight: .bold))
+                        .font(.system(size: 24, weight: .bold))
                         .foregroundColor(Color(hex: "111827"))
 
                     Text(program.description)
                         .font(.system(size: 14, weight: .medium))
                         .foregroundColor(Color(hex: "6B7280"))
                         .fixedSize(horizontal: false, vertical: true)
-
-                    if program.isPremium && !storeKitManager.effectiveIsPremiumUnlocked {
-                        Label("Requires LevelUp Premium", systemImage: "star.fill")
-                            .font(.system(size: 13, weight: .semibold))
-                            .foregroundColor(Color(hex: "0B5ED7"))
-                    }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
 
@@ -1246,7 +1421,7 @@ struct ProgramJoinPopupView: View {
                     .font(.system(size: 15, weight: .semibold))
                     .foregroundColor(Color(hex: "6B7280"))
                     .frame(maxWidth: .infinity)
-                    .padding(.vertical, 11)
+                    .padding(.vertical, 12)
                     .background(Color(hex: "F3F4F6"))
                     .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
 
@@ -1257,12 +1432,12 @@ struct ProgramJoinPopupView: View {
                     .font(.system(size: 15, weight: .semibold))
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
-                    .padding(.vertical, 11)
+                    .padding(.vertical, 12)
                     .background(Color(hex: "0B5ED7"))
                     .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
                 }
             }
-            .padding(16)
+            .padding(18)
             .background(Color.white)
             .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
             .overlay(
@@ -1270,6 +1445,63 @@ struct ProgramJoinPopupView: View {
                     .stroke(Color.black.opacity(0.08), lineWidth: 1)
             )
             .padding(.horizontal, 20)
+        }
+    }
+}
+
+struct CreateFriendRoomSheet: View {
+    let context: FriendWorkoutContext
+    let onCreate: (String, Date) -> Void
+
+    @Environment(\.dismiss) private var dismiss
+    @State private var roomName = ""
+    @State private var scheduleDate = Date().addingTimeInterval(3600)
+
+    var body: some View {
+        NavigationStack {
+            VStack(alignment: .leading, spacing: 14) {
+                Text("Create a \(context == .program ? "Program" : "Gym") room and invite people to train together.")
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundColor(Color(hex: "6B7280"))
+
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("Room Name")
+                        .font(.system(size: 13, weight: .semibold))
+                    TextField("Evening Strength Crew", text: $roomName)
+                        .font(.system(size: 15, weight: .medium))
+                        .padding(10)
+                        .background(Color(hex: "F8FAFC"))
+                        .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+                }
+
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("Schedule")
+                        .font(.system(size: 13, weight: .semibold))
+                    DatePicker("", selection: $scheduleDate, in: Date()..., displayedComponents: [.date, .hourAndMinute])
+                        .datePickerStyle(.compact)
+                }
+
+                Spacer()
+            }
+            .padding(16)
+            .navigationTitle("New Friend Room")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("Cancel") {
+                        dismiss()
+                    }
+                    .font(.system(size: 14, weight: .semibold))
+                }
+
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Create") {
+                        onCreate(roomName, scheduleDate)
+                        dismiss()
+                    }
+                    .font(.system(size: 14, weight: .semibold))
+                }
+            }
         }
     }
 }

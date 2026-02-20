@@ -6,43 +6,57 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct SubLevelCircularWidget: View {
     var level: Int
     var image: String
     var name: String
-    
+
     var body: some View {
-        VStack {
+        VStack(spacing: 8) {
             ZStack {
-                Circle()
-                    .fill(Color(red: 24 / 255.0, green: 44 / 255.0, blue: 67 / 255.0))
-                    .overlay (
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .fill(
+                        LinearGradient(
+                            colors: [Color(hex: "E8F3FF"), Color(hex: "F8FAFF")],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+
+                Group {
+                    if UIImage(named: image) != nil {
                         Image(image)
                             .resizable()
-//                            .rotationEffect(.degrees(45))
-                            .clipped()
-                            .padding(5)
-                    )
-                
-                
-                Circle()
-                    .stroke(style: StrokeStyle(lineWidth: 2.0, lineCap: .round, lineJoin: .round))
-                    .foregroundColor(Color.black)
-                    .rotationEffect(Angle(degrees: 270.0))
+                            .scaledToFit()
+                            .padding(10)
+                    } else {
+                        Image(systemName: "bolt.heart.fill")
+                            .font(.system(size: 22, weight: .bold))
+                            .foregroundColor(Color(hex: "0B5ED7"))
+                    }
+                }
             }
-            
+            .frame(width: 88, height: 88)
+            .overlay(
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .stroke(Color.black.opacity(0.08), lineWidth: 1)
+            )
+
             Text(name)
-                .font(.headline)
-            
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundColor(Color(hex: "111827"))
+                .lineLimit(1)
+
             Text("Level \(level)")
-                .font(.headline)
-                .bold()
+                .font(.system(size: 12, weight: .bold))
+                .foregroundColor(Color(hex: "0B5ED7"))
         }
+        .frame(maxWidth: .infinity)
     }
 }
 
 #Preview {
-    SubLevelCircularWidget(level: 5, image: "Dumbell", name: "Strength")
-        .frame(width: UIScreen.main.bounds.width / 4.5, height: UIScreen.main.bounds.width / 4.5)
+    SubLevelCircularWidget(level: 5, image: "Dumbbell", name: "Strength")
 }

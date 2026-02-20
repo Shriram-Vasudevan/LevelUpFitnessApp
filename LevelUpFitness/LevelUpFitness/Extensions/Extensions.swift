@@ -452,11 +452,15 @@ extension Program {
 
 extension ProgramDay {
     func requiredEquipment() -> [String] {
-        let equipmentSet = Set(exercises
+        let cleaned = exercises
             .flatMap { $0.equipment }
-            .filter { $0 != "None" }
-        )
-        return Array(equipmentSet)
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .filter { !$0.isEmpty && $0.caseInsensitiveCompare("None") != .orderedSame }
+
+        // Keep ordering deterministic to avoid UI flicker when switching program days.
+        return Array(Set(cleaned)).sorted {
+            $0.localizedCaseInsensitiveCompare($1) == .orderedAscending
+        }
     }
     
     func getTotalWeightByMuscleGroup() -> [String: Int] {

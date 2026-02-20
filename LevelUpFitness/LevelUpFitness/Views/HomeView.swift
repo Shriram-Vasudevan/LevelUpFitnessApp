@@ -40,6 +40,7 @@ struct HomeView: View {
                 }
                 .padding(.horizontal, 16)
                 .padding(.vertical, 14)
+                .padding(.top, 10)
             }
         }
         .alert("Action Failed", isPresented: $perfectProgramChallengeStartFailed) {
@@ -432,7 +433,7 @@ struct HomeView: View {
 
                 if let userXPData = xpManager.userXPData, !challengeManager.challengeTemplates.isEmpty {
                     VStack(spacing: 8) {
-                        ForEach(availableChallengeTemplates.prefix(2), id: \.id) { template in
+                        ForEach(availableChallengeTemplates.prefix(4), id: \.id) { template in
                             DiscoverChallengeCard(
                                 challenge: template,
                                 action: {
@@ -450,6 +451,35 @@ struct HomeView: View {
                             )
                         }
                     }
+                } else {
+                    VStack(spacing: 8) {
+                        ForEach(fallbackChallengeCards, id: \.title) { challenge in
+                            HStack(spacing: 10) {
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text(challenge.title)
+                                        .font(.system(size: 14, weight: .semibold))
+                                        .foregroundColor(Color(hex: "111827"))
+                                    Text(challenge.subtitle)
+                                        .font(.system(size: 12, weight: .medium))
+                                        .foregroundColor(Color(hex: "6B7280"))
+                                        .lineLimit(2)
+                                }
+
+                                Spacer()
+
+                                Text("Soon")
+                                    .font(.system(size: 11, weight: .bold))
+                                    .foregroundColor(Color(hex: "0B5ED7"))
+                                    .padding(.horizontal, 8)
+                                    .padding(.vertical, 6)
+                                    .background(Color(hex: "E8F3FF"))
+                                    .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
+                            }
+                            .padding(10)
+                            .background(Color(hex: "F8FAFC"))
+                            .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+                        }
+                    }
                 }
             }
         }
@@ -459,6 +489,15 @@ struct HomeView: View {
         challengeManager.challengeTemplates.filter { template in
             !challengeManager.userChallenges.contains { $0.challengeTemplateID == template.id }
         }
+    }
+
+    private var fallbackChallengeCards: [(title: String, subtitle: String)] {
+        [
+            ("Consistency Sprint", "Complete 10 workouts in 14 days."),
+            ("Strength Ladder", "Add weight on your primary lift for 4 sessions."),
+            ("Cardio Cadence", "Hit your cardio target 5 times this week."),
+            ("Recovery Precision", "Stay within rest targets for 3 full workouts.")
+        ]
     }
 
     private func challengeProgress(for challenge: UserChallenge) -> Int {
@@ -565,6 +604,7 @@ private struct HomeActionTile: View {
                     .foregroundColor(Color(hex: "6B7280"))
             }
             .frame(maxWidth: .infinity, alignment: .leading)
+            .frame(minHeight: 132, alignment: .topLeading)
             .padding(10)
             .background(Color(hex: "F8FAFC"))
             .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))

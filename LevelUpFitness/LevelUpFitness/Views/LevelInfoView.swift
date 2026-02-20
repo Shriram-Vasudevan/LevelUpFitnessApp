@@ -1,112 +1,154 @@
 import SwiftUI
 
 struct LevelInfoView: View {
-    @Environment(\.dismiss) var dismiss
-    
+    @Environment(\.dismiss) private var dismiss
+
     var body: some View {
         ZStack {
-            Color(red: 240 / 255.0, green: 244 / 255.0, blue: 252 / 255.0)
-                .ignoresSafeArea(.all)
-            
+            Color(hex: "F3F5F8")
+                .ignoresSafeArea()
+
             ScrollView(.vertical, showsIndicators: false) {
-                VStack(alignment: .leading, spacing: 0) {
-                    ZStack {
-                        HStack {
-                            Button(action: {
-                                dismiss()
-                                
-                            }) {
-                                Image(systemName: "xmark")
-                                    .foregroundColor(.gray)
-                                    .font(.system(size: 16, weight: .medium))
-                            }
-                            Spacer()
-                        }
-                        
-                        HStack {
-                            Text("Level Up System")
-                                .font(.headline)
-                        }
-                        
-                    }
-                    .padding(.top, 16)
-                    
-                    Text("Understanding Your Fitness Journey")
-                        .font(.system(size: 28, weight: .bold))
-                        .padding(.top, 20)
-                    
-                    Text("At Level Up, we've developed a unique leveling system to help you track and achieve your fitness goals. This system is based on various factors that contribute to your overall fitness progress.")
-                        .font(.body)
-                        .foregroundColor(.secondary)
-                        .padding(.top, 10)
-                    
-                    VStack(alignment: .leading, spacing: 16) {
-                        Text("Primary Sublevels")
-                            .font(.headline)
-                        
-                        HStack {
-                            SubLevelCircularWidget(level: 1, image: "Dumbell", name: "Strength")
-                                .frame(width: UIScreen.main.bounds.width / 4, height: UIScreen.main.bounds.width / 4)
-                            
-                            Spacer()
-                            
-                            SubLevelCircularWidget(level: 1, image: "Running", name: "Endurance")
-                                .frame(width: UIScreen.main.bounds.width / 4, height: UIScreen.main.bounds.width / 4)
-                            
-                            Spacer()
-                            
-                            SubLevelCircularWidget(level: 1, image: "360", name: "Mobility")
-                                .frame(width: UIScreen.main.bounds.width / 4, height: UIScreen.main.bounds.width / 4)
-                
-                        }
-                        .padding()
-                        .background(
-                            RoundedRectangle(cornerRadius: 10)
-                                .fill(.white) 
-                        )
-                    }
-                    .padding(.vertical, 20)
-                    
-                    VStack(alignment: .leading, spacing: 16) {
-                        Text("Dynamic Leveling")
-                            .font(.headline)
-                        
-                        Text("Your level is dynamic and can change based on your performance:")
-                            .font(.subheadline)
-                        
-                        HStack(alignment: .top) {
-                            Image(systemName: "circle.fill")
-                                .font(.system(size: 6))
-                                .padding(.top, 7)
-                            Text("Improve sublevels or maintain consistency to increase your level")
-                        }
-                        .font(.subheadline)
-                        
-                        HStack(alignment: .top) {
-                            Image(systemName: "circle.fill")
-                                .font(.system(size: 6))
-                                .padding(.top, 7)
-                            Text("Missing workouts or reducing sublevels for multiple weeks may decrease your level")
-                        }
-                        .font(.subheadline)
-                        
-                        HStack(alignment: .top) {
-                            Image(systemName: "circle.fill")
-                                .font(.system(size: 6))
-                                .padding(.top, 7)
-                            Text("The system uses a large timeframe so a few bad performances won't affect levels drastically")
-                        }
-                        .font(.subheadline)
-                        
-                        Text("Our primary goal is to make your level representative of your current form, encouraging continuous improvement and dedication to your fitness journey.")
-                            .font(.body)
-                            .foregroundColor(.secondary)
-                            .padding(.top, 8)
-                    }
+                VStack(alignment: .leading, spacing: 14) {
+                    header
+                    introCard
+                    sublevelsCard
+                    dynamicLevelingCard
                 }
-                .padding(.horizontal, 20)
-                .padding(.bottom, 40)
+                .padding(.horizontal, 16)
+                .padding(.top, 14)
+                .padding(.bottom, 24)
             }
+        }
+        .navigationBarBackButtonHidden()
+    }
+
+    private var header: some View {
+        HStack {
+            Text("Level System")
+                .font(.system(size: 30, weight: .bold))
+                .foregroundColor(Color(hex: "111827"))
+
+            Spacer()
+
+            Button {
+                dismiss()
+            } label: {
+                Image(systemName: "xmark")
+                    .font(.system(size: 14, weight: .bold))
+                    .foregroundColor(Color(hex: "6B7280"))
+                    .frame(width: 32, height: 32)
+                    .background(Color.white)
+                    .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8, style: .continuous)
+                            .stroke(Color.black.opacity(0.08), lineWidth: 1)
+                    )
+            }
+            .buttonStyle(.plain)
+        }
+    }
+
+    private var introCard: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("Understand Your Physical Journey")
+                .font(.system(size: 22, weight: .bold))
+                .foregroundColor(.white)
+
+            Text("Your level reflects training quality, consistency, and recovery. Use these sublevels to see where progress is strongest and where to improve next.")
+                .font(.system(size: 14, weight: .medium))
+                .foregroundColor(Color.white.opacity(0.88))
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(14)
+        .background(
+            LinearGradient(
+                colors: [Color(hex: "0B5ED7"), Color(hex: "1C9BFF")],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+    }
+
+    private var sublevelsCard: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Primary Sublevels")
+                .font(.system(size: 18, weight: .semibold))
+                .foregroundColor(Color(hex: "111827"))
+
+            HStack(spacing: 10) {
+                SubLevelCircularWidget(level: 1, image: "Dumbbell", name: "Strength")
+                SubLevelCircularWidget(level: 1, image: "Running", name: "Endurance")
+                SubLevelCircularWidget(level: 1, image: "360", name: "Mobility")
+            }
+
+            HStack(spacing: 10) {
+                Image("PrimarySublevels")
+                    .resizable()
+                    .scaledToFill()
+                    .frame(height: 96)
+                    .frame(maxWidth: .infinity)
+                    .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+
+                VStack(alignment: .leading, spacing: 5) {
+                    Text("Strength Check")
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundColor(Color(hex: "111827"))
+
+                    Text("Use this visual as a quick map of how your core training dimensions contribute to level movement.")
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundColor(Color(hex: "6B7280"))
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+        }
+        .padding(12)
+        .background(Color.white)
+        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                .stroke(Color.black.opacity(0.08), lineWidth: 1)
+        )
+    }
+
+    private var dynamicLevelingCard: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("Dynamic Leveling")
+                .font(.system(size: 18, weight: .semibold))
+                .foregroundColor(Color(hex: "111827"))
+
+            bullet("Improve sublevels and complete scheduled sessions to raise your level.")
+            bullet("Missing sessions for multiple weeks or declining performance can reduce level.")
+            bullet("The system looks at longer trends so one off days do not heavily impact progress.")
+
+            Text("Use your weekly trend views to see what is moving the needle and adjust your plan early.")
+                .font(.system(size: 13, weight: .medium))
+                .foregroundColor(Color(hex: "6B7280"))
+                .padding(.top, 2)
+        }
+        .padding(12)
+        .background(Color.white)
+        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                .stroke(Color.black.opacity(0.08), lineWidth: 1)
+        )
+    }
+
+    private func bullet(_ text: String) -> some View {
+        HStack(alignment: .top, spacing: 8) {
+            Circle()
+                .fill(Color(hex: "0B5ED7"))
+                .frame(width: 6, height: 6)
+                .padding(.top, 5)
+
+            Text(text)
+                .font(.system(size: 13, weight: .medium))
+                .foregroundColor(Color(hex: "374151"))
+                .fixedSize(horizontal: false, vertical: true)
         }
     }
 }
@@ -114,4 +156,3 @@ struct LevelInfoView: View {
 #Preview {
     LevelInfoView()
 }
-

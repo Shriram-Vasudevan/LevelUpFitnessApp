@@ -10,6 +10,7 @@ import SwiftUI
 
 struct GymSessionsView: View {
     @ObservedObject var gymManager = GymManager.shared
+    @ObservedObject var friendWorkoutManager = FriendWorkoutManager.shared
     @EnvironmentObject private var storeKitManager: StoreKitManager
 
     @State private var showEndSessionConfirmation = false
@@ -23,7 +24,7 @@ struct GymSessionsView: View {
     @State var showGymSessionInfoSheet: Bool = false
     @State private var expandedExercises: Set<UUID> = []
     @State private var showPaywall = false
-    @State private var teammateRooms = GymFriendSession.defaultRooms
+    @State private var showFriendRoomComposer = false
     @State private var friendMessage: String?
     @State private var showFriendMessage = false
     
@@ -86,6 +87,17 @@ struct GymSessionsView: View {
         .sheet(isPresented: $showGymSessionInfoSheet, content: {
             GymSessionInfoView()
         })
+        .sheet(isPresented: $showFriendRoomComposer) {
+            CreateFriendRoomSheet(context: .gym) { title, date in
+                Task {
+                    let success = await friendWorkoutManager.createRoom(context: .gym, title: title, scheduleDate: date)
+                    friendMessage = success
+                        ? "Friend workout room created."
+                        : (friendWorkoutManager.syncErrorMessage ?? "Could not create room right now.")
+                    showFriendMessage = true
+                }
+            }
+        }
         .navigationBarBackButtonHidden()
         .fullScreenCover(isPresented: $showPaywall) {
             PaywallView(allowDismissal: true) {
@@ -97,6 +109,9 @@ struct GymSessionsView: View {
             Button("OK", role: .cancel) { }
         } message: {
             Text(friendMessage ?? "")
+        }
+        .task {
+            await friendWorkoutManager.refreshIfNeeded(context: .gym)
         }
     }
 
@@ -253,22 +268,70 @@ struct GymSessionsView: View {
 
     @ViewBuilder
     private func recentSessionSummary(for session: GymSession) -> some View {
-        VStack(alignment: .leading, spacing: 18) {
-            HStack {
-                Text("Latest session recap")
-                    .font(.system(size: 20, weight: .semibold))
+        VStack(alignment: .leading, spacing: 14) {
+            HStack(alignment: .center) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Latest Session Recap")
+                        .font(.system(size: 20, weight: .bold))
+                    Text(session.startTime.formatted(.dateTime.weekday(.wide).month().day()))
+                        .font(.system(size: 13, weight: .medium))
+                        .foregroundColor(Color(hex: "6B7280"))
+                }
+
                 Spacer()
-                Text(session.startTime, style: .date)
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(.secondary)
+
+                VStack(alignment: .trailing, spacing: 6) {
+                    Text("Most Recent")
+                        .font(.system(size: 10, weight: .bold))
+                        .foregroundColor(Color(hex: "3080FF"))
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .background(Color(hex: "E8F3FF"))
+                        .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
+
+                    Text(formattedDuration(for: session) ?? "--")
+                        .font(.system(size: 13, weight: .semibold))
+                        .foregroundColor(Color(hex: "3080FF"))
+                }
             }
 
             sessionMetricGrid(for: session, elapsedTime: formattedDuration(for: session))
 
             highlightView(for: session, context: .informational)
+
+            Button {
+                selectedPastSession = session
+                navigateToPastSessionDetailView = true
+            } label: {
+                HStack {
+                    Spacer()
+                    Text("Open Full Session")
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundColor(.white)
+                    Spacer()
+                }
+                .padding(.vertical, 11)
+                .background(Color(hex: "3080FF"))
+                .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+            }
+            .buttonStyle(.plain)
         }
         .padding(16)
         .background(cardBackground())
+        .overlay(alignment: .topLeading) {
+            Rectangle()
+                .fill(
+                    LinearGradient(
+                        colors: [Color(hex: "3080FF"), Color(hex: "40C4FC")],
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    )
+                )
+                .frame(width: 92, height: 3)
+                .clipShape(RoundedRectangle(cornerRadius: 2, style: .continuous))
+                .padding(.leading, 16)
+                .padding(.top, 8)
+        }
     }
 
     private func sessionMetricScroll(for session: GymSession, elapsedTime: String? = nil) -> some View {
@@ -601,52 +664,88 @@ struct GymSessionsView: View {
     }
 
     private var friendsSessionSection: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        let rooms = friendWorkoutManager.rooms(for: .gym)
+
+        return VStack(alignment: .leading, spacing: 10) {
             HStack {
                 Text("Train With Friends")
                     .font(.system(size: 20, weight: .semibold))
                 Spacer()
+                Button {
+                    Task {
+                        await friendWorkoutManager.refresh(context: .gym)
+                    }
+                } label: {
+                    Image(systemName: "arrow.clockwise")
+                        .font(.system(size: 13, weight: .bold))
+                        .foregroundColor(Color(hex: "3080FF"))
+                        .frame(width: 28, height: 28)
+                        .background(Color(hex: "E8F3FF"))
+                        .clipShape(RoundedRectangle(cornerRadius: 7, style: .continuous))
+                }
+                .buttonStyle(.plain)
                 Button("Create") {
-                    friendMessage = "New friend session setup will open after sync."
-                    showFriendMessage = true
+                    showFriendRoomComposer = true
                 }
                 .font(.system(size: 13, weight: .semibold))
                 .foregroundColor(Color(hex: "3080FF"))
             }
 
-            ForEach($teammateRooms) { room in
-                HStack(spacing: 12) {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(room.wrappedValue.title)
-                            .font(.system(size: 15, weight: .semibold))
-                            .foregroundColor(Color(hex: "111827"))
-                        Text(room.wrappedValue.time)
-                            .font(.system(size: 13, weight: .medium))
-                            .foregroundColor(.secondary)
-                        Text("\(room.wrappedValue.participants) athletes")
+            if rooms.isEmpty {
+                Text("No gym friend sessions yet. Create one to start training together.")
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundColor(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(10)
+                    .background(Color(uiColor: .secondarySystemGroupedBackground))
+                    .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+            } else {
+                ForEach(rooms) { room in
+                    HStack(spacing: 12) {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(room.title)
+                                .font(.system(size: 15, weight: .semibold))
+                                .foregroundColor(Color(hex: "111827"))
+                            Text(room.scheduleLabel)
+                                .font(.system(size: 13, weight: .medium))
+                                .foregroundColor(.secondary)
+                            HStack(spacing: 6) {
+                                Text("\(room.participantCount) athletes")
+                                if room.hostedByCurrentUser {
+                                    Text("Host")
+                                        .font(.system(size: 10, weight: .bold))
+                                        .padding(.horizontal, 6)
+                                        .padding(.vertical, 2)
+                                        .background(Color(hex: "E8F3FF"))
+                                        .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
+                                }
+                            }
                             .font(.system(size: 12, weight: .semibold))
                             .foregroundColor(Color(hex: "3080FF"))
-                    }
+                        }
 
-                    Spacer()
+                        Spacer()
 
-                    Button(room.wrappedValue.joined ? "Joined" : "Join") {
-                        room.wrappedValue.joined.toggle()
-                        friendMessage = room.wrappedValue.joined
-                            ? "You joined \(room.wrappedValue.title)."
-                            : "You left \(room.wrappedValue.title)."
-                        showFriendMessage = true
+                        Button(room.joined ? "Leave Room" : "Join Room") {
+                            Task {
+                                let success = await friendWorkoutManager.toggleMembership(room: room)
+                                friendMessage = success
+                                    ? (room.joined ? "You left \(room.title)." : "You joined \(room.title).")
+                                    : (friendWorkoutManager.syncErrorMessage ?? "Unable to update room membership.")
+                                showFriendMessage = true
+                            }
+                        }
+                        .font(.system(size: 13, weight: .semibold))
+                        .foregroundColor(room.joined ? Color(hex: "3080FF") : .white)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 8)
+                        .background(room.joined ? Color(hex: "E8F3FF") : Color(hex: "3080FF"))
+                        .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
                     }
-                    .font(.system(size: 13, weight: .semibold))
-                    .foregroundColor(room.wrappedValue.joined ? Color(hex: "3080FF") : .white)
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 8)
-                    .background(room.wrappedValue.joined ? Color(hex: "E8F3FF") : Color(hex: "3080FF"))
+                    .padding(10)
+                    .background(Color(uiColor: .secondarySystemGroupedBackground))
                     .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
                 }
-                .padding(10)
-                .background(Color(uiColor: .secondarySystemGroupedBackground))
-                .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
             }
         }
         .padding(16)
@@ -782,20 +881,6 @@ struct SessionMetric: Identifiable {
     let title: String
     let value: String
     let iconName: String
-}
-
-struct GymFriendSession: Identifiable {
-    let id = UUID()
-    let title: String
-    let time: String
-    let participants: Int
-    var joined: Bool
-
-    static let defaultRooms: [GymFriendSession] = [
-        GymFriendSession(title: "Morning Strength Crew", time: "Tue • 6:45 AM", participants: 4, joined: true),
-        GymFriendSession(title: "After Work Push", time: "Thu • 6:15 PM", participants: 7, joined: false),
-        GymFriendSession(title: "Weekend Conditioning", time: "Sat • 9:00 AM", participants: 5, joined: false)
-    ]
 }
 
 struct SessionMetricChip: View {
@@ -1001,12 +1086,12 @@ struct EndSessionConfirmationView: View {
             
             VStack(spacing: 24) {
                 Text("End Gym Session")
-                    .font(.system(size: 24, weight: .bold))
-                    .foregroundColor(Color(hex: "333333"))
+                    .font(.system(size: 22, weight: .bold))
+                    .foregroundColor(Color(hex: "111827"))
                 
                 Text("Are you sure you want to end your gym session?")
-                    .font(.system(size: 18, weight: .medium))
-                    .foregroundColor(Color(hex: "666666"))
+                    .font(.system(size: 15, weight: .medium))
+                    .foregroundColor(Color(hex: "6B7280"))
                     .multilineTextAlignment(.center)
                 
                 HStack(spacing: 16) {
@@ -1016,11 +1101,12 @@ struct EndSessionConfirmationView: View {
                         }
                     }) {
                         Text("Cancel")
-                            .font(.system(size: 18, weight: .semibold))
-                            .foregroundColor(.black)
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundColor(Color(hex: "4B5563"))
                             .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color(hex: "F5F5F5"))
+                            .padding(.vertical, 12)
+                            .background(Color(hex: "F3F4F6"))
+                            .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
                     }
                     
                     Button(action: {
@@ -1030,16 +1116,22 @@ struct EndSessionConfirmationView: View {
                         }
                     }) {
                         Text("End Session")
-                            .font(.system(size: 18, weight: .semibold))
+                            .font(.system(size: 16, weight: .semibold))
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color(hex: "40C4FC"))
+                            .padding(.vertical, 12)
+                            .background(Color(hex: "3080FF"))
+                            .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
                     }
                 }
             }
-            .padding()
+            .padding(18)
             .background(Color.white)
+            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .overlay(
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .stroke(Color.black.opacity(0.08), lineWidth: 1)
+            )
             .padding()
         }
     }

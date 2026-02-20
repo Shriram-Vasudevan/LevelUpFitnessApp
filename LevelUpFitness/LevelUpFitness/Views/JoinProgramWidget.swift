@@ -12,47 +12,56 @@ struct JoinProgramWidget: View {
     @EnvironmentObject private var storeKitManager: StoreKitManager
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            HStack {
-                Text(standardProgramDBRepresentation.name)
-                    .font(.system(size: 22, weight: .bold, design: .default))
-                    .foregroundColor(.black)
+        HStack(spacing: 12) {
+            ProgramPreviewImage(reference: standardProgramDBRepresentation.image)
+                .frame(width: 82, height: 82)
+                .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
 
-                Spacer()
+            VStack(alignment: .leading, spacing: 6) {
+                HStack(spacing: 6) {
+                    Text(standardProgramDBRepresentation.environment)
+                        .font(.system(size: 11, weight: .bold))
+                        .foregroundColor(Color(hex: "0B5ED7"))
+                        .padding(.horizontal, 7)
+                        .padding(.vertical, 4)
+                        .background(Color(hex: "E8F3FF"))
+                        .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
 
-                if standardProgramDBRepresentation.isPremium {
-                    Text(storeKitManager.effectiveIsPremiumUnlocked ? "Premium" : "Unlock")
-                        .font(.system(size: 12, weight: .semibold))
-                        .foregroundColor(.white)
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 6)
-                        .background(Color(hex: "40C4FC"))
-                        .clipShape(Capsule())
+                    if standardProgramDBRepresentation.isPremium {
+                        Text(storeKitManager.effectiveIsPremiumUnlocked ? "Premium" : "Premium Required")
+                            .font(.system(size: 10, weight: .bold))
+                            .foregroundColor(Color(hex: "A16207"))
+                            .padding(.horizontal, 7)
+                            .padding(.vertical, 4)
+                            .background(Color(hex: "FEF3C7"))
+                            .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
+                    }
                 }
+
+                Text(standardProgramDBRepresentation.name)
+                    .font(.system(size: 16, weight: .bold))
+                    .foregroundColor(Color(hex: "111827"))
+                    .lineLimit(2)
+
+                Text(standardProgramDBRepresentation.description)
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundColor(Color(hex: "6B7280"))
+                    .lineLimit(2)
             }
 
-            HStack {
-                programInfoItem(title: "Environment:", value: standardProgramDBRepresentation.environment)
-                Spacer()
-                Image(systemName: "arrow.right.circle.fill")
-                    .foregroundColor(Color(hex: "40C4FC"))
-                    .font(.system(size: 24))
-            }
+            Spacer()
+
+            Image(systemName: "arrow.right.circle.fill")
+                .font(.system(size: 22, weight: .semibold))
+                .foregroundColor(Color(hex: "0B5ED7"))
         }
-        .padding()
-        .background(Color(hex: "F5F5F5"))
-        .cornerRadius(8)
-    }
-    
-    private func programInfoItem(title: String, value: String) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(title)
-                .font(.system(size: 14, weight: .ultraLight, design: .default))
-                .foregroundColor(.gray)
-            Text(value)
-                .font(.system(size: 16, weight: .light, design: .default))
-                .foregroundColor(.black)
-        }
+        .padding(12)
+        .background(Color.white)
+        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                .stroke(Color.black.opacity(0.08), lineWidth: 1)
+        )
     }
 }
 

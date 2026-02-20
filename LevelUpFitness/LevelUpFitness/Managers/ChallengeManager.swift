@@ -64,14 +64,13 @@ class ChallengeManager: ObservableObject {
     }
 
     func createChallenge(challengeName: String, challengeTemplateID: String, userXPData: XPData) async -> Bool {
-        let isoFormatter = ISO8601DateFormatter()
-
         switch challengeName {
             case "30 Day LevelUp Challenge":
                 let levelsRequired = levelsRequired(currentLevel: userXPData.level)
                 guard let dateRange = DateUtility.createDateDurationISO(duration: 30) else { return false }
 
                 await updateChallenge(challengeTemplateID: challengeTemplateID, challengeName: challengeName, startDate: dateRange.0, endDate: dateRange.1, startValue: userXPData.level, targetValue: userXPData.level + levelsRequired, field: "Level")
+                return true
 
             case "Perfect Program Week":
                 if let program = ProgramManager.shared.userProgramData.first?.program {
@@ -87,15 +86,28 @@ class ChallengeManager: ObservableObject {
                             return false
                     }
                 }
+                return false
             case "3-in-15 Challenge":
                 let levelsRequired = 3
                 guard let dateRange = DateUtility.createDateDurationISO(duration: 15) else { return false }
 
                 await updateChallenge(challengeTemplateID: challengeTemplateID, challengeName: challengeName, startDate: dateRange.0, endDate: dateRange.1, startValue: userXPData.level, targetValue: userXPData.level + levelsRequired, field: "Level")
+                return true
             default:
-                break
+                // Graceful fallback for new CloudKit templates that are not explicitly hard-coded yet.
+                guard let dateRange = DateUtility.createDateDurationISO(duration: 14) else { return false }
+                let requiredLevels = max(1, levelsRequired(currentLevel: userXPData.level, k: 4.0))
+                await updateChallenge(
+                    challengeTemplateID: challengeTemplateID,
+                    challengeName: challengeName,
+                    startDate: dateRange.0,
+                    endDate: dateRange.1,
+                    startValue: userXPData.level,
+                    targetValue: userXPData.level + requiredLevels,
+                    field: "Level"
+                )
+                return true
         }
-        return false
     }
 
     func updateChallenge(challengeTemplateID: String, challengeName: String, startDate: String, endDate: String, startValue: Int, targetValue: Int, field: String) async {
