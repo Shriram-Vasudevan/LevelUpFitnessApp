@@ -1,3 +1,10 @@
+//
+//  LibraryView.swift
+//  LevelUpFitness
+//
+//  Created by Shriram Vasudevan.
+//
+
 import SwiftUI
 
 struct LibraryView: View {
@@ -11,7 +18,6 @@ struct LibraryView: View {
     @State var navigateToCustomWorkout: Bool = false
     @State var navigateToCustomWorkoutCreation: Bool = false
     
-    
     let exerciseTypeKeys = [
         Sublevels.CodingKeys.lowerBodyCompound.rawValue,
         Sublevels.CodingKeys.lowerBodyIsolation.rawValue,
@@ -21,110 +27,180 @@ struct LibraryView: View {
     
     var body: some View {
         ZStack {
-            AppTheme.Colors.backgroundDark
-                .ignoresSafeArea()
+            AppTheme.Colors.backgroundDark.ignoresSafeArea()
             
-            ScrollView(.vertical, showsIndicators: false) {
-                VStack(spacing: 24) {
-                    VStack(spacing: 16) {
-                        HStack {
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text("Exercise Library")
-                                    .font(AppTheme.Typography.telemetry(size: 28, weight: .medium))
-                                    .foregroundColor(AppTheme.Colors.textPrimary)
-                                Text("Discover and master new exercises.")
-                                    .font(AppTheme.Typography.telemetry(size: 14))
-                                    .foregroundColor(AppTheme.Colors.textSecondary)
-                            }
-                            Spacer()
-                        }
-                        .padding(.top, 15)
-                    }
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 32) {
+                    headerSection
+                    customWorkoutsSection
                     
-                    VStack(alignment: .leading, spacing: 16) {
-                        HStack {
-                            Text("Custom Workouts")
-                                .font(AppTheme.Typography.telemetry(size: 22, weight: .medium))
-                                .foregroundColor(AppTheme.Colors.textPrimary)
-                            Spacer()
-                            
-                            Button {
-                                navigateToCustomWorkoutCreation = true
-                            } label: {
-                                Text("Create New")
-                                    .font(AppTheme.Typography.telemetry(size: 14, weight: .medium))
-                                    .foregroundColor(AppTheme.Colors.bluePrimary)
-                            }
-
-                        }
-                        
-                        if customWorkoutsManager.customWorkouts.isEmpty {
-                            Text("No Custom Workouts. Create one!")
-                                .font(AppTheme.Typography.telemetry(size: 16))
-                                .foregroundColor(AppTheme.Colors.textSecondary)
-                                .padding(.vertical, 8)
-                        } else {
-                            ScrollView(.horizontal, showsIndicators: false)
-                            {
-                                HStack(spacing: 16) {
-                                    ForEach(customWorkoutsManager.customWorkouts, id: \.name) { workout in
-                                        CustomWorkoutWidget(workout: workout) { workoutToDelete in
-                                            customWorkoutsManager.deleteCustomWorkout(workout: workoutToDelete)
-                                        }
-                                        .onTapGesture {
-                                            selectedCustomWorkout = workout
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    if let userXPData = xpManager.userXPData {
-                        ForEach(exerciseTypeKeys, id: \.self) { key in
-                            VStack(alignment: .leading, spacing: 16) {
-                                HStack {
-                                    Text(key.capitalizingFirstLetter())
-                                        .font(AppTheme.Typography.telemetry(size: 22, weight: .medium))
-                                        .foregroundColor(AppTheme.Colors.textPrimary)
-                                    Spacer()
-                                    if let level = userXPData.subLevels.attribute(for: key)?.level {
-                                        Text("Level \(level)")
-                                            .font(AppTheme.Typography.telemetry(size: 14, weight: .medium))
-                                            .foregroundColor(.white)
-                                            .padding(.horizontal, 12)
-                                            .padding(.vertical, 6)
-                                            .background(AppTheme.Colors.bluePrimary)
-                                    }
-                                }
-                                
-                                let filteredExercises = exerciseManager.exercises.filter { $0.exerciseType == key.capitalizingFirstLetter() }
-                                if filteredExercises.isEmpty {
-                                    Text("No exercises for \(key)")
-                                        .foregroundColor(AppTheme.Colors.textSecondary)
-                                } else {
-                                    ForEach(filteredExercises, id: \.id) { exercise in
-                                        ExerciseLibraryExerciseWidget(exercise: exercise, userXPData: userXPData) { progression in
-                                            self.selectedExercise = progression
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                    if let _ = xpManager.userXPData {
+                        exerciseMasterGrid
                     }
                 }
-                .padding(.horizontal)
+                .padding(.horizontal, 20)
+                .padding(.vertical, 16)
+                .padding(.bottom, 120) // Tab bar clearance
             }
         }
         .navigationBarBackButtonHidden()
         .navigationDestination(item: $selectedExercise) { exercise in
             IndividualExerciseView(progression: exercise)
         }
-        .fullScreenCover(isPresented: $navigateToCustomWorkoutCreation, content: {
+        .fullScreenCover(isPresented: $navigateToCustomWorkoutCreation) {
             CreateCustomWorkoutView()
-        })
-        .fullScreenCover(item: $selectedCustomWorkout) { selectedCustomWorkout in
-            CustomWorkoutView(workout: selectedCustomWorkout)
+        }
+        .fullScreenCover(item: $selectedCustomWorkout) { workout in
+            CustomWorkoutView(workout: workout)
+        }
+    }
+
+    // MARK: - App Architecture Components
+    private var headerSection: some View {
+        HStack(alignment: .center) {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Library")
+                    .font(AppTheme.Typography.telemetry(size: 32, weight: .bold))
+                    .foregroundColor(AppTheme.Colors.textPrimary)
+                
+                Text("Master the mechanics.")
+                    .font(AppTheme.Typography.telemetry(size: 14, weight: .medium))
+                    .foregroundColor(AppTheme.Colors.textSecondary)
+            }
+            Spacer()
+        }
+    }
+
+    private var customWorkoutsSection: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            HStack {
+                Text("Custom Sequences")
+                    .font(AppTheme.Typography.telemetry(size: 14, weight: .bold))
+                    .foregroundColor(AppTheme.Colors.textSecondary)
+                    .textCase(.uppercase)
+                
+                Spacer()
+                
+                Button(action: { navigateToCustomWorkoutCreation = true }) {
+                    Image(systemName: "plus")
+                        .font(.system(size: 16, weight: .bold))
+                        .foregroundColor(AppTheme.Colors.bluePrimary)
+                        .frame(width: 32, height: 32)
+                        .background(AppTheme.Colors.bluePrimary.opacity(0.1))
+                        .clipShape(Circle())
+                }
+                .buttonStyle(KineticButtonStyle())
+            }
+            
+            if customWorkoutsManager.customWorkouts.isEmpty {
+                Button(action: { navigateToCustomWorkoutCreation = true }) {
+                    VStack(spacing: 8) {
+                        Image(systemName: "plus.squares")
+                            .font(.system(size: 24))
+                        Text("Create Sequence")
+                            .font(AppTheme.Typography.telemetry(size: 14, weight: .bold))
+                    }
+                    .foregroundColor(AppTheme.Colors.textSecondary)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 30)
+                    .background(AppTheme.Colors.surfaceLight)
+                    .clipShape(RoundedRectangle(cornerRadius: AppTheme.Geometry.aerodynamicRadius, style: .continuous))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: AppTheme.Geometry.aerodynamicRadius, style: .continuous)
+                            .stroke(Color.black.opacity(0.04), style: StrokeStyle(lineWidth: 1, dash: [4]))
+                    )
+                }
+                .buttonStyle(KineticButtonStyle())
+            } else {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 16) {
+                        ForEach(customWorkoutsManager.customWorkouts, id: \.name) { workout in
+                            Button(action: { selectedCustomWorkout = workout }) {
+                                VStack(alignment: .leading, spacing: 16) {
+                                    HStack(alignment: .top) {
+                                        Image(systemName: "square.stack.3d.up.fill")
+                                            .font(.system(size: 24))
+                                            .foregroundColor(AppTheme.Colors.bluePrimary)
+                                        Spacer()
+                                        Button(action: { customWorkoutsManager.deleteCustomWorkout(workout: workout) }) {
+                                            Image(systemName: "trash.fill")
+                                                .font(.system(size: 14))
+                                                .foregroundColor(AppTheme.Colors.textSecondary.opacity(0.5))
+                                                .padding(8)
+                                        }
+                                    }
+                                    
+                                    Spacer()
+                                    
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        Text(workout.name)
+                                            .font(AppTheme.Typography.telemetry(size: 18, weight: .bold))
+                                            .foregroundColor(AppTheme.Colors.textPrimary)
+                                            .lineLimit(2)
+                                        Text("\(workout.exercises.count) Modules")
+                                            .font(AppTheme.Typography.telemetry(size: 12, weight: .bold))
+                                            .foregroundColor(AppTheme.Colors.textSecondary)
+                                    }
+                                }
+                                .padding(16)
+                                .frame(width: 160, height: 160)
+                                .background(AppTheme.Colors.surfaceLight)
+                                .clipShape(RoundedRectangle(cornerRadius: AppTheme.Geometry.aerodynamicRadius, style: .continuous))
+                                .shadow(color: Color.black.opacity(0.04), radius: 8, x: 0, y: 4)
+                            }
+                            .buttonStyle(KineticButtonStyle())
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private var exerciseMasterGrid: some View {
+        VStack(alignment: .leading, spacing: 24) {
+            ForEach(exerciseTypeKeys, id: \.self) { categoryKey in
+                let categoryName = categoryKey.capitalizingFirstLetter()
+                let filteredExercises = exerciseManager.exercises.filter { $0.exerciseType == categoryName }
+                let userLevel = xpManager.userXPData?.subLevels.attribute(for: categoryKey)?.level ?? 1
+                
+                if !filteredExercises.isEmpty {
+                    VStack(alignment: .leading, spacing: 16) {
+                        HStack(alignment: .bottom) {
+                            Text(categoryName)
+                                .font(AppTheme.Typography.telemetry(size: 18, weight: .bold))
+                                .foregroundColor(AppTheme.Colors.textPrimary)
+                            
+                            Spacer()
+                            
+                            HStack(spacing: 4) {
+                                Text("Lvl")
+                                    .font(AppTheme.Typography.telemetry(size: 10, weight: .bold))
+                                Text("\(userLevel)")
+                                    .font(AppTheme.Typography.monumentalNumber(size: 14))
+                            }
+                            .foregroundColor(.white)
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 4)
+                            .background(AppTheme.Colors.bluePrimary)
+                            .clipShape(Capsule())
+                        }
+                        
+                        VStack(spacing: 12) {
+                            ForEach(filteredExercises, id: \.id) { exercise in
+                                if let xpData = xpManager.userXPData {
+                                    ExerciseLibraryExerciseWidget(
+                                        exercise: exercise,
+                                        userXPData: xpData,
+                                        exerciseSelected: { progression in
+                                            selectedExercise = progression
+                                        }
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

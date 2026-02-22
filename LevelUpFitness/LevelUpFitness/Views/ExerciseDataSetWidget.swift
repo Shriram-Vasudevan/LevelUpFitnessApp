@@ -15,7 +15,8 @@ struct ProgramExerciseDataSetWidget: View {
     @State private var repValue: Int = 0
     
     @State private var restTimeElapsed: Double = 0.0
-    @State private var timer: Timer?
+    @State private var isTimerRunning: Bool = false
+    let timerPublisher = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
     let setIndex: Int
     let totalSets: Int
@@ -44,11 +45,17 @@ struct ProgramExerciseDataSetWidget: View {
             repValue = model.reps > 0 ? model.reps : (Int(exercise.reps) ?? 10)
             
             if setIndex > 0 {
-                startRestTimer()
+                restTimeElapsed = 0.0
+                isTimerRunning = true
             }
         }
         .onDisappear {
-            stopRestTimer()
+            isTimerRunning = false
+        }
+        .onReceive(timerPublisher) { _ in
+            if isTimerRunning {
+                restTimeElapsed += 1.0
+            }
         }
     }
     
@@ -168,20 +175,8 @@ struct ProgramExerciseDataSetWidget: View {
         model.rest = restTimeElapsed
         model.time = 0 // Optional: Could track active time if needed, but not required for simple flow
         
-        stopRestTimer()
+        isTimerRunning = false
         setCompleted()
-    }
-    
-    private func startRestTimer() {
-        restTimeElapsed = 0.0
-        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
-            restTimeElapsed += 1.0
-        }
-    }
-    
-    private func stopRestTimer() {
-        timer?.invalidate()
-        timer = nil
     }
     
     private func timeFormatted(_ totalSeconds: Double) -> String {

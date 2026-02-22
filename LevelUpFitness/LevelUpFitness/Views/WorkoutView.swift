@@ -30,11 +30,35 @@ struct WorkoutView: View {
                 .edgesIgnoringSafeArea(.all)
             
             if !workoutManager.hasExercisesForToday() {
-                Text("No exercises for today")
-                    .foregroundColor(.white)
+                VStack(spacing: 24) {
+                    Text("No exercises for today")
+                        .font(AppTheme.Typography.telemetry(size: 20, weight: .bold))
+                        .foregroundColor(AppTheme.Colors.textPrimary)
+                    
+                    Button {
+                        dismiss()
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.system(size: 44))
+                            .foregroundColor(AppTheme.Colors.textSecondary)
+                    }
+                    .buttonStyle(KineticButtonStyle())
+                }
             } else if workoutManager.isWorkoutComplete() {
-                Text("Workout completed!")
-                    .foregroundColor(.white)
+                VStack(spacing: 24) {
+                    Text("Workout completed!")
+                        .font(AppTheme.Typography.telemetry(size: 20, weight: .bold))
+                        .foregroundColor(AppTheme.Colors.textPrimary)
+                    
+                    Button {
+                        dismiss()
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.system(size: 44))
+                            .foregroundColor(AppTheme.Colors.textSecondary)
+                    }
+                    .buttonStyle(KineticButtonStyle())
+                }
                     .onAppear {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                             dismiss()
@@ -111,8 +135,8 @@ struct WorkoutContent: View {
                         }
                         .padding(.horizontal)
 
-                        Text("Active Protocol")
-                            .font(AppTheme.Typography.telemetry(size: 20, weight: .bold))
+                        Text("Active Program")
+                            .font(AppTheme.Typography.telemetry(size: 12, weight: .medium))
                             .foregroundColor(AppTheme.Colors.textPrimary)
                     }
                     .padding(.bottom)

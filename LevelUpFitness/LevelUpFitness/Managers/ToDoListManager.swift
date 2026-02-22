@@ -164,4 +164,11 @@ class ToDoListManager: ObservableObject {
             
         }
     }
+    
+    func toggleToDoCompletion(item: ToDoListTask) {
+        if let index = toDoList.firstIndex(where: { $0.id == item.id }) {
+            toDoList[index].completed.toggle()
+            LocalStorageUtility.updateTaskCompletionInFile(taskID: item.id, completed: toDoList[index].completed)
+        }
+    }
 }

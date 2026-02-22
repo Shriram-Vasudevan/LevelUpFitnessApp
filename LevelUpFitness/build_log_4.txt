@@ -1,0 +1,515 @@
+Command line invocation:
+    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild -scheme LevelUpFitness -project LevelUpFitness.xcodeproj build
+
+2026-02-22 13:55:45.453 xcodebuild[66876:40030935] warning:  The file reference for "LevelUpFitness/Utilities/DesignSystem.swift" is a member of multiple groups ("Utilities" and ""); this indicates a malformed project.  Only the membership in one of the groups will be preserved (but membership in targets will be unaffected).  If you want a reference to the same file in more than one group, please add another reference to the same path.
+2026-02-22 13:55:45.454 xcodebuild[66876:40030935] warning:  The file reference for "LevelUpFitness/Views/LibraryExercisePicker.swift" is a member of multiple groups ("Views" and ""); this indicates a malformed project.  Only the membership in one of the groups will be preserved (but membership in targets will be unaffected).  If you want a reference to the same file in more than one group, please add another reference to the same path.
+2026-02-22 13:55:45.454 xcodebuild[66876:40030935] warning:  The file reference for "LevelUpFitness/Utilities/CustomComponents.swift" is a member of multiple groups ("Utilities" and ""); this indicates a malformed project.  Only the membership in one of the groups will be preserved (but membership in targets will be unaffected).  If you want a reference to the same file in more than one group, please add another reference to the same path.
+2026-02-22 13:55:45.454 xcodebuild[66876:40030935] warning:  The file reference for "LevelUpFitness/Views/FriendRoomSheets.swift" is a member of multiple groups ("Views" and ""); this indicates a malformed project.  Only the membership in one of the groups will be preserved (but membership in targets will be unaffected).  If you want a reference to the same file in more than one group, please add another reference to the same path.
+2026-02-22 13:55:45.454 xcodebuild[66876:40030935] warning:  The file reference for "LevelUpFitness/Views/GymSessionPlaceholders.swift" is a member of multiple groups ("Views" and ""); this indicates a malformed project.  Only the membership in one of the groups will be preserved (but membership in targets will be unaffected).  If you want a reference to the same file in more than one group, please add another reference to the same path.
+2026-02-22 13:55:46.341 xcodebuild[66876:40030935] [MT] IDERunDestination: Supported platforms for the buildables in the current scheme is empty.
+--- xcodebuild: WARNING: Using the first of multiple matching destinations:
+{ platform:macOS, arch:arm64, variant:Designed for [iPad,iPhone], id:00008132-000479521AA1801C, name:My Mac }
+{ platform:iOS, id:dvtdevice-DVTiPhonePlaceholder-iphoneos:placeholder, name:Any iOS Device }
+{ platform:iOS Simulator, id:dvtdevice-DVTiOSDeviceSimulatorPlaceholder-iphonesimulator:placeholder, name:Any iOS Simulator Device }
+{ platform:iOS Simulator, arch:arm64, id:C2D35B82-AB8A-47DA-95B3-E0AA8CEDF9E4, OS:18.5, name:iPad (A16) }
+{ platform:iOS Simulator, arch:x86_64, id:C2D35B82-AB8A-47DA-95B3-E0AA8CEDF9E4, OS:18.5, name:iPad (A16) }
+{ platform:iOS Simulator, arch:arm64, id:D33AC986-A33C-4751-B6D5-EDF1EA0F1B8E, OS:26.2, name:iPad (A16) }
+{ platform:iOS Simulator, arch:arm64, id:2926704F-EAC4-4ACA-88EC-FE67D5A3E7C8, OS:18.5, name:iPad Air 11-inch (M3) }
+{ platform:iOS Simulator, arch:x86_64, id:2926704F-EAC4-4ACA-88EC-FE67D5A3E7C8, OS:18.5, name:iPad Air 11-inch (M3) }
+{ platform:iOS Simulator, arch:arm64, id:5FAE98BF-18CC-40C9-967B-816D654E0FE8, OS:26.2, name:iPad Air 11-inch (M3) }
+{ platform:iOS Simulator, arch:arm64, id:5BAB29E3-9FB4-4765-8C02-C512A4A43659, OS:18.5, name:iPad Air 13-inch (M3) }
+{ platform:iOS Simulator, arch:x86_64, id:5BAB29E3-9FB4-4765-8C02-C512A4A43659, OS:18.5, name:iPad Air 13-inch (M3) }
+{ platform:iOS Simulator, arch:arm64, id:558A581A-83D8-4888-A3B4-EFC89163FDBF, OS:26.2, name:iPad Air 13-inch (M3) }
+{ platform:iOS Simulator, arch:arm64, id:9007DFEF-F9B3-4DA0-869C-24E7BAE917D8, OS:18.5, name:iPad Pro 11-inch (M4) }
+{ platform:iOS Simulator, arch:x86_64, id:9007DFEF-F9B3-4DA0-869C-24E7BAE917D8, OS:18.5, name:iPad Pro 11-inch (M4) }
+{ platform:iOS Simulator, arch:arm64, id:E2807102-75B2-4529-9601-DF45140364D2, OS:26.2, name:iPad Pro 11-inch (M5) }
+{ platform:iOS Simulator, arch:arm64, id:741A6696-A875-4E06-9155-CEB73952D136, OS:18.5, name:iPad Pro 13-inch (M4) }
+{ platform:iOS Simulator, arch:x86_64, id:741A6696-A875-4E06-9155-CEB73952D136, OS:18.5, name:iPad Pro 13-inch (M4) }
+{ platform:iOS Simulator, arch:arm64, id:09D855EC-8764-4635-A8BB-04015DCD21DC, OS:26.2, name:iPad Pro 13-inch (M5) }
+{ platform:iOS Simulator, arch:arm64, id:883C5AE6-ED6A-491E-8127-C1545403F6D9, OS:18.5, name:iPad mini (A17 Pro) }
+{ platform:iOS Simulator, arch:x86_64, id:883C5AE6-ED6A-491E-8127-C1545403F6D9, OS:18.5, name:iPad mini (A17 Pro) }
+{ platform:iOS Simulator, arch:arm64, id:50F6AA40-C669-4B49-A82B-C4833D57CDE5, OS:26.2, name:iPad mini (A17 Pro) }
+{ platform:iOS Simulator, arch:arm64, id:B241F936-F33D-4C11-A430-0DAB52408A30, OS:18.5, name:iPhone 16 }
+{ platform:iOS Simulator, arch:x86_64, id:B241F936-F33D-4C11-A430-0DAB52408A30, OS:18.5, name:iPhone 16 }
+{ platform:iOS Simulator, arch:arm64, id:CCD4C765-C1B4-42F6-AF74-6A259501C433, OS:18.5, name:iPhone 16 Plus }
+{ platform:iOS Simulator, arch:x86_64, id:CCD4C765-C1B4-42F6-AF74-6A259501C433, OS:18.5, name:iPhone 16 Plus }
+{ platform:iOS Simulator, arch:arm64, id:B6CAEEDA-2674-4211-BE94-A7F5B81E533D, OS:18.5, name:iPhone 16 Pro }
+{ platform:iOS Simulator, arch:x86_64, id:B6CAEEDA-2674-4211-BE94-A7F5B81E533D, OS:18.5, name:iPhone 16 Pro }
+{ platform:iOS Simulator, arch:arm64, id:472DBF42-3FF5-4612-B2DF-E2D489736A71, OS:18.5, name:iPhone 16 Pro Max }
+{ platform:iOS Simulator, arch:x86_64, id:472DBF42-3FF5-4612-B2DF-E2D489736A71, OS:18.5, name:iPhone 16 Pro Max }
+{ platform:iOS Simulator, arch:arm64, id:D9845B73-FD48-46C1-A898-3B21A5B33D8D, OS:18.5, name:iPhone 16e }
+{ platform:iOS Simulator, arch:x86_64, id:D9845B73-FD48-46C1-A898-3B21A5B33D8D, OS:18.5, name:iPhone 16e }
+{ platform:iOS Simulator, arch:arm64, id:818A2E2B-EF0D-4B7A-B9F3-9DEA8B5E5286, OS:26.2, name:iPhone 16e }
+{ platform:iOS Simulator, arch:arm64, id:B2976ECA-9B59-4DA9-A57D-A176E705C2B3, OS:26.2, name:iPhone 17 }
+{ platform:iOS Simulator, arch:arm64, id:5FE10AFA-5EEF-47A0-A684-E57818FB16DB, OS:26.2, name:iPhone 17 Pro }
+{ platform:iOS Simulator, arch:arm64, id:B83F24DC-9EE5-4D65-84A2-CB24470B8F8E, OS:26.2, name:iPhone 17 Pro Max }
+{ platform:iOS Simulator, arch:arm64, id:C9FD5676-9A04-467E-AF60-D9CF41326FE5, OS:26.2, name:iPhone Air }
+{ platform:iOS, arch:arm64, id:00008030-000158C226D2802E, name:iPhone }
+{ platform:iOS, arch:arm64, id:00008120-001E19E40100C01E, name:Sujani's iPhone }
+{ platform:iOS, arch:arm64, id:00008120-00020DE11A7BC01E, name:Vasu’s iphone (2) }
+ComputePackagePrebuildTargetDependencyGraph
+
+Prepare packages
+
+CreateBuildRequest
+
+SendProjectDescription
+
+CreateBuildOperation
+
+ComputeTargetDependencyGraph
+note: Building targets in dependency order
+note: Target dependency graph (1 target)
+    Target 'LevelUpFitness' in project 'LevelUpFitness' (no dependencies)
+
+GatherProvisioningInputs
+
+CreateBuildDescription
+
+ClangStatCache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.2.sdk /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphoneos26.2-23C53-3794476bd08197c3e2abd9bb477ef7f7.sdkstatcache
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness.xcodeproj
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.2.sdk -o /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphoneos26.2-23C53-3794476bd08197c3e2abd9bb477ef7f7.sdkstatcache
+
+SwiftDriver LevelUpFitness normal arm64 com.apple.xcode.tools.swift.compiler (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    builtin-SwiftDriver -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name LevelUpFitness -Onone -enforce-exclusivity\=checked @/Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/Objects-normal/arm64/LevelUpFitness.SwiftFileList -DDEBUG -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.2.sdk -target arm64-apple-ios17.0 -g -module-cache-path /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Products/Debug-iphoneos -F /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Products/Debug-iphoneos -emit-localized-strings -emit-localized-strings-path /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/Objects-normal/arm64 -c -j10 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphoneos26.2-23C53-3794476bd08197c3e2abd9bb477ef7f7.sdkstatcache -output-file-map /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/Objects-normal/arm64/LevelUpFitness-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/Objects-normal/arm64/LevelUpFitness.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/Objects-normal/arm64/LevelUpFitness_const_extract_protocols.json -Xcc -iquote -Xcc /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/LevelUpFitness-generated-files.hmap -Xcc -I/Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/LevelUpFitness-own-target-headers.hmap -Xcc -I/Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/LevelUpFitness-all-target-headers.hmap -Xcc -iquote -Xcc /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/LevelUpFitness-project-headers.hmap -Xcc -I/Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Products/Debug-iphoneos/include -Xcc -I/Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/DerivedSources-normal/arm64 -Xcc -I/Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/DerivedSources/arm64 -Xcc -I/Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/Objects-normal/arm64/LevelUpFitness-Swift.h -working-directory /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness -experimental-emit-module-separately -disable-cmo
+
+SwiftEmitModule normal arm64 Emitting\ module\ for\ LevelUpFitness (in target 'LevelUpFitness' from project 'LevelUpFitness')
+
+EmitSwiftModule normal arm64 (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+/Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Extensions/Extensions.swift:871:1: warning: extension declares a conformance of imported type 'CGPoint' to imported protocols 'VectorArithmetic', 'AdditiveArithmetic'; this will not behave correctly if the owners of 'CoreFoundation' introduce this conformance in the future
+extension CGPoint: VectorArithmetic {
+^
+/Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Extensions/Extensions.swift:871:1: note: add '@retroactive' to silence this warning
+extension CGPoint: VectorArithmetic {
+^                  ~~~~~~~~~~~~~~~~
+                   @retroactive VectorArithmetic
+
+SwiftCompile normal arm64 Compiling\ CreateCustomWorkoutView.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/CreateCustomWorkoutView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/CreateCustomWorkoutView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+/Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/CreateCustomWorkoutView.swift:187:10: warning: 'onChange(of:perform:)' was deprecated in iOS 17.0: Use `onChange` with a two or zero parameter action closure instead.
+        .onChange(of: selectedWorkoutImage) { _ in
+         ^
+
+SwiftCompile normal arm64 Compiling\ CustomWorkoutView.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/CustomWorkoutView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/CustomWorkoutView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 Compiling\ ProgramView.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/ProgramView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/ProgramView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+/Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/ProgramView.swift:137:9: error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions
+        ZStack(alignment: .leading) {
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/ProgramView.swift:213:51: error: cannot convert value of type 'ProgramWithID' to expected argument type 'UserProgramDBRepresentation'
+                            activeProgramTab(for: protocolData, isSelected: isSelected)
+                                                  ^
+
+Failed frontend command:
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -frontend -c -filelist /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/Objects-normal/arm64/sources-1 -primary-file /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/ProgramView.swift -emit-dependencies-path /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/Objects-normal/arm64/ProgramView.d -emit-const-values-path /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/Objects-normal/arm64/ProgramView.swiftconstvalues -emit-reference-dependencies-path /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/Objects-normal/arm64/ProgramView.swiftdeps -serialize-diagnostics-path /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/Objects-normal/arm64/ProgramView.dia -emit-localized-strings -emit-localized-strings-path /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/Objects-normal/arm64 -target arm64-apple-ios17.0 -module-can-import-version DeveloperToolsSupport 23.0.4 23.0.4 -module-can-import-version SwiftUI 7.2.5.1 7.2.5 -module-can-import-version UIKit 9126.2.4.1 9126.2.4 -disable-cross-import-overlay-search -swift-module-cross-import AVKit /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/AVKit.framework/Modules/AVKit.swiftcrossimport/SwiftUI.swiftoverlay -swift-module-cross-import AVKit /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.2.sdk/System/Library/Frameworks/AVKit.framework/Modules/AVKit.swiftcrossimport/SwiftUI.swiftoverlay -swift-module-cross-import PhotosUI /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/PhotosUI.framework/Modules/PhotosUI.swiftcrossimport/SwiftUI.swiftoverlay -swift-module-cross-import PhotosUI /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/PhotosUI.framework/Modules/PhotosUI.swiftcrossimport/WidgetKit.swiftoverlay -swift-module-cross-import PhotosUI /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.2.sdk/System/Library/Frameworks/PhotosUI.framework/Modules/PhotosUI.swiftcrossimport/SwiftUI.swiftoverlay -swift-module-cross-import PhotosUI /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.2.sdk/System/Library/Frameworks/PhotosUI.framework/Modules/PhotosUI.swiftcrossimport/WidgetKit.swiftoverlay -swift-module-cross-import StoreKit /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/StoreKit.framework/Modules/StoreKit.swiftcrossimport/SwiftUI.swiftoverlay -swift-module-cross-import StoreKit /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.2.sdk/System/Library/Frameworks/StoreKit.framework/Modules/StoreKit.swiftcrossimport/SwiftUI.swiftoverlay -swift-module-cross-import WebKit /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Cryptexes/OS/System/Library/Frameworks/WebKit.framework/Modules/WebKit.swiftcrossimport/SwiftUI.swiftoverlay -swift-module-cross-import WebKit /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.2.sdk/System/Library/Frameworks/WebKit.framework/Modules/WebKit.swiftcrossimport/SwiftUI.swiftoverlay -load-resolved-plugin /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/swift/host/plugins/libFoundationMacros.dylib\#/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server\#FoundationMacros -load-resolved-plugin /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/swift/host/plugins/libObservationMacros.dylib\#/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server\#ObservationMacros -load-resolved-plugin /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/swift/host/plugins/libPreviewsMacros.dylib\#/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server\#PreviewsMacros -load-resolved-plugin /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/swift/host/plugins/libSwiftMacros.dylib\#/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server\#SwiftMacros -load-resolved-plugin /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/swift/host/plugins/libSwiftUIMacros.dylib\#/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server\#SwiftUIMacros -load-resolved-plugin /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/swift/host/plugins/libTipKitMacros.dylib\#/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server\#TipKitMacros -disable-implicit-swift-modules -Xcc -fno-implicit-modules -Xcc -fno-implicit-module-maps -explicit-swift-module-map-file /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/Objects-normal/arm64/LevelUpFitness-dependencies-1.json -Xllvm -aarch64-use-tbi -enable-objc-interop -stack-check -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.2.sdk -I /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Products/Debug-iphoneos -F /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Products/Debug-iphoneos -no-color-diagnostics -Xcc -fno-color-diagnostics -enable-testing -g -debug-info-format\=dwarf -dwarf-version\=4 -module-cache-path /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -swift-version 5 -enforce-exclusivity\=checked -Onone -D DEBUG -serialize-debugging-options -const-gather-protocols-file /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/Objects-normal/arm64/LevelUpFitness_const_extract_protocols.json -enable-experimental-feature DebugDescriptionMacro -enable-bare-slash-regex -empty-abi-descriptor -validate-clang-modules-once -clang-build-session-file /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -working-directory -Xcc /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness -enable-anonymous-context-mangled-names -file-compilation-dir /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -Xcc -ivfsstatcache -Xcc /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphoneos26.2-23C53-3794476bd08197c3e2abd9bb477ef7f7.sdkstatcache -Xcc -I/Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/swift-overrides.hmap -Xcc -iquote -Xcc /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/LevelUpFitness-generated-files.hmap -Xcc -I/Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/LevelUpFitness-own-target-headers.hmap -Xcc -I/Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/LevelUpFitness-all-target-headers.hmap -Xcc -iquote -Xcc /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/LevelUpFitness-project-headers.hmap -Xcc -I/Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Products/Debug-iphoneos/include -Xcc -I/Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/DerivedSources-normal/arm64 -Xcc -I/Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/DerivedSources/arm64 -Xcc -I/Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/DerivedSources -Xcc -DDEBUG\=1 -no-auto-bridging-header-chaining -module-name LevelUpFitness -frontend-parseable-output -disable-clang-spi -target-sdk-version 26.2 -target-sdk-name iphoneos26.2 -clang-target arm64-apple-ios26.2 -in-process-plugin-server-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/libSwiftInProcPluginServer.dylib -o /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/Objects-normal/arm64/ProgramView.o -index-unit-output-path /LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/Objects-normal/arm64/ProgramView.o -index-store-path /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Index.noindex/DataStore -index-system-modules
+SwiftCompile normal arm64 Compiling\ HomeView.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/HomeView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/HomeView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 Compiling\ LibraryView.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/LibraryView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/LibraryView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftDriverJobDiscovery normal arm64 Compiling CustomWorkoutView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+
+SwiftDriverJobDiscovery normal arm64 Compiling LibraryView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+
+SwiftDriverJobDiscovery normal arm64 Compiling CreateCustomWorkoutView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+
+SwiftDriverJobDiscovery normal arm64 Emitting module for LevelUpFitness (in target 'LevelUpFitness' from project 'LevelUpFitness')
+
+SwiftDriver\ Compilation\ Requirements LevelUpFitness normal arm64 com.apple.xcode.tools.swift.compiler (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    builtin-Swift-Compilation-Requirements -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name LevelUpFitness -Onone -enforce-exclusivity\=checked @/Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/Objects-normal/arm64/LevelUpFitness.SwiftFileList -DDEBUG -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.2.sdk -target arm64-apple-ios17.0 -g -module-cache-path /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Products/Debug-iphoneos -F /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Products/Debug-iphoneos -emit-localized-strings -emit-localized-strings-path /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/Objects-normal/arm64 -c -j10 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphoneos26.2-23C53-3794476bd08197c3e2abd9bb477ef7f7.sdkstatcache -output-file-map /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/Objects-normal/arm64/LevelUpFitness-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/Objects-normal/arm64/LevelUpFitness.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/Objects-normal/arm64/LevelUpFitness_const_extract_protocols.json -Xcc -iquote -Xcc /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/LevelUpFitness-generated-files.hmap -Xcc -I/Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/LevelUpFitness-own-target-headers.hmap -Xcc -I/Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/LevelUpFitness-all-target-headers.hmap -Xcc -iquote -Xcc /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/LevelUpFitness-project-headers.hmap -Xcc -I/Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Products/Debug-iphoneos/include -Xcc -I/Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/DerivedSources-normal/arm64 -Xcc -I/Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/DerivedSources/arm64 -Xcc -I/Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/Objects-normal/arm64/LevelUpFitness-Swift.h -working-directory /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness -experimental-emit-module-separately -disable-cmo
+
+Copy /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Products/Debug-iphoneos/LevelUpFitness.swiftmodule/Project/arm64-apple-ios.swiftsourceinfo /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/Objects-normal/arm64/LevelUpFitness.swiftsourceinfo (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/Objects-normal/arm64/LevelUpFitness.swiftsourceinfo /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Products/Debug-iphoneos/LevelUpFitness.swiftmodule/Project/arm64-apple-ios.swiftsourceinfo
+
+Copy /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Products/Debug-iphoneos/LevelUpFitness.swiftmodule/arm64-apple-ios.swiftmodule /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/Objects-normal/arm64/LevelUpFitness.swiftmodule (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/Objects-normal/arm64/LevelUpFitness.swiftmodule /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Products/Debug-iphoneos/LevelUpFitness.swiftmodule/arm64-apple-ios.swiftmodule
+
+Copy /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Products/Debug-iphoneos/LevelUpFitness.swiftmodule/arm64-apple-ios.abi.json /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/Objects-normal/arm64/LevelUpFitness.abi.json (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Intermediates.noindex/LevelUpFitness.build/Debug-iphoneos/LevelUpFitness.build/Objects-normal/arm64/LevelUpFitness.abi.json /Users/shriramvasudevan/Library/Developer/Xcode/DerivedData/LevelUpFitness-dgmdvlaqfyitjscjxmfgmlydgtwr/Build/Products/Debug-iphoneos/LevelUpFitness.swiftmodule/arm64-apple-ios.abi.json
+
+SwiftDriverJobDiscovery normal arm64 Compiling HomeView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+
+SwiftCompile normal arm64 Compiling\ IndividualExerciseView.swift,\ PagesHolderView.swift,\ PastProgramsView.swift,\ ChallengeDetailsView.swift,\ SplashScreenView.swift,\ ProfileView.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/IndividualExerciseView.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/PagesHolderView.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/PastProgramsView.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/ChallengeDetailsView.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/SplashScreenView.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/ProfileView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/IndividualExerciseView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/PagesHolderView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+/Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/PagesHolderView.swift:62:24: warning: no 'async' operations occur within 'await' expression
+                    if await HealthManager.shared.todaysSteps == nil {
+                       ^
+/Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/PagesHolderView.swift:63:25: warning: no 'async' operations occur within 'await' expression
+                        await HealthManager.shared.getInitialHealthData()
+                        ^
+/Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/PagesHolderView.swift:83:29: warning: no 'async' operations occur within 'await' expression
+                            await XPManager.shared.addXPToDB()
+                            ^
+/Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/PagesHolderView.swift:90:29: warning: no 'async' operations occur within 'await' expression
+                            await XPManager.shared.addXPToDB()
+                            ^
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/PastProgramsView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/ChallengeDetailsView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/SplashScreenView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/ProfileView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+/Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/ProfileView.swift:73:10: warning: 'onChange(of:perform:)' was deprecated in iOS 17.0: Use `onChange` with a two or zero parameter action closure instead.
+        .onChange(of: selectedProfilePicture) { _ in
+         ^
+
+SwiftCompile normal arm64 Compiling\ SetStatWidget.swift,\ StatisticsWidget.swift,\ ChallengeTemplateWidget.swift,\ WorkoutCard.swift,\ HealthTrendView.swift,\ TimeSpentWidget.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/SetStatWidget.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/StatisticsWidget.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/ChallengeTemplateWidget.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/WorkoutCard.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/HealthTrendView.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/TimeSpentWidget.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/SetStatWidget.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/StatisticsWidget.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/ChallengeTemplateWidget.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/WorkoutCard.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/HealthTrendView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+/Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/HealthTrendView.swift:205:19: warning: value 'healthValueDouble' was defined but never used; consider replacing with boolean test
+        guard let healthValueDouble = Double(healthValue) else { return }
+              ~~~~^~~~~~~~~~~~~~~~~~~~
+                                                          != nil
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/TimeSpentWidget.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 Compiling\ ProgramStatsButtonWidget.swift,\ ToDoList.swift,\ SetCounterWidget.swift,\ ActiveChallengesView.swift,\ ExerciseDataSetWidget.swift,\ LevelCircularProgressView.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/ProgramStatsButtonWidget.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/ToDoList.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/SetCounterWidget.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/ActiveChallengesView.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/ExerciseDataSetWidget.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/LevelCircularProgressView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/ProgramStatsButtonWidget.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/ToDoList.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/SetCounterWidget.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/ActiveChallengesView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/ExerciseDataSetWidget.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/LevelCircularProgressView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 Compiling\ AchievementWidget.swift,\ LevelInfoView.swift,\ VerticalLevelBanner.swift,\ GymSessionView.swift,\ WeightProgressTracker.swift,\ ProgramSummaryView.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/AchievementWidget.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/LevelInfoView.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/VerticalLevelBanner.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/GymSessionView.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/WeightProgressTracker.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/ProgramSummaryView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/AchievementWidget.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/LevelInfoView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/VerticalLevelBanner.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/GymSessionView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+/Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/GymSessionView.swift:75:81: warning: backward matching of the unlabeled trailing closure is deprecated; label the argument with 'action' to suppress this warning
+                        PremiumActionButton(title: "Cancel", style: .secondary) { showEndSessionConfirmation = false }
+                                                                              ~ ^
+                                                                              , action:                               )
+/Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Utilities/CustomComponents.swift:11:8: note: 'init(title:icon:action:style:)' declared here
+struct PremiumActionButton: View {
+       ^
+/Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/GymSessionView.swift:76:84: warning: backward matching of the unlabeled trailing closure is deprecated; label the argument with 'action' to suppress this warning
+                        PremiumActionButton(title: "End Session", style: .primary) {
+                                                                                 ~ ^
+                                                                                 , action: 
+/Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Utilities/CustomComponents.swift:11:8: note: 'init(title:icon:action:style:)' declared here
+struct PremiumActionButton: View {
+       ^
+/Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/GymSessionView.swift:157:93: warning: backward matching of the unlabeled trailing closure is deprecated; label the argument with 'action' to suppress this warning
+            PremiumActionButton(title: "Start Session", icon: "play.fill", style: .primary) {
+                                                                                          ~ ^
+                                                                                          , action: 
+/Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Utilities/CustomComponents.swift:11:8: note: 'init(title:icon:action:style:)' declared here
+struct PremiumActionButton: View {
+       ^
+/Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/GymSessionView.swift:200:93: warning: backward matching of the unlabeled trailing closure is deprecated; label the argument with 'action' to suppress this warning
+                PremiumActionButton(title: "Log Exercise", icon: "plus", style: .secondary) { navigateToAddExerciseView = true }
+                                                                                          ~ ^
+                                                                                          , action:                             )
+/Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Utilities/CustomComponents.swift:11:8: note: 'init(title:icon:action:style:)' declared here
+struct PremiumActionButton: View {
+       ^
+/Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/GymSessionView.swift:201:99: warning: backward matching of the unlabeled trailing closure is deprecated; label the argument with 'action' to suppress this warning
+                PremiumActionButton(title: "End Session", icon: "stop.fill", style: .destructive) { showEndSessionConfirmation = true }
+                                                                                                ~ ^
+                                                                                                , action:                              )
+/Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Utilities/CustomComponents.swift:11:8: note: 'init(title:icon:action:style:)' declared here
+struct PremiumActionButton: View {
+       ^
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/WeightProgressTracker.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/ProgramSummaryView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 Compiling\ HealthStatsWidget.swift,\ GymSessionsInfoView.swift,\ ProgramCompletedCover.swift,\ MetricsView.swift,\ WorkoutView.swift,\ LevelUpBar.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/HealthStatsWidget.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/GymSessionsInfoView.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/ProgramCompletedCover.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/MetricsView.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/WorkoutView.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/LevelUpBar.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/HealthStatsWidget.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/GymSessionsInfoView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/ProgramCompletedCover.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/MetricsView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/WorkoutView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/LevelUpBar.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 Compiling\ ContentView.swift,\ DailyTargetView.swift,\ JoinProgramWidget.swift,\ ProgramListHomePreview.swift,\ ChallengeCompletedView.swift,\ CommunityView.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/ContentView.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/DailyTargetView.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/JoinProgramWidget.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/ProgramListHomePreview.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/ChallengeCompletedView.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/CommunityView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/ContentView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/DailyTargetView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/JoinProgramWidget.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/ProgramListHomePreview.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/ChallengeCompletedView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/CommunityView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 Compiling\ ChatView.swift,\ AnalyticsView.swift,\ ActiveUserChallengeWidget.swift,\ ExerciseLibraryExerciseWidget.swift,\ IntroView.swift,\ FullLevelBreakdownView.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/ChatView.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/AnalyticsView.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/ActiveUserChallengeWidget.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/ExerciseLibraryExerciseWidget.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/IntroView.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/FullLevelBreakdownView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/ChatView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/AnalyticsView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/ActiveUserChallengeWidget.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/ExerciseLibraryExerciseWidget.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/IntroView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+/Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/IntroView.swift:105:41: warning: non-constant range: argument must be an integer literal
+                            ForEach(0..<totalSteps) { index in
+                                        ^
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/FullLevelBreakdownView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 Compiling\ PastProgramInsightView.swift,\ ConfirmLeaveProgramWidget.swift,\ RecommendedExerciseWidget.swift,\ WorkoutExitWarningView.swift,\ WeightStatView.swift,\ PaywallView.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/PastProgramInsightView.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/ConfirmLeaveProgramWidget.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/RecommendedExerciseWidget.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/WorkoutExitWarningView.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/WeightStatView.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/PaywallView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/PastProgramInsightView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/ConfirmLeaveProgramWidget.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/RecommendedExerciseWidget.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/WorkoutExitWarningView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/WeightStatView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/PaywallView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+/Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/PaywallView.swift:94:14: warning: 'onChange(of:perform:)' was deprecated in iOS 17.0: Use `onChange` with a two or zero parameter action closure instead.
+            .onChange(of: storeKitManager.effectiveIsPremiumUnlocked) { isUnlocked in
+             ^
+/Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/PaywallView.swift:99:14: warning: 'onChange(of:perform:)' was deprecated in iOS 17.0: Use `onChange` with a two or zero parameter action closure instead.
+            .onChange(of: storeKitManager.activeSubscription) { subscription in
+             ^
+
+SwiftCompile normal arm64 Compiling\ CustomWorkoutExerciseDataSetWidget.swift,\ RequestCustomProgramWidget.swift,\ ProgramCompletedForTheDayCover.swift,\ PastProgramWidget.swift,\ SubLevelCircularWidget.swift,\ LevelChangeWidget.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/CustomWorkoutExerciseDataSetWidget.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/RequestCustomProgramWidget.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/ProgramCompletedForTheDayCover.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/PastProgramWidget.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/SubLevelCircularWidget.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/LevelChangeWidget.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/CustomWorkoutExerciseDataSetWidget.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/RequestCustomProgramWidget.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/ProgramCompletedForTheDayCover.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/PastProgramWidget.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/SubLevelCircularWidget.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/LevelChangeWidget.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 Compiling\ SearchView.swift,\ WeightTrendView.swift,\ ProgramStatisticsView.swift,\ UsageTimeView.swift,\ FullPageVideoView.swift,\ LibraryExerciseDataView.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/SearchView.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/WeightTrendView.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/ProgramStatisticsView.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/UsageTimeView.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/FullPageVideoView.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/LibraryExerciseDataView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/SearchView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/WeightTrendView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/ProgramStatisticsView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/UsageTimeView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/FullPageVideoView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+
+SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/LibraryExerciseDataView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+    cd /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness
+    
+/Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/LibraryExerciseDataView.swift:97:25: warning: no 'async' operations occur within 'await' expression
+                        await addToGymSession()
+                        ^
+/Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/LibraryExerciseDataView.swift:98:25: warning: no 'async' operations occur within 'await' expression
+                        await XPManager.shared.addXP(increment: 2, type: xpAdditionType)
+                        ^
+/Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/LibraryExerciseDataView.swift:99:25: warning: no 'async' operations occur within 'await' expression
+                        await XPManager.shared.addXP(increment: 2, type: .total)
+                        ^
+
+SwiftDriverJobDiscovery normal arm64 Compiling ContentView.swift, DailyTargetView.swift, JoinProgramWidget.swift, ProgramListHomePreview.swift, ChallengeCompletedView.swift, CommunityView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+
+SwiftDriverJobDiscovery normal arm64 Compiling CustomWorkoutExerciseDataSetWidget.swift, RequestCustomProgramWidget.swift, ProgramCompletedForTheDayCover.swift, PastProgramWidget.swift, SubLevelCircularWidget.swift, LevelChangeWidget.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+
+SwiftDriverJobDiscovery normal arm64 Compiling HealthStatsWidget.swift, GymSessionsInfoView.swift, ProgramCompletedCover.swift, MetricsView.swift, WorkoutView.swift, LevelUpBar.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+
+SwiftDriverJobDiscovery normal arm64 Compiling ProgramStatsButtonWidget.swift, ToDoList.swift, SetCounterWidget.swift, ActiveChallengesView.swift, ExerciseDataSetWidget.swift, LevelCircularProgressView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+
+SwiftDriverJobDiscovery normal arm64 Compiling SetStatWidget.swift, StatisticsWidget.swift, ChallengeTemplateWidget.swift, WorkoutCard.swift, HealthTrendView.swift, TimeSpentWidget.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+
+SwiftDriverJobDiscovery normal arm64 Compiling AchievementWidget.swift, LevelInfoView.swift, VerticalLevelBanner.swift, GymSessionView.swift, WeightProgressTracker.swift, ProgramSummaryView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+
+SwiftDriverJobDiscovery normal arm64 Compiling IndividualExerciseView.swift, PagesHolderView.swift, PastProgramsView.swift, ChallengeDetailsView.swift, SplashScreenView.swift, ProfileView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+
+SwiftDriverJobDiscovery normal arm64 Compiling ChatView.swift, AnalyticsView.swift, ActiveUserChallengeWidget.swift, ExerciseLibraryExerciseWidget.swift, IntroView.swift, FullLevelBreakdownView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+
+SwiftDriverJobDiscovery normal arm64 Compiling SearchView.swift, WeightTrendView.swift, ProgramStatisticsView.swift, UsageTimeView.swift, FullPageVideoView.swift, LibraryExerciseDataView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+
+SwiftDriverJobDiscovery normal arm64 Compiling PastProgramInsightView.swift, ConfirmLeaveProgramWidget.swift, RecommendedExerciseWidget.swift, WorkoutExitWarningView.swift, WeightStatView.swift, PaywallView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+
+** BUILD FAILED **
+
+
+The following build commands failed:
+	SwiftCompile normal arm64 /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/ProgramView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+	SwiftCompile normal arm64 Compiling\ ProgramView.swift /Users/shriramvasudevan/Documents/GitHub/LevelUpFitnessApp/LevelUpFitness/LevelUpFitness/Views/ProgramView.swift (in target 'LevelUpFitness' from project 'LevelUpFitness')
+	Building project LevelUpFitness with scheme LevelUpFitness
+(3 failures)

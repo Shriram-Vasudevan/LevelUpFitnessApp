@@ -13,16 +13,16 @@ struct AppTheme {
         static let blueLight = Color(hex: "2A7FFF")
         static let blueTint = Color(hex: "E8F3FF")
         
-        // Neutrals (Re-mapped for pressurized depth)
-        static let backgroundDark = Color.black
-        static let backgroundSurface = Color(hex: "111827") // Deep slate
-        static let surfaceLight = Color(hex: "1F2937")
+        // Neutrals (Re-mapped for pristine light mode)
+        static let backgroundDark = Color(hex: "F8F9FA") // Main background is now light gray
+        static let backgroundSurface = Color.white // Panels are pure white
+        static let surfaceLight = Color.white // Elevated surfaces are pure white
         
-        static let textPrimary = Color.white
-        static let textSecondary = Color(hex: "9CA3AF") // Muted gray
+        static let textPrimary = Color.black // Text is black
+        static let textSecondary = Color(hex: "6B7280") // Muted slate gray
         
-        static let success = Color(hex: "059669")
-        static let danger = Color(hex: "DC2626")
+        static let success = Color(hex: "10B981") // Brighter success for light mode
+        static let danger = Color(hex: "EF4444") // Brighter danger for light mode
     }
     
     // MARK: - Gradients & Glows
@@ -75,13 +75,13 @@ struct EngineeredPanel: ViewModifier {
             )
             .background(
                 RoundedRectangle(cornerRadius: AppTheme.Geometry.aerodynamicRadius, style: .continuous)
-                    .stroke(Color.white.opacity(0.05), lineWidth: 1)
+                    .stroke(Color.black.opacity(0.04), lineWidth: 1)
             )
             .shadow(
-                color: Color.black.opacity(isElevated ? 0.4 : 0.2),
-                radius: isElevated ? 20 : 10,
+                color: Color.black.opacity(isElevated ? 0.12 : 0.06),
+                radius: isElevated ? 15 : 8,
                 x: 0,
-                y: isElevated ? 10 : 5
+                y: isElevated ? 8 : 4
             )
     }
 }

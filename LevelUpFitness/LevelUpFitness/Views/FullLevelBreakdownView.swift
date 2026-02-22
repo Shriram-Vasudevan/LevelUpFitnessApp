@@ -23,6 +23,7 @@ struct FullLevelBreakdownView: View {
                 }
                 .padding(.horizontal, 16)
                 .padding(.vertical, 14)
+                .padding(.bottom, 120) // Tab bar clearance
             }
         }
         .navigationBarBackButtonHidden()
@@ -160,7 +161,7 @@ struct FullLevelBreakdownView: View {
                                 .foregroundColor(AppTheme.Colors.bluePrimary)
                                 .frame(width: 32, height: 32)
                                 .background(AppTheme.Colors.bluePrimary.opacity(0.15))
-                                .clipShape(RoundedRectangle(cornerRadius: AppTheme.Geometry.tightRadius, style: .continuous))
+                                .clipShape(AngledCutShape(cutSize: 8))
 
                             VStack(alignment: .leading, spacing: 4) {
                                 Text(change.keyword)
@@ -172,7 +173,7 @@ struct FullLevelBreakdownView: View {
                                     .lineLimit(2)
                                 Text(formattedTimestamp(change.timestamp))
                                     .font(AppTheme.Typography.telemetry(size: 11, weight: .medium))
-                                    .foregroundColor(AppTheme.Colors.textDisabled)
+                                    .foregroundColor(AppTheme.Colors.textSecondary.opacity(0.6))
                             }
 
                             Spacer()
@@ -183,9 +184,9 @@ struct FullLevelBreakdownView: View {
                         }
                         .padding(12)
                         .background(AppTheme.Colors.surfaceLight)
-                        .clipShape(RoundedRectangle(cornerRadius: AppTheme.Geometry.tightRadius, style: .continuous))
+                        .clipShape(AngledCutShape(cutSize: 12))
                         .overlay(
-                            RoundedRectangle(cornerRadius: AppTheme.Geometry.tightRadius, style: .continuous)
+                            AngledCutShape(cutSize: 12)
                                 .stroke(Color.white.opacity(0.04), lineWidth: 1)
                         )
                     }
@@ -267,9 +268,9 @@ struct FullLevelBreakdownView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(12)
             .background(AppTheme.Colors.surfaceLight)
-            .clipShape(RoundedRectangle(cornerRadius: AppTheme.Geometry.tightRadius, style: .continuous))
+            .clipShape(AngledCutShape(cutSize: 12))
             .overlay(
-                RoundedRectangle(cornerRadius: AppTheme.Geometry.tightRadius, style: .continuous)
+                AngledCutShape(cutSize: 12)
                     .stroke(Color.white.opacity(0.04), lineWidth: 1)
             )
     }
@@ -368,6 +369,12 @@ struct FullLevelBreakdownView: View {
             }
         }
 
+        if points.count == 1 {
+            if let thirtyDaysAgo = Calendar.current.date(byAdding: .day, value: -30, to: points[0].date) {
+                points.insert(HealthDataPoint(date: thirtyDaysAgo, value: points[0].value), at: 0)
+            }
+        }
+
         levelTrendPoints = points.sorted { $0.date < $1.date }
     }
 }
@@ -427,11 +434,12 @@ private struct SublevelCard: View {
                 .foregroundColor(AppTheme.Colors.textSecondary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(height: 120) // Strict uniform size
         .padding(12)
         .background(AppTheme.Colors.surfaceLight)
-        .clipShape(RoundedRectangle(cornerRadius: AppTheme.Geometry.tightRadius, style: .continuous))
+        .clipShape(AngledCutShape(cutSize: 12))
         .overlay(
-            RoundedRectangle(cornerRadius: AppTheme.Geometry.tightRadius, style: .continuous)
+            AngledCutShape(cutSize: 12)
                 .stroke(Color.white.opacity(0.04), lineWidth: 1)
         )
     }

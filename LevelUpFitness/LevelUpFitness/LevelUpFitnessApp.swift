@@ -16,6 +16,7 @@ struct LevelUpFitnessApp: App {
     var body: some Scene {
         WindowGroup {
             OpeningViewsContainer()
+                .preferredColorScheme(.light)
                 .environmentObject(storeKitManager)
                 .task {
                     await storeKitManager.refresh()

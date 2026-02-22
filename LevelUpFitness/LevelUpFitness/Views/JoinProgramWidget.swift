@@ -13,7 +13,10 @@ struct JoinProgramWidget: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            ProgramPreviewImage(reference: standardProgramDBRepresentation.image)
+            Image(systemName: "dumbbell.fill")
+                .font(.system(size: 32))
+                .foregroundColor(AppTheme.Colors.bluePrimary)
+                .background(AppTheme.Colors.bluePrimary.opacity(0.1))
                 .frame(width: 82, height: 82)
                 .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
 

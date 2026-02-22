@@ -34,7 +34,7 @@ struct PaywallView: View {
         [
             PaywallFeature(icon: "chart.xyaxis.line", title: "Pro analytics", detail: "Clean trend dashboards for volume, reps, rest, and streaks."),
             PaywallFeature(icon: "square.grid.2x2", title: "Multi-programs", detail: "Join and manage multiple active programs from one hub."),
-            PaywallFeature(icon: "person.2.fill", title: "Squad training", detail: "Build friend sessions, challenge cards, and shared goals."),
+            PaywallFeature(icon: "person.2.fill", title: "Team training", detail: "Build friend sessions, challenge cards, and shared goals."),
             PaywallFeature(icon: "clock.arrow.circlepath", title: "Full history", detail: "Unlimited access to past sessions and program insights.")
         ]
     }

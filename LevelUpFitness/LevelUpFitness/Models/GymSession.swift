@@ -21,6 +21,10 @@ struct GymSession: Codable, Identifiable {
         return endTime.timeIntervalSince(startTime)
     }
 
+    var allExercises: [ExerciseRecord] {
+        individualExercises + programExercises.values.flatMap { $0 }
+    }
+
     init(startTime: Date) {
         self.id = UUID()
         self.startTime = startTime

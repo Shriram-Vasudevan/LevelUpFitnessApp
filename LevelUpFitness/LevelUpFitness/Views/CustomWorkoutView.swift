@@ -51,7 +51,7 @@ struct CustomWorkoutView: View {
                         }
                         .padding(.horizontal)
 
-                        Text("Custom Protocol")
+                        Text("Custom Sequence")
                             .font(AppTheme.Typography.telemetry(size: 20, weight: .bold))
                             .foregroundColor(AppTheme.Colors.textPrimary)
                     }

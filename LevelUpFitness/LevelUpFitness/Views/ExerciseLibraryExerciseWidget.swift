@@ -23,8 +23,8 @@ struct ExerciseLibraryExerciseWidget: View {
            
            if isExpanded {
                VStack(alignment: .leading, spacing: 16) {
-                   Text("Other Progressions")
-                       .font(AppTheme.Typography.telemetry(size: 18, weight: .medium))
+                    Text("Progressions")
+                        .font(AppTheme.Typography.telemetry(size: 18, weight: .medium))
                        .foregroundColor(AppTheme.Colors.textPrimary)
                    
                    ScrollView(.horizontal, showsIndicators: false) {
@@ -127,10 +127,11 @@ struct ExerciseLibraryExerciseWidget: View {
                    .background(isLocked(progression: progression) ? Color.gray : AppTheme.Colors.bluePrimary)
            }
            .disabled(isLocked(progression: progression))
-       }
-       .frame(width: 100)
-       .padding(8)
-       .background(AppTheme.Colors.surfaceLight)
+        }
+        .frame(width: 100, height: 160) // Forced Uniform Height
+        .padding(8)
+        .background(AppTheme.Colors.surfaceLight)
+        .clipShape(AngledCutShape(cutSize: 12))
    }
     
 

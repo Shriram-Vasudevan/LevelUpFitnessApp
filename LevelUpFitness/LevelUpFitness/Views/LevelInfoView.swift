@@ -39,9 +39,9 @@ struct LevelInfoView: View {
                     .foregroundColor(Color(hex: "6B7280"))
                     .frame(width: 32, height: 32)
                     .background(Color.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+                    .clipShape(AngledCutShape(cutSize: 8))
                     .overlay(
-                        RoundedRectangle(cornerRadius: 8, style: .continuous)
+                        AngledCutShape(cutSize: 8)
                             .stroke(Color.black.opacity(0.08), lineWidth: 1)
                     )
             }
@@ -69,7 +69,7 @@ struct LevelInfoView: View {
                 endPoint: .bottomTrailing
             )
         )
-        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+        .clipShape(AngledCutShape(cutSize: 10))
     }
 
     private var sublevelsCard: some View {
@@ -90,7 +90,7 @@ struct LevelInfoView: View {
                     .scaledToFill()
                     .frame(height: 96)
                     .frame(maxWidth: .infinity)
-                    .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+                    .clipShape(AngledCutShape(cutSize: 8))
 
                 VStack(alignment: .leading, spacing: 5) {
                     Text("Strength Check")
@@ -107,9 +107,9 @@ struct LevelInfoView: View {
         }
         .padding(12)
         .background(Color.white)
-        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+        .clipShape(AngledCutShape(cutSize: 10))
         .overlay(
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
+            AngledCutShape(cutSize: 10)
                 .stroke(Color.black.opacity(0.08), lineWidth: 1)
         )
     }
@@ -131,9 +131,9 @@ struct LevelInfoView: View {
         }
         .padding(12)
         .background(Color.white)
-        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+        .clipShape(AngledCutShape(cutSize: 10))
         .overlay(
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
+            AngledCutShape(cutSize: 10)
                 .stroke(Color.black.opacity(0.08), lineWidth: 1)
         )
     }

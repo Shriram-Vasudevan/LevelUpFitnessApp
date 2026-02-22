@@ -128,7 +128,7 @@ struct LibraryExerciseDataView: View {
                 sectionType = .start
                 currentExerciseDataSetIndex = 0
             }) {
-                Text("Start Another Exercise")
+                Text("Begin Session")
                     .font(AppTheme.Typography.telemetry(size: 16, weight: .bold))
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
@@ -180,7 +180,8 @@ struct LibraryExerciseDataSetWidget: View {
     @State private var weightValue: Int = 0
     @State private var repValue: Int = 0
     @State private var restTimeElapsed: Double = 0.0
-    @State private var timer: Timer?
+    @State private var isTimerRunning: Bool = false
+    let timerPublisher = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
     var isWeight: Bool
     var setIndex: Int
@@ -206,11 +207,17 @@ struct LibraryExerciseDataSetWidget: View {
             repValue = exerciseDataSet.reps > 0 ? exerciseDataSet.reps : 10
             
             if setIndex > 0 {
-                startRestTimer()
+                restTimeElapsed = 0.0
+                isTimerRunning = true
             }
         }
         .onDisappear {
-            stopRestTimer()
+            isTimerRunning = false
+        }
+        .onReceive(timerPublisher) { _ in
+            if isTimerRunning {
+                restTimeElapsed += 1.0
+            }
         }
     }
     
@@ -279,20 +286,8 @@ struct LibraryExerciseDataSetWidget: View {
         exerciseDataSet.rest = restTimeElapsed
         exerciseDataSet.time = 0
         
-        stopRestTimer()
+        isTimerRunning = false
         moveToNextSet()
-    }
-    
-    private func startRestTimer() {
-        restTimeElapsed = 0.0
-        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
-            restTimeElapsed += 1.0
-        }
-    }
-    
-    private func stopRestTimer() {
-        timer?.invalidate()
-        timer = nil
     }
     
     private func timeFormatted(_ totalSeconds: Double) -> String {

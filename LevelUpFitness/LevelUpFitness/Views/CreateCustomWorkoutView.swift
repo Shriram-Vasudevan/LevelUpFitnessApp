@@ -26,7 +26,7 @@ struct CreateCustomWorkoutView: View {
             VStack(spacing: 20) {
                 // MARK: - Header
                 HStack {
-                    Text("Design Program")
+                    Text("Create Program")
                         .font(AppTheme.Typography.telemetry(size: 20, weight: .bold))
                         .foregroundColor(AppTheme.Colors.textPrimary)
 
@@ -45,10 +45,10 @@ struct CreateCustomWorkoutView: View {
 
                 // MARK: - Workout Identity
                 VStack(spacing: 16) {
-                    inputField(title: "Program Designation", text: $workoutName, placeholder: "e.g. Tactical Barbell")
+                    inputField(title: "Program Name", text: $workoutName, placeholder: "e.g. Tactical Barbell")
                     
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Module Identity Art")
+                        Text("Cover Image")
                             .font(AppTheme.Typography.telemetry(size: 14, weight: .semibold))
                             .foregroundColor(AppTheme.Colors.textSecondary)
                         
@@ -58,7 +58,7 @@ struct CreateCustomWorkoutView: View {
                                     .resizable()
                                     .aspectRatio(contentMode: .fill)
                                     .frame(height: 100)
-                                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                                    .clipShape(AngledCutShape(cutSize: 12))
                                     .frame(maxWidth: .infinity)
                             } else {
                                 VStack(spacing: 8) {
@@ -72,11 +72,8 @@ struct CreateCustomWorkoutView: View {
                                 .frame(maxWidth: .infinity)
                                 .frame(height: 100)
                                 .background(AppTheme.Colors.surfaceLight)
-                                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 12, style: .continuous)
-                                        .stroke(Color.white.opacity(0.1), style: StrokeStyle(lineWidth: 1, dash: [4]))
-                                )
+                                .clipShape(AngledCutShape(cutSize: 16))
+                                .overlay(AngledCutShape(cutSize: 16).stroke(Color.black.opacity(0.04), lineWidth: 1))
                             }
                         }
                         .buttonStyle(KineticButtonStyle())
@@ -87,13 +84,13 @@ struct CreateCustomWorkoutView: View {
                 // MARK: - Exercise Sequence
                 VStack(alignment: .leading, spacing: 12) {
                     HStack {
-                        Text("Protocol Sequence")
+                        Text("Exercises")
                             .font(AppTheme.Typography.telemetry(size: 18, weight: .bold))
                             .foregroundColor(AppTheme.Colors.textPrimary)
                         
                         Spacer()
                         
-                        Text("\(exercises.count) Nodes")
+                        Text("\(exercises.count) Exercises")
                             .font(AppTheme.Typography.monumentalNumber(size: 14))
                             .foregroundColor(AppTheme.Colors.bluePrimary)
                     }
@@ -111,7 +108,8 @@ struct CreateCustomWorkoutView: View {
                         .frame(maxWidth: .infinity)
                         .frame(height: 150)
                         .background(AppTheme.Colors.surfaceLight)
-                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                        .clipShape(AngledCutShape(cutSize: 20))
+                        .overlay(AngledCutShape(cutSize: 20).stroke(Color.black.opacity(0.02), lineWidth: 1))
                         .padding(.horizontal)
                     } else {
                         ScrollView {
@@ -132,18 +130,14 @@ struct CreateCustomWorkoutView: View {
                     HStack {
                         Spacer()
                         Image(systemName: "plus")
-                        Text("Append Exercise")
+                        Text("Add Exercise")
                         Spacer()
                     }
                     .font(AppTheme.Typography.telemetry(size: 16, weight: .bold))
                     .foregroundColor(AppTheme.Colors.bluePrimary)
                     .padding()
-                    .background(AppTheme.Colors.bluePrimary.opacity(0.15))
-                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12, style: .continuous)
-                            .stroke(AppTheme.Colors.bluePrimary.opacity(0.3), lineWidth: 1)
-                    )
+                    .background(AppTheme.Colors.surfaceLight)
+                    .clipShape(AngledCutShape(cutSize: 12))
                 }
                 .buttonStyle(KineticButtonStyle())
                 .padding(.horizontal)
@@ -160,15 +154,14 @@ struct CreateCustomWorkoutView: View {
                 }) {
                     HStack {
                         Spacer()
-                        Text("Compile & Save")
+                        Text("Save Program")
                             .font(AppTheme.Typography.telemetry(size: 18, weight: .bold))
                         Spacer()
                     }
                     .foregroundColor(.white)
                     .padding()
                     .background(exercises.isEmpty || workoutName.isEmpty ? AppTheme.Colors.surfaceLight : AppTheme.Colors.bluePrimary)
-                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-                    .controlledGlow(isActive: !exercises.isEmpty && !workoutName.isEmpty)
+                    .clipShape(AngledCutShape(cutSize: 16))
                 }
                 .buttonStyle(KineticButtonStyle())
                 .disabled(exercises.isEmpty || workoutName.isEmpty)
@@ -220,7 +213,7 @@ struct CreateCustomWorkoutView: View {
 
             Button(action: {
                 withAnimation {
-                    exercises.remove(at: index)
+                    self.exercises.removeAll { $0.id == exercise.id }
                 }
             }) {
                 Image(systemName: "minus.circle.fill")
@@ -228,10 +221,11 @@ struct CreateCustomWorkoutView: View {
                     .font(.system(size: 24))
             }
             .buttonStyle(KineticButtonStyle())
-        }
-        .padding()
-        .background(AppTheme.Colors.surfaceLight)
-        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+            }
+            .padding()
+            .background(AppTheme.Colors.surfaceLight)
+            .clipShape(AngledCutShape(cutSize: 12))
+            .overlay(AngledCutShape(cutSize: 12).stroke(Color.black.opacity(0.04), lineWidth: 1))
     }
 
     private func inputField(title: String, text: Binding<String>, placeholder: String) -> some View {
@@ -244,12 +238,9 @@ struct CreateCustomWorkoutView: View {
                 .font(AppTheme.Typography.telemetry(size: 18, weight: .medium))
                 .foregroundColor(AppTheme.Colors.textPrimary)
                 .padding()
-                .background(AppTheme.Colors.surfaceLight)
-                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        .stroke(Color.white.opacity(0.05), lineWidth: 1)
-                )
+                .engineeredPanel(isElevated: false)
+                .clipShape(AngledCutShape(cutSize: 12))
+                .overlay(AngledCutShape(cutSize: 12).stroke(Color.white.opacity(0.05), lineWidth: 1))
         }
     }
 }
