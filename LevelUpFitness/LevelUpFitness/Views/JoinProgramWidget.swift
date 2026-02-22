@@ -27,8 +27,8 @@ struct JoinProgramWidget: View {
                         .background(Color(hex: "E8F3FF"))
                         .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
 
-                    if standardProgramDBRepresentation.isPremium {
-                        Text(storeKitManager.effectiveIsPremiumUnlocked ? "Premium" : "Premium Required")
+                    if standardProgramDBRepresentation.requiresSubscription {
+                        Text(storeKitManager.canAccessProgram(standardProgramDBRepresentation) ? "Premium" : "Subscription Required")
                             .font(.system(size: 10, weight: .bold))
                             .foregroundColor(Color(hex: "A16207"))
                             .padding(.horizontal, 7)

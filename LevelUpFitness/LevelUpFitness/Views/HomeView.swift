@@ -26,7 +26,7 @@ struct HomeView: View {
 
     var body: some View {
         ZStack {
-            Color(hex: "F3F5F8").ignoresSafeArea()
+            AppTheme.Colors.backgroundDark.ignoresSafeArea()
 
             ScrollView {
                 VStack(spacing: 14) {
@@ -82,12 +82,12 @@ struct HomeView: View {
             HStack(alignment: .top) {
                 VStack(alignment: .leading, spacing: 6) {
                     Text(greeting)
-                        .font(.system(size: 24, weight: .bold))
-                        .foregroundColor(.white)
+                        .font(AppTheme.Typography.telemetry(size: 24, weight: .bold))
+                        .foregroundColor(AppTheme.Colors.textPrimary)
 
                     Text(InitializationManager.shared.selectedAffirmation ?? "Stay consistent and keep building.")
-                        .font(.system(size: 14, weight: .medium))
-                        .foregroundColor(Color.white.opacity(0.85))
+                        .font(AppTheme.Typography.telemetry(size: 14, weight: .medium))
+                        .foregroundColor(AppTheme.Colors.textSecondary)
                 }
 
                 Spacer()
@@ -124,39 +124,37 @@ struct HomeView: View {
             }
         }
         .padding(14)
-        .background(
-            LinearGradient(
-                colors: [Color(hex: "0B5ED7"), Color(hex: "1C9BFF")],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-        )
-        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-        .shadow(color: Color.black.opacity(0.08), radius: 10, x: 0, y: 6)
+        .background(AppTheme.Lighting.activeGradient)
+        .clipShape(RoundedRectangle(cornerRadius: AppTheme.Geometry.aerodynamicRadius, style: .continuous))
+        .shadow(color: AppTheme.Colors.blueDark.opacity(0.3), radius: 15, x: 0, y: 10)
     }
 
     private func heroStat(title: String, value: String, actionLabel: String, action: @escaping () -> Void) -> some View {
         VStack(alignment: .leading, spacing: 6) {
             Text(title)
-                .font(.system(size: 11, weight: .semibold))
+                .font(AppTheme.Typography.telemetry(size: 11, weight: .semibold))
                 .foregroundColor(Color.white.opacity(0.82))
 
             Text(value)
-                .font(.system(size: 22, weight: .bold))
-                .foregroundColor(.white)
+                .font(AppTheme.Typography.monumentalNumber(size: 22))
+                .foregroundColor(AppTheme.Colors.textPrimary)
 
             Button(actionLabel, action: action)
-                .font(.system(size: 11, weight: .semibold))
-                .foregroundColor(Color(hex: "0B5ED7"))
+                .font(AppTheme.Typography.telemetry(size: 11, weight: .bold))
+                .foregroundColor(AppTheme.Colors.bluePrimary)
                 .padding(.horizontal, 8)
                 .padding(.vertical, 5)
                 .background(Color.white)
-                .clipShape(RoundedRectangle(cornerRadius: 7, style: .continuous))
+                .clipShape(RoundedRectangle(cornerRadius: AppTheme.Geometry.tightRadius, style: .continuous))
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(10)
-        .background(Color.white.opacity(0.18))
-        .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+        .padding(12)
+        .background(Color.white.opacity(0.12))
+        .clipShape(RoundedRectangle(cornerRadius: AppTheme.Geometry.tightRadius, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: AppTheme.Geometry.tightRadius, style: .continuous)
+                .stroke(Color.white.opacity(0.15), lineWidth: 1)
+        )
     }
 
     private var profileImage: some View {
@@ -557,24 +555,19 @@ private struct HomeSectionCard<Content: View>: View {
     @ViewBuilder let content: Content
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(alignment: .leading, spacing: 14) {
             HStack {
                 Text(title)
-                    .font(.system(size: 18, weight: .semibold))
-                    .foregroundColor(Color(hex: "111827"))
+                    .font(AppTheme.Typography.telemetry(size: 18, weight: .bold))
+                    .foregroundColor(AppTheme.Colors.textPrimary)
                 Spacer()
                 trailing
             }
 
             content
         }
-        .padding(12)
-        .background(Color.white)
-        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .stroke(Color.black.opacity(0.08), lineWidth: 1)
-        )
+        .padding(16)
+        .engineeredPanel(isElevated: false)
     }
 }
 
@@ -591,25 +584,30 @@ private struct HomeActionTile: View {
                 Image(systemName: icon)
                     .font(.system(size: 16, weight: .bold))
                     .foregroundColor(color)
-                    .frame(width: 30, height: 30)
-                    .background(color.opacity(0.12))
-                    .clipShape(RoundedRectangle(cornerRadius: 7, style: .continuous))
+                    .frame(width: 32, height: 32)
+                    .background(color.opacity(0.15))
+                    .clipShape(RoundedRectangle(cornerRadius: AppTheme.Geometry.tightRadius, style: .continuous))
+                    .controlledGlow(isActive: true, color: color.opacity(0.3))
 
                 Text(title)
-                    .font(.system(size: 15, weight: .semibold))
-                    .foregroundColor(Color(hex: "111827"))
+                    .font(AppTheme.Typography.telemetry(size: 15, weight: .bold))
+                    .foregroundColor(AppTheme.Colors.textPrimary)
 
                 Text(subtitle)
-                    .font(.system(size: 12, weight: .medium))
-                    .foregroundColor(Color(hex: "6B7280"))
+                    .font(AppTheme.Typography.telemetry(size: 12, weight: .medium))
+                    .foregroundColor(AppTheme.Colors.textSecondary)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .frame(minHeight: 132, alignment: .topLeading)
-            .padding(10)
-            .background(Color(hex: "F8FAFC"))
-            .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+            .padding(12)
+            .background(AppTheme.Colors.surfaceLight)
+            .clipShape(RoundedRectangle(cornerRadius: AppTheme.Geometry.tightRadius, style: .continuous))
+            .overlay(
+                RoundedRectangle(cornerRadius: AppTheme.Geometry.tightRadius, style: .continuous)
+                    .stroke(Color.white.opacity(0.03), lineWidth: 1)
+            )
         }
-        .buttonStyle(.plain)
+        .buttonStyle(KineticButtonStyle())
     }
 }
 
@@ -622,29 +620,34 @@ private struct HealthInsightCard: View {
 
     var body: some View {
         Button(action: action) {
-            VStack(alignment: .leading, spacing: 8) {
+            VStack(alignment: .leading, spacing: 10) {
                 HStack {
                     Image(systemName: icon)
-                        .font(.system(size: 13, weight: .bold))
-                        .foregroundColor(Color(hex: "0B5ED7"))
+                        .font(.system(size: 14, weight: .bold))
+                        .foregroundColor(AppTheme.Colors.bluePrimary)
+                        .controlledGlow(isActive: true, color: AppTheme.Colors.bluePrimary.opacity(0.2))
                     Spacer()
                     trendBadge
                 }
 
                 Text(value)
-                    .font(.system(size: 22, weight: .bold))
-                    .foregroundColor(Color(hex: "111827"))
+                    .font(AppTheme.Typography.monumentalNumber(size: 24))
+                    .foregroundColor(AppTheme.Colors.textPrimary)
 
                 Text(title)
-                    .font(.system(size: 13, weight: .semibold))
-                    .foregroundColor(Color(hex: "6B7280"))
+                    .font(AppTheme.Typography.telemetry(size: 13, weight: .bold))
+                    .foregroundColor(AppTheme.Colors.textSecondary)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(10)
-            .background(Color(hex: "F8FAFC"))
-            .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+            .padding(14)
+            .background(AppTheme.Colors.surfaceLight)
+            .clipShape(RoundedRectangle(cornerRadius: AppTheme.Geometry.tightRadius, style: .continuous))
+            .overlay(
+                RoundedRectangle(cornerRadius: AppTheme.Geometry.tightRadius, style: .continuous)
+                    .stroke(Color.white.opacity(0.03), lineWidth: 1)
+            )
         }
-        .buttonStyle(.plain)
+        .buttonStyle(KineticButtonStyle())
     }
 
     private var trendBadge: some View {
@@ -652,12 +655,12 @@ private struct HealthInsightCard: View {
             Image(systemName: trendIcon)
                 .font(.system(size: 10, weight: .bold))
             Text(trendText)
-                .font(.system(size: 10, weight: .bold))
+                .font(AppTheme.Typography.telemetry(size: 10, weight: .bold))
         }
         .foregroundColor(trendColor)
         .padding(.horizontal, 7)
         .padding(.vertical, 4)
-        .background(trendColor.opacity(0.14))
+        .background(trendColor.opacity(0.15))
         .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
     }
 
@@ -679,9 +682,9 @@ private struct HealthInsightCard: View {
 
     private var trendColor: Color {
         switch comparison {
-        case .equal: return Color(hex: "2563EB")
-        case .greater: return Color(hex: "059669")
-        case .less: return Color(hex: "DC2626")
+        case .equal: return AppTheme.Colors.bluePrimary
+        case .greater: return AppTheme.Colors.success
+        case .less: return AppTheme.Colors.danger
         }
     }
 }
@@ -699,36 +702,42 @@ private struct ChallengeSummaryCard: View {
 
     var body: some View {
         Button(action: action) {
-            VStack(alignment: .leading, spacing: 8) {
+            VStack(alignment: .leading, spacing: 10) {
                 Text(title)
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundColor(Color(hex: "111827"))
+                    .font(AppTheme.Typography.telemetry(size: 15, weight: .bold))
+                    .foregroundColor(AppTheme.Colors.textPrimary)
                     .lineLimit(2)
 
                 Text(durationText)
-                    .font(.system(size: 12, weight: .medium))
-                    .foregroundColor(Color(hex: "6B7280"))
+                    .font(AppTheme.Typography.telemetry(size: 12, weight: .medium))
+                    .foregroundColor(AppTheme.Colors.textSecondary)
 
                 ProgressView(value: completion)
                     .progressViewStyle(.linear)
-                    .tint(Color(hex: "0B5ED7"))
+                    .tint(AppTheme.Colors.bluePrimary)
+                    .background(Color.white.opacity(0.1))
 
                 HStack {
                     Text("\(progress)/\(target)")
-                        .font(.system(size: 12, weight: .semibold))
-                        .foregroundColor(Color(hex: "0B5ED7"))
+                        .font(AppTheme.Typography.monumentalNumber(size: 12))
+                        .foregroundColor(AppTheme.Colors.textSecondary)
                     Spacer()
                     Text("\(Int(completion * 100))%")
-                        .font(.system(size: 12, weight: .bold))
-                        .foregroundColor(Color(hex: "0B5ED7"))
+                        .font(AppTheme.Typography.monumentalNumber(size: 12))
+                        .foregroundColor(AppTheme.Colors.bluePrimary)
+                        .controlledGlow(isActive: true, color: AppTheme.Colors.bluePrimary.opacity(0.4))
                 }
             }
-            .frame(width: 190, alignment: .leading)
-            .padding(10)
-            .background(Color(hex: "F8FAFC"))
-            .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+            .frame(width: 200, alignment: .leading)
+            .padding(14)
+            .background(AppTheme.Colors.surfaceLight)
+            .clipShape(RoundedRectangle(cornerRadius: AppTheme.Geometry.tightRadius, style: .continuous))
+            .overlay(
+                RoundedRectangle(cornerRadius: AppTheme.Geometry.tightRadius, style: .continuous)
+                    .stroke(Color.white.opacity(0.04), lineWidth: 1)
+            )
         }
-        .buttonStyle(.plain)
+        .buttonStyle(KineticButtonStyle())
     }
 }
 
@@ -737,31 +746,36 @@ private struct DiscoverChallengeCard: View {
     let action: () -> Void
 
     var body: some View {
-        HStack(spacing: 10) {
-            VStack(alignment: .leading, spacing: 4) {
+        HStack(spacing: 12) {
+            VStack(alignment: .leading, spacing: 6) {
                 Text(challenge.name)
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundColor(Color(hex: "111827"))
+                    .font(AppTheme.Typography.telemetry(size: 15, weight: .bold))
+                    .foregroundColor(AppTheme.Colors.textPrimary)
 
                 Text(challenge.description)
-                    .font(.system(size: 12, weight: .medium))
-                    .foregroundColor(Color(hex: "6B7280"))
+                    .font(AppTheme.Typography.telemetry(size: 13, weight: .medium))
+                    .foregroundColor(AppTheme.Colors.textSecondary)
                     .lineLimit(2)
             }
 
             Spacer()
 
             Button("Start", action: action)
-                .font(.system(size: 12, weight: .semibold))
+                .font(AppTheme.Typography.telemetry(size: 13, weight: .bold))
                 .foregroundColor(.white)
-                .padding(.horizontal, 10)
-                .padding(.vertical, 8)
-                .background(Color(hex: "0B5ED7"))
+                .padding(.horizontal, 14)
+                .padding(.vertical, 10)
+                .background(AppTheme.Colors.blueDark)
                 .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+                .buttonStyle(KineticButtonStyle())
         }
-        .padding(10)
-        .background(Color(hex: "F8FAFC"))
-        .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+        .padding(14)
+        .background(AppTheme.Colors.surfaceLight)
+        .clipShape(RoundedRectangle(cornerRadius: AppTheme.Geometry.tightRadius, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: AppTheme.Geometry.tightRadius, style: .continuous)
+                .stroke(Color.white.opacity(0.03), lineWidth: 1)
+        )
     }
 }
 

@@ -29,6 +29,12 @@ struct StandardProgramDBRepresentation: Codable {
     var image: String
     var description: String
     var isPremium: Bool
+    var requiredSubscriptionProductIDs: [String]
+    var requiredSubscriptionGroupID: String?
+
+    var requiresSubscription: Bool {
+        isPremium || !requiredSubscriptionProductIDs.isEmpty || requiredSubscriptionGroupID != nil
+    }
 
     enum CodingKeys: String, CodingKey {
         case id = "ID"
@@ -37,15 +43,28 @@ struct StandardProgramDBRepresentation: Codable {
         case image = "Image"
         case description = "Description"
         case isPremium = "IsPremium"
+        case requiredSubscriptionProductIDs = "RequiredSubscriptionProductIDs"
+        case requiredSubscriptionGroupID = "RequiredSubscriptionGroupID"
     }
 
-    init(id: String, name: String, environment: String, image: String, description: String, isPremium: Bool = false) {
+    init(
+        id: String,
+        name: String,
+        environment: String,
+        image: String,
+        description: String,
+        isPremium: Bool = false,
+        requiredSubscriptionProductIDs: [String] = [],
+        requiredSubscriptionGroupID: String? = nil
+    ) {
         self.id = id
         self.name = name
         self.environment = environment
         self.image = image
         self.description = description
         self.isPremium = isPremium
+        self.requiredSubscriptionProductIDs = requiredSubscriptionProductIDs
+        self.requiredSubscriptionGroupID = requiredSubscriptionGroupID
     }
 
     init(from decoder: Decoder) throws {
@@ -56,6 +75,8 @@ struct StandardProgramDBRepresentation: Codable {
         image = try container.decode(String.self, forKey: .image)
         description = try container.decode(String.self, forKey: .description)
         isPremium = try container.decodeIfPresent(Bool.self, forKey: .isPremium) ?? false
+        requiredSubscriptionProductIDs = try container.decodeIfPresent([String].self, forKey: .requiredSubscriptionProductIDs) ?? []
+        requiredSubscriptionGroupID = try container.decodeIfPresent(String.self, forKey: .requiredSubscriptionGroupID)
     }
 
     func encode(to encoder: Encoder) throws {
@@ -66,5 +87,7 @@ struct StandardProgramDBRepresentation: Codable {
         try container.encode(image, forKey: .image)
         try container.encode(description, forKey: .description)
         try container.encode(isPremium, forKey: .isPremium)
+        try container.encode(requiredSubscriptionProductIDs, forKey: .requiredSubscriptionProductIDs)
+        try container.encodeIfPresent(requiredSubscriptionGroupID, forKey: .requiredSubscriptionGroupID)
     }
 }

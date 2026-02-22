@@ -163,13 +163,14 @@
 		99FC9E482C5EC56B00DAFFAC /* RequestCustomProgramWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC9E472C5EC56B00DAFFAC /* RequestCustomProgramWidget.swift */; };
 		AA1234562C84567890ABC001 /* StoreKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1234562C84567890ABC002 /* StoreKitManager.swift */; };
 		BB7654322C84567890FED001 /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7654322C84567890FED002 /* PaywallView.swift */; };
+		F5361616D19E7549FA2D164C /* DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6D282618E90BB28B97B172 /* DesignSystem.swift */; };
+		FF22A602FCDB5D9E694972F1 /* LibraryExercisePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D2C9713A87E916F1100CFBC /* LibraryExercisePicker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2D2C9713A87E916F1100CFBC /* LibraryExercisePicker.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LibraryExercisePicker.swift; path = LevelUpFitness/Views/LibraryExercisePicker.swift; sourceTree = "<group>"; };
 		991F8FD92C13EB3900A134A5 /* HealthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthManager.swift; sourceTree = "<group>"; };
 		991F8FE12C15278500A134A5 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
-		AA1234562C84567890ABC002 /* StoreKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreKitManager.swift; sourceTree = "<group>"; };
-		BB7654322C84567890FED002 /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
 		991F8FE32C1527A900A134A5 /* ProgramStatisticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramStatisticsView.swift; sourceTree = "<group>"; };
 		991F8FE52C154F5200A134A5 /* DayCompletion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCompletion.swift; sourceTree = "<group>"; };
 		991F8FE72C1680A800A134A5 /* ProgramDBRepresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramDBRepresentation.swift; sourceTree = "<group>"; };
@@ -326,6 +327,9 @@
 		99FC9E432C5EADC800DAFFAC /* XPAdditionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XPAdditionType.swift; sourceTree = "<group>"; };
 		99FC9E452C5EC1F900DAFFAC /* AnalyticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsView.swift; sourceTree = "<group>"; };
 		99FC9E472C5EC56B00DAFFAC /* RequestCustomProgramWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestCustomProgramWidget.swift; sourceTree = "<group>"; };
+		AA1234562C84567890ABC002 /* StoreKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreKitManager.swift; sourceTree = "<group>"; };
+		BB7654322C84567890FED002 /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
+		EB6D282618E90BB28B97B172 /* DesignSystem.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DesignSystem.swift; path = LevelUpFitness/Utilities/DesignSystem.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -352,6 +356,7 @@
 				99A0C8C02CA77F5000F9281A /* TrendCloudKitUtility.swift */,
 				99A0C8C22CA7917100F9281A /* ChallengeCloudKitUtility.swift */,
 				99A0C8E22CA9B0D900F9281A /* ExerciseCloudKitUtility.swift */,
+				EB6D282618E90BB28B97B172 /* DesignSystem.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -474,6 +479,7 @@
 				9953BDEB2CF2832800348AC3 /* ScheduleBarView.swift */,
 				9953BDED2CF2A25A00348AC3 /* FutureWorkoutOverlays.swift */,
 				BB7654322C84567890FED002 /* PaywallView.swift */,
+				2D2C9713A87E916F1100CFBC /* LibraryExercisePicker.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -551,6 +557,8 @@
 				99CFAAE42BEB075500EFF67E /* LevelUpFitness */,
 				99CFAAE32BEB075500EFF67E /* Products */,
 				996E6AC52C0023A9000720FC /* Frameworks */,
+				EB6D282618E90BB28B97B172 /* DesignSystem.swift */,
+				2D2C9713A87E916F1100CFBC /* LibraryExercisePicker.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -617,8 +625,6 @@
 			dependencies = (
 			);
 			name = LevelUpFitness;
-			packageProductDependencies = (
-			);
 			productName = LevelUpFitness;
 			productReference = 99CFAAE22BEB075500EFF67E /* LevelUpFitness.app */;
 			productType = "com.apple.product-type.application";
@@ -647,8 +653,6 @@
 				Base,
 			);
 			mainGroup = 99CFAAD92BEB075400EFF67E;
-			packageReferences = (
-			);
 			productRefGroup = 99CFAAE32BEB075500EFF67E /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -829,6 +833,8 @@
 				994E7DB92C026BE500BAD9E0 /* AuthCheckView.swift in Sources */,
 				AA1234562C84567890ABC001 /* StoreKitManager.swift in Sources */,
 				BB7654322C84567890FED001 /* PaywallView.swift in Sources */,
+				F5361616D19E7549FA2D164C /* DesignSystem.swift in Sources */,
+				FF22A602FCDB5D9E694972F1 /* LibraryExercisePicker.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1054,7 +1060,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
 	};
 	rootObject = 99CFAADA2BEB075500EFF67E /* Project object */;
 }

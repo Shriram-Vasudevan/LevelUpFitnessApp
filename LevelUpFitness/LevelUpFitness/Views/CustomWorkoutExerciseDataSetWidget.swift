@@ -11,8 +11,7 @@ struct CustomWorkoutExerciseDataSetWidget: View {
     @State var sectionType: ExerciseDataSectionType = .start
     @Binding var exerciseData: ExerciseData
     
-    @State var numberOfSets: String = ""
-    @State var setsFieldNotFilledOut: Bool = false
+    @State var numberOfSetsValue: Int = 3
     @State var currentExerciseDataSetIndex: Int = 0
 
     var isWeight: Bool
@@ -33,43 +32,33 @@ struct CustomWorkoutExerciseDataSetWidget: View {
     }
     
     var startView: some View {
-        VStack(spacing: 24) {
+        VStack(spacing: 32) {
             Text("Set up your exercise")
-                .font(.system(size: 20, weight: .medium, design: .default))
+                .font(AppTheme.Typography.telemetry(size: 20, weight: .bold))
+                .foregroundColor(AppTheme.Colors.textPrimary)
                 .multilineTextAlignment(.center)
             
-            VStack(alignment: .leading, spacing: 8) {
-                Text("Number of Sets")
-                    .font(.system(size: 16, weight: .light, design: .default))
-                    .foregroundColor(.secondary)
+            VStack(spacing: 24) {
+                KineticStepper(title: "Target Sets", value: $numberOfSetsValue, step: 1, unit: "sets")
                 
-                TextField("", text: $numberOfSets)
-                    .keyboardType(.numberPad)
-                    .font(.system(size: 18, weight: .medium, design: .default))
-                    .padding()
-                    .background(Color(hex: "F5F5F5"))
-                    .overlay(
-                        Rectangle()
-                            .stroke(setsFieldNotFilledOut ? Color.red : Color.clear, lineWidth: 2)
-                    )
-            }
-            
-            Button(action: {
-                if !numberOfSets.isEmpty {
-                    setsFieldNotFilledOut = false
-                    initializeExerciseData(numberOfSets: numberOfSets)
-                    sectionType = .inProgress
-                } else {
-                    setsFieldNotFilledOut = true
+                Button(action: {
+                    if numberOfSetsValue > 0 {
+                        initializeExerciseData(numberOfSets: numberOfSetsValue)
+                        sectionType = .inProgress
+                    }
+                }) {
+                    Text("Begin Sets")
+                        .font(AppTheme.Typography.telemetry(size: 16, weight: .bold))
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(AppTheme.Colors.bluePrimary)
+                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                 }
-            }) {
-                Text("Begin Sets")
-                    .font(.system(size: 16, weight: .medium, design: .default))
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color(hex: "40C4FC"))
+                .buttonStyle(KineticButtonStyle())
             }
+            .padding(20)
+            .engineeredPanel(isElevated: true)
         }
     }
     
@@ -90,14 +79,22 @@ struct CustomWorkoutExerciseDataSetWidget: View {
     }
     
     var finishedView: some View {
-        VStack(spacing: 24) {
-            Text("Exercise Complete!")
-                .font(.system(size: 20, weight: .medium, design: .default))
-            
-            Text("Great job! You've finished all your sets.")
-                .font(.system(size: 16, weight: .light, design: .default))
-                .multilineTextAlignment(.center)
-                .foregroundColor(.secondary)
+        VStack(spacing: 32) {
+            Image(systemName: "checkmark.seal.fill")
+                .font(.system(size: 64))
+                .foregroundColor(AppTheme.Colors.success)
+                .controlledGlow(isActive: true, color: AppTheme.Colors.success.opacity(0.4))
+
+            VStack(spacing: 8) {
+                Text("Exercise Complete!")
+                    .font(AppTheme.Typography.telemetry(size: 24, weight: .bold))
+                    .foregroundColor(AppTheme.Colors.textPrimary)
+                
+                Text("Great job! You've finished all your sets.")
+                    .font(AppTheme.Typography.telemetry(size: 16))
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(AppTheme.Colors.textSecondary)
+            }
             
             Button(action: {
                 self.exerciseData = ExerciseData(sets: [])
@@ -105,31 +102,24 @@ struct CustomWorkoutExerciseDataSetWidget: View {
                 
                 sectionType = .start
             }) {
-                Text("Continue")
-                    .font(.system(size: 16, weight: .medium, design: .default))
+                Text("Continue to Next Exercise")
+                    .font(AppTheme.Typography.telemetry(size: 16, weight: .bold))
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color(hex: "40C4FC"))
+                    .background(AppTheme.Colors.bluePrimary)
+                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
             }
+            .buttonStyle(KineticButtonStyle())
+            .padding(20)
+            .engineeredPanel(isElevated: true)
         }
     }
     
-    func initializeExerciseData(numberOfSets: String) {
-        guard let numSets = Int(numberOfSets) else { return }
-        self.exerciseData = ExerciseData(sets: Array(repeating: ExerciseDataSet(weight: 0, reps: 0, time: 0.0, rest: 0.0), count: numSets))
-    }
-    
-    func getExerciseTypeEnum(exerciseType: String) -> XPAdditionType {
-        switch exerciseType {
-        case "Lower Body Compound":
-            return .lowerBodyCompound
-        default:
-            return .lowerBodyCompound
-        }
+    func initializeExerciseData(numberOfSets: Int) {
+        self.exerciseData = ExerciseData(sets: Array(repeating: ExerciseDataSet(weight: 0, reps: 0, time: 0.0, rest: 0.0), count: numberOfSets))
     }
 }
-
 
 #Preview {
     CustomWorkoutExerciseDataSetWidget(exerciseData: .constant(ExerciseData(sets: [])), isWeight: false, exerciseFinished: {})

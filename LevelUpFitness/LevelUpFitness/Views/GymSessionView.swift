@@ -25,12 +25,13 @@ struct GymSessionsView: View {
     @State private var expandedExercises: Set<UUID> = []
     @State private var showPaywall = false
     @State private var showFriendRoomComposer = false
+    @State private var showGlobalRoomDirectory = false
     @State private var friendMessage: String?
     @State private var showFriendMessage = false
     
     var body: some View {
         ZStack {
-            Color(hex: "F3F5F8")
+            AppTheme.Colors.backgroundDark
                 .ignoresSafeArea()
 
             ScrollView {
@@ -88,14 +89,25 @@ struct GymSessionsView: View {
             GymSessionInfoView()
         })
         .sheet(isPresented: $showFriendRoomComposer) {
-            CreateFriendRoomSheet(context: .gym) { title, date in
+            CreateFriendRoomSheet(context: .gym) { title, date, isPublic in
                 Task {
-                    let success = await friendWorkoutManager.createRoom(context: .gym, title: title, scheduleDate: date)
+                    let success = await friendWorkoutManager.createRoom(
+                        context: .gym,
+                        title: title,
+                        scheduleDate: date,
+                        isPublic: isPublic
+                    )
                     friendMessage = success
                         ? "Friend workout room created."
                         : (friendWorkoutManager.syncErrorMessage ?? "Could not create room right now.")
                     showFriendMessage = true
                 }
+            }
+        }
+        .sheet(isPresented: $showGlobalRoomDirectory) {
+            GlobalFriendRoomDirectorySheet(initialContext: .gym) { message in
+                friendMessage = message
+                showFriendMessage = true
             }
         }
         .navigationBarBackButtonHidden()
@@ -120,11 +132,11 @@ struct GymSessionsView: View {
             HStack(alignment: .top) {
                 VStack(alignment: .leading, spacing: 6) {
                     Text("Gym Sessions")
-                        .font(.system(size: 30, weight: .bold))
+                        .font(AppTheme.Typography.telemetry(size: 30, weight: .bold))
                         .foregroundColor(.white)
 
                     Text(gymManager.currentSession == nil ? "Track every rep, revisit every win." : "Session in progress — keep the momentum going!")
-                        .font(.system(size: 15, weight: .medium))
+                        .font(AppTheme.Typography.telemetry(size: 15, weight: .medium))
                         .foregroundColor(Color.white.opacity(0.75))
                 }
 
@@ -143,7 +155,7 @@ struct GymSessionsView: View {
             HStack(spacing: 12) {
                 if gymManager.currentSession != nil {
                     Label("Active session", systemImage: "dot.radiowaves.left.and.right")
-                        .font(.system(size: 13, weight: .semibold))
+                        .font(AppTheme.Typography.telemetry(size: 13, weight: .semibold))
                         .padding(.vertical, 8)
                         .padding(.horizontal, 12)
                         .background(Color.white.opacity(0.25))
@@ -152,7 +164,7 @@ struct GymSessionsView: View {
                 }
 
                 Label("\(gymManager.gymSessions.count) logged", systemImage: "calendar")
-                    .font(.system(size: 13, weight: .medium))
+                    .font(AppTheme.Typography.telemetry(size: 13, weight: .medium))
                     .padding(.vertical, 8)
                     .padding(.horizontal, 12)
                     .background(Color.white.opacity(0.15))
@@ -162,7 +174,7 @@ struct GymSessionsView: View {
         }
         .padding(14)
         .background(
-            LinearGradient(colors: [Color(hex: "3080FF"), Color(hex: "40C4FC")], startPoint: .topLeading, endPoint: .bottomTrailing)
+            LinearGradient(colors: [AppTheme.Colors.bluePrimary, Color(hex: "40C4FC")], startPoint: .topLeading, endPoint: .bottomTrailing)
         )
         .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
         .shadow(color: Color.black.opacity(0.08), radius: 10, x: 0, y: 6)
@@ -171,10 +183,10 @@ struct GymSessionsView: View {
     private var startNewSessionView: some View {
         VStack(alignment: .leading, spacing: 18) {
             Label("Ready for your next workout?", systemImage: "figure.strengthtraining.traditional")
-                .font(.system(size: 20, weight: .semibold))
+                .font(AppTheme.Typography.telemetry(size: 20, weight: .semibold))
 
             Text("Start a fresh session to log sets, weights, and rest times in real time.")
-                .font(.system(size: 15, weight: .regular))
+                .font(AppTheme.Typography.telemetry(size: 15, weight: .regular))
                 .foregroundColor(.secondary)
 
             VStack(alignment: .leading, spacing: 12) {
@@ -182,7 +194,7 @@ struct GymSessionsView: View {
                 Label("Get instant volume, set, and rest analytics", systemImage: "chart.bar")
                 Label("Save sessions automatically when you finish", systemImage: "externaldrive")
             }
-            .font(.system(size: 14, weight: .medium))
+            .font(AppTheme.Typography.telemetry(size: 14, weight: .medium))
             .foregroundColor(.secondary)
 
             Button {
@@ -191,13 +203,13 @@ struct GymSessionsView: View {
                 HStack {
                     Spacer()
                     Label("Start new session", systemImage: "play.circle.fill")
-                        .font(.system(size: 18, weight: .semibold))
+                        .font(AppTheme.Typography.telemetry(size: 18, weight: .semibold))
                         .foregroundColor(.white)
                     Spacer()
                 }
                 .padding()
                 .background(
-                    LinearGradient(colors: [Color(hex: "40C4FC"), Color(hex: "3080FF")], startPoint: .leading, endPoint: .trailing)
+                    LinearGradient(colors: [Color(hex: "40C4FC"), AppTheme.Colors.bluePrimary], startPoint: .leading, endPoint: .trailing)
                 )
                 .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
             }
@@ -213,12 +225,12 @@ struct GymSessionsView: View {
             HStack(alignment: .center) {
                 VStack(alignment: .leading, spacing: 6) {
                     Text("Active session")
-                        .font(.system(size: 20, weight: .semibold))
+                        .font(AppTheme.Typography.telemetry(size: 20, weight: .semibold))
                         .foregroundColor(.primary)
 
                     Text(gymManager.elapsedTime)
-                        .font(.system(size: 36, weight: .bold, design: .monospaced))
-                        .foregroundColor(Color(hex: "3080FF"))
+                        .font(AppTheme.Typography.monumentalNumber(size: 36))
+                        .foregroundColor(AppTheme.Colors.bluePrimary)
                 }
 
                 Spacer()
@@ -227,7 +239,7 @@ struct GymSessionsView: View {
                     showEndSessionConfirmation = true
                 } label: {
                     Label("End", systemImage: "stop.circle")
-                        .font(.system(size: 16, weight: .semibold))
+                        .font(AppTheme.Typography.telemetry(size: 16, weight: .semibold))
                         .padding(.vertical, 10)
                         .padding(.horizontal, 18)
                         .background(Color(hex: "FF3B30"))
@@ -249,13 +261,13 @@ struct GymSessionsView: View {
                 HStack {
                     Spacer()
                     Label("Add exercise", systemImage: "plus.circle.fill")
-                        .font(.system(size: 18, weight: .semibold))
+                        .font(AppTheme.Typography.telemetry(size: 18, weight: .semibold))
                         .foregroundColor(.white)
                     Spacer()
                 }
                 .padding()
                 .background(
-                    LinearGradient(colors: [Color(hex: "3080FF"), Color(hex: "40C4FC")], startPoint: .leading, endPoint: .trailing)
+                    LinearGradient(colors: [AppTheme.Colors.bluePrimary, Color(hex: "40C4FC")], startPoint: .leading, endPoint: .trailing)
                 )
                 .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
             }
@@ -272,26 +284,26 @@ struct GymSessionsView: View {
             HStack(alignment: .center) {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Latest Session Recap")
-                        .font(.system(size: 20, weight: .bold))
+                        .font(AppTheme.Typography.telemetry(size: 20, weight: .bold))
                     Text(session.startTime.formatted(.dateTime.weekday(.wide).month().day()))
-                        .font(.system(size: 13, weight: .medium))
-                        .foregroundColor(Color(hex: "6B7280"))
+                        .font(AppTheme.Typography.telemetry(size: 13, weight: .medium))
+                        .foregroundColor(AppTheme.Colors.textSecondary)
                 }
 
                 Spacer()
 
                 VStack(alignment: .trailing, spacing: 6) {
                     Text("Most Recent")
-                        .font(.system(size: 10, weight: .bold))
-                        .foregroundColor(Color(hex: "3080FF"))
+                        .font(AppTheme.Typography.telemetry(size: 10, weight: .bold))
+                        .foregroundColor(AppTheme.Colors.bluePrimary)
                         .padding(.horizontal, 8)
                         .padding(.vertical, 4)
                         .background(Color(hex: "E8F3FF"))
                         .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
 
                     Text(formattedDuration(for: session) ?? "--")
-                        .font(.system(size: 13, weight: .semibold))
-                        .foregroundColor(Color(hex: "3080FF"))
+                        .font(AppTheme.Typography.telemetry(size: 13, weight: .semibold))
+                        .foregroundColor(AppTheme.Colors.bluePrimary)
                 }
             }
 
@@ -306,12 +318,12 @@ struct GymSessionsView: View {
                 HStack {
                     Spacer()
                     Text("Open Full Session")
-                        .font(.system(size: 14, weight: .semibold))
+                        .font(AppTheme.Typography.telemetry(size: 14, weight: .semibold))
                         .foregroundColor(.white)
                     Spacer()
                 }
                 .padding(.vertical, 11)
-                .background(Color(hex: "3080FF"))
+                .background(AppTheme.Colors.bluePrimary)
                 .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
             }
             .buttonStyle(.plain)
@@ -322,7 +334,7 @@ struct GymSessionsView: View {
             Rectangle()
                 .fill(
                     LinearGradient(
-                        colors: [Color(hex: "3080FF"), Color(hex: "40C4FC")],
+                        colors: [AppTheme.Colors.bluePrimary, Color(hex: "40C4FC")],
                         startPoint: .leading,
                         endPoint: .trailing
                     )
@@ -382,22 +394,22 @@ struct GymSessionsView: View {
 
         let content = HStack(spacing: 16) {
             Image(systemName: "trophy.fill")
-                .font(.system(size: 22))
-                .foregroundColor(Color(hex: "3080FF"))
+                .font(AppTheme.Typography.telemetry(size: 22))
+                .foregroundColor(AppTheme.Colors.bluePrimary)
                 .padding(12)
-                .background(Color(hex: "3080FF").opacity(0.12))
+                .background(AppTheme.Colors.bluePrimary.opacity(0.12))
                 .clipShape(Circle())
 
             VStack(alignment: .leading, spacing: 6) {
                 Text(context == .interactive ? "Heaviest lift so far" : "Session highlight")
-                    .font(.system(size: 15, weight: .semibold))
+                    .font(AppTheme.Typography.telemetry(size: 15, weight: .semibold))
                     .foregroundColor(.secondary)
 
                 Text(highlight.exerciseName)
-                    .font(.system(size: 17, weight: .semibold))
+                    .font(AppTheme.Typography.telemetry(size: 17, weight: .semibold))
 
                 Text("\(highlight.set.reps) reps at \(formatWeight(highlight.set.weight))")
-                    .font(.system(size: 15, weight: .medium))
+                    .font(AppTheme.Typography.telemetry(size: 15, weight: .medium))
                     .foregroundColor(.secondary)
             }
 
@@ -405,15 +417,12 @@ struct GymSessionsView: View {
 
             if context == .interactive {
                 Image(systemName: "arrow.up.right")
-                    .font(.system(size: 16, weight: .semibold))
-                    .foregroundColor(Color(hex: "3080FF"))
+                    .font(AppTheme.Typography.telemetry(size: 16, weight: .semibold))
+                    .foregroundColor(AppTheme.Colors.bluePrimary)
             }
         }
         .padding(18)
-        .background(
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .fill(Color(uiColor: .secondarySystemGroupedBackground))
-        )
+        .engineeredPanel(isElevated: false)
 
         switch context {
         case .interactive:
@@ -449,7 +458,7 @@ struct GymSessionsView: View {
 
     private func cardBackground() -> some View {
         RoundedRectangle(cornerRadius: 10, style: .continuous)
-            .fill(Color(uiColor: .systemBackground))
+            .fill(AppTheme.Colors.surfaceLight)
             .shadow(color: Color.black.opacity(0.08), radius: 10, x: 0, y: 6)
     }
 
@@ -502,11 +511,11 @@ struct GymSessionsView: View {
     private func exercisesListView(_ currentSession: GymSession) -> some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Logged exercises")
-                .font(.system(size: 18, weight: .semibold))
+                .font(AppTheme.Typography.telemetry(size: 18, weight: .semibold))
 
             if currentSession.loggedExercises.isEmpty {
                 Text("Your sets will appear here as soon as you add them.")
-                    .font(.system(size: 15, weight: .regular))
+                    .font(AppTheme.Typography.telemetry(size: 15, weight: .regular))
                     .foregroundColor(.secondary)
             } else {
                 if !currentSession.programExercises.isEmpty {
@@ -523,16 +532,13 @@ struct GymSessionsView: View {
             }
         }
         .padding(20)
-        .background(
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .fill(Color(uiColor: .secondarySystemGroupedBackground))
-        )
+        .engineeredPanel(isElevated: false)
     }
 
     private func exerciseSection(title: String, records: [ExerciseRecord]) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             Text(title)
-                .font(.system(size: 16, weight: .medium))
+                .font(AppTheme.Typography.telemetry(size: 16, weight: .medium))
                 .foregroundColor(.secondary)
                 .padding(.top, 4)
 
@@ -557,24 +563,24 @@ struct GymSessionsView: View {
                 navigateToExerciseView = true
             } label: {
                 Label("View detailed log", systemImage: "arrow.up.right")
-                    .font(.system(size: 14, weight: .semibold))
+                    .font(AppTheme.Typography.telemetry(size: 14, weight: .semibold))
             }
             .buttonStyle(.borderless)
             .padding(.top, 4)
         } label: {
             HStack(alignment: .center, spacing: 16) {
                 Image(systemName: "figure.strengthtraining.traditional")
-                    .font(.system(size: 22))
+                    .font(AppTheme.Typography.telemetry(size: 22))
                     .foregroundColor(.white)
                     .frame(width: 48, height: 48)
                     .background(
-                        LinearGradient(colors: [Color(hex: "3080FF"), Color(hex: "40C4FC")], startPoint: .topLeading, endPoint: .bottomTrailing)
+                        LinearGradient(colors: [AppTheme.Colors.bluePrimary, Color(hex: "40C4FC")], startPoint: .topLeading, endPoint: .bottomTrailing)
                     )
                     .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
 
                 VStack(alignment: .leading, spacing: 6) {
                     Text(record.exerciseInfo.exerciseName)
-                        .font(.system(size: 16, weight: .semibold))
+                        .font(AppTheme.Typography.telemetry(size: 16, weight: .semibold))
                         .foregroundColor(.primary)
 
                     HStack(spacing: 8) {
@@ -596,11 +602,7 @@ struct GymSessionsView: View {
         .accentColor(.primary)
         .padding(.horizontal, 16)
         .padding(.vertical, 4)
-        .background(
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .fill(Color(uiColor: .systemBackground))
-                .shadow(color: Color.black.opacity(0.05), radius: 6, x: 0, y: 4)
-        )
+        .engineeredPanel(isElevated: true)
     }
 
     private func binding(for record: ExerciseRecord) -> Binding<Bool> {
@@ -628,10 +630,10 @@ struct GymSessionsView: View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Text("Set \(index + 1)")
-                    .font(.system(size: 15, weight: .semibold))
+                    .font(AppTheme.Typography.telemetry(size: 15, weight: .semibold))
                 Spacer()
                 Text("\(set.reps) reps")
-                    .font(.system(size: 15, weight: .semibold))
+                    .font(AppTheme.Typography.telemetry(size: 15, weight: .semibold))
             }
 
             HStack(spacing: 8) {
@@ -652,14 +654,14 @@ struct GymSessionsView: View {
     private func metricTag(icon: String, text: String) -> some View {
         HStack(spacing: 4) {
             Image(systemName: icon)
-                .font(.system(size: 11, weight: .medium))
+                .font(AppTheme.Typography.telemetry(size: 11, weight: .medium))
             Text(text)
-                .font(.system(size: 11, weight: .semibold))
+                .font(AppTheme.Typography.telemetry(size: 11, weight: .semibold))
         }
-        .foregroundColor(Color(hex: "3080FF"))
+        .foregroundColor(AppTheme.Colors.bluePrimary)
         .padding(.vertical, 4)
         .padding(.horizontal, 8)
-        .background(Color(hex: "3080FF").opacity(0.12))
+        .background(AppTheme.Colors.bluePrimary.opacity(0.12))
         .clipShape(RoundedRectangle(cornerRadius: 7, style: .continuous))
     }
 
@@ -669,7 +671,7 @@ struct GymSessionsView: View {
         return VStack(alignment: .leading, spacing: 10) {
             HStack {
                 Text("Train With Friends")
-                    .font(.system(size: 20, weight: .semibold))
+                    .font(AppTheme.Typography.telemetry(size: 20, weight: .semibold))
                 Spacer()
                 Button {
                     Task {
@@ -677,51 +679,67 @@ struct GymSessionsView: View {
                     }
                 } label: {
                     Image(systemName: "arrow.clockwise")
-                        .font(.system(size: 13, weight: .bold))
-                        .foregroundColor(Color(hex: "3080FF"))
+                        .font(AppTheme.Typography.telemetry(size: 13, weight: .bold))
+                        .foregroundColor(AppTheme.Colors.bluePrimary)
                         .frame(width: 28, height: 28)
                         .background(Color(hex: "E8F3FF"))
                         .clipShape(RoundedRectangle(cornerRadius: 7, style: .continuous))
                 }
                 .buttonStyle(.plain)
+                Button("Global") {
+                    showGlobalRoomDirectory = true
+                }
+                .font(AppTheme.Typography.telemetry(size: 13, weight: .semibold))
+                .foregroundColor(AppTheme.Colors.bluePrimary)
                 Button("Create") {
                     showFriendRoomComposer = true
                 }
-                .font(.system(size: 13, weight: .semibold))
-                .foregroundColor(Color(hex: "3080FF"))
+                .font(AppTheme.Typography.telemetry(size: 13, weight: .semibold))
+                .foregroundColor(AppTheme.Colors.bluePrimary)
             }
 
             if rooms.isEmpty {
-                Text("No gym friend sessions yet. Create one to start training together.")
-                    .font(.system(size: 14, weight: .medium))
+                Text("No gym friend sessions yet. Create one, then share the room code or join from the global directory.")
+                    .font(AppTheme.Typography.telemetry(size: 14, weight: .medium))
                     .foregroundColor(.secondary)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(10)
-                    .background(Color(uiColor: .secondarySystemGroupedBackground))
+                    .background(AppTheme.Colors.surfaceLight)
                     .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
             } else {
                 ForEach(rooms) { room in
                     HStack(spacing: 12) {
                         VStack(alignment: .leading, spacing: 4) {
                             Text(room.title)
-                                .font(.system(size: 15, weight: .semibold))
-                                .foregroundColor(Color(hex: "111827"))
+                                .font(AppTheme.Typography.telemetry(size: 15, weight: .semibold))
+                                .foregroundColor(AppTheme.Colors.textPrimary)
                             Text(room.scheduleLabel)
-                                .font(.system(size: 13, weight: .medium))
+                                .font(AppTheme.Typography.telemetry(size: 13, weight: .medium))
                                 .foregroundColor(.secondary)
                             HStack(spacing: 6) {
                                 Text("\(room.participantCount) athletes")
+                                Text("Code \(room.roomCode)")
+                                Text(room.contextLabel)
                                 if room.hostedByCurrentUser {
                                     Text("Host")
-                                        .font(.system(size: 10, weight: .bold))
+                                        .font(AppTheme.Typography.telemetry(size: 10, weight: .bold))
                                         .padding(.horizontal, 6)
                                         .padding(.vertical, 2)
                                         .background(Color(hex: "E8F3FF"))
                                         .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
                                 }
+                                if room.isPublic {
+                                    Text("Public")
+                                        .font(AppTheme.Typography.telemetry(size: 10, weight: .bold))
+                                        .foregroundColor(Color(hex: "0F766E"))
+                                        .padding(.horizontal, 6)
+                                        .padding(.vertical, 2)
+                                        .background(Color(hex: "DFF8F4"))
+                                        .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
+                                }
                             }
-                            .font(.system(size: 12, weight: .semibold))
-                            .foregroundColor(Color(hex: "3080FF"))
+                            .font(AppTheme.Typography.telemetry(size: 12, weight: .semibold))
+                            .foregroundColor(AppTheme.Colors.bluePrimary)
                         }
 
                         Spacer()
@@ -735,15 +753,15 @@ struct GymSessionsView: View {
                                 showFriendMessage = true
                             }
                         }
-                        .font(.system(size: 13, weight: .semibold))
-                        .foregroundColor(room.joined ? Color(hex: "3080FF") : .white)
+                        .font(AppTheme.Typography.telemetry(size: 13, weight: .semibold))
+                        .foregroundColor(room.joined ? AppTheme.Colors.bluePrimary : .white)
                         .padding(.horizontal, 10)
                         .padding(.vertical, 8)
-                        .background(room.joined ? Color(hex: "E8F3FF") : Color(hex: "3080FF"))
+                        .background(room.joined ? Color(hex: "E8F3FF") : AppTheme.Colors.bluePrimary)
                         .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
                     }
                     .padding(10)
-                    .background(Color(uiColor: .secondarySystemGroupedBackground))
+                    .background(AppTheme.Colors.surfaceLight)
                     .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
                 }
             }
@@ -756,7 +774,7 @@ struct GymSessionsView: View {
         VStack(alignment: .leading, spacing: 16) {
             HStack {
                 Text("Past sessions")
-                    .font(.system(size: 20, weight: .semibold))
+                    .font(AppTheme.Typography.telemetry(size: 20, weight: .semibold))
                 Spacer()
                 Button {
                     if storeKitManager.effectiveIsPremiumUnlocked {
@@ -768,15 +786,15 @@ struct GymSessionsView: View {
                 } label: {
                     Label("See all", systemImage: "chevron.right")
                         .labelStyle(.titleAndIcon)
-                        .font(.system(size: 14, weight: .semibold))
-                        .foregroundColor(Color(hex: "3080FF"))
+                        .font(AppTheme.Typography.telemetry(size: 14, weight: .semibold))
+                        .foregroundColor(AppTheme.Colors.bluePrimary)
                 }
                 .buttonStyle(.plain)
             }
 
             if gymManager.gymSessions.isEmpty {
                 Text("Complete a workout to start building your history.")
-                    .font(.system(size: 15, weight: .regular))
+                    .font(AppTheme.Typography.telemetry(size: 15, weight: .regular))
                     .foregroundColor(.secondary)
             } else {
                 ForEach(gymManager.loadAllGymSessions().prefix(3)) { session in
@@ -797,14 +815,14 @@ struct GymSessionsView: View {
     private var gymStatsView: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("My trends")
-                .font(.system(size: 20, weight: .semibold))
+                .font(AppTheme.Typography.telemetry(size: 20, weight: .semibold))
 
             if storeKitManager.effectiveIsPremiumUnlocked {
                 if gymManager.gymSessions.totalNumberOfSessions >= 2 {
                     GymSessionsStatsView()
                 } else {
                     Text("Trends will appear once 2 sessions have been completed")
-                        .font(.system(size: 15, weight: .medium))
+                        .font(AppTheme.Typography.telemetry(size: 15, weight: .medium))
                         .foregroundColor(.secondary)
                 }
             } else {
@@ -818,10 +836,10 @@ struct GymSessionsView: View {
     private var premiumUpsellCard: some View {
         VStack(alignment: .leading, spacing: 12) {
             Label("Premium analytics", systemImage: "sparkles")
-                .font(.system(size: 18, weight: .semibold))
+                .font(AppTheme.Typography.telemetry(size: 18, weight: .semibold))
 
             Text("Unlock trends for volume, rest, top sets, and more with LevelUp Premium.")
-                .font(.system(size: 15, weight: .medium))
+                .font(AppTheme.Typography.telemetry(size: 15, weight: .medium))
                 .foregroundColor(.secondary)
 
             Button {
@@ -829,11 +847,11 @@ struct GymSessionsView: View {
                 showPaywall = true
             } label: {
                 Text("See what's included")
-                    .font(.system(size: 15, weight: .semibold))
+                    .font(AppTheme.Typography.telemetry(size: 15, weight: .semibold))
                     .foregroundColor(.white)
                     .padding(.vertical, 10)
                     .padding(.horizontal, 16)
-                    .background(Color(hex: "3080FF"))
+                    .background(AppTheme.Colors.bluePrimary)
                     .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
             }
             .buttonStyle(.plain)
@@ -849,10 +867,10 @@ struct GymSessionsView: View {
             HStack(alignment: .firstTextBaseline) {
                 VStack(alignment: .leading, spacing: 6) {
                     Text(session.startTime, style: .date)
-                        .font(.system(size: 17, weight: .semibold))
+                        .font(AppTheme.Typography.telemetry(size: 17, weight: .semibold))
 
                     Text(session.startTime, style: .time)
-                        .font(.system(size: 14, weight: .medium))
+                        .font(AppTheme.Typography.telemetry(size: 14, weight: .medium))
                         .foregroundColor(.secondary)
                 }
 
@@ -867,11 +885,7 @@ struct GymSessionsView: View {
             highlightView(for: session, context: .informational)
         }
         .padding(20)
-        .background(
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .fill(Color(uiColor: .systemBackground))
-                .shadow(color: Color.black.opacity(0.05), radius: 10, x: 0, y: 6)
-        )
+        .engineeredPanel(isElevated: true)
     }
 
 }
@@ -891,12 +905,12 @@ struct SessionMetricChip: View {
         VStack(alignment: .leading, spacing: 6) {
             HStack(spacing: 6) {
                 Image(systemName: metric.iconName)
-                    .font(.system(size: 12, weight: .semibold))
-                    .foregroundColor(Color(hex: "3080FF"))
+                    .font(AppTheme.Typography.telemetry(size: 12, weight: .semibold))
+                    .foregroundColor(AppTheme.Colors.bluePrimary)
                     .frame(width: 16, height: 16)
 
                 Text(metric.title)
-                    .font(.system(size: 12, weight: .semibold))
+                    .font(AppTheme.Typography.telemetry(size: 12, weight: .semibold))
                     .foregroundColor(.secondary)
             }
 
@@ -909,7 +923,7 @@ struct SessionMetricChip: View {
         .frame(minWidth: isProminent ? 140 : nil, alignment: .leading)
         .background(
             RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .fill(isProminent ? Color(uiColor: .systemBackground) : Color(uiColor: .secondarySystemGroupedBackground))
+                .fill(isProminent ? AppTheme.Colors.surfaceLight : AppTheme.Colors.surfaceLight)
         )
         .shadow(color: isProminent ? Color.black.opacity(0.08) : Color.clear, radius: 10, x: 0, y: 6)
     }
@@ -931,7 +945,7 @@ struct GymSessionExerciseView: View {
 
                 VStack(alignment: .leading, spacing: 16) {
                     Text("Logged sets")
-                        .font(.system(size: 18, weight: .semibold))
+                        .font(AppTheme.Typography.telemetry(size: 18, weight: .semibold))
 
                     ForEach(Array(exerciseRecord.exerciseData.sets.enumerated()), id: \.offset) { index, set in
                         setCard(for: set, index: index)
@@ -940,38 +954,34 @@ struct GymSessionExerciseView: View {
             }
             .padding(16)
         }
-        .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())
+        .background(AppTheme.Colors.backgroundDark.ignoresSafeArea())
         .navigationTitle(exerciseTitle)
     }
 
     private var exerciseHeader: some View {
         HStack(alignment: .center, spacing: 18) {
             Image(systemName: "figure.strengthtraining.traditional")
-                .font(.system(size: 28))
+                .font(AppTheme.Typography.telemetry(size: 28))
                 .foregroundColor(.white)
                 .padding(22)
                 .background(
-                    LinearGradient(colors: [Color(hex: "3080FF"), Color(hex: "40C4FC")], startPoint: .topLeading, endPoint: .bottomTrailing)
+                    LinearGradient(colors: [AppTheme.Colors.bluePrimary, Color(hex: "40C4FC")], startPoint: .topLeading, endPoint: .bottomTrailing)
                 )
                 .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
 
             VStack(alignment: .leading, spacing: 6) {
                 Text(exerciseTitle)
-                    .font(.system(size: 26, weight: .bold))
+                    .font(AppTheme.Typography.telemetry(size: 26, weight: .bold))
 
                 Text("\(exerciseRecord.totalSets) sets • \(exerciseRecord.totalReps) reps")
-                    .font(.system(size: 15, weight: .medium))
+                    .font(AppTheme.Typography.telemetry(size: 15, weight: .medium))
                     .foregroundColor(.secondary)
             }
 
             Spacer()
         }
         .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .fill(Color(uiColor: .systemBackground))
-                .shadow(color: Color.black.opacity(0.08), radius: 12, x: 0, y: 8)
-        )
+        .engineeredPanel(isElevated: true)
     }
 
     private var exerciseMetrics: [SessionMetric] {
@@ -996,12 +1006,12 @@ struct GymSessionExerciseView: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Text("Set \(index + 1)")
-                    .font(.system(size: 16, weight: .semibold))
+                    .font(AppTheme.Typography.telemetry(size: 16, weight: .semibold))
 
                 Spacer()
 
                 Text("\(set.reps) reps")
-                    .font(.system(size: 16, weight: .semibold))
+                    .font(AppTheme.Typography.telemetry(size: 16, weight: .semibold))
             }
 
             HStack(spacing: 10) {
@@ -1018,24 +1028,20 @@ struct GymSessionExerciseView: View {
         }
         .padding(18)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .fill(Color(uiColor: .systemBackground))
-                .shadow(color: Color.black.opacity(0.05), radius: 6, x: 0, y: 4)
-        )
+        .engineeredPanel(isElevated: true)
     }
 
     private func chip(icon: String, text: String) -> some View {
         HStack(spacing: 6) {
             Image(systemName: icon)
-                .font(.system(size: 12, weight: .semibold))
+                .font(AppTheme.Typography.telemetry(size: 12, weight: .semibold))
             Text(text)
-                .font(.system(size: 12, weight: .semibold))
+                .font(AppTheme.Typography.telemetry(size: 12, weight: .semibold))
         }
-        .foregroundColor(Color(hex: "3080FF"))
+        .foregroundColor(AppTheme.Colors.bluePrimary)
         .padding(.vertical, 6)
         .padding(.horizontal, 10)
-        .background(Color(hex: "3080FF").opacity(0.12))
+        .background(AppTheme.Colors.bluePrimary.opacity(0.12))
         .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
     }
 
@@ -1086,12 +1092,12 @@ struct EndSessionConfirmationView: View {
             
             VStack(spacing: 24) {
                 Text("End Gym Session")
-                    .font(.system(size: 22, weight: .bold))
-                    .foregroundColor(Color(hex: "111827"))
+                    .font(AppTheme.Typography.telemetry(size: 22, weight: .bold))
+                    .foregroundColor(AppTheme.Colors.textPrimary)
                 
                 Text("Are you sure you want to end your gym session?")
-                    .font(.system(size: 15, weight: .medium))
-                    .foregroundColor(Color(hex: "6B7280"))
+                    .font(AppTheme.Typography.telemetry(size: 15, weight: .medium))
+                    .foregroundColor(AppTheme.Colors.textSecondary)
                     .multilineTextAlignment(.center)
                 
                 HStack(spacing: 16) {
@@ -1101,7 +1107,7 @@ struct EndSessionConfirmationView: View {
                         }
                     }) {
                         Text("Cancel")
-                            .font(.system(size: 16, weight: .semibold))
+                            .font(AppTheme.Typography.telemetry(size: 16, weight: .semibold))
                             .foregroundColor(Color(hex: "4B5563"))
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 12)
@@ -1116,11 +1122,11 @@ struct EndSessionConfirmationView: View {
                         }
                     }) {
                         Text("End Session")
-                            .font(.system(size: 16, weight: .semibold))
+                            .font(AppTheme.Typography.telemetry(size: 16, weight: .semibold))
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 12)
-                            .background(Color(hex: "3080FF"))
+                            .background(AppTheme.Colors.bluePrimary)
                             .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
                     }
                 }
@@ -1165,7 +1171,7 @@ struct PastGymSessionDetailView: View {
                 VStack (spacing: 6) {
                     HStack {
                         Text("Session Stats")
-                            .font(.system(size: 20, weight: .medium))
+                            .font(AppTheme.Typography.telemetry(size: 20, weight: .medium))
                             .foregroundColor(.black)
                         
                         Spacer()
@@ -1183,12 +1189,12 @@ struct PastGymSessionDetailView: View {
     private var headerView: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Session Details")
-                .font(.system(size: 24, weight: .medium, design: .default))
-                .foregroundColor(Color(hex: "333333"))
+                .font(AppTheme.Typography.telemetry(size: 24, weight: .medium))
+                .foregroundColor(AppTheme.Colors.textPrimary)
             
             Text("Review your past workout")
-                .font(.system(size: 16, weight: .light))
-                .foregroundColor(Color(hex: "666666"))
+                .font(AppTheme.Typography.telemetry(size: 16, weight: .light))
+                .foregroundColor(AppTheme.Colors.textSecondary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
@@ -1198,22 +1204,22 @@ struct PastGymSessionDetailView: View {
             HStack {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Gym Session")
-                        .font(.system(size: 20, weight: .medium))
-                        .foregroundColor(Color(hex: "333333"))
+                        .font(AppTheme.Typography.telemetry(size: 20, weight: .medium))
+                        .foregroundColor(AppTheme.Colors.textPrimary)
                     
                     Text(session.startTime, style: .date)
-                        .font(.system(size: 16, weight: .light))
-                        .foregroundColor(Color(hex: "666666"))
+                        .font(AppTheme.Typography.telemetry(size: 16, weight: .light))
+                        .foregroundColor(AppTheme.Colors.textSecondary)
                 }
                 
                 Spacer()
                 
                 Image(systemName: "clock")
-                    .font(.system(size: 24))
+                    .font(AppTheme.Typography.telemetry(size: 24))
                     .foregroundColor(.white)
                     .frame(width: 50, height: 50)
                     .background(
-                        LinearGradient(gradient: Gradient(colors: [Color(hex: "40C4FC"), Color(hex: "3080FF")]), startPoint: .topLeading, endPoint: .bottomTrailing)
+                        LinearGradient(gradient: Gradient(colors: [Color(hex: "40C4FC"), AppTheme.Colors.bluePrimary]), startPoint: .topLeading, endPoint: .bottomTrailing)
                     )
             }
             
@@ -1232,28 +1238,28 @@ struct PastGymSessionDetailView: View {
             }
         }
         .padding()
-        .background(Color(hex: "F5F5F5"))
+        .background(AppTheme.Colors.surfaceLight)
     }
     
     private func timeInfoView(title: String, time: Date) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(title)
-                .font(.system(size: 14, weight: .light))
-                .foregroundColor(Color(hex: "666666"))
+                .font(AppTheme.Typography.telemetry(size: 14, weight: .light))
+                .foregroundColor(AppTheme.Colors.textSecondary)
             Text(time, style: .time)
-                .font(.system(size: 16, weight: .medium))
-                .foregroundColor(Color(hex: "333333"))
+                .font(AppTheme.Typography.telemetry(size: 16, weight: .medium))
+                .foregroundColor(AppTheme.Colors.textPrimary)
         }
     }
     
     private func infoView(title: String, value: String) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(title)
-                .font(.system(size: 14, weight: .light))
-                .foregroundColor(Color(hex: "666666"))
+                .font(AppTheme.Typography.telemetry(size: 14, weight: .light))
+                .foregroundColor(AppTheme.Colors.textSecondary)
             Text(value)
-                .font(.system(size: 16, weight: .medium))
-                .foregroundColor(Color(hex: "333333"))
+                .font(AppTheme.Typography.telemetry(size: 16, weight: .medium))
+                .foregroundColor(AppTheme.Colors.textPrimary)
         }
     }
     
@@ -1261,7 +1267,7 @@ struct PastGymSessionDetailView: View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Text("Completed Exercises")
-                    .font(.system(size: 20, weight: .medium))
+                    .font(AppTheme.Typography.telemetry(size: 20, weight: .medium))
                     .foregroundColor(.black)
                 
                 Spacer()
@@ -1271,33 +1277,33 @@ struct PastGymSessionDetailView: View {
                 exerciseWidget(for: exerciseRecord)
             }
         }
-//        .background(Color(hex: "F5F5F5"))
+//        .background(AppTheme.Colors.surfaceLight)
     }
     
     private func exerciseWidget(for exerciseRecord: ExerciseRecord) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(spacing: 16) {
                 Image(systemName: "figure.walk")
-                    .font(.system(size: 24))
+                    .font(AppTheme.Typography.telemetry(size: 24))
                     .foregroundColor(.white)
                     .frame(width: 50, height: 50)
                     .background(
-                        LinearGradient(gradient: Gradient(colors: [Color(hex: "40C4FC"), Color(hex: "3080FF")]), startPoint: .topLeading, endPoint: .bottomTrailing)
+                        LinearGradient(gradient: Gradient(colors: [Color(hex: "40C4FC"), AppTheme.Colors.bluePrimary]), startPoint: .topLeading, endPoint: .bottomTrailing)
                     )
 
                 VStack(alignment: .leading, spacing: 4) {
                     switch exerciseRecord.exerciseInfo {
                         case .programExercise(let programExercise):
                             Text(programExercise.name)
-                                .font(.system(size: 18, weight: .medium))
+                                .font(AppTheme.Typography.telemetry(size: 18, weight: .medium))
                         case .libraryExercise(let libraryExercise):
                             Text(libraryExercise.name)
-                                .font(.system(size: 18, weight: .medium))
+                                .font(AppTheme.Typography.telemetry(size: 18, weight: .medium))
                     }
 
                     Text("\(exerciseRecord.exerciseData.sets.count) sets")
-                        .font(.system(size: 14, weight: .light))
-                        .foregroundColor(Color(hex: "666666"))
+                        .font(AppTheme.Typography.telemetry(size: 14, weight: .light))
+                        .foregroundColor(AppTheme.Colors.textSecondary)
                 }
 
                 Spacer()
@@ -1306,24 +1312,24 @@ struct PastGymSessionDetailView: View {
             ForEach(Array(exerciseRecord.exerciseData.sets.enumerated()), id: \.offset) { index, set in
                 HStack {
                     Text("Set \(index + 1)")
-                        .font(.system(size: 14, weight: .light))
-                        .foregroundColor(Color(hex: "666666"))
+                        .font(AppTheme.Typography.telemetry(size: 14, weight: .light))
+                        .foregroundColor(AppTheme.Colors.textSecondary)
                     Spacer()
                     Text("\(set.reps) reps • \(set.weight) lbs")
-                        .font(.system(size: 14, weight: .medium))
-                        .foregroundColor(Color(hex: "333333"))
+                        .font(AppTheme.Typography.telemetry(size: 14, weight: .medium))
+                        .foregroundColor(AppTheme.Colors.textPrimary)
                 }
                 .padding(.vertical, 4)
             }
         }
         .padding()
-        .background(Color(hex: "F5F5F5"))
+        .background(AppTheme.Colors.surfaceLight)
     }
     
     private var backButton: some View {
         Button(action: { dismiss() }) {
             Image(systemName: "arrow.left")
-                .font(.system(size: 20, weight: .medium))
+                .font(AppTheme.Typography.telemetry(size: 20, weight: .medium))
                 .foregroundColor(Color(hex: "40C4FC"))
                 .frame(width: 40, height: 40)
         }
@@ -1363,8 +1369,8 @@ struct AllPastGymSessionsView: View {
                     header
 
                     Image(systemName: "lock.rectangle.stack")
-                        .font(.system(size: 48))
-                        .foregroundColor(Color(hex: "3080FF"))
+                        .font(AppTheme.Typography.telemetry(size: 48))
+                        .foregroundColor(AppTheme.Colors.bluePrimary)
 
                     Text("Full history is a Premium feature")
                         .font(.title3.weight(.semibold))
@@ -1384,7 +1390,7 @@ struct AllPastGymSessionsView: View {
                             .foregroundColor(.white)
                             .padding(.horizontal, 24)
                             .padding(.vertical, 12)
-                            .background(Color(hex: "3080FF"))
+                            .background(AppTheme.Colors.bluePrimary)
                             .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
                     }
                 }
@@ -1392,7 +1398,7 @@ struct AllPastGymSessionsView: View {
                 .padding(16)
             }
         }
-        .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())
+        .background(AppTheme.Colors.backgroundDark.ignoresSafeArea())
         .navigationDestination(isPresented: $navigateToPastSessionDetailView) {
             if let pastSession = selectedPastSession {
                 PastGymSessionDetailView(session: pastSession)
@@ -1413,17 +1419,17 @@ struct AllPastGymSessionsView: View {
                 dismiss()
             } label: {
                 Image(systemName: "chevron.left")
-                    .font(.system(size: 18, weight: .semibold))
-                    .foregroundColor(Color(hex: "3080FF"))
+                    .font(AppTheme.Typography.telemetry(size: 18, weight: .semibold))
+                    .foregroundColor(AppTheme.Colors.bluePrimary)
                     .padding(10)
-                    .background(Color(hex: "3080FF").opacity(0.1))
+                    .background(AppTheme.Colors.bluePrimary.opacity(0.1))
                     .clipShape(Circle())
             }
 
             Spacer()
 
             Text("Past sessions")
-                .font(.system(size: 22, weight: .bold))
+                .font(AppTheme.Typography.telemetry(size: 22, weight: .bold))
                 .foregroundColor(.primary)
 
             Spacer()
@@ -1438,10 +1444,10 @@ struct AllPastGymSessionsView: View {
             HStack(alignment: .firstTextBaseline) {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(session.startTime, style: .date)
-                        .font(.system(size: 18, weight: .semibold))
+                        .font(AppTheme.Typography.telemetry(size: 18, weight: .semibold))
 
                     Text(session.startTime, style: .time)
-                        .font(.system(size: 14, weight: .medium))
+                        .font(AppTheme.Typography.telemetry(size: 14, weight: .medium))
                         .foregroundColor(.secondary)
                 }
 
@@ -1462,11 +1468,7 @@ struct AllPastGymSessionsView: View {
             }
         }
         .padding(20)
-        .background(
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .fill(Color(uiColor: .systemBackground))
-                .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 4)
-        )
+        .engineeredPanel(isElevated: true)
     }
 
     private func sessionMetricData(for session: GymSession) -> [SessionMetric] {
@@ -1487,32 +1489,29 @@ struct AllPastGymSessionsView: View {
     private func highlightRow(for highlight: (exerciseName: String, set: ExerciseDataSet)) -> some View {
         HStack(spacing: 14) {
             Image(systemName: "trophy.fill")
-                .font(.system(size: 20))
-                .foregroundColor(Color(hex: "3080FF"))
+                .font(AppTheme.Typography.telemetry(size: 20))
+                .foregroundColor(AppTheme.Colors.bluePrimary)
                 .padding(12)
-                .background(Color(hex: "3080FF").opacity(0.12))
+                .background(AppTheme.Colors.bluePrimary.opacity(0.12))
                 .clipShape(Circle())
 
             VStack(alignment: .leading, spacing: 4) {
                 Text("Session highlight")
-                    .font(.system(size: 14, weight: .semibold))
+                    .font(AppTheme.Typography.telemetry(size: 14, weight: .semibold))
                     .foregroundColor(.secondary)
 
                 Text(highlight.exerciseName)
-                    .font(.system(size: 16, weight: .semibold))
+                    .font(AppTheme.Typography.telemetry(size: 16, weight: .semibold))
 
                 Text("\(highlight.set.reps) reps @ \(highlight.set.weight) lb")
-                    .font(.system(size: 14, weight: .medium))
+                    .font(AppTheme.Typography.telemetry(size: 14, weight: .medium))
                     .foregroundColor(.secondary)
             }
 
             Spacer()
         }
         .padding(16)
-        .background(
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .fill(Color(uiColor: .secondarySystemGroupedBackground))
-        )
+        .engineeredPanel(isElevated: false)
     }
 
     private func formatDuration(_ duration: TimeInterval) -> String {
@@ -1555,7 +1554,7 @@ struct AddExerciseView: View {
                     dismiss()
                 }) {
                     Image(systemName: "arrow.left")
-                        .font(.system(size: 20, weight: .medium))
+                        .font(AppTheme.Typography.telemetry(size: 20, weight: .medium))
                         .foregroundColor(Color(hex: "40C4FC"))
                 }
                 Spacer()
@@ -1564,7 +1563,7 @@ struct AddExerciseView: View {
 
             HStack {
                 Text("Add Exercise")
-                    .font(.system(size: 24, weight: .bold))
+                    .font(AppTheme.Typography.telemetry(size: 24, weight: .bold))
                     .padding(.top, 8)
                 
                 Spacer()
@@ -1572,9 +1571,9 @@ struct AddExerciseView: View {
             .padding(.horizontal)
 
             TextField("Exercise Name", text: $exerciseName)
-                .font(.system(size: 18, weight: .medium))
+                .font(AppTheme.Typography.telemetry(size: 18, weight: .medium))
                 .padding()
-                .background(Color(hex: "F5F5F5"))
+                .background(AppTheme.Colors.surfaceLight)
 //                .cornerRadius(8)
                 .padding(.horizontal)
 
@@ -1583,7 +1582,7 @@ struct AddExerciseView: View {
                     VStack(alignment: .leading, spacing: 12) {
                         HStack {
                             Text("Set \(index + 1)")
-                                .font(.system(size: 18, weight: .medium))
+                                .font(AppTheme.Typography.telemetry(size: 18, weight: .medium))
                                 .foregroundColor(.black)
 
                             
@@ -1595,9 +1594,9 @@ struct AddExerciseView: View {
                                 } label: {
                                     Image(systemName: "plus")
                                         .foregroundColor(.black)
-                                        .font(.system(size: 20))
+                                        .font(AppTheme.Typography.telemetry(size: 20))
                                         .padding(7)
-                                        .background(Circle().fill(Color(hex: "F5F5F5")))
+                                        .background(Circle().fill(AppTheme.Colors.surfaceLight))
                                 }
                             } else {
                                 Button {
@@ -1605,7 +1604,7 @@ struct AddExerciseView: View {
                                 } label: {
                                     Image(systemName: "minus")
                                         .foregroundColor(.white)
-                                        .font(.system(size: 20))
+                                        .font(AppTheme.Typography.telemetry(size: 20))
                                         .padding(7)
                                         .background(Circle().fill(Color.red))
                                 }
@@ -1631,7 +1630,7 @@ struct AddExerciseView: View {
                 dismiss()
             }) {
                 Text("Add Exercise")
-                    .font(.system(size: 16, weight: .medium))
+                    .font(AppTheme.Typography.telemetry(size: 16, weight: .medium))
                     .foregroundColor(.white)
                     .padding()
                     .frame(maxWidth: .infinity)
@@ -1661,14 +1660,14 @@ struct AddExerciseView: View {
     private func inputField(title: String, value: Binding<Int>, unit: String) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(title)
-                .font(.system(size: 14, weight: .light))
+                .font(AppTheme.Typography.telemetry(size: 14, weight: .light))
                 .foregroundColor(.secondary)
             HStack {
                 TextField("0", value: value, formatter: NumberFormatter())
                     .keyboardType(.numberPad)
-                    .font(.system(size: 18, weight: .medium))
+                    .font(AppTheme.Typography.telemetry(size: 18, weight: .medium))
                 Text(unit)
-                    .font(.system(size: 14, weight: .light))
+                    .font(AppTheme.Typography.telemetry(size: 14, weight: .light))
                     .foregroundColor(.secondary)
             }
             .padding(.vertical, 8)
@@ -1681,14 +1680,14 @@ struct AddExerciseView: View {
     private func inputField(title: String, value: Binding<Double>, unit: String) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(title)
-                .font(.system(size: 14, weight: .light))
+                .font(AppTheme.Typography.telemetry(size: 14, weight: .light))
                 .foregroundColor(.secondary)
             HStack {
                 TextField("0", value: value, formatter: NumberFormatter())
                     .keyboardType(.decimalPad)
-                    .font(.system(size: 18, weight: .medium))
+                    .font(AppTheme.Typography.telemetry(size: 18, weight: .medium))
                 Text(unit)
-                    .font(.system(size: 14, weight: .light))
+                    .font(AppTheme.Typography.telemetry(size: 14, weight: .light))
                     .foregroundColor(.secondary)
             }
             .padding(.vertical, 8)
@@ -1708,7 +1707,7 @@ struct GymSessionInfoView: View {
                 Spacer()
                 Button(action: { dismiss() }) {
                     Image(systemName: "xmark.circle.fill")
-                        .font(.system(size: 26))
+                        .font(AppTheme.Typography.telemetry(size: 26))
                         .foregroundColor(Color(hex: "CCCCCC"))
                 }
                 .padding()
@@ -1717,7 +1716,7 @@ struct GymSessionInfoView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 24) {
                     Text("Mastering gym sessions")
-                        .font(.system(size: 30, weight: .bold))
+                        .font(AppTheme.Typography.telemetry(size: 30, weight: .bold))
                         .padding(.horizontal)
 
                     infoCard(title: "Live logging", description: "Start a session to unlock the real‑time timer, quick add button, and detailed exercise rows. Every set you record feeds session metrics like volume, reps, and average rest automatically.") {
@@ -1748,28 +1747,24 @@ struct GymSessionInfoView: View {
                 .padding(.bottom, 32)
             }
         }
-        .background(Color(uiColor: .systemGroupedBackground))
+        .background(AppTheme.Colors.backgroundDark)
     }
 
     private func infoCard(title: String, description: String, @ViewBuilder content: () -> some View) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             Text(title)
-                .font(.system(size: 20, weight: .semibold))
+                .font(AppTheme.Typography.telemetry(size: 20, weight: .semibold))
 
             Text(description)
-                .font(.system(size: 16, weight: .regular))
+                .font(AppTheme.Typography.telemetry(size: 16, weight: .regular))
                 .foregroundColor(.secondary)
 
             VStack(alignment: .leading, spacing: 10, content: content)
-                .font(.system(size: 15, weight: .medium))
-                .foregroundColor(Color(hex: "3080FF"))
+                .font(AppTheme.Typography.telemetry(size: 15, weight: .medium))
+                .foregroundColor(AppTheme.Colors.bluePrimary)
         }
         .padding(20)
-        .background(
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .fill(Color(uiColor: .systemBackground))
-                .shadow(color: Color.black.opacity(0.05), radius: 10, x: 0, y: 6)
-        )
+        .engineeredPanel(isElevated: true)
         .padding(.horizontal)
     }
 }

@@ -26,7 +26,7 @@ struct WorkoutView: View {
     
     var body: some View {
         ZStack {
-            Color(red: 248/255.0, green: 4/255.0, blue: 76/255.0)
+            AppTheme.Colors.backgroundDark
                 .edgesIgnoringSafeArea(.all)
             
             if !workoutManager.hasExercisesForToday() {
@@ -85,36 +85,35 @@ struct WorkoutContent: View {
                             Button {
                                 dismiss()
                             } label: {
-                                Image(systemName: "chevron.left")
-                                    .foregroundColor(.black)
+                                Image(systemName: "xmark.circle.fill")
+                                    .font(.system(size: 28))
+                                    .foregroundColor(AppTheme.Colors.textSecondary)
                             }
+                            .buttonStyle(KineticButtonStyle())
                             
                             Spacer()
                             
                             Button(action: {
                                 exitWorkout()
                             }, label: {
-                                Text("Finish")
-                                    .font(.caption)
-                                    .foregroundColor(.white)
-                                    .padding(7)
-                                    .background(
-                                        Capsule()
-                                            .fill(
-                                                LinearGradient(
-                                                    gradient: Gradient(colors: [Color(hex: "40C4FC"), Color(hex: "0077FF")]),
-                                                    startPoint: .leading,
-                                                    endPoint: .trailing
-                                                )
-                                            )
-                                    )
+                                HStack {
+                                    Text("FINISH")
+                                    Image(systemName: "flag.checkered")
+                                }
+                                .font(AppTheme.Typography.telemetry(size: 14, weight: .bold))
+                                .foregroundColor(AppTheme.Colors.backgroundDark)
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 8)
+                                .background(AppTheme.Colors.bluePrimary)
+                                .clipShape(Capsule())
                             })
+                            .buttonStyle(KineticButtonStyle())
                         }
                         .padding(.horizontal)
 
-                        Text("Exercise")
-                            .font(.custom("Sailec Bold", size: 20))
-                            .foregroundColor(.black)
+                        Text("Active Protocol")
+                            .font(AppTheme.Typography.telemetry(size: 20, weight: .bold))
+                            .foregroundColor(AppTheme.Colors.textPrimary)
                     }
                     .padding(.bottom)
 
@@ -135,14 +134,12 @@ struct WorkoutContent: View {
                                 showDescriptionPopup = true
                             }) {
                                 Text("See Description")
-                                    .font(.system(size: 16, weight: .bold))
-                                    .foregroundColor(.white)
-                                    .padding(10)
-                                    .background(
-                                        Rectangle()
-                                            .fill(Color(hex: "40C4FC"))
-                                            
-                                    )
+                                    .font(AppTheme.Typography.telemetry(size: 14, weight: .bold))
+                                    .foregroundColor(AppTheme.Colors.bluePrimary)
+                                    .padding(.horizontal, 16)
+                                    .padding(.vertical, 8)
+                                    .background(AppTheme.Colors.bluePrimary.opacity(0.1))
+                                    .clipShape(Capsule())
                             }
                             .padding(.top, 10)
                         }
@@ -151,12 +148,13 @@ struct WorkoutContent: View {
 
                     HStack {
                         Text(workoutManager.currentExercises[workoutManager.currentExerciseIndex].name)
-                            .font(.system(size: 20, weight: .medium, design: .default))
+                            .font(AppTheme.Typography.telemetry(size: 24, weight: .bold))
+                            .foregroundColor(AppTheme.Colors.textPrimary)
 
                         Spacer()
                     }
                     .padding(.horizontal)
-                    .padding(.top, 10)
+                    .padding(.top, 16)
                 }
 
                 if workoutManager.currentSetIndex < workoutManager.currentExerciseData.sets.count {
@@ -172,8 +170,7 @@ struct WorkoutContent: View {
             }
         }
         .background(content: {
-            Rectangle()
-                .fill(.white)
+            AppTheme.Colors.backgroundDark
                 .edgesIgnoringSafeArea(.all)
         })
         .onChange(of: workoutManager.programCompletedForDay, { oldValue, newValue in

@@ -128,14 +128,63 @@ class ProgramCloudKitUtility {
                 }
 
                 let isPremium = record["IsPremium"] as? Bool ?? false
+                let requiredProductIDs = parseRequiredSubscriptionProductIDs(record: record)
+                let requiredSubscriptionGroupID = parseRequiredSubscriptionGroupID(record: record)
 
                 print("Fetched program - ID: \(id), Name: \(name)")
-                return StandardProgramDBRepresentation(id: id, name: name, environment: environment, image: image, description: description, isPremium: isPremium)
+                return StandardProgramDBRepresentation(
+                    id: id,
+                    name: name,
+                    environment: environment,
+                    image: image,
+                    description: description,
+                    isPremium: isPremium,
+                    requiredSubscriptionProductIDs: requiredProductIDs,
+                    requiredSubscriptionGroupID: requiredSubscriptionGroupID
+                )
             } ?? []
             
             print("Returning \(programs.count) programs")
             completion(programs, nil)
         }
+    }
+
+    private static func parseRequiredSubscriptionProductIDs(record: CKRecord) -> [String] {
+        if let productIDs = record["RequiredSubscriptionProductIDs"] as? [String] {
+            return normalizedProductIDs(productIDs)
+        }
+        if let productIDs = record["RequiredProductIDs"] as? [String] {
+            return normalizedProductIDs(productIDs)
+        }
+        if let csv = record["RequiredSubscriptionProductIDs"] as? String {
+            return normalizedProductIDs(csv.split(separator: ",").map(String.init))
+        }
+        if let csv = record["RequiredProductIDs"] as? String {
+            return normalizedProductIDs(csv.split(separator: ",").map(String.init))
+        }
+        return []
+    }
+
+    private static func parseRequiredSubscriptionGroupID(record: CKRecord) -> String? {
+        if let groupID = record["RequiredSubscriptionGroupID"] as? String {
+            return normalizedOptional(groupID)
+        }
+        if let groupID = record["SubscriptionGroupID"] as? String {
+            return normalizedOptional(groupID)
+        }
+        return nil
+    }
+
+    private static func normalizedProductIDs(_ ids: [String]) -> [String] {
+        let cleaned = ids
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .filter { !$0.isEmpty }
+        return Array(Set(cleaned)).sorted()
+    }
+
+    private static func normalizedOptional(_ value: String) -> String? {
+        let cleaned = value.trimmingCharacters(in: .whitespacesAndNewlines)
+        return cleaned.isEmpty ? nil : cleaned
     }
 
     static func fetchStandardProgramData(programName: String, completion: @escaping (Program?, Error?) -> Void) {

@@ -17,48 +17,50 @@ struct CustomWorkoutView: View {
     var body: some View {
         if let workout = workout {
             ZStack {
+                AppTheme.Colors.backgroundDark.ignoresSafeArea()
+                
                 VStack {
                     ZStack {
                         HStack {
                             Button {
                                 dismiss()
                             } label: {
-                                Image(systemName: "xmark")
-                                    .foregroundColor(.black)
+                                Image(systemName: "xmark.circle.fill")
+                                    .font(.system(size: 28))
+                                    .foregroundColor(AppTheme.Colors.textSecondary)
                             }
+                            .buttonStyle(KineticButtonStyle())
                             
                             Spacer()
                             
                             Button(action: {
                                 dismiss()
                             }, label: {
-                                Text("Finish")
-                                    .font(.caption)
-                                    .foregroundColor(.white)
-                                    .padding(7)
-                                    .background(
-                                        Capsule()
-                                            .fill(
-                                                LinearGradient(
-                                                    gradient: Gradient(colors: [Color(hex: "40C4FC"), Color(hex: "0077FF")]),
-                                                    startPoint: .leading,
-                                                    endPoint: .trailing
-                                                )
-                                            )
-                                    )
+                                HStack {
+                                    Text("FINISH")
+                                    Image(systemName: "flag.checkered")
+                                }
+                                .font(AppTheme.Typography.telemetry(size: 14, weight: .bold))
+                                .foregroundColor(AppTheme.Colors.backgroundDark)
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 8)
+                                .background(AppTheme.Colors.bluePrimary)
+                                .clipShape(Capsule())
                             })
+                            .buttonStyle(KineticButtonStyle())
                         }
                         .padding(.horizontal)
 
-                        Text("Exercise")
-                            .font(.custom("Sailec Bold", size: 20))
-                            .foregroundColor(.black)
+                        Text("Custom Protocol")
+                            .font(AppTheme.Typography.telemetry(size: 20, weight: .bold))
+                            .foregroundColor(AppTheme.Colors.textPrimary)
                     }
                     .padding(.bottom)
                     
                     HStack {
                         Text(workout.exercises[currentExerciseIndex].name)
-                            .font(.system(size: 20, weight: .medium, design: .default))
+                            .font(AppTheme.Typography.telemetry(size: 24, weight: .bold))
+                            .foregroundColor(AppTheme.Colors.textPrimary)
 
                         Spacer()
                     }

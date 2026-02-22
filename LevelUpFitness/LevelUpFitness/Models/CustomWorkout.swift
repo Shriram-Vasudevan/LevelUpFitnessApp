@@ -14,7 +14,9 @@ struct CustomWorkout: Codable, Identifiable {
     var exercises: [CustomWorkoutExercise]
 }
 
-struct CustomWorkoutExercise: Codable {
+struct CustomWorkoutExercise: Codable, Hashable {
+    var id: String = UUID().uuidString
     var name: String
     var isWeight: Bool
+    var progression: Progression?
 }

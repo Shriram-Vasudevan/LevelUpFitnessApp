@@ -32,10 +32,11 @@ struct ProgramView: View {
     @State private var infoMessage: String?
     @State private var showInfoAlert = false
     @State private var showFriendRoomComposer = false
+    @State private var showGlobalRoomDirectory = false
 
     var body: some View {
         ZStack {
-            Color(hex: "F3F5F8")
+            AppTheme.Colors.backgroundDark
                 .ignoresSafeArea()
 
             ScrollView {
@@ -85,14 +86,25 @@ struct ProgramView: View {
             programHubSheet
         }
         .sheet(isPresented: $showFriendRoomComposer) {
-            CreateFriendRoomSheet(context: .program) { title, date in
+            CreateFriendRoomSheet(context: .program) { title, date, isPublic in
                 Task {
-                    let success = await friendWorkoutManager.createRoom(context: .program, title: title, scheduleDate: date)
+                    let success = await friendWorkoutManager.createRoom(
+                        context: .program,
+                        title: title,
+                        scheduleDate: date,
+                        isPublic: isPublic
+                    )
                     infoMessage = success
                         ? "Friend workout room created."
                         : (friendWorkoutManager.syncErrorMessage ?? "Could not create room right now.")
                     showInfoAlert = true
                 }
+            }
+        }
+        .sheet(isPresented: $showGlobalRoomDirectory) {
+            GlobalFriendRoomDirectorySheet(initialContext: .program) { message in
+                infoMessage = message
+                showInfoAlert = true
             }
         }
         .fullScreenCover(isPresented: $showPaywall) {
@@ -120,12 +132,12 @@ struct ProgramView: View {
         HStack(spacing: 10) {
             VStack(alignment: .leading, spacing: 6) {
                 Text("Programs")
-                    .font(.system(size: 31, weight: .bold))
-                    .foregroundColor(Color(hex: "111827"))
+                    .font(AppTheme.Typography.telemetry(size: 31, weight: .bold))
+                    .foregroundColor(AppTheme.Colors.textPrimary)
 
                 Text(programManager.selectedProgram?.program.programName ?? "Pick a plan, join it, and train.")
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(Color(hex: "6B7280"))
+                    .font(AppTheme.Typography.telemetry(size: 14, weight: .medium))
+                    .foregroundColor(AppTheme.Colors.textSecondary)
                     .lineLimit(2)
             }
 
@@ -138,8 +150,8 @@ struct ProgramView: View {
                     Image(systemName: "slider.horizontal.3")
                     Text("Manage")
                 }
-                .font(.system(size: 14, weight: .semibold))
-                .foregroundColor(Color(hex: "0B5ED7"))
+                .font(AppTheme.Typography.telemetry(size: 14, weight: .semibold))
+                .foregroundColor(AppTheme.Colors.bluePrimary)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 9)
                 .background(Color.white)
@@ -158,34 +170,34 @@ struct ProgramView: View {
         VStack(alignment: .leading, spacing: 10) {
             HStack {
                 Text("Active Programs")
-                    .font(.system(size: 18, weight: .semibold))
-                    .foregroundColor(Color(hex: "111827"))
+                    .font(AppTheme.Typography.telemetry(size: 18, weight: .semibold))
+                    .foregroundColor(AppTheme.Colors.textPrimary)
 
                 Spacer()
 
                 Text("\(programManager.userProgramData.count)")
-                    .font(.system(size: 14, weight: .bold))
-                    .foregroundColor(Color(hex: "0B5ED7"))
+                    .font(AppTheme.Typography.telemetry(size: 14, weight: .bold))
+                    .foregroundColor(AppTheme.Colors.bluePrimary)
 
                 Button("Manage") {
                     showProgramHub = true
                 }
-                .font(.system(size: 12, weight: .semibold))
-                .foregroundColor(Color(hex: "0B5ED7"))
+                .font(AppTheme.Typography.telemetry(size: 12, weight: .semibold))
+                .foregroundColor(AppTheme.Colors.bluePrimary)
             }
 
             if programManager.userProgramData.isEmpty {
                 VStack(alignment: .leading, spacing: 10) {
                     Text("No active plans yet.")
-                        .font(.system(size: 15, weight: .semibold))
+                        .font(AppTheme.Typography.telemetry(size: 15, weight: .semibold))
                     Text("Join multiple programs and switch between them from this page.")
-                        .font(.system(size: 14, weight: .medium))
-                        .foregroundColor(Color(hex: "6B7280"))
+                        .font(AppTheme.Typography.telemetry(size: 14, weight: .medium))
+                        .foregroundColor(AppTheme.Colors.textSecondary)
                     Button("Browse Programs") {
                         showProgramHub = true
                     }
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundColor(Color(hex: "0B5ED7"))
+                    .font(AppTheme.Typography.telemetry(size: 14, weight: .semibold))
+                    .foregroundColor(AppTheme.Colors.bluePrimary)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(14)
@@ -260,11 +272,11 @@ struct ProgramView: View {
     private func workspaceHeader(_ program: Program) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Current Program Workspace")
-                .font(.system(size: 18, weight: .semibold))
-                .foregroundColor(Color(hex: "111827"))
+                .font(AppTheme.Typography.telemetry(size: 18, weight: .semibold))
+                .foregroundColor(AppTheme.Colors.textPrimary)
             Text("Selected: \(program.programName)")
-                .font(.system(size: 13, weight: .medium))
-                .foregroundColor(Color(hex: "6B7280"))
+                .font(AppTheme.Typography.telemetry(size: 13, weight: .medium))
+                .foregroundColor(AppTheme.Colors.textSecondary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
@@ -277,13 +289,13 @@ struct ProgramView: View {
 
         return VStack(alignment: .leading, spacing: 10) {
             Text(title)
-                .font(.system(size: 18, weight: .semibold))
-                .foregroundColor(Color(hex: "111827"))
+                .font(AppTheme.Typography.telemetry(size: 18, weight: .semibold))
+                .foregroundColor(AppTheme.Colors.textPrimary)
 
             if programs.isEmpty {
                 Text("No programs available right now.")
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(Color(hex: "6B7280"))
+                    .font(AppTheme.Typography.telemetry(size: 14, weight: .medium))
+                    .foregroundColor(AppTheme.Colors.textSecondary)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(12)
                     .background(Color.white)
@@ -299,7 +311,7 @@ struct ProgramView: View {
                             ProgramMarketplaceCard(
                                 program: program,
                                 joined: isProgramJoined(program),
-                                premiumLocked: program.isPremium && !storeKitManager.effectiveIsPremiumUnlocked
+                                premiumLocked: isProgramLocked(program)
                             ) {
                                 requestJoin(program)
                             }
@@ -334,25 +346,20 @@ struct ProgramView: View {
     private func actionCard(title: String, subtitle: String, icon: String) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             Image(systemName: icon)
-                .font(.system(size: 17, weight: .bold))
-                .foregroundColor(Color(hex: "0B5ED7"))
+                .font(AppTheme.Typography.telemetry(size: 17, weight: .bold))
+                .foregroundColor(AppTheme.Colors.bluePrimary)
 
             Text(title)
-                .font(.system(size: 15, weight: .semibold))
-                .foregroundColor(Color(hex: "111827"))
+                .font(AppTheme.Typography.telemetry(size: 15, weight: .semibold))
+                .foregroundColor(AppTheme.Colors.textPrimary)
 
             Text(subtitle)
-                .font(.system(size: 13, weight: .medium))
-                .foregroundColor(Color(hex: "6B7280"))
+                .font(AppTheme.Typography.telemetry(size: 13, weight: .medium))
+                .foregroundColor(AppTheme.Colors.textSecondary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(12)
-        .background(Color.white)
-        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .stroke(Color.black.opacity(0.08), lineWidth: 1)
-        )
+        .engineeredPanel(isElevated: false)
     }
 
     private func equipmentSection(for day: ProgramDay) -> some View {
@@ -360,13 +367,13 @@ struct ProgramView: View {
 
         return VStack(alignment: .leading, spacing: 10) {
             Text("Required Equipment")
-                .font(.system(size: 18, weight: .semibold))
-                .foregroundColor(Color(hex: "111827"))
+                .font(AppTheme.Typography.telemetry(size: 18, weight: .semibold))
+                .foregroundColor(AppTheme.Colors.textPrimary)
 
             if equipment.isEmpty {
                 Text("No equipment required for this session.")
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(Color(hex: "6B7280"))
+                    .font(AppTheme.Typography.telemetry(size: 14, weight: .medium))
+                    .foregroundColor(AppTheme.Colors.textSecondary)
                     .frame(maxWidth: .infinity, alignment: .leading)
             } else {
                 ScrollView(.horizontal, showsIndicators: false) {
@@ -379,12 +386,7 @@ struct ProgramView: View {
             }
         }
         .padding(12)
-        .background(Color.white)
-        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .stroke(Color.black.opacity(0.08), lineWidth: 1)
-        )
+        .engineeredPanel(isElevated: false)
     }
 
     private func selectedDaySnapshot(for day: ProgramDay) -> some View {
@@ -396,12 +398,12 @@ struct ProgramView: View {
         return VStack(alignment: .leading, spacing: 10) {
             HStack(alignment: .firstTextBaseline) {
                 Text(Calendar.current.isDateInToday(selectedDate) ? "Today's Plan" : selectedDate.formatted(.dateTime.weekday(.wide).month().day()))
-                    .font(.system(size: 18, weight: .semibold))
-                    .foregroundColor(Color(hex: "111827"))
+                    .font(AppTheme.Typography.telemetry(size: 18, weight: .semibold))
+                    .foregroundColor(AppTheme.Colors.textPrimary)
                 Spacer()
                 Text(day.day)
-                    .font(.system(size: 12, weight: .bold))
-                    .foregroundColor(Color(hex: "0B5ED7"))
+                    .font(AppTheme.Typography.telemetry(size: 12, weight: .bold))
+                    .foregroundColor(AppTheme.Colors.bluePrimary)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 4)
                     .background(Color(hex: "E8F3FF"))
@@ -415,12 +417,7 @@ struct ProgramView: View {
             }
         }
         .padding(12)
-        .background(Color.white)
-        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .stroke(Color.black.opacity(0.08), lineWidth: 1)
-        )
+        .engineeredPanel(isElevated: false)
     }
 
     private func upNextSection(for day: ProgramDay) -> some View {
@@ -429,19 +426,19 @@ struct ProgramView: View {
         return VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Text("Up Next")
-                    .font(.system(size: 18, weight: .semibold))
-                    .foregroundColor(Color(hex: "111827"))
+                    .font(AppTheme.Typography.telemetry(size: 18, weight: .semibold))
+                    .foregroundColor(AppTheme.Colors.textPrimary)
                 Spacer()
                 Text(Calendar.current.isDateInToday(selectedDate) ? "Today" : selectedDate.formatted(.dateTime.month().day()))
-                    .font(.system(size: 13, weight: .semibold))
-                    .foregroundColor(Color(hex: "6B7280"))
+                    .font(AppTheme.Typography.telemetry(size: 13, weight: .semibold))
+                    .foregroundColor(AppTheme.Colors.textSecondary)
             }
 
             if let nextExercise {
                 VStack(alignment: .leading, spacing: 10) {
                     Text(nextExercise.name)
-                        .font(.system(size: 17, weight: .semibold))
-                        .foregroundColor(Color(hex: "111827"))
+                        .font(AppTheme.Typography.telemetry(size: 17, weight: .semibold))
+                        .foregroundColor(AppTheme.Colors.textPrimary)
 
                     HStack(spacing: 8) {
                         workoutPill("Sets \(nextExercise.sets)")
@@ -461,35 +458,30 @@ struct ProgramView: View {
                         HStack {
                             Spacer()
                             Text("Start Workout")
-                                .font(.system(size: 15, weight: .semibold))
+                                .font(AppTheme.Typography.telemetry(size: 15, weight: .semibold))
                                 .foregroundColor(.white)
                             Spacer()
                         }
                         .padding(.vertical, 12)
-                        .background(Color(hex: "0B5ED7"))
+                        .background(AppTheme.Colors.bluePrimary)
                         .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
                     }
                     .buttonStyle(.plain)
                 }
             } else {
                 Text("All exercises are complete for this day.")
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(Color(hex: "6B7280"))
+                    .font(AppTheme.Typography.telemetry(size: 14, weight: .medium))
+                    .foregroundColor(AppTheme.Colors.textSecondary)
             }
         }
         .padding(12)
-        .background(Color.white)
-        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .stroke(Color.black.opacity(0.08), lineWidth: 1)
-        )
+        .engineeredPanel(isElevated: false)
     }
 
     private func workoutPill(_ label: String) -> some View {
         Text(label)
-            .font(.system(size: 12, weight: .semibold))
-            .foregroundColor(Color(hex: "0B5ED7"))
+            .font(AppTheme.Typography.telemetry(size: 12, weight: .semibold))
+            .foregroundColor(AppTheme.Colors.bluePrimary)
             .padding(.horizontal, 8)
             .padding(.vertical, 5)
             .background(Color(hex: "E8F3FF"))
@@ -501,31 +493,31 @@ struct ProgramView: View {
 
         return VStack(alignment: .leading, spacing: 10) {
             Text("Exercise Sequence")
-                .font(.system(size: 18, weight: .semibold))
-                .foregroundColor(Color(hex: "111827"))
+                .font(AppTheme.Typography.telemetry(size: 18, weight: .semibold))
+                .foregroundColor(AppTheme.Colors.textPrimary)
 
             ForEach(Array(displayedExercises.enumerated()), id: \.offset) { _, exercise in
                 HStack(spacing: 10) {
                     Image(systemName: exercise.isWeight ? "dumbbell.fill" : "figure.run")
-                        .font(.system(size: 14, weight: .bold))
-                        .foregroundColor(Color(hex: "0B5ED7"))
+                        .font(AppTheme.Typography.telemetry(size: 14, weight: .bold))
+                        .foregroundColor(AppTheme.Colors.bluePrimary)
                         .frame(width: 26, height: 26)
                         .background(Color(hex: "E8F3FF"))
                         .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
 
                     VStack(alignment: .leading, spacing: 3) {
                         Text(exercise.name)
-                            .font(.system(size: 14, weight: .semibold))
-                            .foregroundColor(Color(hex: "111827"))
+                            .font(AppTheme.Typography.telemetry(size: 14, weight: .semibold))
+                            .foregroundColor(AppTheme.Colors.textPrimary)
                         Text("\(exercise.sets) sets • \(exercise.reps) reps • rest \(exercise.rest)s")
-                            .font(.system(size: 12, weight: .medium))
-                            .foregroundColor(Color(hex: "6B7280"))
+                            .font(AppTheme.Typography.telemetry(size: 12, weight: .medium))
+                            .foregroundColor(AppTheme.Colors.textSecondary)
                     }
 
                     Spacer()
 
                     Image(systemName: exercise.completed ? "checkmark.circle.fill" : "circle")
-                        .foregroundColor(exercise.completed ? Color(hex: "0B5ED7") : Color(hex: "9CA3AF"))
+                        .foregroundColor(exercise.completed ? AppTheme.Colors.bluePrimary : Color(hex: "9CA3AF"))
                 }
                 .padding(10)
                 .background(Color(hex: "F8FAFC"))
@@ -536,55 +528,40 @@ struct ProgramView: View {
                 Button(showFullSchedule ? "Show less" : "Show all") {
                     showFullSchedule.toggle()
                 }
-                .font(.system(size: 14, weight: .semibold))
-                .foregroundColor(Color(hex: "0B5ED7"))
+                .font(AppTheme.Typography.telemetry(size: 14, weight: .semibold))
+                .foregroundColor(AppTheme.Colors.bluePrimary)
             }
         }
         .padding(12)
-        .background(Color.white)
-        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .stroke(Color.black.opacity(0.08), lineWidth: 1)
-        )
+        .engineeredPanel(isElevated: false)
     }
 
     private var emptyScheduleCard: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("No workout scheduled")
-                .font(.system(size: 17, weight: .semibold))
-                .foregroundColor(Color(hex: "111827"))
+                .font(AppTheme.Typography.telemetry(size: 17, weight: .semibold))
+                .foregroundColor(AppTheme.Colors.textPrimary)
             Text("Switch your selected date or choose another active program.")
-                .font(.system(size: 14, weight: .medium))
-                .foregroundColor(Color(hex: "6B7280"))
+                .font(AppTheme.Typography.telemetry(size: 14, weight: .medium))
+                .foregroundColor(AppTheme.Colors.textSecondary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(12)
-        .background(Color.white)
-        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .stroke(Color.black.opacity(0.08), lineWidth: 1)
-        )
+        .engineeredPanel(isElevated: false)
     }
 
     private var lockedDayCard: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Locked")
-                .font(.system(size: 17, weight: .bold))
-                .foregroundColor(Color(hex: "111827"))
+                .font(AppTheme.Typography.telemetry(size: 17, weight: .bold))
+                .foregroundColor(AppTheme.Colors.textPrimary)
             Text(workoutAvailabilityText(for: selectedDate))
-                .font(.system(size: 14, weight: .medium))
-                .foregroundColor(Color(hex: "6B7280"))
+                .font(AppTheme.Typography.telemetry(size: 14, weight: .medium))
+                .foregroundColor(AppTheme.Colors.textSecondary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(12)
-        .background(Color.white)
-        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .stroke(Color.black.opacity(0.08), lineWidth: 1)
-        )
+        .engineeredPanel(isElevated: false)
     }
 
     private var friendsWorkoutSection: some View {
@@ -593,8 +570,8 @@ struct ProgramView: View {
         return VStack(alignment: .leading, spacing: 10) {
             HStack {
                 Text("Workout With Friends")
-                    .font(.system(size: 18, weight: .semibold))
-                    .foregroundColor(Color(hex: "111827"))
+                    .font(AppTheme.Typography.telemetry(size: 18, weight: .semibold))
+                    .foregroundColor(AppTheme.Colors.textPrimary)
                 Spacer()
                 Button {
                     Task {
@@ -602,24 +579,29 @@ struct ProgramView: View {
                     }
                 } label: {
                     Image(systemName: "arrow.clockwise")
-                        .font(.system(size: 13, weight: .bold))
-                        .foregroundColor(Color(hex: "0B5ED7"))
+                        .font(AppTheme.Typography.telemetry(size: 13, weight: .bold))
+                        .foregroundColor(AppTheme.Colors.bluePrimary)
                         .frame(width: 28, height: 28)
                         .background(Color(hex: "E8F3FF"))
                         .clipShape(RoundedRectangle(cornerRadius: 7, style: .continuous))
                 }
                 .buttonStyle(.plain)
+                Button("Global") {
+                    showGlobalRoomDirectory = true
+                }
+                .font(AppTheme.Typography.telemetry(size: 13, weight: .semibold))
+                .foregroundColor(AppTheme.Colors.bluePrimary)
                 Button("Create Room") {
                     showFriendRoomComposer = true
                 }
-                .font(.system(size: 13, weight: .semibold))
-                .foregroundColor(Color(hex: "0B5ED7"))
+                .font(AppTheme.Typography.telemetry(size: 13, weight: .semibold))
+                .foregroundColor(AppTheme.Colors.bluePrimary)
             }
 
             if rooms.isEmpty {
-                Text("No friend rooms yet. Create one and invite your group.")
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(Color(hex: "6B7280"))
+                Text("No friend rooms yet. Create one, then share the room code or open the global directory.")
+                    .font(AppTheme.Typography.telemetry(size: 14, weight: .medium))
+                    .foregroundColor(AppTheme.Colors.textSecondary)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(10)
                     .background(Color(hex: "F8FAFC"))
@@ -639,19 +621,14 @@ struct ProgramView: View {
             }
         }
         .padding(12)
-        .background(Color.white)
-        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .stroke(Color.black.opacity(0.08), lineWidth: 1)
-        )
+        .engineeredPanel(isElevated: false)
     }
 
     private var challengeSection: some View {
         VStack(alignment: .leading, spacing: 10) {
             Text("Challenges")
-                .font(.system(size: 18, weight: .semibold))
-                .foregroundColor(Color(hex: "111827"))
+                .font(AppTheme.Typography.telemetry(size: 18, weight: .semibold))
+                .foregroundColor(AppTheme.Colors.textPrimary)
 
             if challengeManager.challengeTemplates.isEmpty {
                 VStack(spacing: 8) {
@@ -667,11 +644,11 @@ struct ProgramView: View {
                     HStack(alignment: .top, spacing: 10) {
                         VStack(alignment: .leading, spacing: 4) {
                             Text(template.name)
-                                .font(.system(size: 15, weight: .semibold))
-                                .foregroundColor(Color(hex: "111827"))
+                                .font(AppTheme.Typography.telemetry(size: 15, weight: .semibold))
+                                .foregroundColor(AppTheme.Colors.textPrimary)
                             Text(template.description)
-                                .font(.system(size: 13, weight: .medium))
-                                .foregroundColor(Color(hex: "6B7280"))
+                                .font(AppTheme.Typography.telemetry(size: 13, weight: .medium))
+                                .foregroundColor(AppTheme.Colors.textSecondary)
                                 .lineLimit(2)
                         }
 
@@ -680,8 +657,8 @@ struct ProgramView: View {
                         Button("Join") {
                             joinChallenge(template)
                         }
-                        .font(.system(size: 13, weight: .semibold))
-                        .foregroundColor(Color(hex: "0B5ED7"))
+                        .font(AppTheme.Typography.telemetry(size: 13, weight: .semibold))
+                        .foregroundColor(AppTheme.Colors.bluePrimary)
                     }
                     .padding(10)
                     .background(Color(hex: "F8FAFC"))
@@ -690,28 +667,23 @@ struct ProgramView: View {
             }
         }
         .padding(12)
-        .background(Color.white)
-        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .stroke(Color.black.opacity(0.08), lineWidth: 1)
-        )
+        .engineeredPanel(isElevated: false)
     }
 
     private func challengeFallbackRow(_ title: String, subtitle: String) -> some View {
         HStack(alignment: .top, spacing: 10) {
             VStack(alignment: .leading, spacing: 4) {
                 Text(title)
-                    .font(.system(size: 15, weight: .semibold))
-                    .foregroundColor(Color(hex: "111827"))
+                    .font(AppTheme.Typography.telemetry(size: 15, weight: .semibold))
+                    .foregroundColor(AppTheme.Colors.textPrimary)
                 Text(subtitle)
-                    .font(.system(size: 13, weight: .medium))
-                    .foregroundColor(Color(hex: "6B7280"))
+                    .font(AppTheme.Typography.telemetry(size: 13, weight: .medium))
+                    .foregroundColor(AppTheme.Colors.textSecondary)
             }
             Spacer()
             Text("Live")
-                .font(.system(size: 11, weight: .bold))
-                .foregroundColor(Color(hex: "0B5ED7"))
+                .font(AppTheme.Typography.telemetry(size: 11, weight: .bold))
+                .foregroundColor(AppTheme.Colors.bluePrimary)
                 .padding(.horizontal, 8)
                 .padding(.vertical, 5)
                 .background(Color(hex: "E8F3FF"))
@@ -727,13 +699,13 @@ struct ProgramView: View {
 
         return VStack(alignment: .leading, spacing: 10) {
             Text("Program History")
-                .font(.system(size: 18, weight: .semibold))
-                .foregroundColor(Color(hex: "111827"))
+                .font(AppTheme.Typography.telemetry(size: 18, weight: .semibold))
+                .foregroundColor(AppTheme.Colors.textPrimary)
 
             if historyNames.isEmpty {
                 Text("No saved program history available.")
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(Color(hex: "6B7280"))
+                    .font(AppTheme.Typography.telemetry(size: 14, weight: .medium))
+                    .foregroundColor(AppTheme.Colors.textSecondary)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(10)
                     .background(Color(hex: "F8FAFC"))
@@ -754,12 +726,7 @@ struct ProgramView: View {
             }
         }
         .padding(12)
-        .background(Color.white)
-        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .stroke(Color.black.opacity(0.08), lineWidth: 1)
-        )
+        .engineeredPanel(isElevated: false)
     }
 
     private var programHubSheet: some View {
@@ -767,13 +734,13 @@ struct ProgramView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 14) {
                     Text("Active Programs")
-                        .font(.system(size: 20, weight: .bold))
-                        .foregroundColor(Color(hex: "111827"))
+                        .font(AppTheme.Typography.telemetry(size: 20, weight: .bold))
+                        .foregroundColor(AppTheme.Colors.textPrimary)
 
                     if programManager.userProgramData.isEmpty {
                         Text("You are not enrolled in any programs.")
-                            .font(.system(size: 14, weight: .medium))
-                            .foregroundColor(Color(hex: "6B7280"))
+                            .font(AppTheme.Typography.telemetry(size: 14, weight: .medium))
+                            .foregroundColor(AppTheme.Colors.textSecondary)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(12)
                             .background(Color.white)
@@ -791,18 +758,18 @@ struct ProgramView: View {
 
                                 VStack(alignment: .leading, spacing: 4) {
                                     Text(programWithID.program.programName)
-                                        .font(.system(size: 15, weight: .semibold))
+                                        .font(AppTheme.Typography.telemetry(size: 15, weight: .semibold))
                                     Text(programWithID.program.environment)
-                                        .font(.system(size: 13, weight: .medium))
-                                        .foregroundColor(Color(hex: "6B7280"))
+                                        .font(AppTheme.Typography.telemetry(size: 13, weight: .medium))
+                                        .foregroundColor(AppTheme.Colors.textSecondary)
                                 }
 
                                 Spacer()
 
                                 if programManager.selectedProgram?.programID == programWithID.programID {
                                     Text("Current")
-                                        .font(.system(size: 11, weight: .bold))
-                                        .foregroundColor(Color(hex: "0B5ED7"))
+                                        .font(AppTheme.Typography.telemetry(size: 11, weight: .bold))
+                                        .foregroundColor(AppTheme.Colors.bluePrimary)
                                         .padding(.horizontal, 8)
                                         .padding(.vertical, 5)
                                         .background(Color(hex: "E8F3FF"))
@@ -811,8 +778,8 @@ struct ProgramView: View {
                                     Button("Set Current") {
                                         programManager.selectedProgram = programWithID
                                     }
-                                    .font(.system(size: 13, weight: .semibold))
-                                    .foregroundColor(Color(hex: "0B5ED7"))
+                                    .font(AppTheme.Typography.telemetry(size: 13, weight: .semibold))
+                                    .foregroundColor(AppTheme.Colors.bluePrimary)
                                 }
 
                                 Menu {
@@ -823,8 +790,8 @@ struct ProgramView: View {
                                     }
                                 } label: {
                                     Image(systemName: "ellipsis.circle")
-                                        .font(.system(size: 18, weight: .semibold))
-                                        .foregroundColor(Color(hex: "6B7280"))
+                                        .font(AppTheme.Typography.telemetry(size: 18, weight: .semibold))
+                                        .foregroundColor(AppTheme.Colors.textSecondary)
                                         .frame(width: 30, height: 30)
                                 }
                             }
@@ -839,15 +806,15 @@ struct ProgramView: View {
                     }
 
                     Text("Join More Programs")
-                        .font(.system(size: 20, weight: .bold))
-                        .foregroundColor(Color(hex: "111827"))
+                        .font(AppTheme.Typography.telemetry(size: 20, weight: .bold))
+                        .foregroundColor(AppTheme.Colors.textPrimary)
                         .padding(.top, 4)
 
                     let joinablePrograms = programManager.standardProgramDBRepresentations.filter { !isProgramJoined($0) }
                     if joinablePrograms.isEmpty {
                         Text("You've joined every available program.")
-                            .font(.system(size: 14, weight: .medium))
-                            .foregroundColor(Color(hex: "6B7280"))
+                            .font(AppTheme.Typography.telemetry(size: 14, weight: .medium))
+                            .foregroundColor(AppTheme.Colors.textSecondary)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(12)
                             .background(Color.white)
@@ -866,16 +833,16 @@ struct ProgramView: View {
 
                             VStack(alignment: .leading, spacing: 4) {
                                 Text(program.name)
-                                    .font(.system(size: 15, weight: .semibold))
+                                    .font(AppTheme.Typography.telemetry(size: 15, weight: .semibold))
                                 Text(program.environment)
-                                    .font(.system(size: 13, weight: .medium))
-                                    .foregroundColor(Color(hex: "6B7280"))
+                                    .font(AppTheme.Typography.telemetry(size: 13, weight: .medium))
+                                    .foregroundColor(AppTheme.Colors.textSecondary)
                             }
 
                             Spacer()
 
-                            Button(program.isPremium && !storeKitManager.effectiveIsPremiumUnlocked ? "Unlock" : "Join") {
-                                if program.isPremium && !storeKitManager.effectiveIsPremiumUnlocked {
+                            Button(isProgramLocked(program) ? "Unlock" : "Join") {
+                                if isProgramLocked(program) {
                                     showProgramHub = false
                                     storeKitManager.recordPaywallTrigger(.premiumProgram(name: program.name))
                                     showPaywall = true
@@ -884,8 +851,8 @@ struct ProgramView: View {
                                     joinProgram(program)
                                 }
                             }
-                            .font(.system(size: 13, weight: .semibold))
-                            .foregroundColor(Color(hex: "0B5ED7"))
+                            .font(AppTheme.Typography.telemetry(size: 13, weight: .semibold))
+                            .foregroundColor(AppTheme.Colors.bluePrimary)
                         }
                         .padding(10)
                         .background(Color.white)
@@ -898,14 +865,14 @@ struct ProgramView: View {
                 }
                 .padding(16)
             }
-            .background(Color(hex: "F3F5F8").ignoresSafeArea())
+            .background(AppTheme.Colors.backgroundDark.ignoresSafeArea())
             .navigationTitle("Program Hub")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Done") {
                         showProgramHub = false
                     }
-                    .font(.system(size: 14, weight: .semibold))
+                    .font(AppTheme.Typography.telemetry(size: 14, weight: .semibold))
                 }
             }
         }
@@ -980,7 +947,7 @@ struct ProgramView: View {
     private func requestJoin(_ program: StandardProgramDBRepresentation) {
         guard !isProgramJoined(program) else { return }
 
-        if program.isPremium && !storeKitManager.effectiveIsPremiumUnlocked {
+        if isProgramLocked(program) {
             storeKitManager.recordPaywallTrigger(.premiumProgram(name: program.name))
             showPaywall = true
             return
@@ -1067,6 +1034,10 @@ struct ProgramView: View {
             .folding(options: .diacriticInsensitive, locale: .current)
             .lowercased()
     }
+
+    private func isProgramLocked(_ program: StandardProgramDBRepresentation) -> Bool {
+        !storeKitManager.canAccessProgram(program)
+    }
 }
 
 private struct ActiveProgramSummaryCard: View {
@@ -1082,20 +1053,20 @@ private struct ActiveProgramSummaryCard: View {
                     .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
 
                 Text(programWithID.program.programName)
-                    .font(.system(size: 15, weight: .semibold))
-                    .foregroundColor(Color(hex: "111827"))
+                    .font(AppTheme.Typography.telemetry(size: 15, weight: .semibold))
+                    .foregroundColor(AppTheme.Colors.textPrimary)
                     .lineLimit(1)
 
                 HStack {
                     Text(programWithID.program.environment)
-                        .font(.system(size: 12, weight: .medium))
-                        .foregroundColor(Color(hex: "6B7280"))
+                        .font(AppTheme.Typography.telemetry(size: 12, weight: .medium))
+                        .foregroundColor(AppTheme.Colors.textSecondary)
 
                     Spacer()
 
                     Text(isSelected ? "Current" : "Select")
-                        .font(.system(size: 11, weight: .bold))
-                        .foregroundColor(Color(hex: "0B5ED7"))
+                        .font(AppTheme.Typography.telemetry(size: 11, weight: .bold))
+                        .foregroundColor(AppTheme.Colors.bluePrimary)
                         .padding(.horizontal, 8)
                         .padding(.vertical, 4)
                         .background(Color(hex: "E8F3FF"))
@@ -1103,8 +1074,8 @@ private struct ActiveProgramSummaryCard: View {
                 }
 
                 Text(isSelected ? "Current plan in focus" : "Tap to switch focus")
-                    .font(.system(size: 11, weight: .medium))
-                    .foregroundColor(Color(hex: "6B7280"))
+                    .font(AppTheme.Typography.telemetry(size: 11, weight: .medium))
+                    .foregroundColor(AppTheme.Colors.textSecondary)
             }
             .padding(10)
             .frame(width: 200, height: 176, alignment: .topLeading)
@@ -1112,7 +1083,7 @@ private struct ActiveProgramSummaryCard: View {
             .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
             .overlay(
                 RoundedRectangle(cornerRadius: 10, style: .continuous)
-                    .stroke(isSelected ? Color(hex: "0B5ED7") : Color.black.opacity(0.08), lineWidth: isSelected ? 2 : 1)
+                    .stroke(isSelected ? AppTheme.Colors.bluePrimary : Color.black.opacity(0.08), lineWidth: isSelected ? 2 : 1)
             )
         }
         .buttonStyle(.plain)
@@ -1132,13 +1103,13 @@ private struct ProgramHeroCard: View {
 
             VStack(alignment: .leading, spacing: 5) {
                 Text(program.programName)
-                    .font(.system(size: 18, weight: .bold))
-                    .foregroundColor(Color(hex: "111827"))
+                    .font(AppTheme.Typography.telemetry(size: 18, weight: .bold))
+                    .foregroundColor(AppTheme.Colors.textPrimary)
                     .lineLimit(2)
 
                 Text("\(program.environment) • \(weekLabel)")
-                    .font(.system(size: 13, weight: .medium))
-                    .foregroundColor(Color(hex: "6B7280"))
+                    .font(AppTheme.Typography.telemetry(size: 13, weight: .medium))
+                    .foregroundColor(AppTheme.Colors.textSecondary)
             }
 
             Spacer()
@@ -1147,8 +1118,8 @@ private struct ProgramHeroCard: View {
                 onSwitch()
             } label: {
                 Image(systemName: "arrow.triangle.2.circlepath")
-                    .font(.system(size: 16, weight: .semibold))
-                    .foregroundColor(Color(hex: "0B5ED7"))
+                    .font(AppTheme.Typography.telemetry(size: 16, weight: .semibold))
+                    .foregroundColor(AppTheme.Colors.bluePrimary)
                     .frame(width: 34, height: 34)
                     .background(Color(hex: "E8F3FF"))
                     .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
@@ -1156,12 +1127,7 @@ private struct ProgramHeroCard: View {
             .buttonStyle(.plain)
         }
         .padding(12)
-        .background(Color.white)
-        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .stroke(Color.black.opacity(0.08), lineWidth: 1)
-        )
+        .engineeredPanel(isElevated: false)
     }
 }
 
@@ -1181,29 +1147,29 @@ private struct ProgramMarketplaceCard: View {
                     .clipShape(RoundedRectangle(cornerRadius: 9, style: .continuous))
 
                 Text(program.name)
-                    .font(.system(size: 16, weight: .semibold))
-                    .foregroundColor(Color(hex: "111827"))
+                    .font(AppTheme.Typography.telemetry(size: 16, weight: .semibold))
+                    .foregroundColor(AppTheme.Colors.textPrimary)
                     .lineLimit(2)
 
                 HStack(spacing: 7) {
                     Text(program.environment)
-                        .font(.system(size: 12, weight: .medium))
-                        .foregroundColor(Color(hex: "6B7280"))
+                        .font(AppTheme.Typography.telemetry(size: 12, weight: .medium))
+                        .foregroundColor(AppTheme.Colors.textSecondary)
 
                     Spacer()
 
                     if joined {
                         Text("Joined")
-                            .font(.system(size: 12, weight: .bold))
-                            .foregroundColor(Color(hex: "0B5ED7"))
+                            .font(AppTheme.Typography.telemetry(size: 12, weight: .bold))
+                            .foregroundColor(AppTheme.Colors.bluePrimary)
                     } else if premiumLocked {
                         Text("Unlock")
-                            .font(.system(size: 12, weight: .bold))
-                            .foregroundColor(Color(hex: "0B5ED7"))
+                            .font(AppTheme.Typography.telemetry(size: 12, weight: .bold))
+                            .foregroundColor(AppTheme.Colors.bluePrimary)
                     } else {
                         Text("Join")
-                            .font(.system(size: 12, weight: .bold))
-                            .foregroundColor(Color(hex: "0B5ED7"))
+                            .font(AppTheme.Typography.telemetry(size: 12, weight: .bold))
+                            .foregroundColor(AppTheme.Colors.bluePrimary)
                     }
                 }
             }
@@ -1232,8 +1198,8 @@ private struct EquipmentPill: View {
                 .clipShape(RoundedRectangle(cornerRadius: 7, style: .continuous))
 
             Text(name)
-                .font(.system(size: 11, weight: .semibold))
-                .foregroundColor(Color(hex: "111827"))
+                .font(AppTheme.Typography.telemetry(size: 11, weight: .semibold))
+                .foregroundColor(AppTheme.Colors.textPrimary)
                 .lineLimit(1)
         }
         .frame(width: 72)
@@ -1251,25 +1217,36 @@ private struct FriendRoomCard: View {
         HStack(alignment: .top, spacing: 10) {
             VStack(alignment: .leading, spacing: 4) {
                 Text(room.title)
-                    .font(.system(size: 15, weight: .semibold))
-                    .foregroundColor(Color(hex: "111827"))
+                    .font(AppTheme.Typography.telemetry(size: 15, weight: .semibold))
+                    .foregroundColor(AppTheme.Colors.textPrimary)
                 Text(room.scheduleLabel)
-                    .font(.system(size: 13, weight: .medium))
-                    .foregroundColor(Color(hex: "6B7280"))
+                    .font(AppTheme.Typography.telemetry(size: 13, weight: .medium))
+                    .foregroundColor(AppTheme.Colors.textSecondary)
                 HStack(spacing: 6) {
                     Text("\(room.participantCount) members")
+                    Text("Code \(room.roomCode)")
+                    Text(room.contextLabel)
                     if room.hostedByCurrentUser {
                         Text("Host")
-                            .font(.system(size: 10, weight: .bold))
-                            .foregroundColor(Color(hex: "0B5ED7"))
+                            .font(AppTheme.Typography.telemetry(size: 10, weight: .bold))
+                            .foregroundColor(AppTheme.Colors.bluePrimary)
                             .padding(.horizontal, 6)
                             .padding(.vertical, 2)
                             .background(Color(hex: "E8F3FF"))
                             .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
                     }
+                    if room.isPublic {
+                        Text("Public")
+                            .font(AppTheme.Typography.telemetry(size: 10, weight: .bold))
+                            .foregroundColor(Color(hex: "0F766E"))
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 2)
+                            .background(Color(hex: "DFF8F4"))
+                            .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
+                    }
                 }
-                    .font(.system(size: 12, weight: .semibold))
-                    .foregroundColor(Color(hex: "0B5ED7"))
+                    .font(AppTheme.Typography.telemetry(size: 12, weight: .semibold))
+                    .foregroundColor(AppTheme.Colors.bluePrimary)
             }
 
             Spacer()
@@ -1277,11 +1254,11 @@ private struct FriendRoomCard: View {
             Button(room.joined ? "Leave Room" : "Join Room") {
                 onToggle()
             }
-            .font(.system(size: 13, weight: .semibold))
-            .foregroundColor(room.joined ? Color(hex: "0B5ED7") : .white)
+            .font(AppTheme.Typography.telemetry(size: 13, weight: .semibold))
+            .foregroundColor(room.joined ? AppTheme.Colors.bluePrimary : .white)
             .padding(.horizontal, 10)
             .padding(.vertical, 7)
-            .background(room.joined ? Color(hex: "E8F3FF") : Color(hex: "0B5ED7"))
+            .background(room.joined ? Color(hex: "E8F3FF") : AppTheme.Colors.bluePrimary)
             .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
         }
         .padding(10)
@@ -1342,7 +1319,7 @@ struct ProgramPreviewImage: View {
                 endPoint: .bottomTrailing
             )
             ProgressView()
-                .tint(Color(hex: "0B5ED7"))
+                .tint(AppTheme.Colors.bluePrimary)
         }
     }
 
@@ -1354,8 +1331,8 @@ struct ProgramPreviewImage: View {
                 endPoint: .bottomTrailing
             )
             Image(systemName: "figure.strengthtraining.traditional")
-                .font(.system(size: 22, weight: .semibold))
-                .foregroundColor(Color(hex: "0B5ED7"))
+                .font(AppTheme.Typography.telemetry(size: 22, weight: .semibold))
+                .foregroundColor(AppTheme.Colors.bluePrimary)
         }
     }
 }
@@ -1382,19 +1359,19 @@ struct ProgramJoinPopupView: View {
                 VStack(alignment: .leading, spacing: 10) {
                     HStack(spacing: 8) {
                         Text(program.environment)
-                            .font(.system(size: 12, weight: .bold))
-                            .foregroundColor(Color(hex: "0B5ED7"))
+                            .font(AppTheme.Typography.telemetry(size: 12, weight: .bold))
+                            .foregroundColor(AppTheme.Colors.bluePrimary)
                             .padding(.horizontal, 8)
                             .padding(.vertical, 5)
                             .background(Color(hex: "E8F3FF"))
                             .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
 
-                        if program.isPremium {
+                        if program.requiresSubscription {
                             Label(
-                                storeKitManager.effectiveIsPremiumUnlocked ? "Premium" : "Premium Required",
+                                storeKitManager.canAccessProgram(program) ? "Premium" : "Subscription Required",
                                 systemImage: "star.fill"
                             )
-                            .font(.system(size: 11, weight: .bold))
+                            .font(AppTheme.Typography.telemetry(size: 11, weight: .bold))
                             .foregroundColor(Color(hex: "A16207"))
                             .padding(.horizontal, 8)
                             .padding(.vertical, 5)
@@ -1404,12 +1381,12 @@ struct ProgramJoinPopupView: View {
                     }
 
                     Text(program.name)
-                        .font(.system(size: 24, weight: .bold))
-                        .foregroundColor(Color(hex: "111827"))
+                        .font(AppTheme.Typography.telemetry(size: 24, weight: .bold))
+                        .foregroundColor(AppTheme.Colors.textPrimary)
 
                     Text(program.description)
-                        .font(.system(size: 14, weight: .medium))
-                        .foregroundColor(Color(hex: "6B7280"))
+                        .font(AppTheme.Typography.telemetry(size: 14, weight: .medium))
+                        .foregroundColor(AppTheme.Colors.textSecondary)
                         .fixedSize(horizontal: false, vertical: true)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -1418,22 +1395,22 @@ struct ProgramJoinPopupView: View {
                     Button("Cancel") {
                         isPresented = false
                     }
-                    .font(.system(size: 15, weight: .semibold))
-                    .foregroundColor(Color(hex: "6B7280"))
+                    .font(AppTheme.Typography.telemetry(size: 15, weight: .semibold))
+                    .foregroundColor(AppTheme.Colors.textSecondary)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 12)
                     .background(Color(hex: "F3F4F6"))
                     .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
 
-                    Button(storeKitManager.effectiveIsPremiumUnlocked || !program.isPremium ? "Join Program" : "Unlock Premium") {
+                    Button(storeKitManager.canAccessProgram(program) ? "Join Program" : "Unlock Subscription") {
                         joinProgramAction()
                         isPresented = false
                     }
-                    .font(.system(size: 15, weight: .semibold))
+                    .font(AppTheme.Typography.telemetry(size: 15, weight: .semibold))
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 12)
-                    .background(Color(hex: "0B5ED7"))
+                    .background(AppTheme.Colors.bluePrimary)
                     .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
                 }
             }
@@ -1449,26 +1426,196 @@ struct ProgramJoinPopupView: View {
     }
 }
 
+struct GlobalFriendRoomDirectorySheet: View {
+    let onStatusMessage: (String) -> Void
+    @ObservedObject private var friendWorkoutManager = FriendWorkoutManager.shared
+    @Environment(\.dismiss) private var dismiss
+
+    @State private var selectedFilter: FriendWorkoutContext?
+    @State private var joinCode = ""
+
+    init(initialContext: FriendWorkoutContext? = nil, onStatusMessage: @escaping (String) -> Void) {
+        self.onStatusMessage = onStatusMessage
+        _selectedFilter = State(initialValue: initialContext)
+    }
+
+    private var displayedRooms: [FriendWorkoutRoom] {
+        let rooms = friendWorkoutManager.globalRooms.sorted(by: { $0.scheduleDate < $1.scheduleDate })
+        guard let selectedFilter else { return rooms }
+        return rooms.filter { $0.context == selectedFilter }
+    }
+
+    var body: some View {
+        NavigationStack {
+            VStack(alignment: .leading, spacing: 14) {
+                Text("Public CloudKit rooms are visible to everyone. Join instantly with a room code or from the directory.")
+                    .font(AppTheme.Typography.telemetry(size: 14, weight: .medium))
+                    .foregroundColor(AppTheme.Colors.textSecondary)
+
+                HStack(spacing: 8) {
+                    filterChip(label: "All", selected: selectedFilter == nil) {
+                        selectedFilter = nil
+                    }
+                    ForEach(FriendWorkoutContext.allCases, id: \.self) { context in
+                        filterChip(label: context.title, selected: selectedFilter == context) {
+                            selectedFilter = context
+                        }
+                    }
+                }
+
+                HStack(spacing: 8) {
+                    TextField("Enter room code", text: $joinCode)
+                        .textInputAutocapitalization(.characters)
+                        .autocorrectionDisabled()
+                        .font(AppTheme.Typography.telemetry(size: 14, weight: .medium))
+                        .padding(10)
+                        .background(Color(hex: "F8FAFC"))
+                        .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+
+                    Button("Join") {
+                        Task {
+                            let success = await friendWorkoutManager.joinRoom(withCode: joinCode)
+                            let normalized = normalizedRoomCode(joinCode)
+                            if success {
+                                joinCode = ""
+                                onStatusMessage("Joined room \(normalized).")
+                            } else {
+                                onStatusMessage(friendWorkoutManager.syncErrorMessage ?? "Unable to join that room.")
+                            }
+                        }
+                    }
+                    .font(AppTheme.Typography.telemetry(size: 14, weight: .semibold))
+                    .foregroundColor(.white)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 10)
+                    .background(AppTheme.Colors.bluePrimary)
+                    .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+                }
+
+                if displayedRooms.isEmpty {
+                    Text("No public rooms available right now.")
+                        .font(AppTheme.Typography.telemetry(size: 14, weight: .medium))
+                        .foregroundColor(AppTheme.Colors.textSecondary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(12)
+                        .background(Color(hex: "F8FAFC"))
+                        .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+                } else {
+                    ScrollView {
+                        VStack(spacing: 10) {
+                            ForEach(displayedRooms) { room in
+                                HStack(spacing: 10) {
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        Text(room.title)
+                                            .font(AppTheme.Typography.telemetry(size: 15, weight: .semibold))
+                                        Text("\(room.contextLabel) • \(room.scheduleLabel)")
+                                            .font(AppTheme.Typography.telemetry(size: 12, weight: .medium))
+                                            .foregroundColor(AppTheme.Colors.textSecondary)
+                                        Text("Code \(room.roomCode)")
+                                            .font(AppTheme.Typography.telemetry(size: 12, weight: .bold))
+                                            .foregroundColor(AppTheme.Colors.bluePrimary)
+                                    }
+
+                                    Spacer()
+
+                                    Button(room.joined ? "Leave Room" : "Join Room") {
+                                        Task {
+                                            let success = await friendWorkoutManager.toggleMembership(room: room)
+                                            if success {
+                                                onStatusMessage(room.joined ? "You left \(room.title)." : "You joined \(room.title).")
+                                            } else {
+                                                onStatusMessage(friendWorkoutManager.syncErrorMessage ?? "Unable to update room membership.")
+                                            }
+                                        }
+                                    }
+                                    .font(AppTheme.Typography.telemetry(size: 13, weight: .semibold))
+                                    .foregroundColor(room.joined ? AppTheme.Colors.bluePrimary : .white)
+                                    .padding(.horizontal, 10)
+                                    .padding(.vertical, 8)
+                                    .background(room.joined ? Color(hex: "E8F3FF") : AppTheme.Colors.bluePrimary)
+                                    .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+                                }
+                                .padding(10)
+                                .background(Color.white)
+                                .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                        .stroke(Color.black.opacity(0.08), lineWidth: 1)
+                                )
+                            }
+                        }
+                        .padding(.vertical, 2)
+                    }
+                }
+
+                Spacer()
+            }
+            .padding(16)
+            .navigationTitle("Global Rooms")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("Close") {
+                        dismiss()
+                    }
+                    .font(AppTheme.Typography.telemetry(size: 14, weight: .semibold))
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        Task {
+                            await friendWorkoutManager.refreshGlobalDirectory()
+                        }
+                    } label: {
+                        Image(systemName: "arrow.clockwise")
+                            .font(AppTheme.Typography.telemetry(size: 14, weight: .bold))
+                    }
+                }
+            }
+            .task {
+                await friendWorkoutManager.refreshGlobalDirectory()
+            }
+        }
+    }
+
+    private func filterChip(label: String, selected: Bool, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Text(label)
+                .font(AppTheme.Typography.telemetry(size: 12, weight: .semibold))
+                .foregroundColor(selected ? .white : AppTheme.Colors.bluePrimary)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 6)
+                .background(selected ? AppTheme.Colors.bluePrimary : Color(hex: "E8F3FF"))
+                .clipShape(RoundedRectangle(cornerRadius: 7, style: .continuous))
+        }
+        .buttonStyle(.plain)
+    }
+
+    private func normalizedRoomCode(_ value: String) -> String {
+        String(value.uppercased().filter { $0.isLetter || $0.isNumber })
+    }
+}
+
 struct CreateFriendRoomSheet: View {
     let context: FriendWorkoutContext
-    let onCreate: (String, Date) -> Void
+    let onCreate: (String, Date, Bool) -> Void
 
     @Environment(\.dismiss) private var dismiss
     @State private var roomName = ""
     @State private var scheduleDate = Date().addingTimeInterval(3600)
+    @State private var isPublicRoom = true
 
     var body: some View {
         NavigationStack {
             VStack(alignment: .leading, spacing: 14) {
                 Text("Create a \(context == .program ? "Program" : "Gym") room and invite people to train together.")
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(Color(hex: "6B7280"))
+                    .font(AppTheme.Typography.telemetry(size: 14, weight: .medium))
+                    .foregroundColor(AppTheme.Colors.textSecondary)
 
                 VStack(alignment: .leading, spacing: 6) {
                     Text("Room Name")
-                        .font(.system(size: 13, weight: .semibold))
+                        .font(AppTheme.Typography.telemetry(size: 13, weight: .semibold))
                     TextField("Evening Strength Crew", text: $roomName)
-                        .font(.system(size: 15, weight: .medium))
+                        .font(AppTheme.Typography.telemetry(size: 15, weight: .medium))
                         .padding(10)
                         .background(Color(hex: "F8FAFC"))
                         .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
@@ -1476,10 +1623,21 @@ struct CreateFriendRoomSheet: View {
 
                 VStack(alignment: .leading, spacing: 6) {
                     Text("Schedule")
-                        .font(.system(size: 13, weight: .semibold))
+                        .font(AppTheme.Typography.telemetry(size: 13, weight: .semibold))
                     DatePicker("", selection: $scheduleDate, in: Date()..., displayedComponents: [.date, .hourAndMinute])
                         .datePickerStyle(.compact)
                 }
+
+                Toggle(isOn: $isPublicRoom) {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("List in global directory")
+                            .font(AppTheme.Typography.telemetry(size: 13, weight: .semibold))
+                        Text("Anyone can discover and join this room by code.")
+                            .font(AppTheme.Typography.telemetry(size: 12, weight: .medium))
+                            .foregroundColor(AppTheme.Colors.textSecondary)
+                    }
+                }
+                .toggleStyle(.switch)
 
                 Spacer()
             }
@@ -1491,15 +1649,15 @@ struct CreateFriendRoomSheet: View {
                     Button("Cancel") {
                         dismiss()
                     }
-                    .font(.system(size: 14, weight: .semibold))
+                    .font(AppTheme.Typography.telemetry(size: 14, weight: .semibold))
                 }
 
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Create") {
-                        onCreate(roomName, scheduleDate)
+                        onCreate(roomName, scheduleDate, isPublicRoom)
                         dismiss()
                     }
-                    .font(.system(size: 14, weight: .semibold))
+                    .font(AppTheme.Typography.telemetry(size: 14, weight: .semibold))
                 }
             }
         }

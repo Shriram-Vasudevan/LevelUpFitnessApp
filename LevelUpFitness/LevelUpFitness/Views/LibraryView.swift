@@ -21,7 +21,7 @@ struct LibraryView: View {
     
     var body: some View {
         ZStack {
-            Color.white
+            AppTheme.Colors.backgroundDark
                 .ignoresSafeArea()
             
             ScrollView(.vertical, showsIndicators: false) {
@@ -30,11 +30,11 @@ struct LibraryView: View {
                         HStack {
                             VStack(alignment: .leading, spacing: 4) {
                                 Text("Exercise Library")
-                                    .font(.system(size: 28, weight: .medium, design: .default))
-                                    .foregroundColor(.black)
+                                    .font(AppTheme.Typography.telemetry(size: 28, weight: .medium))
+                                    .foregroundColor(AppTheme.Colors.textPrimary)
                                 Text("Discover and master new exercises.")
-                                    .font(.system(size: 14, weight: .regular, design: .default))
-                                    .foregroundColor(.gray)
+                                    .font(AppTheme.Typography.telemetry(size: 14))
+                                    .foregroundColor(AppTheme.Colors.textSecondary)
                             }
                             Spacer()
                         }
@@ -44,24 +44,24 @@ struct LibraryView: View {
                     VStack(alignment: .leading, spacing: 16) {
                         HStack {
                             Text("Custom Workouts")
-                                .font(.system(size: 22, weight: .medium, design: .default))
-                                .foregroundColor(.black)
+                                .font(AppTheme.Typography.telemetry(size: 22, weight: .medium))
+                                .foregroundColor(AppTheme.Colors.textPrimary)
                             Spacer()
                             
                             Button {
                                 navigateToCustomWorkoutCreation = true
                             } label: {
                                 Text("Create New")
-                                    .font(.system(size: 14, weight: .medium, design: .default))
-                                    .foregroundColor(Color(hex: "40C4FC"))
+                                    .font(AppTheme.Typography.telemetry(size: 14, weight: .medium))
+                                    .foregroundColor(AppTheme.Colors.bluePrimary)
                             }
 
                         }
                         
                         if customWorkoutsManager.customWorkouts.isEmpty {
                             Text("No Custom Workouts. Create one!")
-                                .font(.system(size: 16, weight: .regular, design: .default))
-                                .foregroundColor(.gray)
+                                .font(AppTheme.Typography.telemetry(size: 16))
+                                .foregroundColor(AppTheme.Colors.textSecondary)
                                 .padding(.vertical, 8)
                         } else {
                             ScrollView(.horizontal, showsIndicators: false)
@@ -85,23 +85,23 @@ struct LibraryView: View {
                             VStack(alignment: .leading, spacing: 16) {
                                 HStack {
                                     Text(key.capitalizingFirstLetter())
-                                        .font(.system(size: 22, weight: .medium, design: .default))
-                                        .foregroundColor(.black)
+                                        .font(AppTheme.Typography.telemetry(size: 22, weight: .medium))
+                                        .foregroundColor(AppTheme.Colors.textPrimary)
                                     Spacer()
                                     if let level = userXPData.subLevels.attribute(for: key)?.level {
                                         Text("Level \(level)")
-                                            .font(.system(size: 14, weight: .medium, design: .default))
+                                            .font(AppTheme.Typography.telemetry(size: 14, weight: .medium))
                                             .foregroundColor(.white)
                                             .padding(.horizontal, 12)
                                             .padding(.vertical, 6)
-                                            .background(Color(hex: "40C4FC"))
+                                            .background(AppTheme.Colors.bluePrimary)
                                     }
                                 }
                                 
                                 let filteredExercises = exerciseManager.exercises.filter { $0.exerciseType == key.capitalizingFirstLetter() }
                                 if filteredExercises.isEmpty {
                                     Text("No exercises for \(key)")
-                                        .foregroundColor(.gray)
+                                        .foregroundColor(AppTheme.Colors.textSecondary)
                                 } else {
                                     ForEach(filteredExercises, id: \.id) { exercise in
                                         ExerciseLibraryExerciseWidget(exercise: exercise, userXPData: userXPData) { progression in

@@ -8,11 +8,9 @@ struct FullLevelBreakdownView: View {
 
     @State private var levelTrendPoints: [HealthDataPoint] = []
 
-    private let accent = Color(hex: "0B5ED7")
-
     var body: some View {
         ZStack {
-            Color(hex: "F3F5F8").ignoresSafeArea()
+            AppTheme.Colors.backgroundDark.ignoresSafeArea()
 
             ScrollView {
                 VStack(spacing: 14) {
@@ -36,8 +34,8 @@ struct FullLevelBreakdownView: View {
     private var titleHeader: some View {
         HStack {
             Text("Level Breakdown")
-                .font(.system(size: 30, weight: .bold))
-                .foregroundColor(Color(hex: "111827"))
+                .font(AppTheme.Typography.telemetry(size: 30, weight: .bold))
+                .foregroundColor(AppTheme.Colors.textPrimary)
             Spacer()
         }
     }
@@ -47,26 +45,27 @@ struct FullLevelBreakdownView: View {
             HStack {
                 VStack(alignment: .leading, spacing: 6) {
                     Text("Current Level")
-                        .font(.system(size: 13, weight: .semibold))
-                        .foregroundColor(Color.white.opacity(0.85))
+                        .font(AppTheme.Typography.telemetry(size: 13, weight: .semibold))
+                        .foregroundColor(AppTheme.Colors.textSecondary)
 
                     Text("\(xpManager.userXPData?.level ?? 1)")
-                        .font(.system(size: 46, weight: .bold))
-                        .foregroundColor(.white)
+                        .font(AppTheme.Typography.monumentalNumber(size: 46))
+                        .foregroundColor(AppTheme.Colors.textPrimary)
+                        .controlledGlow(isActive: true)
                 }
 
                 Spacer()
 
                 VStack(alignment: .trailing, spacing: 6) {
                     Text("Recent XP Delta")
-                        .font(.system(size: 12, weight: .semibold))
-                        .foregroundColor(Color.white.opacity(0.8))
+                        .font(AppTheme.Typography.telemetry(size: 12, weight: .semibold))
+                        .foregroundColor(AppTheme.Colors.textSecondary)
                     HStack(spacing: 4) {
                         Image(systemName: deltaIcon)
                         Text(deltaLabel)
                     }
-                    .font(.system(size: 16, weight: .bold))
-                    .foregroundColor(.white)
+                    .font(AppTheme.Typography.telemetry(size: 16, weight: .bold))
+                    .foregroundColor(recentDelta >= 0 ? AppTheme.Colors.success : AppTheme.Colors.danger)
                 }
             }
 
@@ -76,25 +75,17 @@ struct FullLevelBreakdownView: View {
                     Spacer()
                     Text("Next: \(xpManager.userXPData?.xpNeeded ?? 1) XP")
                 }
-                .font(.system(size: 12, weight: .semibold))
-                .foregroundColor(Color.white.opacity(0.86))
+                .font(AppTheme.Typography.telemetry(size: 12, weight: .semibold))
+                .foregroundColor(AppTheme.Colors.textSecondary)
 
                 ProgressView(value: levelProgress)
                     .progressViewStyle(.linear)
-                    .tint(.white)
+                    .tint(AppTheme.Colors.bluePrimary)
                     .scaleEffect(x: 1, y: 1.35, anchor: .center)
             }
         }
-        .padding(14)
-        .background(
-            LinearGradient(
-                colors: [Color(hex: "0B5ED7"), Color(hex: "1C9BFF")],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-        )
-        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-        .shadow(color: Color.black.opacity(0.08), radius: 10, x: 0, y: 6)
+        .padding(16)
+        .engineeredPanel(isElevated: true)
     }
 
     private var sublevelSection: some View {
@@ -121,13 +112,7 @@ struct FullLevelBreakdownView: View {
                         x: .value("Category", sublevel.shortName),
                         y: .value("Completion", sublevel.completion * 100)
                     )
-                    .foregroundStyle(
-                        LinearGradient(
-                            colors: [Color(hex: "0B5ED7"), Color(hex: "40C4FC")],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        )
-                    )
+                    .foregroundStyle(AppTheme.Lighting.activeGradient)
                     .cornerRadius(3)
                 }
                 .frame(height: 200)
@@ -135,11 +120,25 @@ struct FullLevelBreakdownView: View {
                 .chartYAxis {
                     AxisMarks(position: .leading) { value in
                         AxisGridLine(stroke: StrokeStyle(lineWidth: 0.35, dash: [2]))
+                            .foregroundStyle(Color.white.opacity(0.1))
                         AxisTick()
+                            .foregroundStyle(Color.white.opacity(0.1))
                         AxisValueLabel {
                             if let y = value.as(Double.self) {
                                 Text("\(Int(y))%")
-                                    .font(.system(size: 10, weight: .medium))
+                                    .font(AppTheme.Typography.telemetry(size: 10, weight: .medium))
+                                    .foregroundColor(AppTheme.Colors.textSecondary)
+                            }
+                        }
+                    }
+                }
+                .chartXAxis {
+                    AxisMarks { value in
+                        AxisValueLabel {
+                            if let x = value.as(String.self) {
+                                Text(x)
+                                    .font(AppTheme.Typography.telemetry(size: 10, weight: .medium))
+                                    .foregroundColor(AppTheme.Colors.textSecondary)
                             }
                         }
                     }
@@ -155,36 +154,40 @@ struct FullLevelBreakdownView: View {
             } else {
                 VStack(spacing: 8) {
                     ForEach(Array(levelChangeManager.levelChanges.suffix(6).reversed()), id: \.id) { change in
-                        HStack(spacing: 10) {
+                        HStack(spacing: 12) {
                             Image(systemName: iconName(for: change.keyword))
-                                .font(.system(size: 13, weight: .bold))
-                                .foregroundColor(accent)
-                                .frame(width: 28, height: 28)
-                                .background(accent.opacity(0.12))
-                                .clipShape(RoundedRectangle(cornerRadius: 7, style: .continuous))
+                                .font(.system(size: 14, weight: .bold))
+                                .foregroundColor(AppTheme.Colors.bluePrimary)
+                                .frame(width: 32, height: 32)
+                                .background(AppTheme.Colors.bluePrimary.opacity(0.15))
+                                .clipShape(RoundedRectangle(cornerRadius: AppTheme.Geometry.tightRadius, style: .continuous))
 
-                            VStack(alignment: .leading, spacing: 3) {
+                            VStack(alignment: .leading, spacing: 4) {
                                 Text(change.keyword)
-                                    .font(.system(size: 14, weight: .semibold))
-                                    .foregroundColor(Color(hex: "111827"))
+                                    .font(AppTheme.Typography.telemetry(size: 14, weight: .semibold))
+                                    .foregroundColor(AppTheme.Colors.textPrimary)
                                 Text(change.description)
-                                    .font(.system(size: 12, weight: .medium))
-                                    .foregroundColor(Color(hex: "6B7280"))
+                                    .font(AppTheme.Typography.telemetry(size: 12, weight: .medium))
+                                    .foregroundColor(AppTheme.Colors.textSecondary)
                                     .lineLimit(2)
                                 Text(formattedTimestamp(change.timestamp))
-                                    .font(.system(size: 11, weight: .medium))
-                                    .foregroundColor(Color(hex: "9CA3AF"))
+                                    .font(AppTheme.Typography.telemetry(size: 11, weight: .medium))
+                                    .foregroundColor(AppTheme.Colors.textDisabled)
                             }
 
                             Spacer()
 
                             Text(signedXP(change.change))
-                                .font(.system(size: 13, weight: .bold))
-                                .foregroundColor(change.change >= 0 ? Color(hex: "0B5ED7") : Color(hex: "DC2626"))
+                                .font(AppTheme.Typography.monumentalNumber(size: 14))
+                                .foregroundColor(change.change >= 0 ? AppTheme.Colors.success : AppTheme.Colors.danger)
                         }
-                        .padding(10)
-                        .background(Color(hex: "F8FAFC"))
-                        .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+                        .padding(12)
+                        .background(AppTheme.Colors.surfaceLight)
+                        .clipShape(RoundedRectangle(cornerRadius: AppTheme.Geometry.tightRadius, style: .continuous))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: AppTheme.Geometry.tightRadius, style: .continuous)
+                                .stroke(Color.white.opacity(0.04), lineWidth: 1)
+                        )
                     }
                 }
             }
@@ -203,7 +206,7 @@ struct FullLevelBreakdownView: View {
                     )
                     .foregroundStyle(
                         LinearGradient(
-                            colors: [accent.opacity(0.24), accent.opacity(0.03)],
+                            colors: [AppTheme.Colors.bluePrimary.opacity(0.24), AppTheme.Colors.bluePrimary.opacity(0.03)],
                             startPoint: .top,
                             endPoint: .bottom
                         )
@@ -213,24 +216,27 @@ struct FullLevelBreakdownView: View {
                         x: .value("Date", point.date),
                         y: .value("Level", point.value)
                     )
-                    .foregroundStyle(accent)
+                    .foregroundStyle(AppTheme.Colors.bluePrimary)
                     .lineStyle(StrokeStyle(lineWidth: 3, lineCap: .round, lineJoin: .round))
 
                     PointMark(
                         x: .value("Date", point.date),
                         y: .value("Level", point.value)
                     )
-                    .foregroundStyle(accent)
+                    .foregroundStyle(AppTheme.Colors.bluePrimary)
                 }
                 .frame(height: 220)
                 .chartYAxis {
                     AxisMarks(position: .leading) { value in
                         AxisGridLine(stroke: StrokeStyle(lineWidth: 0.35, dash: [2]))
+                            .foregroundStyle(Color.white.opacity(0.1))
                         AxisTick()
+                            .foregroundStyle(Color.white.opacity(0.1))
                         AxisValueLabel {
                             if let y = value.as(Double.self) {
                                 Text(String(format: "%.0f", y))
-                                    .font(.system(size: 10, weight: .medium))
+                                    .font(AppTheme.Typography.telemetry(size: 10, weight: .medium))
+                                    .foregroundColor(AppTheme.Colors.textSecondary)
                             }
                         }
                     }
@@ -238,8 +244,16 @@ struct FullLevelBreakdownView: View {
                 .chartXAxis {
                     AxisMarks(values: .stride(by: .day, count: max(1, levelTrendPoints.count / 4))) { value in
                         AxisGridLine(stroke: StrokeStyle(lineWidth: 0.35, dash: [2]))
+                            .foregroundStyle(Color.white.opacity(0.1))
                         AxisTick()
-                        AxisValueLabel(format: .dateTime.month(.abbreviated).day())
+                            .foregroundStyle(Color.white.opacity(0.1))
+                        AxisValueLabel {
+                            if let date = value.as(Date.self) {
+                                Text(date.formatted(.dateTime.month(.abbreviated).day()))
+                                    .font(AppTheme.Typography.telemetry(size: 10, weight: .medium))
+                                    .foregroundColor(AppTheme.Colors.textSecondary)
+                            }
+                        }
                     }
                 }
             }
@@ -248,12 +262,16 @@ struct FullLevelBreakdownView: View {
 
     private func emptyState(_ text: String) -> some View {
         Text(text)
-            .font(.system(size: 13, weight: .medium))
-            .foregroundColor(Color(hex: "6B7280"))
+            .font(AppTheme.Typography.telemetry(size: 13, weight: .medium))
+            .foregroundColor(AppTheme.Colors.textSecondary)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(10)
-            .background(Color(hex: "F8FAFC"))
-            .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+            .padding(12)
+            .background(AppTheme.Colors.surfaceLight)
+            .clipShape(RoundedRectangle(cornerRadius: AppTheme.Geometry.tightRadius, style: .continuous))
+            .overlay(
+                RoundedRectangle(cornerRadius: AppTheme.Geometry.tightRadius, style: .continuous)
+                    .stroke(Color.white.opacity(0.04), lineWidth: 1)
+            )
     }
 
     private var levelProgress: Double {
@@ -359,20 +377,15 @@ private struct DashboardSection<Content: View>: View {
     @ViewBuilder let content: Content
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(alignment: .leading, spacing: 14) {
             Text(title)
-                .font(.system(size: 18, weight: .semibold))
-                .foregroundColor(Color(hex: "111827"))
+                .font(AppTheme.Typography.telemetry(size: 18, weight: .bold))
+                .foregroundColor(AppTheme.Colors.textPrimary)
 
             content
         }
-        .padding(12)
-        .background(Color.white)
-        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .stroke(Color.black.opacity(0.08), lineWidth: 1)
-        )
+        .padding(16)
+        .engineeredPanel(isElevated: false)
     }
 }
 
@@ -393,28 +406,34 @@ private struct SublevelCard: View {
     let sublevel: SublevelDisplay
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 10) {
             Text(sublevel.name)
-                .font(.system(size: 13, weight: .semibold))
-                .foregroundColor(Color(hex: "111827"))
+                .font(AppTheme.Typography.telemetry(size: 14, weight: .bold))
+                .foregroundColor(AppTheme.Colors.textPrimary)
                 .lineLimit(2)
 
             Text("Level \(sublevel.level)")
-                .font(.system(size: 12, weight: .bold))
-                .foregroundColor(Color(hex: "0B5ED7"))
+                .font(AppTheme.Typography.monumentalNumber(size: 16))
+                .foregroundColor(AppTheme.Colors.bluePrimary)
+                .controlledGlow(isActive: true, color: AppTheme.Colors.bluePrimary.opacity(0.3))
 
             ProgressView(value: sublevel.completion)
                 .progressViewStyle(.linear)
-                .tint(Color(hex: "0B5ED7"))
+                .tint(AppTheme.Colors.bluePrimary)
+                .background(Color.white.opacity(0.1))
 
             Text("\(sublevel.xp)/\(sublevel.xpNeeded) XP")
-                .font(.system(size: 11, weight: .medium))
-                .foregroundColor(Color(hex: "6B7280"))
+                .font(AppTheme.Typography.monumentalNumber(size: 11))
+                .foregroundColor(AppTheme.Colors.textSecondary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(10)
-        .background(Color(hex: "F8FAFC"))
-        .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+        .padding(12)
+        .background(AppTheme.Colors.surfaceLight)
+        .clipShape(RoundedRectangle(cornerRadius: AppTheme.Geometry.tightRadius, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: AppTheme.Geometry.tightRadius, style: .continuous)
+                .stroke(Color.white.opacity(0.04), lineWidth: 1)
+        )
     }
 }
 

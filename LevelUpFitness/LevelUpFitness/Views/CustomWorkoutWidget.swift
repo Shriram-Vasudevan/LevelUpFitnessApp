@@ -33,16 +33,16 @@ struct CustomWorkoutWidget: View {
                 VStack (spacing: 4) {
                     HStack {
                         Text(workout.name)
-                            .font(.system(size: 16, weight: .medium, design: .default))
-                            .foregroundColor(.black)
+                            .font(AppTheme.Typography.telemetry(size: 16, weight: .medium))
+                            .foregroundColor(AppTheme.Colors.textPrimary)
                         
                         Spacer()
                     }
                     
                     HStack {
                         Text("\(workout.exercises.count) exercises")
-                            .font(.system(size: 14, weight: .regular, design: .default))
-                            .foregroundColor(.gray)
+                            .font(AppTheme.Typography.telemetry(size: 14))
+                            .foregroundColor(AppTheme.Colors.textSecondary)
                         
                         Spacer()
                     }
@@ -55,14 +55,14 @@ struct CustomWorkoutWidget: View {
                     onDelete(workout)
                 }) {
                     Image(systemName: "trash")
-                        .foregroundColor(Color(hex: "40C4FC"))
+                        .foregroundColor(AppTheme.Colors.bluePrimary)
                         .padding(6)
                 }
             }
         }
         .frame(width: 150)
         .padding(12)
-        .background(Color(hex: "F5F5F5"))
+        .engineeredPanel(isElevated: true)
     }
 }
 

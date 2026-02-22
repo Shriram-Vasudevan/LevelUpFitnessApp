@@ -69,6 +69,7 @@ class ProgramManager: ObservableObject {
             if let programs = programs {
                 DispatchQueue.main.async {
                     self.standardProgramDBRepresentations = programs
+                    StoreKitManager.shared.registerProgramSubscriptionRequirements(programs)
                 }
             } else if let error = error {
                 print("Error fetching standard programs: \(error.localizedDescription)")
@@ -99,8 +100,13 @@ class ProgramManager: ObservableObject {
         }
 
         print("trying to join standard program")
-        let isPremiumProgram = standardProgramDBRepresentations.first(where: { $0.name == programName })?.isPremium ?? false
-        if isPremiumProgram && !StoreKitManager.shared.effectiveIsPremiumUnlocked {
+        let programMetadata = standardProgramDBRepresentations.first {
+            normalizeProgramName($0.name) == normalizedIncoming
+        }
+        let requiresSubscription = programMetadata?.requiresSubscription ?? false
+        let canAccessProgram = programMetadata.map { StoreKitManager.shared.canAccessProgram($0) } ?? true
+
+        if requiresSubscription && !canAccessProgram {
             print("Premium subscription required to join \(programName)")
             await MainActor.run {
                 StoreKitManager.shared.recordPaywallTrigger(.premiumProgram(name: programName))
@@ -118,7 +124,7 @@ class ProgramManager: ObservableObject {
             ProgramCloudKitUtility.fetchStandardProgramData(programName: programName) { program, error in
                 if let program = program {
                     var enrichedProgram = program
-                    enrichedProgram.isPremium = program.isPremium || isPremiumProgram
+                    enrichedProgram.isPremium = program.isPremium || (programMetadata?.isPremium ?? false)
                     ProgramCloudKitUtility.saveUserProgram(userID: userID, program: enrichedProgram, startDate: startDate) { programID, success, error in
                         if success {
                             let programWithID = ProgramWithID(programID: programID, program: enrichedProgram)
@@ -228,6 +234,15 @@ class ProgramManager: ObservableObject {
 enum FriendWorkoutContext: String, CaseIterable {
     case program = "Program"
     case gym = "Gym"
+
+    var title: String {
+        switch self {
+        case .program:
+            return "Program"
+        case .gym:
+            return "Gym"
+        }
+    }
 }
 
 struct FriendWorkoutRoom: Identifiable, Hashable {
@@ -238,9 +253,15 @@ struct FriendWorkoutRoom: Identifiable, Hashable {
     let participantCount: Int
     let joined: Bool
     let hostedByCurrentUser: Bool
+    let roomCode: String
+    let isPublic: Bool
 
     var scheduleLabel: String {
         scheduleDate.formatted(.dateTime.weekday(.abbreviated).hour().minute())
+    }
+
+    var contextLabel: String {
+        context.title
     }
 }
 
@@ -250,6 +271,7 @@ class FriendWorkoutManager: ObservableObject {
 
     @Published private(set) var programRooms: [FriendWorkoutRoom] = []
     @Published private(set) var gymRooms: [FriendWorkoutRoom] = []
+    @Published private(set) var globalRooms: [FriendWorkoutRoom] = []
     @Published var syncErrorMessage: String?
     @Published var syncing = false
 
@@ -268,6 +290,10 @@ class FriendWorkoutManager: ObservableObject {
     func refreshIfNeeded(context: FriendWorkoutContext) async {
         if rooms(for: context).isEmpty {
             await refresh(context: context)
+        }
+
+        if globalRooms.isEmpty {
+            await refreshGlobalDirectory()
         }
     }
 
@@ -292,8 +318,27 @@ class FriendWorkoutManager: ObservableObject {
         }
     }
 
+    func refreshGlobalDirectory() async {
+        syncing = true
+        defer { syncing = false }
+
+        do {
+            let currentUserID = try await ProgramCloudKitUtility.customContainer.userRecordID().recordName
+            globalRooms = try await fetchGlobalRooms(currentUserID: currentUserID)
+            syncErrorMessage = nil
+        } catch {
+            syncErrorMessage = "Unable to load global rooms right now."
+            print("Friend workout global refresh error: \(error.localizedDescription)")
+        }
+    }
+
     @discardableResult
-    func createRoom(context: FriendWorkoutContext, title: String, scheduleDate: Date) async -> Bool {
+    func createRoom(
+        context: FriendWorkoutContext,
+        title: String,
+        scheduleDate: Date,
+        isPublic: Bool = true
+    ) async -> Bool {
         syncing = true
         defer { syncing = false }
 
@@ -311,13 +356,77 @@ class FriendWorkoutManager: ObservableObject {
             record["ParticipantIDs"] = [currentUserID] as CKRecordValue
             record["CreatedAt"] = Date() as CKRecordValue
             record["IsActive"] = true as CKRecordValue
+            record["RoomCode"] = generateRoomCode() as CKRecordValue
+            record["IsPublicRoom"] = isPublic as CKRecordValue
 
             _ = try await save(record: record)
             await refresh(context: context)
+            await refreshGlobalDirectory()
             return true
         } catch {
             syncErrorMessage = "Could not create room. Check network and CloudKit permissions."
             print("Friend workout room creation error: \(error.localizedDescription)")
+            return false
+        }
+    }
+
+    @discardableResult
+    func joinRoom(withCode roomCode: String) async -> Bool {
+        syncing = true
+        defer { syncing = false }
+
+        do {
+            let normalizedCode = normalizeRoomCode(roomCode)
+            guard !normalizedCode.isEmpty else {
+                syncErrorMessage = "Enter a valid room code."
+                return false
+            }
+
+            let currentUserID = try await ProgramCloudKitUtility.customContainer.userRecordID().recordName
+            let query = CKQuery(recordType: recordType, predicate: NSPredicate(format: "RoomCode == %@", normalizedCode))
+            let records = try await perform(query: query)
+
+            guard let record = records.first else {
+                syncErrorMessage = "Room code not found."
+                return false
+            }
+
+            let isActive = (record["IsActive"] as? Bool) ?? true
+            guard isActive else {
+                syncErrorMessage = "This room is no longer active."
+                return false
+            }
+
+            let isPublicRoom = (record["IsPublicRoom"] as? Bool) ?? true
+            guard isPublicRoom else {
+                syncErrorMessage = "This room is private."
+                return false
+            }
+
+            let hostUserID = record["HostUserID"] as? String ?? ""
+            var participantIDs = record["ParticipantIDs"] as? [String] ?? []
+            if !hostUserID.isEmpty && !participantIDs.contains(hostUserID) {
+                participantIDs.append(hostUserID)
+            }
+
+            if !participantIDs.contains(currentUserID) {
+                participantIDs.append(currentUserID)
+                record["ParticipantIDs"] = Array(Set(participantIDs)) as CKRecordValue
+                _ = try await save(record: record)
+            }
+
+            if let contextString = record["Environment"] as? String,
+               let context = FriendWorkoutContext(rawValue: contextString) {
+                await refresh(context: context)
+            } else {
+                await refresh(context: .program)
+                await refresh(context: .gym)
+            }
+            await refreshGlobalDirectory()
+            return true
+        } catch {
+            syncErrorMessage = "Could not join room by code."
+            print("Friend workout join by code error: \(error.localizedDescription)")
             return false
         }
     }
@@ -348,6 +457,7 @@ class FriendWorkoutManager: ObservableObject {
             record["ParticipantIDs"] = Array(Set(participantIDs)) as CKRecordValue
             _ = try await save(record: record)
             await refresh(context: room.context)
+            await refreshGlobalDirectory()
             return true
         } catch {
             syncErrorMessage = "Could not update participation. Please retry."
@@ -371,30 +481,65 @@ class FriendWorkoutManager: ObservableObject {
         query.sortDescriptors = [NSSortDescriptor(key: "ScheduleDate", ascending: true)]
 
         let records = try await perform(query: query)
+        return records.compactMap { room(from: $0, currentUserID: currentUserID, fallbackContext: context) }
+    }
 
-        return records.compactMap { record in
-            let roomID = (record["ID"] as? String) ?? record.recordID.recordName
-            let title = (record["Title"] as? String) ?? defaultRoomTitle(for: context)
-            let scheduleDate = (record["ScheduleDate"] as? Date) ?? Date()
-            let hostUserID = (record["HostUserID"] as? String) ?? ""
-            let active = (record["IsActive"] as? Bool) ?? true
-            guard active else { return nil }
+    private func fetchGlobalRooms(currentUserID: String) async throws -> [FriendWorkoutRoom] {
+        let query = CKQuery(recordType: recordType, predicate: NSPredicate(value: true))
+        query.sortDescriptors = [NSSortDescriptor(key: "ScheduleDate", ascending: true)]
 
-            let participantIDs = record["ParticipantIDs"] as? [String] ?? []
-            let normalizedParticipantIDs = Array(
-                Set(participantIDs + (hostUserID.isEmpty ? [] : [hostUserID]))
-            )
+        let records = try await perform(query: query)
+        return records.compactMap { room(from: $0, currentUserID: currentUserID, fallbackContext: nil) }
+    }
 
-            return FriendWorkoutRoom(
-                id: roomID,
-                title: title,
-                scheduleDate: scheduleDate,
-                context: context,
-                participantCount: max(normalizedParticipantIDs.count, 1),
-                joined: normalizedParticipantIDs.contains(currentUserID),
-                hostedByCurrentUser: hostUserID == currentUserID
-            )
+    private func room(
+        from record: CKRecord,
+        currentUserID: String,
+        fallbackContext: FriendWorkoutContext?
+    ) -> FriendWorkoutRoom? {
+        let context: FriendWorkoutContext
+        if let environment = record["Environment"] as? String,
+           let parsed = FriendWorkoutContext(rawValue: environment) {
+            context = parsed
+        } else if let fallbackContext {
+            context = fallbackContext
+        } else {
+            return nil
         }
+
+        let roomID = (record["ID"] as? String) ?? record.recordID.recordName
+        let title = (record["Title"] as? String) ?? defaultRoomTitle(for: context)
+        let scheduleDate = (record["ScheduleDate"] as? Date) ?? Date()
+        let hostUserID = (record["HostUserID"] as? String) ?? ""
+        let active = (record["IsActive"] as? Bool) ?? true
+        guard active else { return nil }
+
+        let isPublicRoom = (record["IsPublicRoom"] as? Bool) ?? true
+        let participantIDs = record["ParticipantIDs"] as? [String] ?? []
+        let normalizedParticipantIDs = Array(
+            Set(participantIDs + (hostUserID.isEmpty ? [] : [hostUserID]))
+        )
+        let joined = normalizedParticipantIDs.contains(currentUserID)
+
+        if !isPublicRoom && !joined && hostUserID != currentUserID {
+            return nil
+        }
+
+        let roomCode = normalizeRoomCode(
+            (record["RoomCode"] as? String) ?? String(roomID.prefix(6))
+        )
+
+        return FriendWorkoutRoom(
+            id: roomID,
+            title: title,
+            scheduleDate: scheduleDate,
+            context: context,
+            participantCount: max(normalizedParticipantIDs.count, 1),
+            joined: joined,
+            hostedByCurrentUser: hostUserID == currentUserID,
+            roomCode: roomCode,
+            isPublic: isPublicRoom
+        )
     }
 
     private func perform(query: CKQuery) async throws -> [CKRecord] {
@@ -442,5 +587,16 @@ class FriendWorkoutManager: ObservableObject {
                 continuation.resume(returning: savedRecord)
             }
         }
+    }
+
+    private func normalizeRoomCode(_ value: String) -> String {
+        let allowed = CharacterSet.alphanumerics
+        let normalizedScalars = value.uppercased().unicodeScalars.filter { allowed.contains($0) }
+        return String(String.UnicodeScalarView(normalizedScalars))
+    }
+
+    private func generateRoomCode(length: Int = 6) -> String {
+        let alphabet = Array("ABCDEFGHJKLMNPQRSTUVWXYZ23456789")
+        return String((0..<length).map { _ in alphabet.randomElement() ?? "X" })
     }
 }

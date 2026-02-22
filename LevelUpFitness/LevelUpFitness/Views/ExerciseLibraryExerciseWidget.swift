@@ -24,8 +24,8 @@ struct ExerciseLibraryExerciseWidget: View {
            if isExpanded {
                VStack(alignment: .leading, spacing: 16) {
                    Text("Other Progressions")
-                       .font(.system(size: 18, weight: .medium, design: .default))
-                       .foregroundColor(.black)
+                       .font(AppTheme.Typography.telemetry(size: 18, weight: .medium))
+                       .foregroundColor(AppTheme.Colors.textPrimary)
                    
                    ScrollView(.horizontal, showsIndicators: false) {
                        HStack(spacing: 16) {
@@ -38,9 +38,7 @@ struct ExerciseLibraryExerciseWidget: View {
            }
        }
        .padding()
-       .background(Color.white)
-       .cornerRadius(4)
-       .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0, y: 2)
+       .engineeredPanel(isElevated: true)
    }
    
    private func mainProgressionView(progression: Progression) -> some View {
@@ -53,14 +51,14 @@ struct ExerciseLibraryExerciseWidget: View {
            
            VStack(alignment: .leading, spacing: 4) {
                Text(progression.name)
-                   .font(.system(size: 18, weight: .medium, design: .default))
-                   .foregroundColor(.black)
+                   .font(AppTheme.Typography.telemetry(size: 18, weight: .medium))
+                   .foregroundColor(AppTheme.Colors.textPrimary)
                Text("Level \(progression.level)")
-                   .font(.system(size: 14, weight: .regular, design: .default))
-                   .foregroundColor(Color(hex: "40C4FC"))
+                   .font(AppTheme.Typography.telemetry(size: 14))
+                   .foregroundColor(AppTheme.Colors.bluePrimary)
                Text(exercise.exerciseType)
-                   .font(.system(size: 14, weight: .regular, design: .default))
-                   .foregroundColor(.gray)
+                   .font(AppTheme.Typography.telemetry(size: 14))
+                   .foregroundColor(AppTheme.Colors.textSecondary)
            }
            
            Spacer()
@@ -72,7 +70,7 @@ struct ExerciseLibraryExerciseWidget: View {
                    Image(systemName: "play.fill")
                        .foregroundColor(.white)
                        .frame(width: 40, height: 40)
-                       .background(Color(hex: "40C4FC"))
+                       .background(AppTheme.Colors.bluePrimary)
                }
                
                Button(action: {
@@ -81,9 +79,9 @@ struct ExerciseLibraryExerciseWidget: View {
                    }
                }) {
                    Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
-                       .foregroundColor(.gray)
+                       .foregroundColor(AppTheme.Colors.textSecondary)
                        .frame(width: 40, height: 40)
-                       .background(Color(hex: "F5F5F5"))
+                       .background(AppTheme.Colors.surfaceLight)
                }
            }
        }
@@ -107,13 +105,13 @@ struct ExerciseLibraryExerciseWidget: View {
            }
            
            Text(progression.name)
-               .font(.system(size: 14, weight: .medium, design: .default))
+               .font(AppTheme.Typography.telemetry(size: 14, weight: .medium))
                .lineLimit(2)
                .multilineTextAlignment(.center)
            
            Text("Level \(progression.level)")
-               .font(.system(size: 12, weight: .regular, design: .default))
-               .foregroundColor(Color(hex: "40C4FC"))
+               .font(AppTheme.Typography.telemetry(size: 12))
+               .foregroundColor(AppTheme.Colors.bluePrimary)
            
            Button(action: {
                if !isLocked(progression: progression) {
@@ -121,18 +119,18 @@ struct ExerciseLibraryExerciseWidget: View {
                }
            }) {
                Text(isLocked(progression: progression) ? "Locked" : "Start")
-                   .font(.system(size: 14, weight: .medium, design: .default))
+                   .font(AppTheme.Typography.telemetry(size: 14, weight: .medium))
                    .foregroundColor(.white)
                    .padding(.horizontal, 12)
                    .padding(.vertical, 6)
                    .frame(width: 80)
-                   .background(isLocked(progression: progression) ? Color.gray : Color(hex: "40C4FC"))
+                   .background(isLocked(progression: progression) ? Color.gray : AppTheme.Colors.bluePrimary)
            }
            .disabled(isLocked(progression: progression))
        }
        .frame(width: 100)
        .padding(8)
-       .background(Color(hex: "F5F5F5"))
+       .background(AppTheme.Colors.surfaceLight)
    }
     
 

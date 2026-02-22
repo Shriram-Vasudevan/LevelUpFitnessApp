@@ -37,6 +37,14 @@ struct DebugSubscriptionMenu: View {
                     LabeledContent("Price", value: subscription.displayPrice)
                 }
 
+                if !storeKitManager.entitledProductIDs.isEmpty {
+                    LabeledContent("Entitled Product IDs") {
+                        Text(storeKitManager.entitledProductIDs.sorted().joined(separator: ", "))
+                            .font(.caption)
+                            .multilineTextAlignment(.trailing)
+                    }
+                }
+
                 if let error = storeKitManager.lastError {
                     LabeledContent("Last Error") {
                         Text(error)

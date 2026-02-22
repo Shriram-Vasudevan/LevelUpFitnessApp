@@ -7,11 +7,12 @@
 
 import SwiftUI
 import PhotosUI
+
 struct CreateCustomWorkoutView: View {
     @State private var workoutName: String = ""
     @State private var exercises: [CustomWorkoutExercise] = []
-    @State private var newExerciseName: String = ""
-    @State private var isWeight: Bool = false
+    
+    @State private var showingExercisePicker = false
     
     @State private var selectedWorkoutImage: PhotosPickerItem?
     @State private var workoutImageData: Data? = nil
@@ -20,154 +21,170 @@ struct CreateCustomWorkoutView: View {
 
     var body: some View {
         ZStack {
-            Color.white.ignoresSafeArea()
+            AppTheme.Colors.backgroundDark.ignoresSafeArea()
 
-            VStack(spacing: 16) {
+            VStack(spacing: 20) {
+                // MARK: - Header
                 HStack {
-                    Text("Create Custom Workout")
-                        .font(.system(size: 18, weight: .medium, design: .default))
-                        .foregroundColor(.primary)
+                    Text("Design Program")
+                        .font(AppTheme.Typography.telemetry(size: 20, weight: .bold))
+                        .foregroundColor(AppTheme.Colors.textPrimary)
 
                     Spacer()
 
                     Button(action: {
                         dismiss()
                     }) {
-                        Image(systemName: "xmark")
-                            .foregroundColor(Color(hex: "40C4FC"))
-                            .frame(width: 30, height: 30)
-                            .background(Color(hex: "40C4FC").opacity(0.1))
-                            .clipShape(Circle())
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.system(size: 24))
+                            .foregroundColor(AppTheme.Colors.textSecondary)
                     }
                 }
-                .padding(.vertical, 8)
+                .padding(.horizontal)
+                .padding(.top, 16)
 
-                inputField(title: "Workout Name", text: $workoutName, unit: "")
-
-                VStack(spacing: 8) {
-                    HStack {
-                        Text("Workout Image")
-                            .font(.system(size: 14, weight: .light, design: .default))
-                            .foregroundColor(.secondary)
+                // MARK: - Workout Identity
+                VStack(spacing: 16) {
+                    inputField(title: "Program Designation", text: $workoutName, placeholder: "e.g. Tactical Barbell")
+                    
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Module Identity Art")
+                            .font(AppTheme.Typography.telemetry(size: 14, weight: .semibold))
+                            .foregroundColor(AppTheme.Colors.textSecondary)
                         
-                        Spacer()
-                    }
-
-                    HStack {
                         PhotosPicker(selection: $selectedWorkoutImage, matching: .images, photoLibrary: .shared()) {
                             if let imageData = workoutImageData, let uiImage = UIImage(data: imageData) {
                                 Image(uiImage: uiImage)
                                     .resizable()
-                                    .scaledToFit()
-                                    .frame(height: 50)
-                                    .cornerRadius(8)
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(height: 100)
+                                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                                    .frame(maxWidth: .infinity)
                             } else {
-                                Image("NoImage")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(height: 50)
-                                    .cornerRadius(8)
-                            }
-                        }
-                        .buttonStyle(PlainButtonStyle())
-                        
-                        Spacer()
-                    }
-                }
-
-                ScrollView {
-                    VStack(spacing: 16) {
-                        ForEach(exercises.indices, id: \.self) { index in
-                            exerciseRow(for: exercises[index], at: index)
-                        }
-                    }
-                }
-
-                VStack(spacing: 8) {
-                    VStack(spacing: 4) {
-                        HStack {
-                            Text("Exercise Name")
-                                .font(.system(size: 14, weight: .light, design: .default))
-                                .foregroundColor(.secondary)
-
-                            Spacer()
-                        }
-
-                        HStack {
-                            inputField(title: nil, text: $newExerciseName, unit: "")
-
-                            HStack {
-                                Button(action: {
-                                    isWeight.toggle()
-                                }) {
-                                    Image(systemName: isWeight ? "dumbbell.fill" : "figure.walk")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 25, height: 25)
-                                        .foregroundColor(isWeight ? Color(hex: "40C4FC") : .gray)
+                                VStack(spacing: 8) {
+                                    Image(systemName: "photo.on.rectangle.angled")
+                                        .font(.system(size: 24))
+                                        .foregroundColor(AppTheme.Colors.bluePrimary)
+                                    Text("Select Cover Image")
+                                        .font(AppTheme.Typography.telemetry(size: 14, weight: .semibold))
+                                        .foregroundColor(AppTheme.Colors.textPrimary)
                                 }
-                                .padding(8)
-                                .background(Color(hex: "F5F5F5"))
-                                .clipShape(Circle())
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 100)
+                                .background(AppTheme.Colors.surfaceLight)
+                                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                                 .overlay(
-                                    Circle()
-                                        .stroke(Color(hex: "40C4FC"), lineWidth: 1)
+                                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                                        .stroke(Color.white.opacity(0.1), style: StrokeStyle(lineWidth: 1, dash: [4]))
                                 )
                             }
-                            .frame(width: 60)
-
-                            Spacer()
                         }
-                    }
-
-                    HStack {
-                        Button(action: {
-                            if !newExerciseName.isEmpty {
-                                let exercise = CustomWorkoutExercise(name: newExerciseName, isWeight: isWeight)
-                                exercises.append(exercise)
-                                newExerciseName = ""
-                                isWeight = false
-                            }
-                        }) {
-                            HStack {
-                                Image(systemName: "plus.circle.fill")
-                                Text("Add Exercise")
-                                    .font(.system(size: 16, weight: .medium))
-                            }
-                            .padding()
-                            .foregroundColor(Color(hex: "40C4FC"))
-                            .background(Color(hex: "40C4FC").opacity(0.1))
-                            .cornerRadius(8)
-                        }
-
-                        Spacer()
+                        .buttonStyle(KineticButtonStyle())
                     }
                 }
-                .padding(.vertical, 8)
+                .padding(.horizontal)
 
+                // MARK: - Exercise Sequence
+                VStack(alignment: .leading, spacing: 12) {
+                    HStack {
+                        Text("Protocol Sequence")
+                            .font(AppTheme.Typography.telemetry(size: 18, weight: .bold))
+                            .foregroundColor(AppTheme.Colors.textPrimary)
+                        
+                        Spacer()
+                        
+                        Text("\(exercises.count) Nodes")
+                            .font(AppTheme.Typography.monumentalNumber(size: 14))
+                            .foregroundColor(AppTheme.Colors.bluePrimary)
+                    }
+                    .padding(.horizontal)
+                    
+                    if exercises.isEmpty {
+                        VStack(spacing: 12) {
+                            Image(systemName: "square.stack.3d.up.slash")
+                                .font(.system(size: 32))
+                                .foregroundColor(AppTheme.Colors.textSecondary)
+                            Text("Sequence Empty")
+                                .font(AppTheme.Typography.telemetry(size: 16, weight: .semibold))
+                                .foregroundColor(AppTheme.Colors.textSecondary)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 150)
+                        .background(AppTheme.Colors.surfaceLight)
+                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                        .padding(.horizontal)
+                    } else {
+                        ScrollView {
+                            LazyVStack(spacing: 12) {
+                                ForEach(exercises.indices, id: \.self) { index in
+                                    exerciseRow(for: exercises[index], at: index)
+                                }
+                            }
+                            .padding(.horizontal)
+                        }
+                    }
+                }
+                
+                // MARK: - Append Action
                 Button(action: {
-                    if exercises.count > 0 {
+                    showingExercisePicker = true
+                }) {
+                    HStack {
+                        Spacer()
+                        Image(systemName: "plus")
+                        Text("Append Exercise")
+                        Spacer()
+                    }
+                    .font(AppTheme.Typography.telemetry(size: 16, weight: .bold))
+                    .foregroundColor(AppTheme.Colors.bluePrimary)
+                    .padding()
+                    .background(AppTheme.Colors.bluePrimary.opacity(0.15))
+                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12, style: .continuous)
+                            .stroke(AppTheme.Colors.bluePrimary.opacity(0.3), lineWidth: 1)
+                    )
+                }
+                .buttonStyle(KineticButtonStyle())
+                .padding(.horizontal)
+
+                Spacer()
+
+                // MARK: - Commit Action
+                Button(action: {
+                    if !exercises.isEmpty && !workoutName.isEmpty {
                         let customWorkout = CustomWorkout(name: workoutName, image: workoutImageData, exercises: exercises)
                         CustomWorkoutManager.shared.addCustomWorkout(workout: customWorkout)
-
                         dismiss()
                     }
                 }) {
                     HStack {
                         Spacer()
-                        Text("Create Workout")
-                            .font(.system(size: 18, weight: .medium))
+                        Text("Compile & Save")
+                            .font(AppTheme.Typography.telemetry(size: 18, weight: .bold))
                         Spacer()
                     }
-                    .padding()
-                    .background(Color(hex: "40C4FC"))
                     .foregroundColor(.white)
-                    .cornerRadius(8)
+                    .padding()
+                    .background(exercises.isEmpty || workoutName.isEmpty ? AppTheme.Colors.surfaceLight : AppTheme.Colors.bluePrimary)
+                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                    .controlledGlow(isActive: !exercises.isEmpty && !workoutName.isEmpty)
                 }
+                .buttonStyle(KineticButtonStyle())
+                .disabled(exercises.isEmpty || workoutName.isEmpty)
                 .padding(.horizontal)
-                .padding(.top, 16)
+                .padding(.bottom, 16)
             }
-            .padding()
+        }
+        .sheet(isPresented: $showingExercisePicker) {
+            LibraryExercisePicker { progression in
+                let newExercise = CustomWorkoutExercise(
+                    name: progression.name,
+                    isWeight: progression.isWeight,
+                    progression: progression
+                )
+                exercises.append(newExercise)
+            }
         }
         .onChange(of: selectedWorkoutImage) { _ in
             Task {
@@ -180,51 +197,59 @@ struct CreateCustomWorkoutView: View {
 
     private func exerciseRow(for exercise: CustomWorkoutExercise, at index: Int) -> some View {
         HStack {
-            VStack(alignment: .leading) {
+            Text("\(index + 1)")
+                .font(AppTheme.Typography.monumentalNumber(size: 16))
+                .foregroundColor(AppTheme.Colors.bluePrimary)
+                .frame(width: 30)
+            
+            VStack(alignment: .leading, spacing: 4) {
                 Text(exercise.name)
-                    .font(.system(size: 16, weight: .medium))
-                Text(exercise.isWeight ? "Uses Weights" : "Bodyweight")
-                    .font(.system(size: 14, weight: .light))
-                    .foregroundColor(.secondary)
+                    .font(AppTheme.Typography.telemetry(size: 16, weight: .bold))
+                    .foregroundColor(AppTheme.Colors.textPrimary)
+                
+                HStack(spacing: 4) {
+                    Image(systemName: exercise.isWeight ? "dumbbell.fill" : "figure.walk")
+                        .font(.system(size: 10))
+                    Text(exercise.isWeight ? "Weighted" : "Bodyweight")
+                }
+                .font(AppTheme.Typography.telemetry(size: 12))
+                .foregroundColor(AppTheme.Colors.textSecondary)
             }
 
             Spacer()
 
             Button(action: {
-                exercises.remove(at: index)
+                withAnimation {
+                    exercises.remove(at: index)
+                }
             }) {
                 Image(systemName: "minus.circle.fill")
-                    .foregroundColor(.red)
+                    .foregroundColor(AppTheme.Colors.danger)
+                    .font(.system(size: 24))
             }
+            .buttonStyle(KineticButtonStyle())
         }
         .padding()
-        .background(Color(hex: "F5F5F5"))
-        .cornerRadius(8)
+        .background(AppTheme.Colors.surfaceLight)
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
     }
 
-    private func inputField(title: String?, text: Binding<String>, unit: String) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            if let title = title {
-                Text(title)
-                    .font(.system(size: 14, weight: .light, design: .default))
-                    .foregroundColor(.secondary)
-            }
-            HStack {
-                TextField("Enter", text: text)
-                    .keyboardType(.default)
-                    .font(.system(size: 18, weight: .medium, design: .default))
-                Text(unit)
-                    .font(.system(size: 14, weight: .light, design: .default))
-                    .foregroundColor(.secondary)
-            }
-            .padding(.vertical, 8)
-            .padding(.horizontal, 12)
-            .background(Color.white)
-            .cornerRadius(8)
-            .overlay(
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color.gray.opacity(0.5), lineWidth: 1)
-            )
+    private func inputField(title: String, text: Binding<String>, placeholder: String) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(title)
+                .font(AppTheme.Typography.telemetry(size: 14, weight: .semibold))
+                .foregroundColor(AppTheme.Colors.textSecondary)
+            
+            TextField(placeholder, text: text)
+                .font(AppTheme.Typography.telemetry(size: 18, weight: .medium))
+                .foregroundColor(AppTheme.Colors.textPrimary)
+                .padding()
+                .background(AppTheme.Colors.surfaceLight)
+                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                        .stroke(Color.white.opacity(0.05), lineWidth: 1)
+                )
         }
     }
 }

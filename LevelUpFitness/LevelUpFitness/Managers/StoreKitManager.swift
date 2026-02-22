@@ -79,6 +79,8 @@ final class StoreKitManager: ObservableObject {
     @Published private(set) var availableProducts: [Product] = []
     @Published private(set) var isPremiumUnlocked: Bool = false
     @Published private(set) var activeSubscription: Product?
+    @Published private(set) var entitledProductIDs: Set<String> = []
+    @Published private(set) var activeSubscriptionGroupIDs: Set<String> = []
     @Published private(set) var isLoadingProducts: Bool = false
     @Published private(set) var purchaseInProgress: Bool = false
     @Published var lastPaywallTrigger: PaywallTriggerReason?
@@ -93,6 +95,7 @@ final class StoreKitManager: ObservableObject {
     }
 
     private let premiumStatusKey = "com.levelupfitness.premiumUnlockedCache"
+    private var programEntitlementProductIDs: Set<String> = []
 
     #if DEBUG
     @Published var debugMode: Bool = false
@@ -144,6 +147,35 @@ final class StoreKitManager: ObservableObject {
         lastPaywallTrigger = reason
     }
 
+    func registerProgramSubscriptionRequirements(_ programs: [StandardProgramDBRepresentation]) {
+        let discovered = Set(programs.flatMap(\.requiredSubscriptionProductIDs))
+        guard discovered != programEntitlementProductIDs else { return }
+
+        programEntitlementProductIDs = discovered
+        Task {
+            await updateProducts()
+            await updateSubscriptionStatus()
+        }
+    }
+
+    func canAccessProgram(_ program: StandardProgramDBRepresentation) -> Bool {
+        let requiresProgramSubscription = program.requiresSubscription
+        guard requiresProgramSubscription else { return true }
+
+        let requiredProductIDs = Set(program.requiredSubscriptionProductIDs)
+        if !requiredProductIDs.isEmpty && !entitledProductIDs.intersection(requiredProductIDs).isEmpty {
+            return true
+        }
+
+        if let requiredGroupID = program.requiredSubscriptionGroupID,
+           activeSubscriptionGroupIDs.contains(requiredGroupID) {
+            return true
+        }
+
+        // Backward-compatible fallback while CloudKit program gating rolls out.
+        return effectiveIsPremiumUnlocked
+    }
+
     func updateProducts(retryCount: Int = 3) async {
         guard !isLoadingProducts else { return }
         isLoadingProducts = true
@@ -153,7 +185,7 @@ final class StoreKitManager: ObservableObject {
         var attempts = 0
         while attempts < retryCount {
             do {
-                let productIDs = SubscriptionTier.allCases.map(\.rawValue)
+                let productIDs = knownSubscriptionProductIDs()
                 let storeProducts = try await Product.products(for: productIDs)
 
                 if storeProducts.isEmpty {
@@ -185,24 +217,43 @@ final class StoreKitManager: ObservableObject {
     func updateSubscriptionStatus() async {
         var latestEntitlement: Product?
         var lastSeenError: String?
+        var currentEntitlements: Set<String> = []
+        var currentSubscriptionGroups: Set<String> = []
+        let knownProductIDs = Set(knownSubscriptionProductIDs())
 
         for await verificationResult in Transaction.currentEntitlements {
             switch verificationResult {
             case .verified(let transaction):
-                guard SubscriptionTier.allCases.contains(where: { $0.rawValue == transaction.productID }) else { continue }
+                currentEntitlements.insert(transaction.productID)
+
                 if let product = availableProducts.first(where: { $0.id == transaction.productID }) {
-                    latestEntitlement = product
+                    if product.type == .autoRenewable {
+                        latestEntitlement = product
+                    }
+                    if let groupID = product.subscription?.subscriptionGroupID {
+                        currentSubscriptionGroups.insert(groupID)
+                    }
                 } else if let fetchedProduct = try? await Product.products(for: [transaction.productID]).first {
-                    latestEntitlement = fetchedProduct
+                    if fetchedProduct.type == .autoRenewable {
+                        latestEntitlement = fetchedProduct
+                    }
+                    if let groupID = fetchedProduct.subscription?.subscriptionGroupID {
+                        currentSubscriptionGroups.insert(groupID)
+                    }
                 }
             case .unverified(let transaction, let error):
-                if SubscriptionTier.allCases.contains(where: { $0.rawValue == transaction.productID }) {
+                if knownProductIDs.contains(transaction.productID) {
                     lastSeenError = error.localizedDescription
                 }
             }
         }
 
-        isPremiumUnlocked = latestEntitlement != nil
+        let hasKnownActiveSubscription = !currentEntitlements.intersection(knownProductIDs).isEmpty
+        let hasSubscriptionGroup = !currentSubscriptionGroups.isEmpty
+
+        entitledProductIDs = currentEntitlements
+        activeSubscriptionGroupIDs = currentSubscriptionGroups
+        isPremiumUnlocked = hasKnownActiveSubscription || hasSubscriptionGroup
         activeSubscription = latestEntitlement
         lastError = lastSeenError
 
@@ -272,5 +323,11 @@ final class StoreKitManager: ObservableObject {
                 continue
             }
         }
+    }
+
+    private func knownSubscriptionProductIDs() -> [String] {
+        let defaults = Set(SubscriptionTier.allCases.map(\.rawValue))
+        let combined = defaults.union(programEntitlementProductIDs)
+        return Array(combined).sorted()
     }
 }
