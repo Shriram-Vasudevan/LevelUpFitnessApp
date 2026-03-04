@@ -70,7 +70,7 @@ struct ProfileView: View {
         } message: {
             Text("Are you sure you want to wipe your data? You will still be able to use this iCloud account for future use, but all existing data will be wiped. This action cannot be undone.")
         }
-        .onChange(of: selectedProfilePicture) { _ in
+        .onChange(of: selectedProfilePicture) { _, _ in
             Task {
                 if let data = try? await selectedProfilePicture?.loadTransferable(type: Data.self) {
                     pfpData = data

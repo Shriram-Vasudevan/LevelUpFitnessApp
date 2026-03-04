@@ -59,8 +59,8 @@ struct PagesHolderView: View {
             .preferredColorScheme(.dark)
             .onAppear {
                 Task {
-                    if await HealthManager.shared.todaysSteps == nil {
-                        await HealthManager.shared.getInitialHealthData()
+                    if HealthManager.shared.todaysSteps == nil {
+                        HealthManager.shared.getInitialHealthData()
                     }
                 }
             }
@@ -80,14 +80,14 @@ struct PagesHolderView: View {
                 } else if newPhase == .inactive {
                     Task {
                         if XPManager.shared.xpDataModified {
-                            await XPManager.shared.addXPToDB()
+                            XPManager.shared.addXPToDB()
                         }
                     }
                     print("Inactive")
                 } else if newPhase == .background {
                     Task {
                         if XPManager.shared.xpDataModified {
-                            await XPManager.shared.addXPToDB()
+                            XPManager.shared.addXPToDB()
                         }
                     }
                     NotificationManager.shared.appDidEnterBackground()

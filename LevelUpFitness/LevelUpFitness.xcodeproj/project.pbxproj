@@ -171,10 +171,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		2D2C9713A87E916F1100CFBC /* LibraryExercisePicker.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LibraryExercisePicker.swift; path = LevelUpFitness/Views/LibraryExercisePicker.swift; sourceTree = "<group>"; };
-		46323C583DE7CFFCA0B29421 /* CustomComponents.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CustomComponents.swift; path = LevelUpFitness/Utilities/CustomComponents.swift; sourceTree = "<group>"; };
-		644BDA54E18BC2C6522EFC43 /* GymSessionPlaceholders.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = GymSessionPlaceholders.swift; path = LevelUpFitness/Views/GymSessionPlaceholders.swift; sourceTree = "<group>"; };
-		67BBA03453825C846E650990 /* FriendRoomSheets.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = FriendRoomSheets.swift; path = LevelUpFitness/Views/FriendRoomSheets.swift; sourceTree = "<group>"; };
+		2D2C9713A87E916F1100CFBC /* LibraryExercisePicker.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LibraryExercisePicker.swift; path = LibraryExercisePicker.swift; sourceTree = "<group>"; };
+		46323C583DE7CFFCA0B29421 /* CustomComponents.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CustomComponents.swift; path = CustomComponents.swift; sourceTree = "<group>"; };
+		644BDA54E18BC2C6522EFC43 /* GymSessionPlaceholders.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = GymSessionPlaceholders.swift; path = GymSessionPlaceholders.swift; sourceTree = "<group>"; };
+		67BBA03453825C846E650990 /* FriendRoomSheets.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = FriendRoomSheets.swift; path = FriendRoomSheets.swift; sourceTree = "<group>"; };
 		991F8FD92C13EB3900A134A5 /* HealthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthManager.swift; sourceTree = "<group>"; };
 		991F8FE12C15278500A134A5 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		991F8FE32C1527A900A134A5 /* ProgramStatisticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramStatisticsView.swift; sourceTree = "<group>"; };
@@ -335,7 +335,7 @@
 		99FC9E472C5EC56B00DAFFAC /* RequestCustomProgramWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestCustomProgramWidget.swift; sourceTree = "<group>"; };
 		AA1234562C84567890ABC002 /* StoreKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreKitManager.swift; sourceTree = "<group>"; };
 		BB7654322C84567890FED002 /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
-		EB6D282618E90BB28B97B172 /* DesignSystem.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DesignSystem.swift; path = LevelUpFitness/Utilities/DesignSystem.swift; sourceTree = "<group>"; };
+		EB6D282618E90BB28B97B172 /* DesignSystem.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DesignSystem.swift; path = DesignSystem.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -560,20 +560,15 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		99CFAAD92BEB075400EFF67E = {
-			isa = PBXGroup;
-			children = (
-				99CFAAE42BEB075500EFF67E /* LevelUpFitness */,
-				99CFAAE32BEB075500EFF67E /* Products */,
-				996E6AC52C0023A9000720FC /* Frameworks */,
-				EB6D282618E90BB28B97B172 /* DesignSystem.swift */,
-				2D2C9713A87E916F1100CFBC /* LibraryExercisePicker.swift */,
-				46323C583DE7CFFCA0B29421 /* CustomComponents.swift */,
-				67BBA03453825C846E650990 /* FriendRoomSheets.swift */,
-				644BDA54E18BC2C6522EFC43 /* GymSessionPlaceholders.swift */,
-			);
-			sourceTree = "<group>";
-		};
+			99CFAAD92BEB075400EFF67E = {
+				isa = PBXGroup;
+				children = (
+					99CFAAE42BEB075500EFF67E /* LevelUpFitness */,
+					99CFAAE32BEB075500EFF67E /* Products */,
+					996E6AC52C0023A9000720FC /* Frameworks */,
+				);
+				sourceTree = "<group>";
+			};
 		99CFAAE32BEB075500EFF67E /* Products */ = {
 			isa = PBXGroup;
 			children = (

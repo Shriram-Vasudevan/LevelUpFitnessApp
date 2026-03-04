@@ -23,7 +23,7 @@ class ChallengeManager: ObservableObject {
     }
 
     func fetchChallengeTemplates() async {
-        await ChallengeCloudKitUtility.fetchChallengeTemplates { templates, error in
+        ChallengeCloudKitUtility.fetchChallengeTemplates { templates, error in
             if let templates = templates {
                 DispatchQueue.main.async {
                     self.challengeTemplates = templates
@@ -38,7 +38,7 @@ class ChallengeManager: ObservableObject {
         do {
             let userID = try await ChallengeCloudKitUtility.customContainer.userRecordID().recordName
             
-            await ChallengeCloudKitUtility.fetchUserChallenges(userID: userID) { challenges, error in
+            ChallengeCloudKitUtility.fetchUserChallenges(userID: userID) { challenges, error in
                 if let challenges = challenges {
                     DispatchQueue.main.async {
                         let isoFormatter = ISO8601DateFormatter()
@@ -128,7 +128,7 @@ class ChallengeManager: ObservableObject {
                 isActive: true
             )
 
-            await ChallengeCloudKitUtility.saveUserChallenge(userChallenge: userChallenge) { success, error in
+            ChallengeCloudKitUtility.saveUserChallenge(userChallenge: userChallenge) { success, error in
                 if success {
                     DispatchQueue.main.async {
                         self.userChallenges.append(userChallenge)
@@ -146,7 +146,7 @@ class ChallengeManager: ObservableObject {
         do {
             let userID = try await ChallengeCloudKitUtility.customContainer.userRecordID().recordName
 
-            await ChallengeCloudKitUtility.leaveChallenge(userID: userID, challengeTemplateID: challengeTemplateID) { success, error in
+            ChallengeCloudKitUtility.leaveChallenge(userID: userID, challengeTemplateID: challengeTemplateID) { success, error in
                 if success {
                     DispatchQueue.main.async {
                         self.userChallenges.removeAll { $0.challengeTemplateID == challengeTemplateID }
@@ -164,7 +164,7 @@ class ChallengeManager: ObservableObject {
         do {
             let userID = try await ChallengeCloudKitUtility.customContainer.userRecordID().recordName
 
-            await ChallengeCloudKitUtility.updateChallengeProgress(userID: userID, field: challengeField, newValue: newValue) { success, error in
+            ChallengeCloudKitUtility.updateChallengeProgress(userID: userID, field: challengeField, newValue: newValue) { success, error in
                 if success {
                     DispatchQueue.main.async {
                         GlobalCoverManager.shared.showChallengeCompletion()

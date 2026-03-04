@@ -12,12 +12,16 @@ import Charts
 struct PaywallView: View {
     @EnvironmentObject private var storeKitManager: StoreKitManager
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.openURL) private var openURL
 
     var allowDismissal: Bool
     var onCompletion: (() -> Void)?
 
     @State private var selectedProductID: String?
     @State private var showError: Bool = false
+
+    private let privacyURL = URL(string: "https://www.banw.net/privacy/levelupfitnessprivacy")
+    private let termsURL = URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")
 
     private var reason: StoreKitManager.PaywallTriggerReason? {
         storeKitManager.lastPaywallTrigger
@@ -52,7 +56,11 @@ struct PaywallView: View {
     var body: some View {
         NavigationStack {
             ZStack(alignment: .topTrailing) {
-                Color(hex: "F4F6F8")
+                LinearGradient(
+                    colors: [Color(hex: "EEF5FF"), Color(hex: "F8FAFC"), Color.white],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
                     .ignoresSafeArea()
 
                 ScrollView {
@@ -62,6 +70,7 @@ struct PaywallView: View {
                         featuresSection
                         productsSection
                         restoreSection
+                        legalSection
                     }
                     .padding(.horizontal, 20)
                     .padding(.top, 20)
@@ -91,12 +100,12 @@ struct PaywallView: View {
             .onReceive(storeKitManager.$lastError) { error in
                 showError = error != nil
             }
-            .onChange(of: storeKitManager.effectiveIsPremiumUnlocked) { isUnlocked in
+            .onChange(of: storeKitManager.effectiveIsPremiumUnlocked) { _, isUnlocked in
                 if isUnlocked {
                     dismissAndComplete()
                 }
             }
-            .onChange(of: storeKitManager.activeSubscription) { subscription in
+            .onChange(of: storeKitManager.activeSubscription) { _, subscription in
                 selectedProductID = subscription?.id
             }
             .alert("Something went wrong", isPresented: $showError, presenting: storeKitManager.lastError) { _ in
@@ -115,22 +124,39 @@ struct PaywallView: View {
 
     private var headerSection: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text(reason?.title ?? "Upgrade to Premium")
-                .font(.system(size: 32, weight: .bold))
-                .foregroundColor(Color(hex: "111827"))
-                .multilineTextAlignment(.leading)
+            VStack(alignment: .leading, spacing: 10) {
+                Text(reason?.title ?? "Upgrade to Premium")
+                    .font(.system(size: 32, weight: .bold))
+                    .foregroundColor(.white)
+                    .multilineTextAlignment(.leading)
 
-            Text(reason?.subtitle ?? "Unlock a cleaner training workflow with advanced insights, friend sessions, and full program history.")
-                .font(.system(size: 16, weight: .medium))
-                .foregroundColor(Color(hex: "4B5563"))
-                .multilineTextAlignment(.leading)
+                Text(reason?.subtitle ?? "Unlock a cleaner training workflow with advanced insights, friend sessions, and full program history.")
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundColor(Color.white.opacity(0.9))
+                    .multilineTextAlignment(.leading)
 
-            HStack(spacing: 8) {
-                paywallTag("No ads")
-                paywallTag("Cancel anytime")
-                paywallTag("Synced across devices")
+                HStack(spacing: 8) {
+                    paywallTag("No ads")
+                    paywallTag("Cancel anytime")
+                    paywallTag("Synced across devices")
+                }
+                .padding(.top, 4)
             }
-            .padding(.top, 4)
+            .padding(18)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(
+                LinearGradient(
+                    colors: [Color(hex: "0B5ED7"), Color(hex: "1C9BFF")],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
+            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .overlay(
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                    .stroke(Color.white.opacity(0.25), lineWidth: 1)
+            )
+            .shadow(color: Color(hex: "0B5ED7").opacity(0.22), radius: 14, x: 0, y: 8)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
@@ -138,10 +164,10 @@ struct PaywallView: View {
     private func paywallTag(_ label: String) -> some View {
         Text(label)
             .font(.system(size: 12, weight: .semibold))
-            .foregroundColor(Color(hex: "1F3C88"))
+            .foregroundColor(.white)
             .padding(.horizontal, 10)
             .padding(.vertical, 6)
-            .background(Color(hex: "DCE9FF"))
+            .background(Color.white.opacity(0.18))
             .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
     }
 
@@ -253,7 +279,13 @@ struct PaywallView: View {
                             Spacer()
                         }
                         .padding(.vertical, 14)
-                        .background(Color(hex: "0B5ED7"))
+                        .background(
+                            LinearGradient(
+                                colors: [Color(hex: "0B5ED7"), Color(hex: "1C9BFF")],
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
+                        )
                         .foregroundColor(.white)
                         .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
                     }
@@ -375,6 +407,32 @@ struct PaywallView: View {
             }
         }
         .padding(.top, 4)
+    }
+
+    private var legalSection: some View {
+        VStack(spacing: 8) {
+            Text("Subscription automatically renews unless cancelled at least 24 hours before the end of the current period.")
+                .font(.system(size: 12, weight: .regular))
+                .foregroundColor(Color(hex: "6B7280"))
+                .multilineTextAlignment(.center)
+
+            HStack(spacing: 18) {
+                legalButton(title: "Privacy Policy", url: privacyURL)
+                legalButton(title: "Terms of Use", url: termsURL)
+            }
+        }
+        .padding(.top, 4)
+        .padding(.bottom, 2)
+    }
+
+    private func legalButton(title: String, url: URL?) -> some View {
+        Button(title) {
+            guard let url else { return }
+            openURL(url)
+        }
+        .font(.system(size: 12, weight: .semibold))
+        .foregroundColor(Color(hex: "0B5ED7"))
+        .disabled(url == nil)
     }
 
     private func dismissAndComplete() {

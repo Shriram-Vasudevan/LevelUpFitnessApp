@@ -179,7 +179,7 @@ struct CreateCustomWorkoutView: View {
                 exercises.append(newExercise)
             }
         }
-        .onChange(of: selectedWorkoutImage) { _ in
+        .onChange(of: selectedWorkoutImage) { _, _ in
             Task {
                 if let data = try? await selectedWorkoutImage?.loadTransferable(type: Data.self) {
                     self.workoutImageData = data

@@ -43,7 +43,7 @@ class ProgramManager: ObservableObject {
     }
 
     func leaveProgram(programID: String, completion: @escaping (Bool) -> Void) async {
-        await ProgramCloudKitUtility.leaveProgram(programID: programID) { success, error in
+        ProgramCloudKitUtility.leaveProgram(programID: programID) { success, error in
             if success {
                 DispatchQueue.main.async {
                     self.userActivePrograms.removeAll { $0.programID == programID }
@@ -215,7 +215,7 @@ class ProgramManager: ObservableObject {
         
         let programID = selectedProgram.programID
         
-        await ProgramCloudKitUtility.uploadNewProgramStatus(programID: programID, updatedProgram: selectedProgram.program) { success, error in
+        ProgramCloudKitUtility.uploadNewProgramStatus(programID: programID, updatedProgram: selectedProgram.program) { success, error in
             if success {
                 DispatchQueue.main.async {
                     print("Program status updated successfully.")

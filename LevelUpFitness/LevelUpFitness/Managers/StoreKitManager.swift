@@ -189,6 +189,7 @@ final class StoreKitManager: ObservableObject {
                 let storeProducts = try await Product.products(for: productIDs)
 
                 if storeProducts.isEmpty {
+                    availableProducts = []
                     productLoadError = "Products not configured in App Store Connect"
                     connectionState = .disconnected
                 } else {
@@ -273,6 +274,7 @@ final class StoreKitManager: ObservableObject {
                 switch verificationResult {
                 case .verified(let transaction):
                     await transaction.finish()
+                    lastError = nil
                     await updateSubscriptionStatus()
                 case .unverified:
                     lastError = "Unable to verify the transaction."
@@ -293,6 +295,8 @@ final class StoreKitManager: ObservableObject {
     func restorePurchases() async {
         do {
             try await AppStore.sync()
+            await updateProducts()
+            lastError = nil
             await updateSubscriptionStatus()
         } catch {
             lastError = error.localizedDescription

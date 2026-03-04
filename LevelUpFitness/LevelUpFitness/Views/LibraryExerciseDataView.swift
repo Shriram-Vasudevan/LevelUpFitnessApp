@@ -94,7 +94,7 @@ struct LibraryExerciseDataView: View {
                     let xpAdditionType = getExerciseTypeEnum(exerciseType: exerciseType)
                 
                     Task {
-                        await addToGymSession()
+                        addToGymSession()
                         await XPManager.shared.addXP(increment: 2, type: xpAdditionType)
                         await XPManager.shared.addXP(increment: 2, type: .total)
                     }
