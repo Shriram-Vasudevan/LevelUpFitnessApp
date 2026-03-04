@@ -37,7 +37,7 @@ class TrendManager: ObservableObject {
     func getWeightTrend() async {
         do {
             let userID = try await TrendCloudKitUtility.customContainer.userRecordID().recordName
-            await TrendCloudKitUtility.fetchWeightTrend(userID: userID, days: 30) { trendData, error in
+            TrendCloudKitUtility.fetchWeightTrend(userID: userID, days: 30) { trendData, error in
                 if let trendData = trendData {
                     DispatchQueue.main.async {
                         self.weightTrend = trendData

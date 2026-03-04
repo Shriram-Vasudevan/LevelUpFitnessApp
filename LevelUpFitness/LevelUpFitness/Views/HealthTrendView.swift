@@ -202,7 +202,7 @@ struct HealthTrendView: View {
     }
     
     private func addHealthValue() {
-        guard let healthValueDouble = Double(healthValue) else { return }
+        guard Double(healthValue) != nil else { return }
         healthValue = ""
     }
 }

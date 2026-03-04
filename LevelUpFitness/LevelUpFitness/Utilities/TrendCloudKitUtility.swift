@@ -35,7 +35,7 @@ class TrendCloudKitUtility {
 
         query.sortDescriptors = [NSSortDescriptor(key: "Timestamp", ascending: false)]
         
-        privateDatabase.perform(query, inZoneWith: nil) { records, error in
+        privateDatabase.fetchRecords(matching: query, inZoneWith: nil) { records, error in
             if let error = error {
                 completion(nil, error)
                 return
@@ -77,7 +77,7 @@ class TrendCloudKitUtility {
 
         query.sortDescriptors = [NSSortDescriptor(key: "Timestamp", ascending: false)]
         
-        privateDatabase.perform(query, inZoneWith: nil) { records, error in
+        privateDatabase.fetchRecords(matching: query, inZoneWith: nil) { records, error in
             if let error = error {
                 completion(nil, error)
                 return

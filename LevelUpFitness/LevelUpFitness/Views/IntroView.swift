@@ -102,7 +102,7 @@ struct IntroView: View {
 
                     VStack (spacing: 0) {
                         HStack(spacing: 8) {
-                            ForEach(0..<totalSteps) { index in
+                            ForEach(Array(0..<totalSteps), id: \.self) { index in
                                 Circle()
                                     .fill(currentStep == index ? Color(hex: "40C4FC") : Color.gray.opacity(0.5))
                                     .frame(width: 10, height: 10)

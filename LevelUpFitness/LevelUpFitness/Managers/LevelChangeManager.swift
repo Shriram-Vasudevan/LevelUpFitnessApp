@@ -149,9 +149,6 @@ class LevelChangeManager: ObservableObject {
             
             let levelChangeInfo = LevelChangeInfo(keyword: "Consistency", description: "This is a measure of how your consistency has been changing over the last few weeks", change: contribution, timestamp: Date().ISO8601Format())
             
-            let jsonEncoder = JSONEncoder()
-            let jsonData = try jsonEncoder.encode(levelChangeInfo)
-            
             appendLevelChangeToFile(levelChangeInfo: levelChangeInfo, contribution: contribution, userID: userID)
         } catch {
             print(error)

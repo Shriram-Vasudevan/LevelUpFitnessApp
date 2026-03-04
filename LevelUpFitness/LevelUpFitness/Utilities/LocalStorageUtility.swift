@@ -323,34 +323,28 @@ class LocalStorageUtility {
     
     static func downloadVideoAndSaveToTempFile(url: URL, completion: @escaping (Result<URL, Error>) -> Void)
     {
-        do {
-            let tempDirectory = FileManager.default.temporaryDirectory
-            let fileURL = tempDirectory.appendingPathComponent("\(UUID()).mp4")
+        let tempDirectory = FileManager.default.temporaryDirectory
+        let fileURL = tempDirectory.appendingPathComponent("\(UUID()).mp4")
 
-            let task = URLSession.shared.downloadTask(with: url) { (location, response, error) in
-                guard let location = location, error == nil else {
-                    print("Failed to download video: \(error?.localizedDescription ?? "Unknown error")")
-                    completion(.failure(error ?? FileError.failed))
-                    return
-                }
-                
-                print("The response: \(String(describing: response))")
-                
-                do {
-                    try FileManager.default.moveItem(at: location, to: fileURL)
-                    completion(.success(fileURL))
-                } catch {
-                    print("File move error: \(error.localizedDescription)")
-                    completion(.failure(error))
-                }
+        let task = URLSession.shared.downloadTask(with: url) { (location, response, error) in
+            guard let location = location, error == nil else {
+                print("Failed to download video: \(error?.localizedDescription ?? "Unknown error")")
+                completion(.failure(error ?? FileError.failed))
+                return
             }
 
-            task.resume()
+            print("The response: \(String(describing: response))")
 
-        } catch {
-            print(error.localizedDescription)
-            completion(.failure(FileError.failed))
+            do {
+                try FileManager.default.moveItem(at: location, to: fileURL)
+                completion(.success(fileURL))
+            } catch {
+                print("File move error: \(error.localizedDescription)")
+                completion(.failure(error))
+            }
         }
+
+        task.resume()
     }
 
     

@@ -47,7 +47,7 @@ class AuthenticationManager: ObservableObject {
 
             let query = CKQuery(recordType: recordType, predicate: NSPredicate(value: true))
             
-            privateDB.perform(query, inZoneWith: nil) { (records, error) in
+            privateDB.fetchRecords(matching: query, inZoneWith: nil) { (records, error) in
                 if let error = error {
                     deletionError = error
                     dispatchGroup.leave()
@@ -61,8 +61,8 @@ class AuthenticationManager: ObservableObject {
 
                 let recordIDs = records.map { $0.recordID }
                 let deleteOperation = CKModifyRecordsOperation(recordIDsToDelete: recordIDs)
-                deleteOperation.modifyRecordsCompletionBlock = { _, deletedRecordIDs, deleteError in
-                    if let deleteError = deleteError {
+                deleteOperation.modifyRecordsResultBlock = { result in
+                    if case let .failure(deleteError) = result {
                         deletionError = deleteError
                     }
                     dispatchGroup.leave()

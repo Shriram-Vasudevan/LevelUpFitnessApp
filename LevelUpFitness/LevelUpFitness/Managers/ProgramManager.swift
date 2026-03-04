@@ -544,7 +544,7 @@ class FriendWorkoutManager: ObservableObject {
 
     private func perform(query: CKQuery) async throws -> [CKRecord] {
         try await withCheckedThrowingContinuation { continuation in
-            database.perform(query, inZoneWith: nil) { records, error in
+            database.fetchRecords(matching: query, inZoneWith: nil) { records, error in
                 if let error {
                     continuation.resume(throwing: error)
                     return

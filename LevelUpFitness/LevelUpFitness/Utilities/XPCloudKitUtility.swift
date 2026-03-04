@@ -20,7 +20,7 @@ class XPCloudKitUtility {
         let predicate = NSPredicate(format: "UserID == %@", userID)
         let query = CKQuery(recordType: "XPData", predicate: predicate)
         
-        privateDatabase.perform(query, inZoneWith: nil) { records, error in
+        privateDatabase.fetchRecords(matching: query, inZoneWith: nil) { records, error in
             if let error = error {
                 completion(nil, error)
                 return
@@ -85,7 +85,7 @@ class XPCloudKitUtility {
         let predicate = NSPredicate(format: "UserID == %@", xpData.userID)
         let query = CKQuery(recordType: "XPData", predicate: predicate)
         
-        privateDatabase.perform(query, inZoneWith: nil) { records, error in
+        privateDatabase.fetchRecords(matching: query, inZoneWith: nil) { records, error in
             guard let record = records?.first else {
                 completion(false, error)
                 return

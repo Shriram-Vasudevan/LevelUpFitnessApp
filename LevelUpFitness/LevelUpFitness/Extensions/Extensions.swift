@@ -121,9 +121,6 @@ extension Array where Element == Program {
             }
         }
         
-        var maxTrendValue = 0
-        var minTrendValue = 0
-        
         for (_, differentials) in restDifferentials {
             guard differentials.count > 0 else { continue }
             
@@ -664,7 +661,7 @@ extension GymSession {
     // Total reps completed during the session
     var totalReps: Int {
         let programReps = programExercises.values.flatMap { $0 }.reduce(0) { $0 + $1.totalReps }
-        let individualReps = individualExercises.reduce(into: 0) { $0 + $1.totalReps }
+        let individualReps = individualExercises.reduce(into: 0) { $0 += $1.totalReps }
         return programReps + individualReps
     }
 
@@ -868,7 +865,7 @@ extension CodableExercise {
 }
 
 
-extension CGPoint: VectorArithmetic {
+extension CGPoint: @retroactive VectorArithmetic {
     public mutating func scale(by rhs: Double) {
         self.x *= CGFloat(rhs)
         self.y *= CGFloat(rhs)

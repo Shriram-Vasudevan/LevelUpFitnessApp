@@ -42,10 +42,10 @@ struct CreateFriendRoomSheet: View {
                     
                     Spacer()
                     
-                    PremiumActionButton(title: "Initialize Room", icon: "network", style: .primary) {
+                    PremiumActionButton(title: "Initialize Room", icon: "network", action: {
                         onCreate(roomTitle.isEmpty ? "Team Session" : roomTitle, scheduleDate, isPublic)
                         dismiss()
-                    }
+                    }, style: .primary)
                 }
                 .padding(20)
             }

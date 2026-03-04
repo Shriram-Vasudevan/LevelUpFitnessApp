@@ -65,11 +65,11 @@ struct GymSessionsView: View {
                         .foregroundColor(AppTheme.Colors.textPrimary)
                     
                     HStack(spacing: 12) {
-                        PremiumActionButton(title: "Cancel", style: .secondary) { showEndSessionConfirmation = false }
-                        PremiumActionButton(title: "End Session", style: .primary) {
+                        PremiumActionButton(title: "Cancel", action: { showEndSessionConfirmation = false }, style: .secondary)
+                        PremiumActionButton(title: "End Session", action: {
                             showEndSessionConfirmation = false
                             gymManager.endGymSession()
-                        }
+                        }, style: .primary)
                     }
                 }
                 .padding(24)
@@ -193,8 +193,8 @@ struct GymSessionsView: View {
             .onDisappear { isPulsing = false }
             
             HStack(spacing: 16) {
-                PremiumActionButton(title: "Log Exercise", icon: "plus", style: .secondary) { navigateToAddExerciseView = true }
-                PremiumActionButton(title: "End Session", icon: "stop.fill", style: .destructive) { showEndSessionConfirmation = true }
+                PremiumActionButton(title: "Log Exercise", icon: "plus", action: { navigateToAddExerciseView = true }, style: .secondary)
+                PremiumActionButton(title: "End Session", icon: "stop.fill", action: { showEndSessionConfirmation = true }, style: .destructive)
             }
             
             if !session.allExercises.isEmpty {

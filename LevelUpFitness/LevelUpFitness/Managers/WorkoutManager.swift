@@ -147,7 +147,7 @@ class WorkoutManager: ObservableObject {
     
     func saveProgramStatus() {
         Task {
-            if let todaysProgram = ProgramManager.shared.selectedProgram?.program.program.first(where: { $0.day == DateUtility.getCurrentWeekday() }) {
+            if ProgramManager.shared.selectedProgram?.program.program.first(where: { $0.day == DateUtility.getCurrentWeekday() }) != nil {
                 print("uploading new status")
                 await programManager.uploadNewProgramStatus(completion: { success in
                     if success {

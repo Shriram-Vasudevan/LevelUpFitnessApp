@@ -8,6 +8,35 @@
 import CloudKit
 import Foundation
 
+extension CKDatabase {
+    func fetchRecords(
+        matching query: CKQuery,
+        inZoneWith zoneID: CKRecordZone.ID? = nil,
+        completion: @escaping ([CKRecord]?, Error?) -> Void
+    ) {
+        var fetchedRecords: [CKRecord] = []
+        let operation = CKQueryOperation(query: query)
+        operation.zoneID = zoneID
+
+        operation.recordMatchedBlock = { _, result in
+            if case let .success(record) = result {
+                fetchedRecords.append(record)
+            }
+        }
+
+        operation.queryResultBlock = { result in
+            switch result {
+            case .success:
+                completion(fetchedRecords, nil)
+            case let .failure(error):
+                completion(nil, error)
+            }
+        }
+
+        add(operation)
+    }
+}
+
 class ProgramCloudKitUtility {
 
     static let customContainer = CKContainer(identifier: "iCloud.LevelUpFitnessCloudKitStorage")
@@ -19,7 +48,7 @@ class ProgramCloudKitUtility {
         let predicate = NSPredicate(format: "ProgramID == %@", programID)
         let query = CKQuery(recordType: "UserProgramMetadata", predicate: predicate)
         
-        privateDatabase.perform(query, inZoneWith: nil) { records, error in
+        privateDatabase.fetchRecords(matching: query, inZoneWith: nil) { records, error in
             if let error = error {
                 print("Error querying for program metadata: \(error.localizedDescription)")
                 completion(false, error)
@@ -52,7 +81,7 @@ class ProgramCloudKitUtility {
         let predicate = NSPredicate(format: "ProgramID == %@", programID)
         let query = CKQuery(recordType: "UserProgramData", predicate: predicate)
         
-        privateDatabase.perform(query, inZoneWith: nil) { records, error in
+        privateDatabase.fetchRecords(matching: query, inZoneWith: nil) { records, error in
             if let error = error {
                 print("Error querying for program data: \(error.localizedDescription)")
                 completion(false, error)
@@ -108,7 +137,7 @@ class ProgramCloudKitUtility {
         let publicDatabase = customContainer.publicCloudDatabase
         let query = CKQuery(recordType: "StandardProgramMetadata", predicate: NSPredicate(value: true))
         
-        publicDatabase.perform(query, inZoneWith: nil) { records, error in
+        publicDatabase.fetchRecords(matching: query, inZoneWith: nil) { records, error in
             if let error = error {
                 print("Error fetching standard program metadata: \(error)")
                 completion(nil, error)
@@ -197,7 +226,7 @@ class ProgramCloudKitUtility {
 
         let query = CKQuery(recordType: "StandardProgramData", predicate: NSPredicate(value: true)) // Fetch all records
         
-        publicDatabase.perform(query, inZoneWith: nil) { records, error in
+        publicDatabase.fetchRecords(matching: query, inZoneWith: nil) { records, error in
             if let error = error {
                 print("Error performing query for program data: \(error.localizedDescription)")
                 completion(nil, error)
@@ -360,7 +389,7 @@ class ProgramCloudKitUtility {
         let predicate = NSPredicate(format: "ProgramID == %@", programID)
         let query = CKQuery(recordType: "UserProgramData", predicate: predicate)
         
-        privateDatabase.perform(query, inZoneWith: nil) { records, error in
+        privateDatabase.fetchRecords(matching: query, inZoneWith: nil) { records, error in
             if let error = error {
                 print("Error fetching program data: \(error.localizedDescription)")
                 completion(nil, error)

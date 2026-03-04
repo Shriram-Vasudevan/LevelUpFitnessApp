@@ -307,7 +307,7 @@ final class StoreKitManager: ObservableObject {
     func showManageSubscriptions() async {
         if #available(iOS 15.0, *) {
             do {
-                if let windowScene = await UIApplication.shared.connectedScenes.first as? UIWindowScene {
+                if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
                     try await AppStore.showManageSubscriptions(in: windowScene)
                 }
             } catch {

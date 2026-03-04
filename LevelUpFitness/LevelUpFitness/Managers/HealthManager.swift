@@ -73,18 +73,18 @@ class HealthManager: ObservableObject {
             results.enumerateStatistics(from: startOfDay, to: now) { statistics, _ in
                 if let sum = statistics.sumQuantity() {
                     let todaysSteps = Int(sum.doubleValue(for: .count()))
-                    
-                    self.getYesterdaysSteps { yesterdaysSteps in
-                        let comparison: HealthComparison
-                        if todaysSteps > yesterdaysSteps {
-                            comparison = .greater
-                        } else if todaysSteps < yesterdaysSteps {
-                            comparison = .less
-                        } else {
-                            comparison = .equal
-                        }
-                        
-                        DispatchQueue.main.async {
+
+                    Task { @MainActor in
+                        self.getYesterdaysSteps { yesterdaysSteps in
+                            let comparison: HealthComparison
+                            if todaysSteps > yesterdaysSteps {
+                                comparison = .greater
+                            } else if todaysSteps < yesterdaysSteps {
+                                comparison = .less
+                            } else {
+                                comparison = .equal
+                            }
+
                             self.todaysSteps = (count: todaysSteps, comparison: comparison)
                         }
                     }
@@ -155,20 +155,19 @@ class HealthManager: ObservableObject {
             results.enumerateStatistics(from: startOfDay, to: now) { statistics, _ in
                 if let sum = statistics.sumQuantity() {
                     let todaysCalories = Int(sum.doubleValue(for: .kilocalorie()))
-                    
-                    self.getYesterdaysCalories { yesterdaysCalories in
-                        let comparison: HealthComparison
-                        if todaysCalories > yesterdaysCalories {
-                            comparison = .greater
-                        } else if todaysCalories < yesterdaysCalories {
-                            comparison = .less
-                        } else {
-                            comparison = .equal
-                        }
-                        DispatchQueue.main.async {
+
+                    Task { @MainActor in
+                        self.getYesterdaysCalories { yesterdaysCalories in
+                            let comparison: HealthComparison
+                            if todaysCalories > yesterdaysCalories {
+                                comparison = .greater
+                            } else if todaysCalories < yesterdaysCalories {
+                                comparison = .less
+                            } else {
+                                comparison = .equal
+                            }
                             self.todaysCalories = (count: todaysCalories, comparison: comparison)
                         }
-                        
                     }
                 }
             }
@@ -237,18 +236,18 @@ class HealthManager: ObservableObject {
             results.enumerateStatistics(from: startOfDay, to: now) { statistics, _ in
                 if let sum = statistics.sumQuantity() {
                     let todaysDistance = sum.doubleValue(for: .meter())
-                    
-                    self.getYesterdaysDistance { yesterdaysDistance in
-                        let comparison: HealthComparison
-                        if todaysDistance > yesterdaysDistance {
-                            comparison = .greater
-                        } else if todaysDistance < yesterdaysDistance {
-                            comparison = .less
-                        } else {
-                            comparison = .equal
-                        }
-                        
-                        DispatchQueue.main.async {
+
+                    Task { @MainActor in
+                        self.getYesterdaysDistance { yesterdaysDistance in
+                            let comparison: HealthComparison
+                            if todaysDistance > yesterdaysDistance {
+                                comparison = .greater
+                            } else if todaysDistance < yesterdaysDistance {
+                                comparison = .less
+                            } else {
+                                comparison = .equal
+                            }
+
                             self.todaysDistance = (count: Int(todaysDistance), comparison: comparison)
                         }
                     }

@@ -95,8 +95,8 @@ struct LibraryExerciseDataView: View {
                 
                     Task {
                         addToGymSession()
-                        await XPManager.shared.addXP(increment: 2, type: xpAdditionType)
-                        await XPManager.shared.addXP(increment: 2, type: .total)
+                        XPManager.shared.addXP(increment: 2, type: xpAdditionType)
+                        XPManager.shared.addXP(increment: 2, type: .total)
                     }
                     
                     sectionType = .finished

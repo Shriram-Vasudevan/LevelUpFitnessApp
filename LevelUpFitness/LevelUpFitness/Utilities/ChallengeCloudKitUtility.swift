@@ -19,7 +19,7 @@ class ChallengeCloudKitUtility {
         let publicDatabase = customContainer.publicCloudDatabase
         let query = CKQuery(recordType: "ChallengeTemplate", predicate: NSPredicate(value: true))
         
-        publicDatabase.perform(query, inZoneWith: nil) { records, error in
+        publicDatabase.fetchRecords(matching: query, inZoneWith: nil) { records, error in
             if let error = error {
                 print("Error fetching challenge templates: \(error.localizedDescription)")
                 completion(nil, error)
@@ -47,7 +47,7 @@ class ChallengeCloudKitUtility {
         let predicate = NSPredicate(format: "UserID == %@", userID)
         let query = CKQuery(recordType: "UserChallenge", predicate: predicate)
         
-        privateDatabase.perform(query, inZoneWith: nil) { records, error in
+        privateDatabase.fetchRecords(matching: query, inZoneWith: nil) { records, error in
             if let error = error {
                 print("Error fetching user challenges: \(error.localizedDescription)")
                 completion(nil, error)
@@ -117,7 +117,7 @@ class ChallengeCloudKitUtility {
         let predicate = NSPredicate(format: "UserID == %@ AND ChallengeTemplateID == %@", userID, challengeTemplateID)
         let query = CKQuery(recordType: "UserChallenge", predicate: predicate)
         
-        privateDatabase.perform(query, inZoneWith: nil) { records, error in
+        privateDatabase.fetchRecords(matching: query, inZoneWith: nil) { records, error in
             if let error = error {
                 print("Error fetching challenges for deletion: \(error.localizedDescription)")
                 completion(false, error)
@@ -148,7 +148,7 @@ class ChallengeCloudKitUtility {
         let predicate = NSPredicate(format: "UserID == %@ AND Field == %@", userID, field)
         let query = CKQuery(recordType: "UserChallenge", predicate: predicate)
         
-        privateDatabase.perform(query, inZoneWith: nil) { records, error in
+        privateDatabase.fetchRecords(matching: query, inZoneWith: nil) { records, error in
             if let error = error {
                 print("Error fetching challenges for update: \(error.localizedDescription)")
                 completion(false, error)
