@@ -18,7 +18,7 @@ struct GymSessionsStatsView: View {
         .onAppear {
             updateGraphData()
         }
-        .onChange(of: selectedGraphType) {
+        .onChange(of: selectedGraphType) { _, _ in
             updateGraphData()
         }
     }
