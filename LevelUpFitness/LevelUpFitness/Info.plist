@@ -16,12 +16,6 @@
 		<string>AzeretMono-Regular.ttf</string>
 		<string>Sailec Regular Italic.ttf</string>
 	</array>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>audio</string>
-		<string>fetch</string>
-		<string>remote-notification</string>
-	</array>
 	<key>NSHealthShareUsageDescription</key>
 	<string>LevelUp Fitness uses your Health data to show daily steps, calories, and distance trends.</string>
 	<key>NSPhotoLibraryUsageDescription</key>

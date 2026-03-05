@@ -1,0 +1,4 @@
+app_identifier(ENV.fetch("BUNDLE_ID", "com.LevelUpFitnessApplication"))
+apple_id(ENV["APPLE_ID"]) # Optional; needed for some metadata flows
+team_id(ENV.fetch("APPLE_TEAM_ID", "NDZ2DG6484"))
+itc_team_id(ENV["ITC_TEAM_ID"]) # Optional; usually only for multi-team setups

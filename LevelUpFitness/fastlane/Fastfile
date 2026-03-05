@@ -1,0 +1,105 @@
+def asc_api_key
+  app_store_connect_api_key(
+    key_id: ENV.fetch("ASC_KEY_ID"),
+    issuer_id: ENV.fetch("ASC_ISSUER_ID"),
+    key_filepath: ENV.fetch("ASC_KEY_FILE"),
+    in_house: false
+  )
+end
+
+def project_scheme
+  ENV.fetch("XCODE_SCHEME", "LevelUpFitness")
+end
+
+def project_path
+  ENV.fetch("XCODEPROJ", "LevelUpFitness.xcodeproj")
+end
+
+platform :ios do
+  desc "Validate local config and ASC authentication"
+  lane :verify_setup do
+    api_key = asc_api_key
+
+    UI.user_error!("ASC_KEY_FILE not found at #{ENV['ASC_KEY_FILE']}") unless File.exist?(ENV.fetch("ASC_KEY_FILE"))
+
+    app_store_build_number(
+      api_key: api_key,
+      app_identifier: ENV.fetch("BUNDLE_ID"),
+      live: false,
+      initial_build_number: 1
+    )
+
+    UI.success("ASC auth and app access verified for #{ENV.fetch('BUNDLE_ID')}")
+  end
+
+  desc "Build archive and upload to TestFlight"
+  lane :beta do
+    api_key = asc_api_key
+    version = get_version_number(xcodeproj: project_path)
+    latest_build = latest_testflight_build_number(
+      api_key: api_key,
+      app_identifier: ENV.fetch("BUNDLE_ID"),
+      version: version,
+      initial_build_number: 0
+    )
+    next_build = latest_build + 1
+
+    increment_build_number(
+      xcodeproj: project_path,
+      build_number: next_build.to_s
+    )
+
+    build_app(
+      project: project_path,
+      scheme: project_scheme,
+      configuration: "Release",
+      clean: true,
+      export_method: "app-store",
+      export_options: {
+        signingStyle: "automatic"
+      },
+      xcargs: "-allowProvisioningUpdates"
+    )
+
+    upload_to_testflight(
+      api_key: api_key,
+      app_identifier: ENV.fetch("BUNDLE_ID"),
+      skip_waiting_for_build_processing: true,
+      distribute_external: false,
+      notify_external_testers: false
+    )
+  end
+
+  desc "Upload an existing ipa to TestFlight (set IPA_PATH)"
+  lane :upload_ipa do
+    api_key = asc_api_key
+    ipa = ENV.fetch("IPA_PATH")
+
+    UI.user_error!("IPA_PATH not found at #{ipa}") unless File.exist?(ipa)
+
+    upload_to_testflight(
+      api_key: api_key,
+      app_identifier: ENV.fetch("BUNDLE_ID"),
+      ipa: ipa,
+      skip_waiting_for_build_processing: true,
+      distribute_external: false,
+      notify_external_testers: false
+    )
+  end
+
+  desc "Submit latest processed TestFlight build to App Store review"
+  lane :submit_for_review do
+    api_key = asc_api_key
+
+    upload_to_app_store(
+      api_key: api_key,
+      app_identifier: ENV.fetch("BUNDLE_ID"),
+      app_version: ENV["APP_VERSION"],
+      submit_for_review: true,
+      automatic_release: false,
+      skip_binary_upload: true,
+      skip_metadata: true,
+      skip_screenshots: true
+    )
+  end
+end

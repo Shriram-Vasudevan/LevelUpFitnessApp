@@ -3,7 +3,7 @@
     "type": "storekitconfiguration",
     "attributes": {
       "appAppleId": 0,
-      "bundleId": "com.levelupfitness.app",
+      "bundleId": "com.LevelUpFitnessApplication",
       "name": "LevelUpFitness",
       "schemaVersion": "1.0",
       "configuration": {

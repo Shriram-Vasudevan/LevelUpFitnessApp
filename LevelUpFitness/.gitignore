@@ -21,3 +21,9 @@ amplifytools.xcconfig
 .secret-*
 **.sample
 #amplify-do-not-edit-end
+
+# fastlane local secrets
+fastlane/.env
+fastlane/.env.*
+!fastlane/.env.example
+fastlane/*.p8
